@@ -45,8 +45,8 @@ jobs:
       with:
           deploy_key: ${{ secrets.HEXO_DEPLOY_PRIVATE_KEY }}
           external_repository: userZheng686/hexo_yuque
-          publish_branch: gh-pages
-          publish_dir: ''
+          publish_branch: master
+          publish_dir: ./public
           commit_message: ${{ github.event.head_commit.message }}
 
         
@@ -54,4 +54,3 @@ jobs:
       run: |
           hexo clean
           hexo generate 
-          hexo deploy
