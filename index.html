@@ -169,7 +169,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-04-15 22:48:14" itemprop="dateCreated datePublished" datetime="2021-04-15T22:48:14+08:00">2021-04-15</time>
+              <time title="创建时间：2021-04-15 22:50:22" itemprop="dateCreated datePublished" datetime="2021-04-15T22:50:22+08:00">2021-04-15</time>
             </span>
 
           
@@ -215,6 +215,65 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/15/yuque/%E6%B5%85%E6%8B%B7%E8%B4%9D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/15/yuque/%E6%B5%85%E6%8B%B7%E8%B4%9D/" class="post-title-link" itemprop="url">浅拷贝</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-15 22:50:15 / 修改时间：22:51:07" itemprop="dateCreated datePublished" datetime="2021-04-15T22:50:15+08:00">2021-04-15</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">拷贝对象后，修改对象的值不影响另一方</span></span><br><span class="line"><span class="comment">浅拷贝只能拷贝一层对象。如果有对象的嵌套，那么浅拷贝将无能为力</span></span><br><span class="line"><span class="comment">深拷贝解决无限层的对象嵌套问题，实现彻底的拷贝</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">浅拷贝的实现方式</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">1.Object.assign</span></span><br><span class="line"><span class="comment">Object.assign拷贝的是对象的属性的引用，而不是对象本身</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">var</span> obj1 = &#123; <span class="attr">a</span>: <span class="number">1</span>, <span class="attr">b</span>: <span class="number">2</span>, <span class="attr">c</span>: <span class="number">3</span> &#125;;</span><br><span class="line"><span class="keyword">var</span> obj2 = &#123; <span class="attr">a</span>: <span class="number">2</span>, <span class="attr">b</span>: <span class="number">3</span> &#125;;</span><br><span class="line"><span class="keyword">var</span> copy = <span class="built_in">Object</span>.assign(obj1, obj2);</span><br><span class="line"><span class="built_in">console</span>.log(copy);</span><br><span class="line"><span class="comment">//&#123;a: 2, b: 3, c: 3&#125;</span></span><br><span class="line">obj1.a = <span class="number">4</span>;</span><br><span class="line"><span class="built_in">console</span>.log(obj2);</span><br><span class="line"><span class="comment">//&#123;a: 2, b: 3&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> obj3 = &#123;</span><br><span class="line">  a: &#123;</span><br><span class="line">    b: <span class="string">&quot;1&quot;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  c: &#123;</span><br><span class="line">    d: <span class="string">&quot;2&quot;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> obj4 = &#123;&#125;;</span><br><span class="line"><span class="keyword">var</span> copy2 = <span class="built_in">Object</span>.assign(obj4, obj3);</span><br><span class="line"><span class="built_in">console</span>.log(copy2);</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">a: &#123;b: 2&#125;</span></span><br><span class="line"><span class="comment">c: &#123;d: &quot;2&quot;&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">obj4.a.b = <span class="number">2</span>;</span><br><span class="line"><span class="built_in">console</span>.log(obj3.a.b); <span class="comment">//2</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">concat浅拷贝数组</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> arr = [<span class="number">1</span>, <span class="number">2</span>];</span><br><span class="line"><span class="keyword">var</span> arr2 = arr.concat();</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(arr2); <span class="comment">//[1,2]</span></span><br><span class="line">arr2.push(<span class="number">3</span>); <span class="comment">//[1,2,3]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> arr3 = [<span class="number">1</span>, [<span class="number">2</span>, <span class="number">3</span>]];</span><br><span class="line"><span class="keyword">var</span> arr4 = arr3.concat();</span><br><span class="line"></span><br><span class="line">arr3[<span class="number">1</span>][<span class="number">1</span>] = <span class="number">4</span>;</span><br><span class="line"><span class="built_in">console</span>.log(arr4[<span class="number">1</span>][<span class="number">1</span>]); <span class="comment">//4</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">slice</span></span><br><span class="line"><span class="comment">更concat一样</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">...展开运算符</span></span><br><span class="line"><span class="comment">更slice是一样的效果</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> arr5 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"><span class="keyword">var</span> arr6 = [...arr5];</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">手动实现</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">var</span> arr7 = []; <span class="comment">//空数组</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> shadowClone = <span class="function"><span class="keyword">function</span> (<span class="params">target, sources</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> prop <span class="keyword">in</span> sources) &#123;</span><br><span class="line">    <span class="keyword">if</span> (target[prop] != sources[prop]) &#123;</span><br><span class="line">      target[prop] = sources[prop];</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> obj5 = &#123;&#125;;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/15/yuque/%E7%BB%A7%E6%89%BF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -240,7 +299,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-04-15 20:20:52 / 修改时间：22:48:51" itemprop="dateCreated datePublished" datetime="2021-04-15T20:20:52+08:00">2021-04-15</time>
+              <time title="创建时间：2021-04-15 20:20:52 / 修改时间：22:51:07" itemprop="dateCreated datePublished" datetime="2021-04-15T20:20:52+08:00">2021-04-15</time>
             </span>
 
           
@@ -311,7 +370,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-04-15 20:18:33 / 修改时间：22:48:52" itemprop="dateCreated datePublished" datetime="2021-04-15T20:18:33+08:00">2021-04-15</time>
+              <time title="创建时间：2021-04-15 20:18:33 / 修改时间：22:51:07" itemprop="dateCreated datePublished" datetime="2021-04-15T20:18:33+08:00">2021-04-15</time>
             </span>
 
           
@@ -372,7 +431,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-04-15 19:35:43 / 修改时间：22:48:52" itemprop="dateCreated datePublished" datetime="2021-04-15T19:35:43+08:00">2021-04-15</time>
+              <time title="创建时间：2021-04-15 19:35:43 / 修改时间：22:51:07" itemprop="dateCreated datePublished" datetime="2021-04-15T19:35:43+08:00">2021-04-15</time>
             </span>
 
           
@@ -431,7 +490,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-04-15 19:27:51 / 修改时间：22:48:52" itemprop="dateCreated datePublished" datetime="2021-04-15T19:27:51+08:00">2021-04-15</time>
+              <time title="创建时间：2021-04-15 19:27:51 / 修改时间：22:51:07" itemprop="dateCreated datePublished" datetime="2021-04-15T19:27:51+08:00">2021-04-15</time>
             </span>
 
           
@@ -490,7 +549,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-04-15 19:19:26 / 修改时间：22:48:52" itemprop="dateCreated datePublished" datetime="2021-04-15T19:19:26+08:00">2021-04-15</time>
+              <time title="创建时间：2021-04-15 19:19:26 / 修改时间：22:51:07" itemprop="dateCreated datePublished" datetime="2021-04-15T19:19:26+08:00">2021-04-15</time>
             </span>
 
           
@@ -555,7 +614,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-15 22:48:52" itemprop="dateModified" datetime="2021-04-15T22:48:52+08:00">2021-04-15</time>
+                <time title="修改时间：2021-04-15 22:51:07" itemprop="dateModified" datetime="2021-04-15T22:51:07+08:00">2021-04-15</time>
               </span>
 
           
@@ -620,7 +679,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-15 22:48:52" itemprop="dateModified" datetime="2021-04-15T22:48:52+08:00">2021-04-15</time>
+                <time title="修改时间：2021-04-15 22:51:07" itemprop="dateModified" datetime="2021-04-15T22:51:07+08:00">2021-04-15</time>
               </span>
 
           
@@ -685,7 +744,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-15 22:48:52" itemprop="dateModified" datetime="2021-04-15T22:48:52+08:00">2021-04-15</time>
+                <time title="修改时间：2021-04-15 22:51:07" itemprop="dateModified" datetime="2021-04-15T22:51:07+08:00">2021-04-15</time>
               </span>
 
           
@@ -781,7 +840,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
