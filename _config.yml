@@ -103,5 +103,5 @@ theme: Next
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  repo : https://github.com/userZheng686/hexo_yuque.git
+  repo : git@github.com:userZheng686/hexo_yuque.git
   branch : gh-pages
