@@ -29,7 +29,6 @@ jobs:
         npm install hexo-cli -g
         npm install yuque-hexo -g
         hexo clean
-        hexo sync
         hexo generate
         
     # from https://github.com/peaceiris/actions-gh-pages
@@ -39,5 +38,5 @@ jobs:
           deploy_key: ${{ secrets.ACTION_DEPLOY_KEY }}
           external_repository: userZheng686/userZheng686.github.io
           publish_branch: master
-          publish_dir: .
+          publish_dir: ./public
           commit_message: auto deploy
