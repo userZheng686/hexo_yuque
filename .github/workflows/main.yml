@@ -39,5 +39,5 @@ jobs:
           deploy_key: ${{ secrets.ACTION_DEPLOY_KEY }}
           external_repository: userZheng686/userZheng686.github.io
           publish_branch: master
-          publish_dir: ./public
+          publish_dir: .
           commit_message: auto deploy
