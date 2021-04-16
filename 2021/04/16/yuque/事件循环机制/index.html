@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="答题大纲 先说基本知识点，宏任务、微任务有哪些 说事件循环机制过程，边说边画图出来 说 async&#x2F;await 执行顺序注意，可以把 chrome 的优化，做法其实是违法了规范的，V8 团队的 PR 这些自信点说出来，显得你很好学，理解得很详细，很透彻。 把 node 的事件循环也说一下，重复 1、2、3 点，node 中的第 3 点要说的是 node11 前后的事件循环变动点。  下面就跟着这个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="事件循环机制">
+<meta property="og:url" content="http://example.com/2021/04/16/yuque/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E6%9C%BA%E5%88%B6/index.html">
+<meta property="og:site_name" content="Adam">
+<meta property="og:description" content="答题大纲 先说基本知识点，宏任务、微任务有哪些 说事件循环机制过程，边说边画图出来 说 async&#x2F;await 执行顺序注意，可以把 chrome 的优化，做法其实是违法了规范的，V8 团队的 PR 这些自信点说出来，显得你很好学，理解得很详细，很透彻。 把 node 的事件循环也说一下，重复 1、2、3 点，node 中的第 3 点要说的是 node11 前后的事件循环变动点。  下面就跟着这个">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618573781952-7782507e-dfda-41bf-8417-0435c4b684c9.png#clientId=u0fbb7ad9-f0df-4&from=drop&id=u25578fe7&margin=%5Bobject%20Object%5D&originHeight=818&originWidth=1678&originalType=binary&size=59057&status=done&style=none&taskId=u73daa851-8b7c-42da-8bec-df55426c906">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1618573787405-8a3aca03-1875-4117-b918-81ae19c99e11.jpeg#clientId=u0fbb7ad9-f0df-4&from=drop&id=ubfc6d14f&margin=%5Bobject%20Object%5D&originHeight=488&originWidth=1000&originalType=binary&size=80503&status=done&style=none&taskId=ufac4233a-7981-4bb7-8d51-1bbbd5e63f6">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618573805467-2e96e30d-3f85-40c5-9215-78a7795fa76c.png#clientId=u0fbb7ad9-f0df-4&from=drop&id=u24642caa&margin=%5Bobject%20Object%5D&originHeight=451&originWidth=751&originalType=binary&size=25564&status=done&style=none&taskId=ud4bb323f-7d66-49c8-919b-bb1d659d487">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1618573818346-738f855a-9297-4b19-9e7e-4350d4e3e7d1.jpeg#clientId=u0fbb7ad9-f0df-4&from=drop&id=ubb22cbe6&margin=%5Bobject%20Object%5D&originHeight=594&originWidth=625&originalType=binary&size=38789&status=done&style=none&taskId=u17631d17-a0d2-4dfb-acf9-0827e261e10">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618573825825-d88156eb-e92a-4394-95c6-642ec5c602cd.png#clientId=u0fbb7ad9-f0df-4&from=drop&id=ua550051a&margin=%5Bobject%20Object%5D&originHeight=480&originWidth=480&originalType=binary&size=207122&status=done&style=none&taskId=u875f592c-0be4-4d8f-ac64-3ffb5c9bdb7">
+<meta property="article:published_time" content="2021-04-16T11:47:37.000Z">
+<meta property="article:modified_time" content="2021-04-16T11:51:14.669Z">
+<meta property="article:author" content="Adam Blog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618573781952-7782507e-dfda-41bf-8417-0435c4b684c9.png#clientId=u0fbb7ad9-f0df-4&from=drop&id=u25578fe7&margin=%5Bobject%20Object%5D&originHeight=818&originWidth=1678&originalType=binary&size=59057&status=done&style=none&taskId=u73daa851-8b7c-42da-8bec-df55426c906">
+
+<link rel="canonical" href="http://example.com/2021/04/16/yuque/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E6%9C%BA%E5%88%B6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>事件循环机制 | Adam</title>
+  <meta name="referrer" content="no-referrer" />
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Adam</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/16/yuque/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E6%9C%BA%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          事件循环机制
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-16 19:47:37 / 修改时间：19:51:14" itemprop="dateCreated datePublished" datetime="2021-04-16T19:47:37+08:00">2021-04-16</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="答题大纲"><a href="#答题大纲" class="headerlink" title="答题大纲"></a>答题大纲</h3><ol>
+<li>先说基本知识点，宏任务、微任务有哪些</li>
+<li>说事件循环机制过程，边说边画图出来</li>
+<li>说 async/await 执行顺序注意，可以把 chrome 的优化，做法其实是违法了规范的，V8 团队的 PR 这些自信点说出来，显得你很好学，理解得很详细，很透彻。</li>
+<li>把 node 的事件循环也说一下，重复 1、2、3 点，node 中的第 3 点要说的是 node11 前后的事件循环变动点。</li>
+</ol>
+<p>下面就跟着这个大纲走，每个点来说一下吧～</p>
+<h3 id="浏览器中的事件循环"><a href="#浏览器中的事件循环" class="headerlink" title="浏览器中的事件循环"></a>浏览器中的事件循环</h3><p>JavaScript 代码的执行过程中，除了依靠函数调用栈来搞定函数的执行顺序外，还依靠任务队列(task queue)来搞定另外一些代码的执行。整个执行过程，我们称为事件循环过程。一个线程中，事件循环是唯一的，但是任务队列可以拥有多个。任务队列又分为 macro-task（宏任务）与 micro-task（微任务），在最新标准中，它们被分别称为 task 与 jobs。</p>
+<p>macro-task 大概包括：</p>
+<ul>
+<li>script(整体代码)</li>
+<li>setTimeout</li>
+<li>setInterval</li>
+<li>setImmediate</li>
+<li>I/O</li>
+<li>UI render</li>
+</ul>
+<p>micro-task 大概包括:</p>
+<ul>
+<li>process.nextTick</li>
+<li>Promise</li>
+<li>Async/Await(实际就是 promise)</li>
+<li>MutationObserver(html5 新特性)</li>
+</ul>
+<p>整体执行，我画了一个流程图：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618573781952-7782507e-dfda-41bf-8417-0435c4b684c9.png#clientId=u0fbb7ad9-f0df-4&from=drop&id=u25578fe7&margin=%5Bobject%20Object%5D&originHeight=818&originWidth=1678&originalType=binary&size=59057&status=done&style=none&taskId=u73daa851-8b7c-42da-8bec-df55426c906"></p>
+<p>总的结论就是，执行宏任务，然后执行该宏任务产生的微任务，若微任务在执行过程中产生了新的微任务，则继续执行微任务，微任务执行完毕后，再回到宏任务中进行下一轮循环。举个例子：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1618573787405-8a3aca03-1875-4117-b918-81ae19c99e11.jpeg#clientId=u0fbb7ad9-f0df-4&from=drop&id=ubfc6d14f&margin=%5Bobject%20Object%5D&originHeight=488&originWidth=1000&originalType=binary&size=80503&status=done&style=none&taskId=ufac4233a-7981-4bb7-8d51-1bbbd5e63f6"></p>
+<p>结合流程图理解，答案输出为：async2 end =&gt; Promise =&gt; async1 end =&gt; promise1 =&gt; promise2 =&gt; setTimeout</p>
+<p>但是，对于 async/await ，我们有个细节还要处理一下。如下：</p>
+<h3 id="async-await-执行顺序"><a href="#async-await-执行顺序" class="headerlink" title="async/await 执行顺序"></a>async/await 执行顺序</h3><p>我们知道<code>async</code>隐式返回 Promise 作为结果的函数,那么可以简单理解为，await 后面的函数执行完毕时，await 会产生一个微任务(Promise.then 是微任务)。但是我们要注意这个微任务产生的时机，它是执行完 await 之后，直接跳出 async 函数，执行其他代码(此处就是协程的运作，A 暂停执行，控制权交给 B)。其他代码执行完毕后，再回到 async 函数去执行剩下的代码，然后把 await 后面的代码注册到微任务队列当中。我们来看个例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">&quot;script start&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">await</span> async2();</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;async1 end&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;async2 end&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line">async1();</span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;setTimeout&quot;</span>);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;Promise&quot;</span>);</span><br><span class="line">  resolve();</span><br><span class="line">&#125;)</span><br><span class="line">  .then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;promise1&quot;</span>);</span><br><span class="line">  &#125;)</span><br><span class="line">  .then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;promise2&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&quot;script end&quot;</span>);</span><br><span class="line"><span class="comment">// 旧版输出如下，但是请继续看完本文下面的注意那里，新版有改动</span></span><br><span class="line"><span class="comment">// script start =&gt; async2 end =&gt; Promise =&gt; script end =&gt; promise1 =&gt; promise2 =&gt; async1 end =&gt; setTimeout</span></span><br></pre></td></tr></table></figure>
+
+<p>分析这段代码：</p>
+<ul>
+<li>执行代码，输出<code>script start</code>。</li>
+<li>执行 async1(),会调用 async2(),然后输出<code>async2 end</code>,此时将会保留 async1 函数的上下文，然后跳出 async1 函数。</li>
+<li>遇到 setTimeout，产生一个宏任务</li>
+<li>执行 Promise，输出<code>Promise</code>。遇到 then，产生第一个微任务</li>
+<li>继续执行代码，输出<code>script end</code></li>
+<li>代码逻辑执行完毕(当前宏任务执行完毕)，开始执行当前宏任务产生的微任务队列，输出<code>promise1</code>，该微任务遇到 then，产生一个新的微任务</li>
+<li>执行产生的微任务，输出<code>promise2</code>,当前微任务队列执行完毕。执行权回到 async1</li>
+<li>执行 await,实际上会产生一个 promise 返回，即</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> promise_ = <span class="keyword">new</span> <span class="built_in">Promise</span>((resolve,reject)&#123; resolve(<span class="literal">undefined</span>)&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>执行完成，执行 await 后面的语句，输出<code>async1 end</code></p>
+<ul>
+<li>最后，执行下一个宏任务，即执行 setTimeout，输出<code>setTimeout</code></li>
+</ul>
+<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><p>新版的 chrome 浏览器中不是如上打印的，因为 chrome 优化了,await 变得更快了,输出为:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// script start =&gt; async2 end =&gt; Promise =&gt; script end =&gt; async1 end =&gt; promise1 =&gt; promise2 =&gt; setTimeout</span></span><br></pre></td></tr></table></figure>
+
+<p>但是这种做法其实是违法了规范的，当然规范也是可以更改的，这是 V8 团队的一个 <a target="_blank" rel="noopener" href="https://github.com/tc39/ecma262/pull/1250#issue-197979338">PR</a> ，目前新版打印已经修改。</p>
+<p>知乎上也有相关讨论,可以看看 <a target="_blank" rel="noopener" href="https://www.zhihu.com/question/268007969">https://www.zhihu.com/question/268007969</a></p>
+<p>我们可以分 2 种情况来理解：</p>
+<ol>
+<li> 如果 await 后面直接跟的为一个变量，比如：await 1；这种情况的话相当于直接把 await 后面的代码注册为一个微任务，可以简单理解为 promise.then(await 下面的代码)。然后跳出 async1 函数，执行其他代码，当遇到 promise 函数的时候，会注册 promise.then()函数到微任务队列，注意此时微任务队列里面已经存在 await 后面的微任务。所以这种情况会先执行 await 后面的代码（async1 end），再执行 async1 函数后面注册的微任务代码(promise1,promise2)。</li>
+<li> 如果 await 后面跟的是一个异步函数的调用，比如上面的代码，将代码改成这样：</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">&quot;script start&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">await</span> async2();</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;async1 end&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;async2 end&quot;</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve().then(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;async2 end1&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line">async1();</span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;setTimeout&quot;</span>);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;Promise&quot;</span>);</span><br><span class="line">  resolve();</span><br><span class="line">&#125;)</span><br><span class="line">  .then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;promise1&quot;</span>);</span><br><span class="line">  &#125;)</span><br><span class="line">  .then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;promise2&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&quot;script end&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>输出为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// script start =&gt; async2 end =&gt; Promise =&gt; script end =&gt; async2 end1 =&gt; promise1 =&gt; promise2 =&gt; async1 end =&gt; setTimeout</span></span><br></pre></td></tr></table></figure>
+
+<p>此时执行完 awit 并不先把 await 后面的代码注册到微任务队列中去，而是执行完 await 之后，直接跳出 async1 函数，执行其他代码。然后遇到 promise 的时候，把 promise.then 注册为微任务。其他代码执行完毕后，需要回到 async1 函数去执行剩下的代码，然后把 await 后面的代码注册到微任务队列当中，注意此时微任务队列中是有之前注册的微任务的。所以这种情况会先执行 async1 函数之外的微任务(promise1,promise2)，然后才执行 async1 内注册的微任务(async1 end).</p>
+<p>可以理解为，这种情况下，await 后面的代码会在本轮循环的最后被执行.</p>
+<p>浏览器中有事件循环，node 中也有，事件循环是 node 处理非阻塞 I/O 操作的机制，node 中事件循环的实现是依靠的 libuv 引擎。由于 node 11 之后，事件循环的一些原理发生了变化，这里就以新的标准去讲，最后再列上变化点让大家了解前因后果。</p>
+<h3 id="node-中的事件循环"><a href="#node-中的事件循环" class="headerlink" title="node 中的事件循环"></a>node 中的事件循环</h3><p>浏览器中有事件循环，node 中也有，事件循环是 node 处理非阻塞 I/O 操作的机制，node 中事件循环的实现是依靠的 libuv 引擎。由于 node 11 之后，事件循环的一些原理发生了变化，这里就以新的标准去讲，最后再列上变化点让大家了解前因后果。</p>
+<h4 id="宏任务和微任务"><a href="#宏任务和微任务" class="headerlink" title="宏任务和微任务"></a>宏任务和微任务</h4><p>node 中也有宏任务和微任务，与浏览器中的事件循环类似，其中，</p>
+<p>macro-task 大概包括：</p>
+<ul>
+<li>setTimeout</li>
+<li>setInterval</li>
+<li>setImmediate</li>
+<li>script（整体代码)</li>
+<li>I/O 操作等。</li>
+</ul>
+<p>micro-task 大概包括：</p>
+<ul>
+<li>process.nextTick(与普通微任务有区别，在微任务队列执行之前执行)</li>
+<li>new Promise().then(回调)等。</li>
+</ul>
+<h4 id="node-事件循环整体理解"><a href="#node-事件循环整体理解" class="headerlink" title="node 事件循环整体理解"></a>node 事件循环整体理解</h4><p>先看一张官网的 node 事件循环简化图：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618573805467-2e96e30d-3f85-40c5-9215-78a7795fa76c.png#clientId=u0fbb7ad9-f0df-4&from=drop&id=u24642caa&margin=%5Bobject%20Object%5D&originHeight=451&originWidth=751&originalType=binary&size=25564&status=done&style=none&taskId=ud4bb323f-7d66-49c8-919b-bb1d659d487"></p>
+<p>图中的每个框被称为事件循环机制的一个阶段，每个阶段都有一个 FIFO 队列来执行回调。虽然每个阶段都是特殊的，但通常情况下，当事件循环进入给定的阶段时，它将执行特定于该阶段的任何操作，然后执行该阶段队列中的回调，直到队列用尽或最大回调数已执行。当该队列已用尽或达到回调限制，事件循环将移动到下一阶段。</p>
+<p>因此，从上面这个简化图中，我们可以分析出 node 的事件循环的阶段顺序为：</p>
+<p>输入数据阶段(incoming data)-&gt;轮询阶段(poll)-&gt;检查阶段(check)-&gt;关闭事件回调阶段(close callback)-&gt;定时器检测阶段(timers)-&gt;I/O 事件回调阶段(I/O callbacks)-&gt;闲置阶段(idle, prepare)-&gt;轮询阶段…</p>
+<h4 id="阶段概述"><a href="#阶段概述" class="headerlink" title="阶段概述"></a>阶段概述</h4><ul>
+<li>定时器检测阶段(timers)：本阶段执行 timer 的回调，即 setTimeout、setInterval 里面的回调函数。</li>
+<li>I/O 事件回调阶段(I/O callbacks)：执行延迟到下一个循环迭代的 I/O 回调，即上一轮循环中未被执行的一些 I/O 回调。</li>
+<li>闲置阶段(idle, prepare)：仅系统内部使用。</li>
+<li>轮询阶段(poll)：检索新的 I/O 事件;执行与 I/O 相关的回调（几乎所有情况下，除了关闭的回调函数，那些由计时器和 setImmediate() 调度的之外），其余情况 node 将在适当的时候在此阻塞。</li>
+<li>检查阶段(check)：setImmediate() 回调函数在这里执行</li>
+<li>关闭事件回调阶段(close callback)：一些关闭的回调函数，如：socket.on(‘close’, …)。</li>
+</ul>
+<h4 id="三大重点阶段"><a href="#三大重点阶段" class="headerlink" title="三大重点阶段"></a>三大重点阶段</h4><p>日常开发中的绝大部分异步任务都是在 poll、check、timers 这 3 个阶段处理的,所以我们来重点看看。</p>
+<h5 id="timers"><a href="#timers" class="headerlink" title="timers"></a>timers</h5><p>timers 阶段会执行 setTimeout 和 setInterval 回调，并且是由 poll 阶段控制的。 同样，在 Node 中定时器指定的时间也不是准确时间，只能是尽快执行。</p>
+<h5 id="poll"><a href="#poll" class="headerlink" title="poll"></a>poll</h5><p>poll 是一个至关重要的阶段，poll 阶段的执行逻辑流程图如下：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1618573818346-738f855a-9297-4b19-9e7e-4350d4e3e7d1.jpeg#clientId=u0fbb7ad9-f0df-4&from=drop&id=ubb22cbe6&margin=%5Bobject%20Object%5D&originHeight=594&originWidth=625&originalType=binary&size=38789&status=done&style=none&taskId=u17631d17-a0d2-4dfb-acf9-0827e261e10"></p>
+<p>如果当前已经存在定时器，而且有定时器到时间了，拿出来执行，eventLoop 将回到 timers 阶段。</p>
+<p>如果没有定时器, 会去看回调函数队列。</p>
+<ul>
+<li>如果 poll 队列不为空，会遍历回调队列并同步执行，直到队列为空或者达到系统限制</li>
+<li>如果 poll 队列为空时，会有两件事发生<ul>
+<li>如果有 setImmediate 回调需要执行，poll 阶段会停止并且进入到 check 阶段执行回调</li>
+<li>如果没有 setImmediate 回调需要执行，会等待回调被加入到队列中并立即执行回调，这里同样会有个超时时间设置防止一直等待下去,一段时间后自动进入 check 阶段。</li>
+</ul>
+</li>
+</ul>
+<h5 id="check"><a href="#check" class="headerlink" title="check"></a>check</h5><p>check 阶段。这是一个比较简单的阶段，直接执行 setImmdiate 的回调。</p>
+<h4 id="process-nextTick"><a href="#process-nextTick" class="headerlink" title="process.nextTick"></a>process.nextTick</h4><p>process.nextTick 是一个独立于 eventLoop 的任务队列。</p>
+<p>在每一个 eventLoop 阶段完成后会去检查 nextTick 队列，如果里面有任务，会让这部分任务优先于微任务执行。</p>
+<p>看一个例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">setImmediate(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;timeout1&quot;</span>);</span><br><span class="line">  <span class="built_in">Promise</span>.resolve().then(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;promise resolve&quot;</span>));</span><br><span class="line">  process.nextTick(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;next tick1&quot;</span>));</span><br><span class="line">&#125;);</span><br><span class="line">setImmediate(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;timeout2&quot;</span>);</span><br><span class="line">  process.nextTick(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;next tick2&quot;</span>));</span><br><span class="line">&#125;);</span><br><span class="line">setImmediate(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;timeout3&quot;</span>));</span><br><span class="line">setImmediate(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;timeout4&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在 node11 之前，因为每一个 eventLoop 阶段完成后会去检查 nextTick 队列，如果里面有任务，会让这部分任务优先于微任务执行，因此上述代码是先进入 check 阶段，执行所有 setImmediate，完成之后执行 nextTick 队列，最后执行微任务队列，因此输出为<code>timeout1=&gt;timeout2=&gt;timeout3=&gt;timeout4=&gt;next tick1=&gt;next tick2=&gt;promise resolve</code></li>
+<li>在 node11 之后，process.nextTick 是微任务的一种,因此上述代码是先进入 check 阶段，执行一个 setImmediate 宏任务，然后执行其微任务队列，再执行下一个宏任务及其微任务,因此输出为<code>timeout1=&gt;next tick1=&gt;promise resolve=&gt;timeout2=&gt;next tick2=&gt;timeout3=&gt;timeout4</code></li>
+</ul>
+<h3 id="node-版本差异说明"><a href="#node-版本差异说明" class="headerlink" title="node 版本差异说明"></a>node 版本差异说明</h3><p>这里主要说明的是 node11 前后的差异，因为 node11 之后一些特性已经向浏览器看齐了，总的变化一句话来说就是，如果是 node11 版本一旦执行一个阶段里的一个宏任务(setTimeout,setInterval 和 setImmediate)就立刻执行对应的微任务队列，一起来看看吧～</p>
+<h4 id="timers-阶段的执行时机变化"><a href="#timers-阶段的执行时机变化" class="headerlink" title="timers 阶段的执行时机变化"></a>timers 阶段的执行时机变化</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;timer1&quot;</span>);</span><br><span class="line">  <span class="built_in">Promise</span>.resolve().then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;promise1&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;timer2&quot;</span>);</span><br><span class="line">  <span class="built_in">Promise</span>.resolve().then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;promise2&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果是 node11 版本一旦执行一个阶段里的一个宏任务(setTimeout,setInterval 和 setImmediate)就立刻执行微任务队列，这就跟浏览器端运行一致，最后的结果为<code>timer1=&gt;promise1=&gt;timer2=&gt;promise2</code></li>
+<li>如果是 node10 及其之前版本要看第一个定时器执行完，第二个定时器是否在完成队列中.<ul>
+<li>如果是第二个定时器还未在完成队列中，最后的结果为<code>timer1=&gt;promise1=&gt;timer2=&gt;promise2</code></li>
+<li>如果是第二个定时器已经在完成队列中，则最后的结果为<code>timer1=&gt;timer2=&gt;promise1=&gt;promise2</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="check-阶段的执行时机变化"><a href="#check-阶段的执行时机变化" class="headerlink" title="check 阶段的执行时机变化"></a>check 阶段的执行时机变化</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">setImmediate(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;immediate1&quot;</span>));</span><br><span class="line">setImmediate(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;immediate2&quot;</span>);</span><br><span class="line">  <span class="built_in">Promise</span>.resolve().then(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;promise resolve&quot;</span>));</span><br><span class="line">&#125;);</span><br><span class="line">setImmediate(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;immediate3&quot;</span>));</span><br><span class="line">setImmediate(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;immediate4&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果是 node11 后的版本，会输出<code>immediate1=&gt;immediate2=&gt;promise resolve=&gt;immediate3=&gt;immediate4</code></li>
+<li>如果是 node11 前的版本，会输出<code>immediate1=&gt;immediate2=&gt;immediate3=&gt;immediate4=&gt;promise resolve</code></li>
+</ul>
+<h4 id="nextTick-队列的执行时机变化"><a href="#nextTick-队列的执行时机变化" class="headerlink" title="nextTick 队列的执行时机变化"></a>nextTick 队列的执行时机变化</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">setImmediate(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;timeout1&quot;</span>));</span><br><span class="line">setImmediate(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;timeout2&quot;</span>);</span><br><span class="line">  process.nextTick(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;next tick&quot;</span>));</span><br><span class="line">&#125;);</span><br><span class="line">setImmediate(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;timeout3&quot;</span>));</span><br><span class="line">setImmediate(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;timeout4&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果是 node11 后的版本，会输出<code>timeout1=&gt;timeout2=&gt;next tick=&gt;timeout3=&gt;timeout4</code></li>
+<li>如果是 node11 前的版本，会输出<code>timeout1=&gt;timeout2=&gt;timeout3=&gt;timeout4=&gt;next tick</code></li>
+</ul>
+<p>以上几个例子，你应该就能清晰感受到它的变化了，反正记着一个结论，如果是 node11 版本一旦执行一个阶段里的一个宏任务(setTimeout,setInterval 和 setImmediate)就立刻执行对应的微任务队列。</p>
+<h3 id="node-和-浏览器-eventLoop-的主要区别"><a href="#node-和-浏览器-eventLoop-的主要区别" class="headerlink" title="node 和 浏览器 eventLoop 的主要区别"></a>node 和 浏览器 eventLoop 的主要区别</h3><p>两者最主要的区别在于浏览器中的微任务是在每个相应的宏任务中执行的，而 nodejs 中的微任务是在不同阶段之间执行的。</p>
+<h3 id="更多理解资料"><a href="#更多理解资料" class="headerlink" title="更多理解资料"></a>更多理解资料</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI0MzIyMDM5Ng==%E2%88%A3=2649826490&idx=1&sn=5e38c673dfa45dabc1a348597cdd6e82&chksm=f175ee79c602676fc885e145fbaef28e6e88678f852c62fb00b8229cfedcf9ac422bcf20b2e4&scene=21#wechat_redirect">【语音解题系列】说说 JS 的事件循环机制 (含满分答题技巧)</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/qEmR-N6cANSkKuJt2QO_eg">【语音解题系列】说说 JS 的事件循环机制 (含满分答题技巧)</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/LuckyWinty/fe-weekly-questions/issues">自测题目</a></li>
+</ul>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://juejin.im/book/6844733763675488269/section/6844733763763568654#heading-4">前端面试之道</a></li>
+<li><a target="_blank" rel="noopener" href="https://juejin.im/post/6844903858129338375">一道面试题引发的 node 事件循环深入思考</a></li>
+<li><a target="_blank" rel="noopener" href="https://nodejs.org/zh-cn/docs/guides/event-loop-timers-and-nexttick/">Node.js 事件循环，定时器和 process.nextTick()</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/33058983">详解 JavaScript 中的 Event Loop（事件循环）机制</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.insiderattack.net/new-changes-to-timers-and-microtasks-from-node-v11-0-0-and-above-68d112743eb3">New Changes to the Timers and Microtasks in Node v11.0.0 ( and above)</a></li>
+</ul>
+<h3 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h3><ul>
+<li>欢迎加我微信(winty230)，拉你进技术群，长期交流学习…</li>
+<li>欢迎关注「前端 Q」,认真学前端，做个有专业的技术人…</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618573825825-d88156eb-e92a-4394-95c6-642ec5c602cd.png#clientId=u0fbb7ad9-f0df-4&from=drop&id=ua550051a&margin=%5Bobject%20Object%5D&originHeight=480&originWidth=480&originalType=binary&size=207122&status=done&style=none&taskId=u875f592c-0be4-4d8f-ac64-3ffb5c9bdb7"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/16/yuque/%E4%BD%9C%E7%94%A8%E5%9F%9F/" rel="prev" title="作用域">
+      <i class="fa fa-chevron-left"></i> 作用域
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/16/hello-world/" rel="next" title="Hello World">
+      Hello World <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%94%E9%A2%98%E5%A4%A7%E7%BA%B2"><span class="nav-number">1.</span> <span class="nav-text">答题大纲</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B8%AD%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF"><span class="nav-number">2.</span> <span class="nav-text">浏览器中的事件循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#async-await-%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F"><span class="nav-number">3.</span> <span class="nav-text">async&#x2F;await 执行顺序</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F"><span class="nav-number">3.1.</span> <span class="nav-text">注意</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#node-%E4%B8%AD%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF"><span class="nav-number">4.</span> <span class="nav-text">node 中的事件循环</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%8F%E4%BB%BB%E5%8A%A1%E5%92%8C%E5%BE%AE%E4%BB%BB%E5%8A%A1"><span class="nav-number">4.1.</span> <span class="nav-text">宏任务和微任务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#node-%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E6%95%B4%E4%BD%93%E7%90%86%E8%A7%A3"><span class="nav-number">4.2.</span> <span class="nav-text">node 事件循环整体理解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%98%B6%E6%AE%B5%E6%A6%82%E8%BF%B0"><span class="nav-number">4.3.</span> <span class="nav-text">阶段概述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%89%E5%A4%A7%E9%87%8D%E7%82%B9%E9%98%B6%E6%AE%B5"><span class="nav-number">4.4.</span> <span class="nav-text">三大重点阶段</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#timers"><span class="nav-number">4.4.1.</span> <span class="nav-text">timers</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#poll"><span class="nav-number">4.4.2.</span> <span class="nav-text">poll</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#check"><span class="nav-number">4.4.3.</span> <span class="nav-text">check</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#process-nextTick"><span class="nav-number">4.5.</span> <span class="nav-text">process.nextTick</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#node-%E7%89%88%E6%9C%AC%E5%B7%AE%E5%BC%82%E8%AF%B4%E6%98%8E"><span class="nav-number">5.</span> <span class="nav-text">node 版本差异说明</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#timers-%E9%98%B6%E6%AE%B5%E7%9A%84%E6%89%A7%E8%A1%8C%E6%97%B6%E6%9C%BA%E5%8F%98%E5%8C%96"><span class="nav-number">5.1.</span> <span class="nav-text">timers 阶段的执行时机变化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#check-%E9%98%B6%E6%AE%B5%E7%9A%84%E6%89%A7%E8%A1%8C%E6%97%B6%E6%9C%BA%E5%8F%98%E5%8C%96"><span class="nav-number">5.2.</span> <span class="nav-text">check 阶段的执行时机变化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#nextTick-%E9%98%9F%E5%88%97%E7%9A%84%E6%89%A7%E8%A1%8C%E6%97%B6%E6%9C%BA%E5%8F%98%E5%8C%96"><span class="nav-number">5.3.</span> <span class="nav-text">nextTick 队列的执行时机变化</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#node-%E5%92%8C-%E6%B5%8F%E8%A7%88%E5%99%A8-eventLoop-%E7%9A%84%E4%B8%BB%E8%A6%81%E5%8C%BA%E5%88%AB"><span class="nav-number">6.</span> <span class="nav-text">node 和 浏览器 eventLoop 的主要区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E5%A4%9A%E7%90%86%E8%A7%A3%E8%B5%84%E6%96%99"><span class="nav-number">7.</span> <span class="nav-text">更多理解资料</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">8.</span> <span class="nav-text">参考资料</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%90%8E"><span class="nav-number">9.</span> <span class="nav-text">最后</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Adam Blog</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Adam Blog</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
