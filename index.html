@@ -170,7 +170,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-04-17 00:22:49" itemprop="dateCreated datePublished" datetime="2021-04-17T00:22:49+08:00">2021-04-17</time>
+              <time title="创建时间：2021-04-17 00:30:18" itemprop="dateCreated datePublished" datetime="2021-04-17T00:30:18+08:00">2021-04-17</time>
             </span>
 
           
@@ -241,7 +241,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-04-17 00:22:27 / 修改时间：00:23:24" itemprop="dateCreated datePublished" datetime="2021-04-17T00:22:27+08:00">2021-04-17</time>
+              <time title="创建时间：2021-04-17 00:22:27 / 修改时间：00:30:48" itemprop="dateCreated datePublished" datetime="2021-04-17T00:22:27+08:00">2021-04-17</time>
             </span>
 
           
@@ -292,35 +292,7 @@
 <p>显然，新增的逻辑就是针对 resolve 入参为 Promise 的时候的处理。我们观察一下 test 里面创建的 Promise，它是没有调用 then 方法的。从上面的分析我们已经知道 Promise 的回调函数就是通过调用其 then 方法注册的，因此 test 里面创建的 Promise 其回调函数为空。</p>
 <p>显然如果没有回调函数，执行 resolve 的时候，是没办法链式下去的。因此，我们需要主动为其注入回调函数。</p>
 <p>我们只要把第一个 then 中产生的 Promise 的 resolve 函数的执行，延迟到 test 里面的 Promise 的状态为 onFulfilled 的时候再执行，那么链式就可以继续了。所以，当 resolve 入参为 Promise 的时候，调用其 then 方法为其注入回调函数，而注入的是前一个 Promise 的 resolve 方法，所以要用 call 来绑定 this 的指向。</p>
-<p>基于新的 Promise 模型，上面的执行过程产生的 Promise 实例及其回调函数，可以用看下表：</p>
-<table>
-<thead>
-<tr>
-<th>Promise</th>
-<th>callback</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>P1</td>
-<td>[{onFulfilled:c1(第一个 then 中的 fn),resolve:p2resolve}]</td>
-</tr>
-<tr>
-<td>P2 (P1 调用 then 时产生)</td>
-<td>[{onFulfilled:c2(第二个 then 中的 fn),resolve:p3resolve}]</td>
-</tr>
-<tr>
-<td>P3 (P2 调用 then 时产生)</td>
-<td>[]</td>
-</tr>
-<tr>
-<td>P4 (执行 c1 中产生[调用 test ])</td>
-<td>[{onFulfilled:p2resolve,resolve:p5resolve}]</td>
-</tr>
-<tr>
-<td>P5 (调用 p2resolve 时，进入 then.call 逻辑中产生)</td>
-<td>[]</td>
-</tr>
-</tbody></table>
+<p>基于新的 Promise 模型，上面的执行过程产生的 Promise 实例及其回调函数，可以用看下表：<br>| Promise | callback |<br>| — | — |<br>| P1 | [{onFulfilled:c1(第一个 then 中的 fn),resolve:p2resolve}] |<br>| P2 (P1 调用 then 时产生) | [{onFulfilled:c2(第二个 then 中的 fn),resolve:p3resolve}] |<br>| P3 (P2 调用 then 时产生) | [] |<br>| P4 (执行 c1 中产生[调用 test ]) | [{onFulfilled:p2resolve,resolve:p5resolve}] |<br>| P5 (调用 p2resolve 时，进入 then.call 逻辑中产生) | [] |</p>
 <p>有了这个表格，我们就可以清晰知道各个实例中 callback 执行的顺序是：</p>
 <p>c1 -&gt; p2resolve -&gt; c2 -&gt; p3resolve -&gt; [] -&gt; p5resolve -&gt; []</p>
 <p>以上就是链式调用的原理了。</p>
@@ -373,7 +345,7 @@
 <h3 id="完整-Promise-模型"><a href="#完整-Promise-模型" class="headerlink" title="完整 Promise 模型"></a>完整 Promise 模型</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br></pre></td><td class="code"><pre><span class="line">function Promise(fn) &#123;</span><br><span class="line">  let state &#x3D; &#39;pending&#39;</span><br><span class="line">  let value &#x3D; null</span><br><span class="line">  const callbacks &#x3D; []</span><br><span class="line"></span><br><span class="line">  this.then &#x3D; function (onFulfilled, onRejected) &#123;</span><br><span class="line">    return new Promise((resolve, reject) &#x3D;&gt; &#123;</span><br><span class="line">      handle(&#123;</span><br><span class="line">        onFulfilled,</span><br><span class="line">        onRejected,</span><br><span class="line">        resolve,</span><br><span class="line">        reject,</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  this.catch &#x3D; function (onError) &#123;</span><br><span class="line">    return this.then(null, onError)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  this.finally &#x3D; function (onDone) &#123;</span><br><span class="line">    this.then(onDone, onError)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  this.resolve &#x3D; function (value) &#123;</span><br><span class="line">    if (value &amp;&amp; value instanceof Promise) &#123;</span><br><span class="line">      return value</span><br><span class="line">    &#125; if (value &amp;&amp; typeof value &#x3D;&#x3D;&#x3D; &#39;object&#39; &amp;&amp; typeof value.then &#x3D;&#x3D;&#x3D; &#39;function&#39;) &#123;</span><br><span class="line">      const &#123; then &#125; &#x3D; value</span><br><span class="line">      return new Promise((resolve) &#x3D;&gt; &#123;</span><br><span class="line">        then(resolve)</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125; if (value) &#123;</span><br><span class="line">      return new Promise(resolve &#x3D;&gt; resolve(value))</span><br><span class="line">    &#125;</span><br><span class="line">    return new Promise(resolve &#x3D;&gt; resolve())</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  this.reject &#x3D; function (value) &#123;</span><br><span class="line">    return new Promise(((resolve, reject) &#x3D;&gt; &#123;</span><br><span class="line">      reject(value)</span><br><span class="line">    &#125;))</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  this.all &#x3D; function (arr) &#123;</span><br><span class="line">    const args &#x3D; Array.prototype.slice.call(arr)</span><br><span class="line">    return new Promise(((resolve, reject) &#x3D;&gt; &#123;</span><br><span class="line">      if (args.length &#x3D;&#x3D;&#x3D; 0) return resolve([])</span><br><span class="line">      let remaining &#x3D; args.length</span><br><span class="line"></span><br><span class="line">      function res(i, val) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">          if (val &amp;&amp; (typeof val &#x3D;&#x3D;&#x3D; &#39;object&#39; || typeof val &#x3D;&#x3D;&#x3D; &#39;function&#39;)) &#123;</span><br><span class="line">            const &#123; then &#125; &#x3D; val</span><br><span class="line">            if (typeof then &#x3D;&#x3D;&#x3D; &#39;function&#39;) &#123;</span><br><span class="line">              then.call(val, (val) &#x3D;&gt; &#123;</span><br><span class="line">                res(i, val)</span><br><span class="line">              &#125;, reject)</span><br><span class="line">              return</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">          args[i] &#x3D; val</span><br><span class="line">          if (--remaining &#x3D;&#x3D;&#x3D; 0) &#123;</span><br><span class="line">            resolve(args)</span><br><span class="line">          &#125;</span><br><span class="line">        &#125; catch (ex) &#123;</span><br><span class="line">          reject(ex)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      for (let i &#x3D; 0; i &lt; args.length; i++) &#123;</span><br><span class="line">        res(i, args[i])</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;))</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  this.race &#x3D; function (values) &#123;</span><br><span class="line">    return new Promise(((resolve, reject) &#x3D;&gt; &#123;</span><br><span class="line">      for (let i &#x3D; 0, len &#x3D; values.length; i &lt; len; i++) &#123;</span><br><span class="line">        values[i].then(resolve, reject)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;))</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  function handle(callback) &#123;</span><br><span class="line">    if (state &#x3D;&#x3D;&#x3D; &#39;pending&#39;) &#123;</span><br><span class="line">      callbacks.push(callback)</span><br><span class="line">      return</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    const cb &#x3D; state &#x3D;&#x3D;&#x3D; &#39;fulfilled&#39; ? callback.onFulfilled : callback.onRejected</span><br><span class="line">    const next &#x3D; state &#x3D;&#x3D;&#x3D; &#39;fulfilled&#39; ? callback.resolve : callback.reject</span><br><span class="line"></span><br><span class="line">    if (!cb) &#123;</span><br><span class="line">      next(value)</span><br><span class="line">      return</span><br><span class="line">    &#125;</span><br><span class="line">    let ret;</span><br><span class="line">    try &#123;</span><br><span class="line">     ret &#x3D; cb(value)</span><br><span class="line">    &#125; catch (e) &#123;</span><br><span class="line">      callback.reject(e)</span><br><span class="line">    &#125;</span><br><span class="line">	callback.resolve(ret);</span><br><span class="line">  &#125;</span><br><span class="line">  function resolve(newValue) &#123;</span><br><span class="line">    const fn &#x3D; () &#x3D;&gt; &#123;</span><br><span class="line">      if (state !&#x3D;&#x3D; &#39;pending&#39;) return</span><br><span class="line"></span><br><span class="line">      if (newValue &amp;&amp; (typeof newValue &#x3D;&#x3D;&#x3D; &#39;object&#39; || typeof newValue &#x3D;&#x3D;&#x3D; &#39;function&#39;)) &#123;</span><br><span class="line">        const &#123; then &#125; &#x3D; newValue</span><br><span class="line">        if (typeof then &#x3D;&#x3D;&#x3D; &#39;function&#39;) &#123;</span><br><span class="line">          &#x2F;&#x2F; newValue 为新产生的 Promise,此时resolve为上个 promise 的resolve</span><br><span class="line">          &#x2F;&#x2F; 相当于调用了新产生 Promise 的then方法，注入了上个 promise 的resolve 为其回调</span><br><span class="line">          then.call(newValue, resolve, reject)</span><br><span class="line">          return</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      state &#x3D; &#39;fulfilled&#39;</span><br><span class="line">      value &#x3D; newValue</span><br><span class="line">      handelCb()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    setTimeout(fn, 0)</span><br><span class="line">  &#125;</span><br><span class="line">  function reject(error) &#123;</span><br><span class="line">    const fn &#x3D; () &#x3D;&gt; &#123;</span><br><span class="line">      if (state !&#x3D;&#x3D; &#39;pending&#39;) return</span><br><span class="line"></span><br><span class="line">      if (error &amp;&amp; (typeof error &#x3D;&#x3D;&#x3D; &#39;object&#39; || typeof error &#x3D;&#x3D;&#x3D; &#39;function&#39;)) &#123;</span><br><span class="line">        const &#123; then &#125; &#x3D; error</span><br><span class="line">        if (typeof then &#x3D;&#x3D;&#x3D; &#39;function&#39;) &#123;</span><br><span class="line">          then.call(error, resolve, reject)</span><br><span class="line">          return</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      state &#x3D; &#39;rejected&#39;</span><br><span class="line">      value &#x3D; error</span><br><span class="line">      handelCb()</span><br><span class="line">    &#125;</span><br><span class="line">    setTimeout(fn, 0)</span><br><span class="line">  &#125;</span><br><span class="line">  function handelCb() &#123;</span><br><span class="line">    while (callbacks.length) &#123;</span><br><span class="line">      const fn &#x3D; callbacks.shift()</span><br><span class="line">      handle(fn)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  try &#123;</span><br><span class="line">  fn(resolve, reject)</span><br><span class="line">  &#125; catch(ex) &#123;</span><br><span class="line">	reject(ex);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h3 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h3><p>觉得内容有帮助可以关注下我的公众号 「前端 Q」，一起学习成长～～</p>
-<p><img src="1.png#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618590479863-45b3793c-1dfa-4e0f-b837-edc1d348729a.png#clientId=u6208012a-0391-4&from=drop&id=u4b2d7e71&margin=%5Bobject%20Object%5D&originHeight=800&originWidth=2800&originalType=binary&size=174941&status=done&style=none&taskId=u0db2a6a1-badf-4755-8f94-e4b9e18befe"></p>
 
       
     </div>
@@ -424,7 +396,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-17 00:23:25" itemprop="dateModified" datetime="2021-04-17T00:23:25+08:00">2021-04-17</time>
+                <time title="修改时间：2021-04-17 00:30:49" itemprop="dateModified" datetime="2021-04-17T00:30:49+08:00">2021-04-17</time>
               </span>
 
           
@@ -650,7 +622,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-17 00:23:25" itemprop="dateModified" datetime="2021-04-17T00:23:25+08:00">2021-04-17</time>
+                <time title="修改时间：2021-04-17 00:30:49" itemprop="dateModified" datetime="2021-04-17T00:30:49+08:00">2021-04-17</time>
               </span>
 
           
@@ -834,7 +806,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-17 00:23:25" itemprop="dateModified" datetime="2021-04-17T00:23:25+08:00">2021-04-17</time>
+                <time title="修改时间：2021-04-17 00:30:49" itemprop="dateModified" datetime="2021-04-17T00:30:49+08:00">2021-04-17</time>
               </span>
 
           
@@ -1094,7 +1066,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-17 00:23:25" itemprop="dateModified" datetime="2021-04-17T00:23:25+08:00">2021-04-17</time>
+                <time title="修改时间：2021-04-17 00:30:49" itemprop="dateModified" datetime="2021-04-17T00:30:49+08:00">2021-04-17</time>
               </span>
 
           
@@ -1167,7 +1139,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-17 00:23:25" itemprop="dateModified" datetime="2021-04-17T00:23:25+08:00">2021-04-17</time>
+                <time title="修改时间：2021-04-17 00:30:49" itemprop="dateModified" datetime="2021-04-17T00:30:49+08:00">2021-04-17</time>
               </span>
 
           
@@ -1232,7 +1204,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-17 00:23:25" itemprop="dateModified" datetime="2021-04-17T00:23:25+08:00">2021-04-17</time>
+                <time title="修改时间：2021-04-17 00:30:49" itemprop="dateModified" datetime="2021-04-17T00:30:49+08:00">2021-04-17</time>
               </span>
 
           
@@ -1319,7 +1291,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-17 00:23:25" itemprop="dateModified" datetime="2021-04-17T00:23:25+08:00">2021-04-17</time>
+                <time title="修改时间：2021-04-17 00:30:49" itemprop="dateModified" datetime="2021-04-17T00:30:49+08:00">2021-04-17</time>
               </span>
 
           
@@ -1393,7 +1365,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-17 00:23:25" itemprop="dateModified" datetime="2021-04-17T00:23:25+08:00">2021-04-17</time>
+                <time title="修改时间：2021-04-17 00:30:49" itemprop="dateModified" datetime="2021-04-17T00:30:49+08:00">2021-04-17</time>
               </span>
 
           
