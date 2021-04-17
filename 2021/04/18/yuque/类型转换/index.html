@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="原始值到原始值的转换原始值转化为布尔值 所有的假值(undefined、null、0、-0、NaN、””)会被转化为 false，其他都会被转为 true 原始值转化为字符串 都相当于 原始值 + “” 原始值转为数字  布尔转数字：true -&gt; 1, false -&gt; 0 字符串转数字：以数字表示的字符串可以直接会转为字符串，如果字符串头尾有空格会忽略，但是空格在中间，转换结果就是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="类型转换">
+<meta property="og:url" content="http://example.com/2021/04/18/yuque/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/index.html">
+<meta property="og:site_name" content="Adam">
+<meta property="og:description" content="原始值到原始值的转换原始值转化为布尔值 所有的假值(undefined、null、0、-0、NaN、””)会被转化为 false，其他都会被转为 true 原始值转化为字符串 都相当于 原始值 + “” 原始值转为数字  布尔转数字：true -&gt; 1, false -&gt; 0 字符串转数字：以数字表示的字符串可以直接会转为字符串，如果字符串头尾有空格会忽略，但是空格在中间，转换结果就是">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://47.98.159.95/my_blog/015/type.jpg#alt=project">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/8/7/165124228d44d25a?imageView2/0/w/1280/h/960/format/webp/ignore-error/1#alt=">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/8/7/165124228d85b808?imageView2/0/w/1280/h/960/format/webp/ignore-error/1#alt=img">
+<meta property="og:image" content="https://yck-1254263422.cos.ap-shanghai.myqcloud.com/blog/2019-06-01-043719.png#alt=img">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/8/7/165124228d0924e7?imageView2/0/w/1280/h/960/format/webp/ignore-error/1#alt=img">
+<meta property="article:published_time" content="2021-04-17T16:11:00.000Z">
+<meta property="article:modified_time" content="2021-04-17T16:13:22.089Z">
+<meta property="article:author" content="Adam Blog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://47.98.159.95/my_blog/015/type.jpg#alt=project">
+
+<link rel="canonical" href="http://example.com/2021/04/18/yuque/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>类型转换 | Adam</title>
+  <meta name="referrer" content="no-referrer" />
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Adam</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/18/yuque/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          类型转换
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-18 00:11:00 / 修改时间：00:13:22" itemprop="dateCreated datePublished" datetime="2021-04-18T00:11:00+08:00">2021-04-18</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="原始值到原始值的转换"><a href="#原始值到原始值的转换" class="headerlink" title="原始值到原始值的转换"></a>原始值到原始值的转换</h2><p>原始值转化为布尔值</p>
+<p>所有的假值(undefined、null、0、-0、NaN、””)会被转化为 false，其他都会被转为 true</p>
+<p>原始值转化为字符串 都相当于 原始值 + “”</p>
+<p>原始值转为数字</p>
+<ul>
+<li>布尔转数字：true -&gt; 1, false -&gt; 0</li>
+<li>字符串转数字：以数字表示的字符串可以直接会转为字符串，如果字符串头尾有空格会忽略，但是空格在中间，转换结果就是 NaN。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">+&quot; 66&quot; &#x2F;&#x2F; 66</span><br><span class="line">+&quot; 6 7 &quot; &#x2F;&#x2F; NaN</span><br></pre></td></tr></table></figure>
+
+<h2 id="原始值到对象的转换"><a href="#原始值到对象的转换" class="headerlink" title="原始值到对象的转换"></a>原始值到对象的转换</h2><ul>
+<li>null 和 undefined 转对象直接抛异常</li>
+<li>原始值通过调用 String()、Number()、Boolean()构造函数，转换为他们各自的包装对象</li>
+<li><img src="http://47.98.159.95/my_blog/015/type.jpg#alt=project"></li>
+</ul>
+<h2 id="对象到原始值的转换"><a href="#对象到原始值的转换" class="headerlink" title="对象到原始值的转换"></a>对象到原始值的转换</h2><p>对象转为布尔都为 true</p>
+<p>对象到字符串</p>
+<ul>
+<li>如果对象有 toString() 方法，就调用 toString() 方法。如果该方法返回原始值，就讲这个值转化为字符串。</li>
+<li>如果对象没有 toString() 方法或者 该方法返回的不是原始值，就会调用该对象的 valueOf() 方法。如果存在就调用这个方法，如果返回值是原始值，就转化为字符串。</li>
+<li>否则就报错</li>
+</ul>
+<p>对象到数字</p>
+<ul>
+<li>对象转化为数字做了跟对象转化为字符串做了想同的事儿，不同的是后者是先调用 valueOf 方法，如果调用失败或者返回不是原始值，就调用 toString 方法。</li>
+</ul>
+<p>补充。一些常用内置对象 toString 方法和 valueOf 的转换规则</p>
+<ul>
+<li>toString 相关</li>
+</ul>
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/7/165124228d44d25a?imageView2/0/w/1280/h/960/format/webp/ignore-error/1#alt="></p>
+<ul>
+<li>valueOf 相关</li>
+</ul>
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/7/165124228d85b808?imageView2/0/w/1280/h/960/format/webp/ignore-error/1#alt=img"></p>
+<h2 id="运算符如何进行类型转换"><a href="#运算符如何进行类型转换" class="headerlink" title="== 运算符如何进行类型转换"></a>== 运算符如何进行类型转换</h2><ol>
+<li>如果一个值是 null，另一个值是 undefined，则相等</li>
+<li>如果一个是字符串，另一个值是数字，则把字符串转换成数字，进行比较</li>
+<li>如果任意值是 true，则把 true 转换成 1 再进行比较；如果任意值是 false，则把 false 转换成 0 再进行比较</li>
+<li>如果一个是对象，另一个是数值或字符串，把对象转换成基础类型的值再比较。对象转换成基础类型，利用它的 toString 或者 valueOf 方法。 <strong>js 核心内置类，会尝试 valueOf 先于 toString（可以理解为对象优先转换成数字</strong>）；例外的是 Date，Date 利用的是 toString 转换。非 js 核心的对象，通过自己的实现中定义的方法转换成原始值。</li>
+<li><img src="https://yck-1254263422.cos.ap-shanghai.myqcloud.com/blog/2019-06-01-043719.png#alt=img"></li>
+</ol>
+<h2 id="运算符如何进行类型转化"><a href="#运算符如何进行类型转化" class="headerlink" title="+ 运算符如何进行类型转化"></a>+ 运算符如何进行类型转化</h2><p>如果作为一元运算符就是转化为数字，常常用来将字符串转化为数字</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">+&quot;2&quot; &#x2F;&#x2F;  2</span><br><span class="line">2+false &#x2F;&#x2F; 0</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>如果作为二元运算符就有两种转换方式</p>
+<ul>
+<li>两边如果有字符串，另一边一会转化为字符串进行相加</li>
+<li>如果没有字符串，两边都会转化为数字进行相加，对象也根据前面的方法转化为原始值数字。</li>
+<li>如果其中的一个操作数是对象,则将对象转换成原始值，日期对象会通过 toString() 方法进行转换，其他对象通过 valueOf（）方法进行转换，但是大多数方法都是不具备可用的 valueOf() 方法，所以还是会通过 toString() 方法执行转换。</li>
+</ul>
+<p>流程图如下：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/8/7/165124228d0924e7?imageView2/0/w/1280/h/960/format/webp/ignore-error/1#alt=img"></p>
+<h1 id="、-、-、-amp-amp"><a href="#、-、-、-amp-amp" class="headerlink" title="+、==、||、&amp;&amp;"></a><strong>+、==、||、&amp;&amp;</strong></h1><h3 id="重点"><a href="#重点" class="headerlink" title="+ (重点)"></a>+ (重点)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">1 + &quot;1&quot; &#x2F;&#x2F; &#39;11&#39;</span><br><span class="line">1 + &quot;string&quot; &#x2F;&#x2F; &quot;1tring&quot; （加非数字字符串）</span><br><span class="line">1 + true &#x2F;&#x2F; 2</span><br><span class="line">1 + false &#x2F;&#x2F;1</span><br><span class="line">1 + [] &#x2F;&#x2F; &quot;1&quot;</span><br><span class="line">1 + [1,2,3] &#x2F;&#x2F; &quot;11,2,3&quot;</span><br><span class="line">1 + &#123;&#125;  &#x2F;&#x2F; &quot;1[object Object]&quot;</span><br><span class="line">1 + null &#x2F;&#x2F; 1</span><br><span class="line">1 + undefined &#x2F;&#x2F; 1</span><br><span class="line">null + undefined &#x2F;&#x2F; NaN</span><br><span class="line"></span><br><span class="line">true + 1 &#x2F;&#x2F; 2</span><br><span class="line">true + &quot;1&quot; &#x2F;&#x2F; &quot;true1&quot;</span><br><span class="line">true + &quot;true&quot; &#x2F;&#x2F; &quot;truetrue&quot; （加非数字字符串）</span><br><span class="line">true + true &#x2F;&#x2F; 2</span><br><span class="line">true + false &#x2F;&#x2F; 1</span><br><span class="line">true + [] &#x2F;&#x2F; &quot;true&quot;</span><br><span class="line">true + [1,2,3] &#x2F;&#x2F; &quot;true1,2,3&quot;</span><br><span class="line">true + &quot;true[object Object]&quot; &#x2F;&#x2F; NaN</span><br><span class="line">true + null &#x2F;&#x2F; 1</span><br><span class="line">true + undefined &#x2F;&#x2F; NaN</span><br><span class="line"></span><br><span class="line">false + 1 &#x2F;&#x2F; 1</span><br><span class="line">false + &quot;1&quot; &#x2F;&#x2F; &quot;false1&quot;</span><br><span class="line">false + &quot;string&quot; &#x2F;&#x2F; &quot;falsestring&quot; （加非数字字符串）</span><br><span class="line">false + false &#x2F;&#x2F; 0</span><br><span class="line">false + true &#x2F;&#x2F; 1</span><br><span class="line">false + [] &#x2F;&#x2F; &quot;false&quot;</span><br><span class="line">false + &#123;&#125;  &#x2F;&#x2F; &quot;false[object Object]&quot;</span><br><span class="line"></span><br><span class="line">[] + 1 &#x2F;&#x2F; &quot;1&quot;</span><br><span class="line">[] + &quot;1&quot; &#x2F;&#x2F; &quot;1&quot;</span><br><span class="line">[] + &quot;string&quot; &#x2F;&#x2F; &quot;string&quot; （加非数字字符串）</span><br><span class="line">[] + true  &#x2F;&#x2F; &quot;true&quot;</span><br><span class="line">[] + false &#x2F;&#x2F; &quot;false&quot;</span><br><span class="line">[] + [] &#x2F;&#x2F; &quot;&quot;</span><br><span class="line">[1] + [1] &#x2F;&#x2F; &quot;11&quot;</span><br><span class="line">[] + &#123;&#125; &#x2F;&#x2F; &quot;[object Object]&quot; （注意！！！）</span><br><span class="line">[] + null &#x2F;&#x2F; &quot;null&quot;</span><br><span class="line">[] + undefined &#x2F;&#x2F; &quot;undefined&quot;</span><br><span class="line"></span><br><span class="line">&#123;&#125; + 1 &#x2F;&#x2F; 1</span><br><span class="line">&#123;&#125; + &quot;1&quot; &#x2F;&#x2F; 1</span><br><span class="line">&#123;&#125; + &quot;string&quot; &#x2F;&#x2F; NaN</span><br><span class="line">&#123;&#125; + true &#x2F;&#x2F; 1</span><br><span class="line">&#123;&#125; + false &#x2F;&#x2F; 0</span><br><span class="line">&#123;&#125; + [] &#x2F;&#x2F; 0 （注意！！！）</span><br><span class="line">&#123; a:1 &#125; + [] &#x2F;&#x2F; 0（注意！！！）</span><br><span class="line">&#123;&#125; + [1] &#x2F;&#x2F; 1 （注意！！！）</span><br><span class="line">&#123;&#125; + [1,2,3] &#x2F;&#x2F; NaN （注意！！！）</span><br><span class="line">&#123;&#125; + &#123;&#125; &#x2F;&#x2F; &quot;[object Object][object Object]&quot;</span><br><span class="line">&#123;&#125; + null &#x2F;&#x2F; 0</span><br><span class="line">&#123;&#125; + undefined &#x2F;&#x2F; NaN</span><br><span class="line"></span><br><span class="line">-Infinity + Infinity &#x2F;&#x2F; NaN</span><br></pre></td></tr></table></figure>
+
+<p>总结：</p>
+<ol>
+<li>如果某个操作数是字符串或者能够转换为字符串的话， + 将进行拼接操作。可见在 + 操作中字符串的拼接<strong>「优先级」</strong>高于数字的 +。</li>
+<li>如果一个操作数是对象（包括数组），则首先对其调用<code>ToPrimitive</code>操作，该抽象操作再调用<code>[[DefalutValue]]</code>，以数字作为上下文，保证了优先调用<code>valueOf()</code>方法，可见在 + 操作时，引用类型内部调用<code>valueOf()</code>方法的<strong>「优先级」</strong>高于<code>toString()</code>。</li>
+<li>数组或者对象在调用<code>valueOf()</code>方法如果无法获取到基本类型值（数字），会转而调用<code>toString()</code>。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 这里提供valueOf()方法，</span><br><span class="line">var daRui &#x3D; &#123;</span><br><span class="line">    valueOf: function() &#123;</span><br><span class="line">        return 18</span><br><span class="line">    &#125;,</span><br><span class="line">    toString: function() &#123;</span><br><span class="line">        return &quot;daRUI&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">daRui + 7 &#x2F;&#x2F; 25</span><br><span class="line">daRui + &quot;7&quot; &#x2F;&#x2F; &quot;187&quot;</span><br><span class="line">daRui + &quot;hello&quot; &#x2F;&#x2F; &quot;18hello&quot;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 这里仅提供toString()方法，</span><br><span class="line">var daRui &#x3D; &#123;</span><br><span class="line">    toString: function() &#123;</span><br><span class="line">        return &quot;daRUI&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">daRui + 7 &#x2F;&#x2F; &quot;daRUI7&quot;</span><br><span class="line">daRui + &quot; hello&quot; &#x2F;&#x2F; &quot;daRUI hello&quot;</span><br></pre></td></tr></table></figure>
+
+<p>特别说明:</p>
+<ol>
+<li><p>数组中的<code>toString()</code>方法是经过改写的，故<code>[1,2,3]</code>会转为”1,2,3”，<code>[]</code> 会转为””。</p>
+</li>
+<li><p>对象的<code>toString()</code>方法会返回 “[object Class]”，<code>Object.prototype.toString.call([])</code> 返回 “[object Array]”。</p>
+</li>
+<li><p><code>[] + &#123;&#125;</code>得到”[object Object]“，而<code>&#123;&#125; + []</code> 得到 0。这是因为 <code>&#123;&#125;</code> (花括号)在 JS 中有两种含义：</p>
+<ol>
+<li>当 <code>&#123;&#125;</code> 在 + 后面时，表示对象<code>&#123;&#125;</code></li>
+<li>当 <code>&#123;&#125;</code> 位于 + 前面时，<code>&#123;&#125;</code> 表示一个独立的<strong>「空代码块」</strong>，所以<code>&#123;&#125; + []</code> 操作相当于进行的是 <code>+[]</code>(一元操作符转换操作) 将 <code>[]</code> 转为 0</li>
+</ol>
+</li>
+</ol>
+<h2 id="（重点）"><a href="#（重点）" class="headerlink" title="==（重点）"></a>==（重点）</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">1 &#x3D;&#x3D; &#39;1&#39; &#x2F;&#x2F; true</span><br><span class="line">1 &#x3D;&#x3D; true &#x2F;&#x2F; true</span><br><span class="line">1 &#x3D;&#x3D; [] &#x2F;&#x2F; false</span><br><span class="line">1 &#x3D;&#x3D; [1] &#x2F;&#x2F; true</span><br><span class="line">1 &#x3D;&#x3D; &#123;&#125;  &#x2F;&#x2F; false</span><br><span class="line"></span><br><span class="line">true &#x3D;&#x3D; &quot;1&quot; &#x2F;&#x2F; true</span><br><span class="line">true &#x3D;&#x3D; &quot;true&quot; &#x2F;&#x2F; false</span><br><span class="line">true &#x3D;&#x3D; [] &#x2F;&#x2F; true</span><br><span class="line">true &#x3D;&#x3D; [1]  &#x2F;&#x2F; true</span><br><span class="line">true &#x3D;&#x3D; &#123;&#125; &#x2F;&#x2F; false</span><br><span class="line"></span><br><span class="line">[] &#x3D;&#x3D; &quot;1&quot;&#x2F;&#x2F; false</span><br><span class="line">[] &#x3D;&#x3D; true  &#x2F;&#x2F; false</span><br><span class="line">[] &#x3D;&#x3D; false &#x2F;&#x2F; true</span><br><span class="line">[] &#x3D;&#x3D; []  &#x2F;&#x2F; false (注意！！！)</span><br><span class="line">[] &#x3D;&#x3D; &#123;&#125; &#x2F;&#x2F; false</span><br><span class="line">[] &#x3D;&#x3D; ![] &#x2F;&#x2F; true (注意！！！)</span><br><span class="line"></span><br><span class="line">&#123;&#125; &#x3D;&#x3D; 1 &#x2F;&#x2F; Unexpected token &#39;&#x3D;&#x3D;&#39;</span><br><span class="line">&#123;&#125; &#x3D;&#x3D; &quot;1&quot; &#x2F;&#x2F; Unexpected token &#39;&#x3D;&#x3D;&#39;</span><br><span class="line">&#123;&#125; &#x3D;&#x3D; true &#x2F;&#x2F; Unexpected token &#39;&#x3D;&#x3D;&#39;</span><br><span class="line">&#123;&#125; &#x3D;&#x3D; false &#x2F;&#x2F; Unexpected token &#39;&#x3D;&#x3D;&#39;</span><br><span class="line">&#123;&#125; &#x3D;&#x3D; [] &#x2F;&#x2F; Unexpected token &#39;&#x3D;&#x3D;&#39;</span><br><span class="line">&#123;&#125; &#x3D;&#x3D; &#123;&#125; &#x2F;&#x2F; false (注意！！！)</span><br><span class="line"></span><br><span class="line">&quot;0&quot; &#x3D;&#x3D; null &#x2F;&#x2F; false</span><br><span class="line">&quot;0&quot; &#x3D;&#x3D; undefined &#x2F;&#x2F; false</span><br><span class="line">&quot;0&quot; &#x3D;&#x3D; false &#x2F;&#x2F; true (注意！！！)</span><br><span class="line">&quot;0&quot; &#x3D;&#x3D; NaN &#x2F;&#x2F; false</span><br><span class="line">&quot;0&quot; &#x3D;&#x3D; 0 &#x2F;&#x2F; true</span><br><span class="line">&quot;0&quot; &#x3D;&#x3D; &quot;&quot; &#x2F;&#x2F; false</span><br><span class="line"></span><br><span class="line">false &#x3D;&#x3D; null &#x2F;&#x2F; false (注意！！！)</span><br><span class="line">false &#x3D;&#x3D; undefined &#x2F;&#x2F; false (注意！！！)</span><br><span class="line">false &#x3D;&#x3D; NaN &#x2F;&#x2F; false</span><br><span class="line">false &#x3D;&#x3D; 0 &#x2F;&#x2F; true (注意！！！)</span><br><span class="line">false &#x3D;&#x3D; &quot;&quot; &#x2F;&#x2F; true (注意！！！)</span><br><span class="line">false &#x3D;&#x3D; [] &#x2F;&#x2F; true (注意！！！)</span><br><span class="line">false &#x3D;&#x3D; &#123;&#125; &#x2F;&#x2F; false</span><br><span class="line"></span><br><span class="line">&quot;&quot; &#x3D;&#x3D; null &#x2F;&#x2F; false</span><br><span class="line">&quot;&quot; &#x3D;&#x3D; undefined &#x2F;&#x2F;false</span><br><span class="line">&quot;&quot; &#x3D;&#x3D; NaN &#x2F;&#x2F; false</span><br><span class="line">&quot;&quot; &#x3D;&#x3D; 0 &#x2F;&#x2F;true (注意！！！)</span><br><span class="line">&quot;&quot; &#x3D;&#x3D; [] &#x2F;&#x2F; true (注意！！！)</span><br><span class="line">&quot;&quot; &#x3D;&#x3D; &#123;&#125; &#x2F;&#x2F; false</span><br><span class="line"></span><br><span class="line">0 &#x3D;&#x3D; null &#x2F;&#x2F; false</span><br><span class="line">0 &#x3D;&#x3D; undefined &#x2F;&#x2F; false</span><br><span class="line">0 &#x3D;&#x3D; NaN &#x2F;&#x2F; false</span><br><span class="line">0 &#x3D;&#x3D; [] &#x2F;&#x2F; true  (注意！！！)</span><br><span class="line">0 &#x3D;&#x3D; &#123;&#125; &#x2F;&#x2F; false</span><br><span class="line">+0 &#x3D;&#x3D; -0 &#x2F;&#x2F; true</span><br><span class="line"></span><br><span class="line">null &#x3D;&#x3D; null &#x2F;&#x2F; true</span><br><span class="line">null &#x3D;&#x3D; undefined &#x2F;&#x2F; true</span><br><span class="line">null &#x3D;&#x3D; &quot;&quot; &#x2F;&#x2F; false</span><br><span class="line">null &#x3D;&#x3D; 0 &#x2F;&#x2F; false</span><br><span class="line">undefined &#x3D;&#x3D; &quot;&quot; &#x2F;&#x2F; false</span><br><span class="line">undefined &#x3D;&#x3D; 0 &#x2F;&#x2F; false</span><br><span class="line"></span><br><span class="line">NaN &#x3D;&#x3D; NaN &#x2F;&#x2F; false  可以使用isNaN() 判断是不是NaN</span><br></pre></td></tr></table></figure>
+
+<p>总结：</p>
+<p>== 操作，最重要的时在两个操作数的转换过程！关于 == 操作<a target="_blank" rel="noopener" href="http://www.ecma-international.org/ecma-262/5.1/index.html#sec-11.9.3">ES5 规范 11.9.3</a>给出了明确规范：</p>
+<ol>
+<li><p>字符串和数字之间的相等比较：</p>
+<ol>
+<li> 如果 Type(x)是数字，Type(y)是字符串，则返回 <code>x == ToNumber(y)</code>的结果。</li>
+<li> 如果 Type(x)是字符串，Type(y)是数字，则返回<code>ToNumber(x) == y</code>的结果。</li>
+</ol>
+</li>
+<li><p>其他类型值和布尔类型之间的相等比较：</p>
+<ol>
+<li> 如果 Type(x)是布尔类型，这返回<code>ToNumber(x) == y</code>的结果</li>
+<li> 如果 Type(y)是布尔类型，则返回<code>x == ToNumber(y)</code> 的结果</li>
+</ol>
+</li>
+<li><p>null 和 undefined 之间的相等比较</p>
+<ol>
+<li> 如果 x 为 null，y 为 undefined，则结果为 true</li>
+<li> 如果 x 为 undefined，y 为 null，则结果为 true</li>
+</ol>
+</li>
+<li><p>对象和非对象之间的相等比较：</p>
+<ol>
+<li> 如果 Type(x)是字符串或者数字，Type(y)是对象，则返回<code>x == ToPrimitive(y)</code>的结果</li>
+<li> 如果 Type(x)是对象，Type(y)是字符串或者数字，则返回<code>toPrimitive(x) == y</code>的结果</li>
+</ol>
+</li>
+<li><p>对象和对象之间比较:</p>
+<ol>
+<li> 在<code>Javascript</code>中对象属于引用类型，对象之间的比较，本质比较的是内存地址。所以都为 false。</li>
+</ol>
+</li>
+</ol>
+<p>（感谢掘友：<code>Bug开发工程师同志</code> 的指正）</p>
+<blockquote>
+<p>❝</p>
+</blockquote>
+<blockquote>
+<p>== 相等操作中，如果两边的操作数不同的话，都会进行类型转换，而且优先转为数字，再进行比较，如果转换后还不同则再次转换，直到相同为止。这里以 <code>字符串类型 == 布尔类型</code>做介绍：</p>
+</blockquote>
+<blockquote>
+<ol>
+<li>首先字符串类型转为 Number 类型，这时比较的是 <code>数字类型 == 布尔类型</code></li>
+<li>再将布尔类型转为 Number 类型，这时比较的是<code>数字类型 == 数字类型</code></li>
+</ol>
+</blockquote>
+<blockquote>
+<p>这也就不难解释为什么<code>&quot;0&quot; == false</code>了</p>
+</blockquote>
+<blockquote>
+<p>如果连个操作数中有引用类型，这会先将引用类型转换为基本类型，在进行上面的操作，进行比较。</p>
+</blockquote>
+<blockquote>
+<p>再说<code>[] == ![] // true</code>:</p>
+</blockquote>
+<blockquote>
+<ol>
+<li>这里!操作的优先级是高于 == 的，![] 首先转换为 false</li>
+<li>此时比较双方是 [] == false，这里会将 [] 再次转换为 0</li>
+<li>此时比较双方是 0 == false，接下来就不难理解了</li>
+</ol>
+</blockquote>
+<h2 id=""><a href="#" class="headerlink" title="!!"></a>!!</h2><p>将值转为布尔值</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 除将下面的转为false其余全部为true</span></span><br><span class="line">!!<span class="string">&quot;&quot;</span>;</span><br><span class="line">!!<span class="number">0</span>;</span><br><span class="line">!!-<span class="number">0</span>;</span><br><span class="line">!!+<span class="number">0</span>;</span><br><span class="line">!!<span class="literal">null</span>;</span><br><span class="line">!!<span class="literal">undefined</span>;</span><br><span class="line">!!<span class="literal">NaN</span>;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/17/yuque/Promise/" rel="prev" title="Promise">
+      <i class="fa fa-chevron-left"></i> Promise
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/18/hello-world/" rel="next" title="Hello World">
+      Hello World <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E5%A7%8B%E5%80%BC%E5%88%B0%E5%8E%9F%E5%A7%8B%E5%80%BC%E7%9A%84%E8%BD%AC%E6%8D%A2"><span class="nav-number">1.</span> <span class="nav-text">原始值到原始值的转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E5%A7%8B%E5%80%BC%E5%88%B0%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%BD%AC%E6%8D%A2"><span class="nav-number">2.</span> <span class="nav-text">原始值到对象的转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%88%B0%E5%8E%9F%E5%A7%8B%E5%80%BC%E7%9A%84%E8%BD%AC%E6%8D%A2"><span class="nav-number">3.</span> <span class="nav-text">对象到原始值的转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E7%AE%97%E7%AC%A6%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="nav-number">4.</span> <span class="nav-text">&#x3D;&#x3D; 运算符如何进行类型转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E7%AE%97%E7%AC%A6%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E7%B1%BB%E5%9E%8B%E8%BD%AC%E5%8C%96"><span class="nav-number">5.</span> <span class="nav-text">+ 运算符如何进行类型转化</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E3%80%81-%E3%80%81-%E3%80%81-amp-amp"><span class="nav-number"></span> <span class="nav-text">+、&#x3D;&#x3D;、||、&amp;&amp;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E7%82%B9"><span class="nav-number">0.1.</span> <span class="nav-text">+ (重点)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EF%BC%88%E9%87%8D%E7%82%B9%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">&#x3D;&#x3D;（重点）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">!!</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Adam Blog</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Adam Blog</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
