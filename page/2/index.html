@@ -146,6 +146,93 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/15/yuque/%E6%B7%B1%E6%8B%B7%E8%B4%9D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/15/yuque/%E6%B7%B1%E6%8B%B7%E8%B4%9D/" class="post-title-link" itemprop="url">深拷贝</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-15 22:54:16" itemprop="dateCreated datePublished" datetime="2021-04-15T22:54:16+08:00">2021-04-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-18 00:32:25" itemprop="dateModified" datetime="2021-04-18T00:32:25+08:00">2021-04-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="简易版"><a href="#简易版" class="headerlink" title="简易版"></a>简易版</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">deepCopy</span>(<span class="params">target</span>) </span>&#123;</span><br><span class="line">  <span class="comment">/*类型检查*/</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> target === <span class="string">&quot;object&quot;</span> &amp;&amp; target != <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> cloneTarge = <span class="built_in">Array</span>.isArray(target) ? [] : &#123;&#125;;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> prop <span class="keyword">in</span> target) &#123;</span><br><span class="line">      <span class="keyword">if</span> (target.hasOwnProperty(prop)) &#123;</span><br><span class="line">        cloneTarge[prop] = target[prop];</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> cloneTarge;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> target;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="三个问题"><a href="#三个问题" class="headerlink" title="三个问题"></a>三个问题</h2><h3 id="1。解决循环引用"><a href="#1。解决循环引用" class="headerlink" title="1。解决循环引用"></a>1。解决循环引用</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">  val: <span class="number">100</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">obj.target = obj;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618498684598-d2c4c952-0587-40d6-8833-6ecb59e6ff8c.png#clientId=uf9685104-9dea-4&from=paste&height=267&id=u506cc515&margin=%5Bobject%20Object%5D&originHeight=267&originWidth=464&originalType=binary&size=13111&status=done&style=none&taskId=ub3498272-98b7-408c-b5be-f28f5ebeb87&width=464"><br>这就是循环引用<br>创建一个 Map。记录下已经拷贝过的对象，如果说已经拷贝过，那直接返回它行了。</p>
+<h4 id="map-和-weakmap"><a href="#map-和-weakmap" class="headerlink" title="map 和 weakmap"></a>map 和 weakmap</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">map</span><br><span class="line">ES6 提供了 Map 数据结构。它类似于对象，也是键值对的集合，但是“键”的范围不限于字符串，各种类型的值（包括对象）都可以当作键。</span><br><span class="line">也就是说，Object 结构提供了“字符串—值”的对应，Map 结构提供了“值—值”的对应，是一种更完善的 Hash 结构实现。</span><br><span class="line">如果你需要“键值对”的数据结构，Map 比 Object 更合适。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> m = <span class="keyword">new</span> <span class="built_in">Map</span>();</span><br><span class="line"><span class="keyword">const</span> o = &#123; <span class="attr">p</span>: <span class="string">&quot;hello world&quot;</span> &#125;;</span><br><span class="line">m.set(o, <span class="string">&quot;content&quot;</span>);</span><br><span class="line">m.get(o); <span class="comment">//content</span></span><br><span class="line">m.has(o); <span class="comment">//true</span></span><br><span class="line">m.delete(o);</span><br><span class="line">m.has(o); <span class="comment">//false</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">	size属性返回 Map 结构的成员总数</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">m.set(<span class="string">&quot;1&quot;</span>, <span class="string">&quot;2&quot;</span>);</span><br><span class="line">m.set(<span class="string">&quot;3&quot;</span>, <span class="string">&quot;4&quot;</span>);</span><br><span class="line"><span class="built_in">console</span>.log(m.size);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">Map.prototype.set(key, value)</span><br><span class="line">set方法设置键名key对应的键值为value，然后返回整个 Map 结构。如果key已经有值，则键值会被更新，否则就新生成该键</span><br><span class="line">set方法返回的是当前的Map对象，因此可以采用链式写法。</span><br><span class="line">m.set().set().set()</span><br><span class="line"></span><br><span class="line">Map.prototype.get(key)</span><br><span class="line">get方法读取key对应的键值，如果找不到key，返回undefined。</span><br><span class="line"></span><br><span class="line">Map.prototype.has(key)</span><br><span class="line">has方法返回一个布尔值，表示某个键是否在当前 Map 对象之中。</span><br><span class="line"></span><br><span class="line">Map.prototype.delete(key)</span><br><span class="line">delete方法删除某个键，返回true。如果删除失败，返回false。</span><br><span class="line"></span><br><span class="line">Map.prototype.clear()</span><br><span class="line">clear方法清除所有成员，没有返回值。</span><br><span class="line"></span><br><span class="line">Map.prototype.keys()：返回键名的遍历器。</span><br><span class="line">Map.prototype.values()：返回键值的遍历器。</span><br><span class="line">Map.prototype.entries()：返回所有成员的遍历器。</span><br><span class="line">Map.prototype.forEach()：遍历 Map 的所有成员</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*keys*/</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> key <span class="keyword">of</span> m.keys()) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(key);</span><br><span class="line">  <span class="comment">/*</span></span><br><span class="line"><span class="comment">      1</span></span><br><span class="line"><span class="comment">      3</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*values*/</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> value <span class="keyword">of</span> m.values()) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(value);</span><br><span class="line">  <span class="comment">/*</span></span><br><span class="line"><span class="comment">      2</span></span><br><span class="line"><span class="comment">    	4</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*entries*/</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> item <span class="keyword">of</span> m.entries()) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(item[<span class="number">0</span>], item[<span class="number">1</span>]);</span><br><span class="line">  <span class="comment">/*</span></span><br><span class="line"><span class="comment">      1 2</span></span><br><span class="line"><span class="comment">      3 4</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*foreach*/</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> [key, value] <span class="keyword">of</span> m) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(key, value);</span><br><span class="line">  <span class="comment">/*</span></span><br><span class="line"><span class="comment">      1 2</span></span><br><span class="line"><span class="comment">      3 4</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">weakmap</span><br><span class="line">WeakMap结构与Map结构类似，也是用于生成键值对的集合。</span><br><span class="line">WeakMap与Map的区别有两点。</span><br><span class="line"></span><br><span class="line">首先，WeakMap只接受对象作为键名（null除外），不接受其他类型的值作为键名。</span><br><span class="line">WeakMap的键名所指向的对象，不计入垃圾回收机制。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// WeakMap 也可以接受一个数组，</span></span><br><span class="line"><span class="comment">// 作为构造函数的参数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> k1 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"><span class="keyword">const</span> k2 = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];</span><br><span class="line"><span class="keyword">const</span> wm2 = <span class="keyword">new</span> <span class="built_in">WeakMap</span>([</span><br><span class="line">  [k1, <span class="string">&quot;foo&quot;</span>],</span><br><span class="line">  [k2, <span class="string">&quot;bar&quot;</span>],</span><br><span class="line">]);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">symbol</span></span><br><span class="line"><span class="comment">Symbol，表示独一无二的值</span></span><br><span class="line"><span class="comment">Symbol函数前不能使用new命令，否则会报错。这是因为生成的 Symbol 是一个原始类型的值，不是对象</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> obj2 = &#123;&#125;;</span><br><span class="line"><span class="keyword">var</span> s1 = <span class="built_in">Symbol</span>(<span class="string">&quot;a&quot;</span>);</span><br><span class="line">obj2[s1] = <span class="string">&quot;hello&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Object.getOwnPropertySymbols()</span></span><br><span class="line"><span class="comment">可以获取指定对象的所有 Symbol 属性名。该方法返回一个数组，成员是当前对象的所有用作属性名的 Symbol 值。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.getOwnPropertySymbols(obj2);</span><br><span class="line"><span class="comment">//[Symbol(a)]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">hasOwnProperty() 方法会返回一个布尔值，指示对象自身属性中是否具有指定的属性（也就是，是否有指定的键）。</span></span><br><span class="line"><span class="comment">obj.hasOwnProperty(prop)</span></span><br><span class="line"><span class="comment">prop</span></span><br><span class="line"><span class="comment">要检测的属性的 String 字符串形式表示的名称，或者 Symbol。</span></span><br><span class="line"><span class="comment">返回值</span></span><br><span class="line"><span class="comment">用来判断某个对象是否含有指定的属性的布尔值 Boolean。</span></span><br><span class="line"><span class="comment">使用 hasOwnProperty 作为属性名</span></span><br><span class="line"><span class="comment">JavaScript 并没有保护 hasOwnProperty 这个属性名，因此，当某个对象可能自有一个占用该属性名的属性时，</span></span><br><span class="line"><span class="comment">就需要使用外部的 hasOwnProperty 获得正确的结果：</span></span><br><span class="line"><span class="comment">// 也可以使用 Object 原型上的 hasOwnProperty 属性</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> foo = &#123;</span><br><span class="line">  hasOwnProperty: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;,</span><br><span class="line">  bar: <span class="string">&quot;Here be dragons&quot;</span>,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">Object</span>.prototype.hasOwnProperty.call(foo, <span class="string">&quot;bar&quot;</span>); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>利用上述知识，可以做出一个深拷贝的函数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> deepcopy2 = <span class="function">(<span class="params">target, hash = <span class="keyword">new</span> <span class="built_in">WeakMap</span>()</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">//对于参数处理</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> target !== <span class="string">&quot;object&quot;</span> || target === <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> target;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (hash.get(target)) &#123;</span><br><span class="line">    <span class="keyword">return</span> hash.get(target);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> clonetarget = <span class="built_in">Array</span>.isArray(target) ? [] : &#123;&#125;;</span><br><span class="line">  hash.set(target, clonetarget);</span><br><span class="line"></span><br><span class="line">  <span class="comment">//针对symbol属性</span></span><br><span class="line">  <span class="keyword">const</span> symKeys = <span class="built_in">Object</span>.getOwnPropertySymbols(target);</span><br><span class="line">  <span class="keyword">if</span> (symKeys.length) &#123;</span><br><span class="line">    symKeys.forEach(<span class="function">(<span class="params">symKey</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">typeof</span> target[symKey] === <span class="string">&quot;object&quot;</span> &amp;&amp; target[symKey] !== <span class="literal">null</span>) &#123;</span><br><span class="line">        clonetarget = deepcopy2(target[symKey]);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        clonetarget[symKey] = target[symKey];</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> i <span class="keyword">in</span> target) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">Object</span>.prototype.hasOwnProperty.call(target, i)) &#123;</span><br><span class="line">      clonetarget[i] =</span><br><span class="line">        <span class="keyword">typeof</span> target[i] === <span class="string">&quot;object&quot;</span> &amp;&amp; target[i] !== <span class="literal">null</span></span><br><span class="line">          ? deepcopy2(target[i], hash)</span><br><span class="line">          : target[i];</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> clonetarget;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;*</span><br><span class="line">分析</span><br><span class="line">首先先判断target是不是对象，如果不是直接返回target 因为基本类型数据拷贝时互相不影响</span><br><span class="line">之后设置一个weakmap，用来缓存数据，因为weakmap的键名所指向的对象不计入垃圾回收机制</span><br><span class="line">判断一下hash有没有target所指向的值，因为target是键名，有就返回，可以避免重复遍历</span><br><span class="line">创建一个变量，用来传进来的symbol属性做判断，获取target的所有属性名</span><br><span class="line">如果属性名不为空，那么就遍历</span><br><span class="line">如果对象的键值不为object或者array这样的对象，那么就直接传值</span><br><span class="line">如果是object或者array这样的对象，那么就递归一次，设置clonetarget[键] &#x3D; target[键]，这样将target的键值赋值给clonetarget,之后返回clonetarget</span><br><span class="line">递归一次之后，在将clonetarget[键] &#x3D; target[键]，这样如果target键值有Object或者array这样的对象的话，那么就用递归，将键值赋给clonetarget</span><br><span class="line">剩下的思路也是一样的</span><br><span class="line">*&#x2F;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/15/yuque/%E6%B5%85%E6%8B%B7%E8%B4%9D/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -177,7 +264,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-18 00:13:23" itemprop="dateModified" datetime="2021-04-18T00:13:23+08:00">2021-04-18</time>
+                <time title="修改时间：2021-04-18 00:32:25" itemprop="dateModified" datetime="2021-04-18T00:32:25+08:00">2021-04-18</time>
               </span>
 
           
@@ -251,7 +338,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-18 00:13:23" itemprop="dateModified" datetime="2021-04-18T00:13:23+08:00">2021-04-18</time>
+                <time title="修改时间：2021-04-18 00:32:25" itemprop="dateModified" datetime="2021-04-18T00:32:25+08:00">2021-04-18</time>
               </span>
 
           
@@ -328,7 +415,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-18 00:13:23" itemprop="dateModified" datetime="2021-04-18T00:13:23+08:00">2021-04-18</time>
+                <time title="修改时间：2021-04-18 00:32:25" itemprop="dateModified" datetime="2021-04-18T00:32:25+08:00">2021-04-18</time>
               </span>
 
           
@@ -395,7 +482,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-18 00:13:23" itemprop="dateModified" datetime="2021-04-18T00:13:23+08:00">2021-04-18</time>
+                <time title="修改时间：2021-04-18 00:32:25" itemprop="dateModified" datetime="2021-04-18T00:32:25+08:00">2021-04-18</time>
               </span>
 
           
@@ -460,7 +547,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-18 00:13:23" itemprop="dateModified" datetime="2021-04-18T00:13:23+08:00">2021-04-18</time>
+                <time title="修改时间：2021-04-18 00:32:25" itemprop="dateModified" datetime="2021-04-18T00:32:25+08:00">2021-04-18</time>
               </span>
 
           
@@ -525,7 +612,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-18 00:13:23" itemprop="dateModified" datetime="2021-04-18T00:13:23+08:00">2021-04-18</time>
+                <time title="修改时间：2021-04-18 00:32:25" itemprop="dateModified" datetime="2021-04-18T00:32:25+08:00">2021-04-18</time>
               </span>
 
           
@@ -590,7 +677,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-18 00:13:23" itemprop="dateModified" datetime="2021-04-18T00:13:23+08:00">2021-04-18</time>
+                <time title="修改时间：2021-04-18 00:32:25" itemprop="dateModified" datetime="2021-04-18T00:32:25+08:00">2021-04-18</time>
               </span>
 
           
@@ -655,7 +742,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-18 00:13:23" itemprop="dateModified" datetime="2021-04-18T00:13:23+08:00">2021-04-18</time>
+                <time title="修改时间：2021-04-18 00:32:25" itemprop="dateModified" datetime="2021-04-18T00:32:25+08:00">2021-04-18</time>
               </span>
 
           
@@ -720,7 +807,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-18 00:13:23" itemprop="dateModified" datetime="2021-04-18T00:13:23+08:00">2021-04-18</time>
+                <time title="修改时间：2021-04-18 00:32:25" itemprop="dateModified" datetime="2021-04-18T00:32:25+08:00">2021-04-18</time>
               </span>
 
           
@@ -819,7 +906,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-count">20</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

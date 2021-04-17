@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="原始值( primitive values )除 Object 以外的所有类型都是不可变的（值本身无法被改变）。例如，与 C 语言不同，JavaScript 中字符串是不可变的（译注：如，JavaScript 中对字符串的操作一定返回了一个新字符串，原始字符串并没有被改变）。我们称这些类型的值为“原始值”。 布尔类型布尔表示一个逻辑实体，可以有两个值：true 和 false。 Null 类型N">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据类型">
+<meta property="og:url" content="http://example.com/2021/04/18/yuque/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">
+<meta property="og:site_name" content="Adam">
+<meta property="og:description" content="原始值( primitive values )除 Object 以外的所有类型都是不可变的（值本身无法被改变）。例如，与 C 语言不同，JavaScript 中字符串是不可变的（译注：如，JavaScript 中对字符串的操作一定返回了一个新字符串，原始字符串并没有被改变）。我们称这些类型的值为“原始值”。 布尔类型布尔表示一个逻辑实体，可以有两个值：true 和 false。 Null 类型N">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618676788048-988699b0-72f7-4748-9064-1bc417d8ba39.png#clientId=u0f756751-46c8-4&from=paste&height=555&id=ued534341&margin=%5Bobject%20Object%5D&originHeight=788&originWidth=1021&originalType=binary&size=126478&status=done&style=none&taskId=u0d11ffd4-876a-4c72-8173-b5871de923e&width=719.5">
+<meta property="article:published_time" content="2021-04-17T16:19:29.000Z">
+<meta property="article:modified_time" content="2021-04-17T16:32:23.887Z">
+<meta property="article:author" content="Adam Blog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618676788048-988699b0-72f7-4748-9064-1bc417d8ba39.png#clientId=u0f756751-46c8-4&from=paste&height=555&id=ued534341&margin=%5Bobject%20Object%5D&originHeight=788&originWidth=1021&originalType=binary&size=126478&status=done&style=none&taskId=u0d11ffd4-876a-4c72-8173-b5871de923e&width=719.5">
+
+<link rel="canonical" href="http://example.com/2021/04/18/yuque/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>数据类型 | Adam</title>
+  <meta name="referrer" content="no-referrer" />
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Adam</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/18/yuque/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数据类型
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-18 00:19:29 / 修改时间：00:32:23" itemprop="dateCreated datePublished" datetime="2021-04-18T00:19:29+08:00">2021-04-18</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618676788048-988699b0-72f7-4748-9064-1bc417d8ba39.png#clientId=u0f756751-46c8-4&from=paste&height=555&id=ued534341&margin=%5Bobject%20Object%5D&originHeight=788&originWidth=1021&originalType=binary&size=126478&status=done&style=none&taskId=u0d11ffd4-876a-4c72-8173-b5871de923e&width=719.5"></p>
+<h2 id="原始值-primitive-values"><a href="#原始值-primitive-values" class="headerlink" title="原始值( primitive values )"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#%E5%8E%9F%E5%A7%8B%E5%80%BC_primitive_values">原始值( primitive values )</a></h2><p>除 Object 以外的所有类型都是不可变的（值本身无法被改变）。例如，与 C 语言不同，JavaScript 中字符串是不可变的（译注：如，JavaScript 中对字符串的操作一定返回了一个新字符串，原始字符串并没有被改变）。我们称这些类型的值为“原始值”。</p>
+<h3 id="布尔类型"><a href="#布尔类型" class="headerlink" title="布尔类型"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#%E5%B8%83%E5%B0%94%E7%B1%BB%E5%9E%8B">布尔类型</a></h3><p>布尔表示一个逻辑实体，可以有两个值：true 和 false。</p>
+<h3 id="Null-类型"><a href="#Null-类型" class="headerlink" title="Null 类型"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#null_%E7%B1%BB%E5%9E%8B">Null 类型</a></h3><p>Null 类型只有一个值：null，更多详情可查看<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/null">null</a>和<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Glossary/Null">Null</a>。</p>
+<h3 id="Undefined-类型"><a href="#Undefined-类型" class="headerlink" title="Undefined 类型"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#undefined_%E7%B1%BB%E5%9E%8B">Undefined 类型</a></h3><p>一个没有被赋值的变量会有个默认值 undefined，更多详情可查看<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a>和<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Glossary/undefined">Undefined</a>。</p>
+<h3 id="数字类型"><a href="#数字类型" class="headerlink" title="数字类型"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#%E6%95%B0%E5%AD%97%E7%B1%BB%E5%9E%8B">数字类型</a></h3><p>根据 ECMAScript 标准，JavaScript 中只有一种数字类型：基于 IEEE 754 标准的双精度 64 位二进制格式的值（-(253-1) 到 253-1）。<strong>它并没有为整数给出一种特定的类型</strong>。除了能够表示浮点数外，还有一些带符号的值：+Infinity，-Infinity 和 NaN(非数值，Not-a-Number)。<br>要检查值是否大于或小于+/-Infinity，你可以使用常量<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_VALUE">Number.MAX_VALUE</a>和<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/MIN_VALUE">Number.MIN_VALUE</a>。另外在 ECMAScript 6 中，你也可以通过<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger">Number.isSafeInteger()</a>方法还有<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER">Number.MAX_SAFE_INTEGER</a>和<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/MIN_SAFE_INTEGER">Number.MIN_SAFE_INTEGER</a>来检查值是否在双精度浮点数的取值范围内。 超出这个范围，JavaScript 中的数字不再安全了，也就是只有 second mathematical interger 可以在 JavaScript 数字类型中正确表现。<br>数字类型中只有一个整数有两种表示方法： 0 可表示为 -0 和 +0（”0” 是 +0 的简写）。 在实践中，这也几乎没有影响。 例如+0 === -0 为真。 但是，你可能要注意除以 0 的时候：<br>42 / +0; // Infinity<br>42 / -0; // -Infinity</p>
+<p>尽管一个数字常常仅代表它本身的值，但 JavaScript 提供了一些<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators">位运算符</a>。 这些位运算符和一个单一数字通过位操作可以用来表现一些布尔值。然而自从 JavaScript 提供其他的方式来表示一组布尔值（如一个布尔值数组或一个布尔值分配给命名属性的对象）后，这种方式通常被认为是不好的。位操作也容易使代码难以阅读，理解和维护， 在一些非常受限的情况下，可能需要用到这些技术，比如试图应付本地存储的存储限制。 位操作只应该是用来优化尺寸的最后选择。</p>
+<h3 id="BigInt-类型"><a href="#BigInt-类型" class="headerlink" title="BigInt 类型"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#bigint_%E7%B1%BB%E5%9E%8B">BigInt 类型</a></h3><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/BigInt">BigInt</a>类型是 JavaScript 中的一个基础的数值类型，可以用任意精度表示整数。使用 BigInt，您可以安全地存储和操作大整数，甚至可以超过数字的安全整数限制。BigInt 是通过在整数末尾附加  n  或调用构造函数来创建的。<br>通过使用常量<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER">Number.MAX_SAFE_INTEGER</a>，您可以获得可以用数字递增的最安全的值。通过引入 BigInt，您可以操作超过<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER">Number.MAX_SAFE_INTEGER</a>的数字。您可以在下面的示例中观察到这一点，其中递增<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER">Number.MAX_SAFE_INTEGER</a>会返回预期的结果:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="keyword">const</span> x = <span class="number">2n</span> ** <span class="number">53n</span>;</span><br><span class="line"><span class="number">9007199254740992n</span></span><br><span class="line">&gt; <span class="keyword">const</span> y = x + <span class="number">1n</span>;</span><br><span class="line"><span class="number">9007199254740993n</span></span><br></pre></td></tr></table></figure>
+
+<p>可以对 BigInt 使用运算符+、*、-、**和%，就像对数字一样。BigInt 严格来说并不等于一个数字，但它是松散的。<br>在将 BigInt 转换为 Boolean 时，它的行为类似于一个数字：if、||、&amp;&amp;、Boolean  和!。<br>BigInt 不能与数字互换操作。否则，将抛出<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/TypeError">TypeError</a>。</p>
+<h3 id="字符串类型"><a href="#字符串类型" class="headerlink" title="字符串类型"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%B1%BB%E5%9E%8B">字符串类型</a></h3><p>JavaScript 的字符串类型用于表示文本数据。它是一组 16 位的无符号整数值的“元素”。在字符串中的每个元素占据了字符串的位置。第一个元素的索引为 0，下一个是索引 1，依此类推。字符串的长度是它的元素的数量。<br>不同于类 C 语言，JavaScript 字符串是不可更改的。这意味着字符串一旦被创建，就不能被修改。但是，可以基于对原始字符串的操作来创建新的字符串。例如：</p>
+<ul>
+<li>获取一个字符串的子串可通过选择个别字母或者使用<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/substr">String.substr()</a>.</li>
+<li>两个字符串的连接使用连接操作符 (+) 或者<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/concat">String.concat()</a>.</li>
+</ul>
+<h4 id="注意代码中的“字符串类型”！"><a href="#注意代码中的“字符串类型”！" class="headerlink" title="注意代码中的“字符串类型”！"></a>注意代码中的“字符串类型”！</h4><p>可以使用字符串来表达复杂的数据。以下是一些很好的性质：</p>
+<ul>
+<li>容易连接构造复杂的字串符</li>
+<li>字符串容易被调试(你看到的往往在字符串里)</li>
+<li>字符串通常是许多 APIs 的常见标准 (<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/DOM/HTMLInputElement">input fields</a>,<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/Storage">local storage</a>values,<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest">XMLHttpRequest</a>当使用 responseText 等的时候回应) 而且他只能与字符串一同使用。</li>
+</ul>
+<p>使用约定，字符串一般可以用来表达任何数据结构。这不是一个好主意。例如，使用一个分隔符，可以模拟一个列表（而 JavaScript 数组可能更适合）。不幸的是，当分隔符用于列表中的元素时，列表就会被破坏。 可以选择转义字符，等等。所有这些都需要约定，并造成不必要的维护负担。<br>表达文本数据和符号数据时候推荐使用字符串。当表达复杂的数据时，使用字符串解析和适当的缩写。</p>
+<h3 id="符号类型"><a href="#符号类型" class="headerlink" title="符号类型"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#%E7%AC%A6%E5%8F%B7%E7%B1%BB%E5%9E%8B">符号类型</a></h3><p>符号(Symbols)是 ECMAScript 第 6 版新定义的。符号类型是唯一的并且是不可修改的, 并且也可以用来作为 Object 的 key 的值(如下).  在某些语言当中也有类似的原子类型(Atoms). 你也可以认为为它们是 C 里面的枚举类型.  更多细节请看<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Glossary/Symbol">Symbol</a>和  <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Symbol">Symbol</a>。</p>
+<h2 id="对象"><a href="#对象" class="headerlink" title="对象"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#%E5%AF%B9%E8%B1%A1">对象</a></h2><p>在计算机科学中, 对象是指内存中的可以被  <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Glossary/Identifier">标识符</a>引用的一块区域.</p>
+<h3 id="属性"><a href="#属性" class="headerlink" title="属性"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#%E5%B1%9E%E6%80%A7">属性</a></h3><p>在 Javascript 里，对象可以被看作是一组属性的集合。用<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/JavaScript/Guide/Values,_variables,_and_literals#object_literals">对象字面量语法</a>来定义一个对象时，会自动初始化一组属性。（也就是说，你定义一个 var a = “Hello”，那么 a 本身就会有 a.substring 这个方法，以及 a.length 这个属性，以及其它；如果你定义了一个对象，var a = {}，那么 a 就会自动有 a.hasOwnProperty 及 a.constructor 等属性和方法。）而后，这些属性还可以被增减。属性的值可以是任意类型，包括具有复杂数据结构的对象。属性使用键来标识，它的键值可以是一个字符串或者符号值（Symbol）。<br>ECMAScript 定义的对象中有两种属性：数据属性和访问器属性。</p>
+<h4 id="数据属性"><a href="#数据属性" class="headerlink" title="数据属性"></a>数据属性</h4><p>数据属性是键值对，并且每个数据属性拥有下列特性:<br><strong>数据属性的特性(Attributes of a data property)</strong><br>| 特性 | 数据类型 | 描述 | 默认值 |<br>| — | — | — | — |<br>| [[Value]] | 任何 Javascript 类型 | 包含这个属性的数据值。 | undefined |<br>| [[Writable]] | Boolean | 如果该值为  false，则该属性的 [[Value]] 特性 不能被改变。 | false |<br>| [[Enumerable]] | Boolean | 如果该值为  true，则该属性可以用  <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...in">for…in</a>循环来枚举。 | false |<br>| [[Configurable]] | Boolean | 如果该值为  false，则该属性不能被删除，并且 除了 [[Value]] 和 [[Writable]] 以外的特性都不能被改变。 | false |</p>
+<h4 id="访问器属性"><a href="#访问器属性" class="headerlink" title="访问器属性"></a>访问器属性</h4><p>访问器属性有一个或两个访问器函数  (get 和 set) 来存取数值，并且有以下特性:<br>| 特性 | 类型 | 描述 | 默认值 |<br>| — | — | — | — |<br>| [[Get]] | 函数对象或者 undefined | 该函数使用一个空的参数列表，能够在有权访问的情况下读取属性值。另见  <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/get">get</a>。 | undefined |<br>| [[Set]] | 函数对象或者 undefined | 该函数有一个参数，用来写入属性值，另见  <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/set">set</a>。 | undefined |<br>| [[Enumerable]] | Boolean | 如果该值为  true，则该属性可以用<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...in">for…in</a>  循环来枚举。 | false |<br>| [[Configurable]] | Boolean | 如果该值为  false，则该属性不能被删除，并且不能被转变成一个数据属性。 | false |</p>
+<h3 id="“标准的”-对象-和函数"><a href="#“标准的”-对象-和函数" class="headerlink" title="“标准的” 对象, 和函数"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#%E6%A0%87%E5%87%86%E7%9A%84_%E5%AF%B9%E8%B1%A1_%E5%92%8C%E5%87%BD%E6%95%B0">“标准的” 对象, 和函数</a></h3><p>一个 Javascript 对象就是键和值之间的映射.。键是一个字符串（或者<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Symbol">Symbol</a>） ，值可以是任意类型的值。  这使得对象非常符合  <a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Hash_table">哈希表</a>。<br>函数是一个附带可被调用功能的常规对象。</p>
+<h3 id="日期"><a href="#日期" class="headerlink" title="日期"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#%E6%97%A5%E6%9C%9F">日期</a></h3><p>当你想要显示日期时，毋庸置疑，使用内建的<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/JavaScript/Reference/Global_Objects/Date">Date</a>对象。</p>
+<h3 id="有序集-数组和类型数组"><a href="#有序集-数组和类型数组" class="headerlink" title="有序集: 数组和类型数组"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#%E6%9C%89%E5%BA%8F%E9%9B%86_%E6%95%B0%E7%BB%84%E5%92%8C%E7%B1%BB%E5%9E%8B%E6%95%B0%E7%BB%84">有序集: 数组和类型数组</a></h3><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array">数组</a>是一种使用整数作为键(integer-key-ed)属性和长度(length)属性之间关联的常规对象。此外，数组对象还继承了 Array.prototype 的一些操作数组的便捷方法。例如, <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf">indexOf</a> (搜索数组中的一个值) or <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/push">push</a> (向数组中添加一个元素)，等等。  这使得数组是表示列表或集合的最优选择。<br><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays">类型数组(Typed Arrays)</a>是 ECMAScript Edition 6 中新定义的 JavaScript 内建对象，提供了一个基本的二进制数据缓冲区的类数组视图。下面的表格能帮助你找到对等的 C 语言数据类型：</p>
+<h4 id="TypedArray-objects"><a href="#TypedArray-objects" class="headerlink" title="TypedArray objects"></a>TypedArray objects</h4><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Value Range</th>
+<th>Size in bytes</th>
+<th>Description</th>
+<th>Web IDL type</th>
+<th>Equivalent C type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array">Int8Array</a></td>
+<td>-128to127</td>
+<td>1</td>
+<td>8-bit two’s complement signed integer</td>
+<td>byte</td>
+<td>int8_t</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array">Uint8Array</a></td>
+<td>0to255</td>
+<td>1</td>
+<td>8-bit unsigned integer</td>
+<td>octet</td>
+<td>uint8_t</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray">Uint8ClampedArray</a></td>
+<td>0to255</td>
+<td>1</td>
+<td>8-bit unsigned integer (clamped)</td>
+<td>octet</td>
+<td>uint8_t</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array">Int16Array</a></td>
+<td>-32768to32767</td>
+<td>2</td>
+<td>16-bit two’s complement signed integer</td>
+<td>short</td>
+<td>int16_t</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array">Uint16Array</a></td>
+<td>0to65535</td>
+<td>2</td>
+<td>16-bit unsigned integer</td>
+<td>unsigned short</td>
+<td>uint16_t</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array">Int32Array</a></td>
+<td>-2147483648to2147483647</td>
+<td>4</td>
+<td>32-bit two’s complement signed integer</td>
+<td>long</td>
+<td>int32_t</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array">Uint32Array</a></td>
+<td>0to4294967295</td>
+<td>4</td>
+<td>32-bit unsigned integer</td>
+<td>unsigned long</td>
+<td>uint32_t</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array">Float32Array</a></td>
+<td>1.2×10-38to3.4×1038</td>
+<td>4</td>
+<td>32-bit IEEE floating point number (7 significant digits e.g.,1.234567)</td>
+<td>unrestricted float</td>
+<td>float</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array">Float64Array</a></td>
+<td>5.0×10-324to1.8×10308</td>
+<td>8</td>
+<td>64-bit IEEE floating point number (16 significant digits e.g.,1.23456789012345)</td>
+<td>unrestricted double</td>
+<td>double</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt64Array">BigInt64Array</a></td>
+<td>-263to263-1</td>
+<td>8</td>
+<td>64-bit two’s complement signed integer</td>
+<td>bigint</td>
+<td>int64_t (signed long long)</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigUint64Array">BigUint64Array</a></td>
+<td>0to264-1</td>
+<td>8</td>
+<td>64-bit unsigned integer</td>
+<td>bigint</td>
+<td>uint64_t (unsigned long long)</td>
+</tr>
+</tbody></table>
+<h3 id="键控集-Maps-Sets-WeakMaps-WeakSets"><a href="#键控集-Maps-Sets-WeakMaps-WeakSets" class="headerlink" title="键控集: Maps, Sets, WeakMaps, WeakSets"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#%E9%94%AE%E6%8E%A7%E9%9B%86_maps_sets_weakmaps_weaksets">键控集: Maps, Sets, WeakMaps, WeakSets</a></h3><p>这些数据结构把对象的引用当作键，其在 ECMAScript 第 6 版中有介绍。当<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map">Map</a>和<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/WeakMap">WeakMap</a>把一个值和对象关联起来的时候，<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Set">Set</a>和<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/WeakSet">WeakSet</a>表示一组对象。 Map 和 WeakMaps 之间的差别在于，在前者中，对象键是可枚举的。这允许垃圾收集器优化后面的枚举(This allows garbage collection optimizations in the latter case)。<br>在纯 ECMAScript 5 下可以实现 Maps 和 Sets。然而，因为对象并不能进行比较（就对象“小于”示例来讲），所以查询必定是线性的。他们本地实现（包括 WeakMaps）查询所花费的时间可能是对数增长。<br>通常，可以通过直接在对象上设置属性或着使用 data-*属性，来绑定数据到 DOM 节点。然而缺陷是在任何的脚本里，数据都运行在同样的上下文中。Maps 和 WeakMaps 方便将数据私密的绑定到一个对象。</p>
+<h3 id="结构化数据-JSON"><a href="#结构化数据-JSON" class="headerlink" title="结构化数据: JSON"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#%E7%BB%93%E6%9E%84%E5%8C%96%E6%95%B0%E6%8D%AE_json">结构化数据: JSON</a></h3><p>JSON (JavaScript Object Notation) 是一种轻量级的数据交换格式，来源于 JavaScript 同时也被多种语言所使用。 JSON 用于构建通用的数据结构。参见<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Glossary/JSON">JSON</a>以及<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/JSON">JSON</a>了解更多。</p>
+<h3 id="标准库中更多的对象"><a href="#标准库中更多的对象" class="headerlink" title="标准库中更多的对象"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%AD%E6%9B%B4%E5%A4%9A%E7%9A%84%E5%AF%B9%E8%B1%A1">标准库中更多的对象</a></h3><p>JavaScript 有一个内置对象的标准库。请查看<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects">参考</a>来了解更多对象。</p>
+<h2 id="使用-typeof-操作符判断对象类型"><a href="#使用-typeof-操作符判断对象类型" class="headerlink" title="使用 typeof 操作符判断对象类型"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#%E4%BD%BF%E7%94%A8_typeof_%E6%93%8D%E4%BD%9C%E7%AC%A6%E5%88%A4%E6%96%AD%E5%AF%B9%E8%B1%A1%E7%B1%BB%E5%9E%8B">使用 typeof 操作符判断对象类型</a></h2><p>typeof 运算符可以帮助你查询变量的类型。要了解更多细节和注意事项请阅读<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof">参考页</a>。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/18/yuque/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/" rel="prev" title="类型转换">
+      <i class="fa fa-chevron-left"></i> 类型转换
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/18/hello-world/" rel="next" title="Hello World">
+      Hello World <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E5%A7%8B%E5%80%BC-primitive-values"><span class="nav-number">1.</span> <span class="nav-text">原始值( primitive values )</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%83%E5%B0%94%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.1.</span> <span class="nav-text">布尔类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Null-%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.2.</span> <span class="nav-text">Null 类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Undefined-%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.3.</span> <span class="nav-text">Undefined 类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E5%AD%97%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.4.</span> <span class="nav-text">数字类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BigInt-%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.5.</span> <span class="nav-text">BigInt 类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.6.</span> <span class="nav-text">字符串类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BB%A3%E7%A0%81%E4%B8%AD%E7%9A%84%E2%80%9C%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%B1%BB%E5%9E%8B%E2%80%9D%EF%BC%81"><span class="nav-number">1.6.1.</span> <span class="nav-text">注意代码中的“字符串类型”！</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%A6%E5%8F%B7%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.7.</span> <span class="nav-text">符号类型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1"><span class="nav-number">2.</span> <span class="nav-text">对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%9E%E6%80%A7"><span class="nav-number">2.1.</span> <span class="nav-text">属性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%B1%9E%E6%80%A7"><span class="nav-number">2.1.1.</span> <span class="nav-text">数据属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%BF%E9%97%AE%E5%99%A8%E5%B1%9E%E6%80%A7"><span class="nav-number">2.1.2.</span> <span class="nav-text">访问器属性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%80%9C%E6%A0%87%E5%87%86%E7%9A%84%E2%80%9D-%E5%AF%B9%E8%B1%A1-%E5%92%8C%E5%87%BD%E6%95%B0"><span class="nav-number">2.2.</span> <span class="nav-text">“标准的” 对象, 和函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A5%E6%9C%9F"><span class="nav-number">2.3.</span> <span class="nav-text">日期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%89%E5%BA%8F%E9%9B%86-%E6%95%B0%E7%BB%84%E5%92%8C%E7%B1%BB%E5%9E%8B%E6%95%B0%E7%BB%84"><span class="nav-number">2.4.</span> <span class="nav-text">有序集: 数组和类型数组</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TypedArray-objects"><span class="nav-number">2.4.1.</span> <span class="nav-text">TypedArray objects</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%AE%E6%8E%A7%E9%9B%86-Maps-Sets-WeakMaps-WeakSets"><span class="nav-number">2.5.</span> <span class="nav-text">键控集: Maps, Sets, WeakMaps, WeakSets</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%84%E5%8C%96%E6%95%B0%E6%8D%AE-JSON"><span class="nav-number">2.6.</span> <span class="nav-text">结构化数据: JSON</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%AD%E6%9B%B4%E5%A4%9A%E7%9A%84%E5%AF%B9%E8%B1%A1"><span class="nav-number">2.7.</span> <span class="nav-text">标准库中更多的对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-typeof-%E6%93%8D%E4%BD%9C%E7%AC%A6%E5%88%A4%E6%96%AD%E5%AF%B9%E8%B1%A1%E7%B1%BB%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">使用 typeof 操作符判断对象类型</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Adam Blog</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Adam Blog</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
