@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="为什么要使用路由现在的网络应用程序越来越多的使用 AJAX 异步请求完成页面的无缝刷新，导致浏览器的 URL 不会发生任何变化而完成了请求，从而破换了用户浏览体验。同时本次浏览的页面内容在用户下次使用 URL 访问时将无法重新呈现，使用路由可以很好地解决这个问题。 单页面应用利用了 JavaScript 动态变换网页内容，避免了页面重载；路由则提供了浏览器地址变化，网页内容也跟随变化，两者结合起来">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端路由的两种模式：hash模式和 history模式">
+<meta property="og:url" content="http://example.com/2021/04/20/yuque/%E5%89%8D%E7%AB%AF%E8%B7%AF%E7%94%B1%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F%EF%BC%9Ahash%E6%A8%A1%E5%BC%8F%E5%92%8C%20history%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:site_name" content="Adam">
+<meta property="og:description" content="为什么要使用路由现在的网络应用程序越来越多的使用 AJAX 异步请求完成页面的无缝刷新，导致浏览器的 URL 不会发生任何变化而完成了请求，从而破换了用户浏览体验。同时本次浏览的页面内容在用户下次使用 URL 访问时将无法重新呈现，使用路由可以很好地解决这个问题。 单页面应用利用了 JavaScript 动态变换网页内容，避免了页面重载；路由则提供了浏览器地址变化，网页内容也跟随变化，两者结合起来">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-20T04:51:15.000Z">
+<meta property="article:modified_time" content="2021-04-20T08:42:19.485Z">
+<meta property="article:author" content="Adam Blog">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/04/20/yuque/%E5%89%8D%E7%AB%AF%E8%B7%AF%E7%94%B1%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F%EF%BC%9Ahash%E6%A8%A1%E5%BC%8F%E5%92%8C%20history%E6%A8%A1%E5%BC%8F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>前端路由的两种模式：hash模式和 history模式 | Adam</title>
+  <meta name="referrer" content="no-referrer" />
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Adam</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/20/yuque/%E5%89%8D%E7%AB%AF%E8%B7%AF%E7%94%B1%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F%EF%BC%9Ahash%E6%A8%A1%E5%BC%8F%E5%92%8C%20history%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          前端路由的两种模式：hash模式和 history模式
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-20 12:51:15 / 修改时间：16:42:19" itemprop="dateCreated datePublished" datetime="2021-04-20T12:51:15+08:00">2021-04-20</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>为什么要使用路由<br>现在的网络应用程序越来越多的使用 AJAX 异步请求完成页面的无缝刷新，导致浏览器的 URL 不会发生任何变化而完成了请求，从而破换了用户浏览体验。同时本次浏览的页面内容在用户下次使用 URL 访问时将无法重新呈现，使用路由可以很好地解决这个问题。</p>
+<p>单页面应用利用了 JavaScript 动态变换网页内容，避免了页面重载；路由则提供了浏览器地址变化，网页内容也跟随变化，两者结合起来则为我们提供了体验良好的单页面 web 应用。</p>
+<h2 id="前端路由实现方式"><a href="#前端路由实现方式" class="headerlink" title="前端路由实现方式"></a>前端路由实现方式</h2><p>路由需要实现三个功能：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">当浏览器地址变化时，切换页面；</span><br><span class="line">点击浏览器【后退】、【前进】按钮，网页内容跟随变化；</span><br><span class="line">刷新浏览器，网页加载当前路由对应内容；</span><br></pre></td></tr></table></figure>
+
+<p>在单页面 web 网页中, 单纯的浏览器地址改变, 网页不会重载，如单纯的 hash 网址改变网页不会变化，因此我们的路由主要是通过监听事件，并利用 js 实现动态改变网页内容，有两种实现方式：</p>
+<ul>
+<li>hash 模式：监听浏览器地址 hash 值变化，执行相应的 js 切换网页；</li>
+<li>history 模式：利用 history API 实现 url 地址改变，网页内容改变；</li>
+</ul>
+<p>它们的区别最明显的就是 hash 会在浏览器地址后面增加#号，而 history 可以自定义地址。</p>
+<h2 id="hash-模式"><a href="#hash-模式" class="headerlink" title="hash 模式"></a>hash 模式</h2><p>使用 window.location.hash 属性及窗口的 onhashchange 事件，可以实现监听浏览器地址 hash 值变化，执行相应的 js 切换网页。下面具体介绍几个使用过程中必须理解的要点：</p>
+<ul>
+<li>hash 指的是地址中#号以及后面的字符，也称为散列值。hash 也称作锚点，本身是用来做页面跳转定位的。如<a target="_blank" rel="noopener" href="http://localhost/index.html#abc">http://localhost/index.html#abc</a>，这里的#abc 就是 hash；</li>
+<li>散列值是不会随请求发送到服务器端的，所以改变 hash，不会重新加载页面；</li>
+<li>监听 window 的 hashchange 事件，当散列值改变时，可以通过 location.hash 来获取和设置 hash 值；</li>
+<li>location.hash 值的变化会直接反应到浏览器地址栏；</li>
+</ul>
+<h2 id="触发-hashchange-事件的几种情况："><a href="#触发-hashchange-事件的几种情况：" class="headerlink" title="触发 hashchange 事件的几种情况："></a>触发 hashchange 事件的几种情况：</h2><ul>
+<li>浏览器地址栏散列值的变化（包括浏览器的前进、后退）会触发 window.location.hash 值的变化，从而触发 onhashchange 事件；</li>
+<li>当浏览器地址栏中 URL 包含哈希如 <a target="_blank" rel="noopener" href="http://www.baidu.com/#home">http://www.baidu.com/#home</a>，这时按下输入，浏览器发送<a target="_blank" rel="noopener" href="http://www.baidu.com/">http://www.baidu.com/</a>请求至服务器，请求完毕之后设置散列值为#home，进而触发 onhashchange 事件；</li>
+<li>当只改变浏览器地址栏 URL 的哈希部分，这时按下回车，浏览器不会发送任何请求至服务器，这时发生的只是设置散列值新修改的哈希值，并触发 onhashchange 事件；</li>
+<li>html 中<a>标签的属性 href 可以设置为页面的元素 ID 如 #top，当点击该链接时页面跳转至该 id 元素所在区域，同时浏览器自动设置 window.location.hash 属性，地址栏中的哈希值也会发生改变，并触发 onhashchange 事件；</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置 url 的 hash，会在当前url后加上&#x27;#abc&#x27;</span></span><br><span class="line"><span class="built_in">window</span>.location.hash = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line"><span class="keyword">let</span> hash = <span class="built_in">window</span>.location.hash; <span class="comment">//&#x27;#abc&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">&quot;hashchange&quot;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">//监听hash变化，点击浏览器的前进后退会触发</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="history-模式"><a href="#history-模式" class="headerlink" title="history 模式"></a>history 模式</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><ul>
+<li>window.history 属性指向 History 对象，它表示当前窗口的浏览历史。当发生改变时，只会改变页面的路径，不会刷新页面。</li>
+<li>History 对象保存了当前窗口访问过的所有页面网址。通过 history.length 可以得出当前窗口一共访问过几个网址。</li>
+<li>由于安全原因，浏览器不允许脚本读取这些地址，但是允许在地址之间导航。</li>
+<li>浏览器工具栏的“前进”和“后退”按钮，其实就是对 History 对象进行操作。</li>
+</ul>
+<h3 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h3><p>History 对象主要有两个属性。</p>
+<ul>
+<li>History.length：当前窗口访问过的网址数量（包括当前网页）</li>
+<li>History.state：History 堆栈最上层的状态值（详见下文）</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 当前窗口访问过多少个网页</span></span><br><span class="line">history.length; <span class="comment">// 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// History 对象的当前状态</span></span><br><span class="line"><span class="comment">// 通常是 undefined，即未设置</span></span><br><span class="line">history.state; <span class="comment">// undefined</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><p><strong>History.back()、History.forward()、History.go()</strong><br>这三个方法用于在历史之中移动。</p>
+<ul>
+<li>**History.back()**：移动到上一个网址，等同于点击浏览器的后退键。对于第一个访问的网址，该方法无效果。</li>
+<li>**History.forward()**：移动到下一个网址，等同于点击浏览器的前进键。对于最后一个访问的网址，该方法无效果。</li>
+<li>**History.go()**：接受一个整数作为参数，以当前网址为基准，移动到参数指定的网址。如果参数超过实际存在的网址范围，该方法无效果；如果不指定参数，默认参数为 0，相当于刷新当前页面。</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">history.back();</span><br><span class="line">history.forward();</span><br><span class="line">history.go(<span class="number">1</span>); <span class="comment">//相当于history.forward()</span></span><br><span class="line">history.go(-<span class="number">1</span>); <span class="comment">//相当于history.back()</span></span><br><span class="line">history.go(<span class="number">0</span>); <span class="comment">// 刷新当前页面</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：移动到以前访问过的页面时，页面通常是从浏览器缓存之中加载，而不是重新要求服务器发送新的网页。</p>
+<p><strong>History.pushState()</strong><br>该方法用于在历史中添加一条记录。pushState()方法不会触发页面刷新，只是导致 History 对象发生变化，地址栏会有变化。</p>
+<p>语法：history.pushState(object, title, url)</p>
+<p>该方法接受三个参数，依次为：</p>
+<ul>
+<li>object：是一个对象，通过 pushState 方法可以将该对象内容传递到新页面中。如果不需要这个对象，此处可以填 null。</li>
+<li>title：指标题，几乎没有浏览器支持该参数，传一个空字符串比较安全。</li>
+<li>url：新的网址，必须与当前页面处在同一个域。不指定的话则为当前的路径，如果设置了一个跨域网址，则会报错。</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> data = &#123; <span class="attr">foo</span>: <span class="string">&quot;bar&quot;</span> &#125;;</span><br><span class="line">history.pushState(data, <span class="string">&quot;&quot;</span>, <span class="string">&quot;2.html&quot;</span>);</span><br><span class="line"><span class="built_in">console</span>.log(history.state); <span class="comment">// &#123;foo: &quot;bar&quot;&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：如果 pushState 的 URL 参数设置了一个新的锚点值（即 hash），并不会触发 hashchange 事件。反过来，如果 URL 的锚点值变了，则会在 History 对象创建一条浏览记录。</p>
+<p>如果 pushState() 方法设置了一个跨域网址，则会报错。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 报错</span></span><br><span class="line"><span class="comment">// 当前网址为 http://example.com</span></span><br><span class="line">history.pushState(<span class="literal">null</span>, <span class="string">&quot;&quot;</span>, <span class="string">&quot;https://twitter.com/hello&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中，pushState 想要插入一个跨域的网址，导致报错。这样设计的目的是，防止恶意代码让用户以为他们是在另一个网站上，因为这个方法不会导致页面跳转。</p>
+<p><strong>History.replaceState()</strong><br>该方法用来修改 History 对象的当前记录，用法与 pushState() 方法一样。<br>假定当前网页是 example.com/example.html。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">history.pushState(&#123; <span class="attr">page</span>: <span class="number">1</span> &#125;, <span class="string">&quot;&quot;</span>, <span class="string">&quot;?page=1&quot;</span>);</span><br><span class="line"><span class="comment">// URL 显示为 http://example.com/example.html?page=1</span></span><br><span class="line"></span><br><span class="line">history.pushState(&#123; <span class="attr">page</span>: <span class="number">2</span> &#125;, <span class="string">&quot;&quot;</span>, <span class="string">&quot;?page=2&quot;</span>);</span><br><span class="line"><span class="comment">// URL 显示为 http://example.com/example.html?page=2</span></span><br><span class="line"></span><br><span class="line">history.replaceState(&#123; <span class="attr">page</span>: <span class="number">3</span> &#125;, <span class="string">&quot;&quot;</span>, <span class="string">&quot;?page=3&quot;</span>);</span><br><span class="line"><span class="comment">// URL 显示为 http://example.com/example.html?page=3</span></span><br><span class="line"></span><br><span class="line">history.back();</span><br><span class="line"><span class="comment">// URL 显示为 http://example.com/example.html?page=1</span></span><br><span class="line"></span><br><span class="line">history.back();</span><br><span class="line"><span class="comment">// URL 显示为 http://example.com/example.html</span></span><br><span class="line"></span><br><span class="line">history.go(<span class="number">2</span>);</span><br><span class="line"><span class="comment">// URL 显示为 http://example.com/example.html?page=3</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>popstate 事件</strong><br>每当 history 对象出现变化时，就会触发 popstate 事件。<br>注意：</p>
+<ul>
+<li>仅仅调用 pushState()方法或 replaceState()方法 ，并不会触发该事件;</li>
+<li>只有用户点击浏览器倒退按钮和前进按钮，或者使用 JavaScript 调用 History.back()、History.forward()、History.go()方法时才会触发。</li>
+<li>另外，该事件只针对同一个文档，如果浏览历史的切换，导致加载不同的文档，该事件也不会触发。</li>
+<li>页面第一次加载的时候，浏览器不会触发 popstate 事件。</li>
+</ul>
+<p>使用的时候，可以为 popstate 事件指定回调函数，回调函数的参数是一个 event 事件对象，它的 state 属性指向当前的 state 对象。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">&quot;popstate&quot;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">  <span class="comment">//e.state 相当于 history.state</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;state: &quot;</span> + <span class="built_in">JSON</span>.stringify(e.state));</span><br><span class="line">  <span class="built_in">console</span>.log(history.state);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Charissa2017/article/details/103841476">点击查看</a><br>通过 history.pushState 实现页面 tab 切换的功能。<br>history 致命的缺点就是当改变页面地址后，强制刷新浏览器时，（如果后端没有做准备的话）会报错，因为刷新是拿当前地址去请求服务器的，如果服务器中没有相应的响应，会出现 404 页面。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/19/yuque/%E8%B7%A8%E9%A1%B5%E9%9D%A2%E9%80%9A%E4%BF%A1/" rel="prev" title="跨页面通信">
+      <i class="fa fa-chevron-left"></i> 跨页面通信
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/20/yuque/DOM%E6%A0%91%EF%BC%9AJavaScript%E6%98%AF%E5%A6%82%E4%BD%95%E5%BD%B1%E5%93%8DDOM%E6%A0%91%E6%9E%84%E5%BB%BA%E7%9A%84/" rel="next" title="DOM树：JavaScript是如何影响DOM树构建的">
+      DOM树：JavaScript是如何影响DOM树构建的 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%AB%AF%E8%B7%AF%E7%94%B1%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">前端路由实现方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hash-%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">hash 模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A6%E5%8F%91-hashchange-%E4%BA%8B%E4%BB%B6%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5%EF%BC%9A"><span class="nav-number">3.</span> <span class="nav-text">触发 hashchange 事件的几种情况：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#history-%E6%A8%A1%E5%BC%8F"><span class="nav-number">4.</span> <span class="nav-text">history 模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">4.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%9E%E6%80%A7"><span class="nav-number">4.2.</span> <span class="nav-text">属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">4.3.</span> <span class="nav-text">方法</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Adam Blog</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Adam Blog</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
