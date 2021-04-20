@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="前言 如果你还在找工作面试，可以适当的了解下。今日早读文章由@葉河英投稿分享。  @叶河英，腾讯前端工程师，主要研发系统和电商平台项目  正文从这开始～ 概述浏览器的缓存机制也就是我们说的 HTTP 缓存机制，其机制是根据 HTTP 报文的缓存标识进行的，所以在分析浏览器缓存机制之前，我们先使用图文简单介绍一下 HTTP 报文，HTTP 报文分为两种： HTTP 请求(Request)报文，报文格">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浏览器的缓存机制">
+<meta property="og:url" content="http://example.com/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/index.html">
+<meta property="og:site_name" content="Adam">
+<meta property="og:description" content="前言 如果你还在找工作面试，可以适当的了解下。今日早读文章由@葉河英投稿分享。  @叶河英，腾讯前端工程师，主要研发系统和电商平台项目  正文从这开始～ 概述浏览器的缓存机制也就是我们说的 HTTP 缓存机制，其机制是根据 HTTP 报文的缓存标识进行的，所以在分析浏览器缓存机制之前，我们先使用图文简单介绍一下 HTTP 报文，HTTP 报文分为两种： HTTP 请求(Request)报文，报文格">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/1.png#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/2.png#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/3.png#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/4.png#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/5.png#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/6.png#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/7.png#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/8.png#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/9.png#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/10.jpg#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/11.jpg#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/12.jpg#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/13.jpg#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/14.png#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/15.png#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/16.png#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/17.png#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/18.png#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/19.jpg#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/20.jpg#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/21.jpg#alt=img">
+<meta property="article:published_time" content="2021-04-20T08:55:56.000Z">
+<meta property="article:modified_time" content="2021-04-20T08:56:41.698Z">
+<meta property="article:author" content="Adam Blog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/1.png#alt=img">
+
+<link rel="canonical" href="http://example.com/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>浏览器的缓存机制 | Adam</title>
+  <meta name="referrer" content="no-referrer" />
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Adam</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          浏览器的缓存机制
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-20 16:55:56 / 修改时间：16:56:41" itemprop="dateCreated datePublished" datetime="2021-04-20T16:55:56+08:00">2021-04-20</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>前言</p>
+<p>如果你还在找工作面试，可以适当的了解下。今日早读文章由@葉河英投稿分享。</p>
+<blockquote>
+<p>@叶河英，腾讯前端工程师，主要研发系统和电商平台项目</p>
+</blockquote>
+<p>正文从这开始～</p>
+<h4 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h4><p>浏览器的缓存机制也就是我们说的 HTTP 缓存机制，其机制是根据 HTTP 报文的缓存标识进行的，所以在分析浏览器缓存机制之前，我们先使用图文简单介绍一下 HTTP 报文，HTTP 报文分为两种：</p>
+<p>HTTP 请求(Request)报文，报文格式为：请求行 – HTTP 头(通用信息头，请求头，实体头) – 请求报文主体(只有 POST 才有报文主体)，如下图</p>
+<p><img src="1.png#alt=img"></p>
+<p><img src="2.png#alt=img"></p>
+<p>HTTP 响应(Response)报文，报文格式为：状态行 – HTTP 头(通用信息头，响应头，实体头) – 响应报文主体，如下图</p>
+<p><img src="3.png#alt=img"></p>
+<p><img src="4.png#alt=img"></p>
+<p>注：通用信息头指的是请求和响应报文都支持的头域，分别为 Cache-Control、Connection、Date、Pragma、Transfer-Encoding、Upgrade、Via；实体头则是实体信息的实体头域，分别为 Allow、Content-Base、Content-Encoding、Content-Language、Content-Length、Content-Location、Content-MD5、Content-Range、Content-Type、Etag、Expires、Last-Modified、extension-header。这里只是为了方便理解，将通用信息头，响应头/请求头，实体头都归为了 HTTP 头。</p>
+<p>以上的概念在这里我们不做多讲解，只简单介绍，有兴趣的童鞋可以自行研究。</p>
+<h4 id="缓存过程分析"><a href="#缓存过程分析" class="headerlink" title="缓存过程分析"></a>缓存过程分析</h4><p>浏览器与服务器通信的方式为应答模式，即是：浏览器发起 HTTP 请求 – 服务器响应该请求。那么浏览器第一次向服务器发起该请求后拿到请求结果，会根据响应报文中 HTTP 头的缓存标识，决定是否缓存结果，是则将请求结果和缓存标识存入浏览器缓存中，简单的过程如下图：</p>
+<p><img src="5.png#alt=img"></p>
+<p>由上图我们可以知道：</p>
+<ul>
+<li><p>浏览器每次发起请求，都会先在浏览器缓存中查找该请求的结果以及缓存标识</p>
+</li>
+<li><p>浏览器每次拿到返回的请求结果都会将该结果和缓存标识存入浏览器缓存中</p>
+</li>
+</ul>
+<p>以上两点结论就是浏览器缓存机制的关键，他确保了每个请求的缓存存入与读取，只要我们再理解浏览器缓存的使用规则，那么所有的问题就迎刃而解了，本文也将围绕着这点进行详细分析。为了方便大家理解，这里我们根据是否需要向服务器重新发起 HTTP 请求将缓存过程分为两个部分，分别是强制缓存和协商缓存。</p>
+<h5 id="强制缓存"><a href="#强制缓存" class="headerlink" title="强制缓存"></a>强制缓存</h5><p>强制缓存就是向浏览器缓存查找该请求结果，并根据该结果的缓存规则来决定是否使用该缓存结果的过程，强制缓存的情况主要有三种(暂不分析协商缓存过程)，如下：</p>
+<p>不存在该缓存结果和缓存标识，强制缓存失效，则直接向服务器发起请求（跟第一次发起请求一致），如下图：</p>
+<p><img src="6.png#alt=img"></p>
+<p>存在该缓存结果和缓存标识，但该结果已失效，强制缓存失效，则使用协商缓存(暂不分析)，如下图</p>
+<p><img src="7.png#alt=img"></p>
+<p>存在该缓存结果和缓存标识，且该结果尚未失效，强制缓存生效，直接返回该结果，如下图</p>
+<p><img src="8.png#alt=img"></p>
+<blockquote>
+<p>那么强制缓存的缓存规则是什么？</p>
+</blockquote>
+<p>当浏览器向服务器发起请求时，服务器会将缓存规则放入 HTTP 响应报文的 HTTP 头中和请求结果一起返回给浏览器，控制强制缓存的字段分别是 Expires 和 Cache-Control，其中 Cache-Control 优先级比 Expires 高。</p>
+<h5 id="Expires"><a href="#Expires" class="headerlink" title="Expires"></a>Expires</h5><p>Expires 是 HTTP/1.0 控制网页缓存的字段，其值为服务器返回该请求结果缓存的到期时间，即再次发起该请求时，如果客户端的时间小于 Expires 的值时，直接使用缓存结果。</p>
+<blockquote>
+<p>Expires 是 HTTP/1.0 的字段，但是现在浏览器默认使用的是 HTTP/1.1，那么在 HTTP/1.1 中网页缓存还是否由 Expires 控制？</p>
+</blockquote>
+<p>到了 HTTP/1.1，Expire 已经被 Cache-Control 替代，原因在于 Expires 控制缓存的原理是使用客户端的时间与服务端返回的时间做对比，那么如果客户端与服务端的时间因为某些原因（例如时区不同；客户端和服务端有一方的时间不准确）发生误差，那么强制缓存则会直接失效，这样的话强制缓存的存在则毫无意义，那么 Cache-Control 又是如何控制的呢？</p>
+<h5 id="Cache-Control"><a href="#Cache-Control" class="headerlink" title="Cache-Control"></a>Cache-Control</h5><p>在 HTTP/1.1 中，Cache-Control 是最重要的规则，主要用于控制网页缓存，主要取值为：</p>
+<ul>
+<li><p>public：所有内容都将被缓存（客户端和代理服务器都可缓存）</p>
+</li>
+<li><p>private：所有内容只有客户端可以缓存，Cache-Control 的默认取值</p>
+</li>
+<li><p>no-cache：客户端缓存内容，但是是否使用缓存则需要经过协商缓存来验证决定</p>
+</li>
+<li><p>no-store：所有内容都不会被缓存，即不使用强制缓存，也不使用协商缓存</p>
+</li>
+<li><p>max-age=xxx (xxx is numeric)：缓存内容将在 xxx 秒后失效</p>
+</li>
+</ul>
+<p>接下来，我们直接看一个例子，如下：</p>
+<p><img src="9.png#alt=img"></p>
+<p>由上面的例子我们可以知道：</p>
+<ul>
+<li><p>HTTP 响应报文中 expires 的时间值，是一个绝对值</p>
+</li>
+<li><p>HTTP 响应报文中 Cache-Control 为 max-age=600，是相对值</p>
+</li>
+</ul>
+<p>由于 Cache-Control 的优先级比 expires，那么直接根据 Cache-Control 的值进行缓存，意思就是说在 600 秒内再次发起该请求，则会直接使用缓存结果，强制缓存生效。</p>
+<p>注：在无法确定客户端的时间是否与服务端的时间同步的情况下，Cache-Control 相比于 expires 是更好的选择，所以同时存在时，只有 Cache-Control 生效。</p>
+<p>了解强制缓存的过程后，我们拓展性的思考一下：</p>
+<blockquote>
+<p>浏览器的缓存存放在哪里，如何在浏览器中判断强制缓存是否生效？</p>
+</blockquote>
+<p><img src="10.jpg#alt=img"></p>
+<p>这里我们以博客的请求为例，状态码为灰色的请求则代表使用了强制缓存，请求对应的 Size 值则代表该缓存存放的位置，分别为 from memory cache 和 from disk cache。</p>
+<blockquote>
+<p>那么 from memory cache 和 from disk cache 又分别代表的是什么呢？什么时候会使用 from disk cache，什么时候会使用 from memory cache 呢？</p>
+</blockquote>
+<p>from memory cache 代表使用内存中的缓存，from disk cache 则代表使用的是硬盘中的缓存，浏览器读取缓存的顺序为 memory –&gt; disk。</p>
+<p>虽然我已经直接把结论说出来了，但是相信有不少人对此不能理解，那么接下来我们一起详细分析一下缓存读取问题，这里仍让以我的博客为例进行分析：</p>
+<p>访问<a target="_blank" rel="noopener" href="https://heyingye.github.io/">https://heyingye.github.io/</a> –&gt; 200 –&gt; 关闭博客的标签页 –&gt; 重新打开<a target="_blank" rel="noopener" href="https://heyingye.github.io/">https://heyingye.github.io/</a> –&gt; 200(from disk cache) –&gt; 刷新 –&gt; 200(from memory cache)</p>
+<p>过程如下：</p>
+<ul>
+<li>访问<a target="_blank" rel="noopener" href="https://heyingye.github.io/">https://heyingye.github.io/</a></li>
+</ul>
+<p><img src="11.jpg#alt=img"></p>
+<ul>
+<li><p>关闭博客的标签页</p>
+</li>
+<li><p>重新打开<a target="_blank" rel="noopener" href="https://heyingye.github.io/">https://heyingye.github.io/</a></p>
+</li>
+</ul>
+<p><img src="12.jpg#alt=img"></p>
+<ul>
+<li>刷新</li>
+</ul>
+<p><img src="13.jpg#alt=img"></p>
+<p>from disk memory</p>
+<blockquote>
+<p>看到这里可能有人小伙伴问了，最后一个步骤刷新的时候，不是同时存在着 from disk cache 和 from memory cache 吗？</p>
+</blockquote>
+<p>对于这个问题，我们需要了解内存缓存(from memory cache)和硬盘缓存(from disk cache)，如下:</p>
+<ul>
+<li><p>内存缓存(from memory cache)：内存缓存具有两个特点，分别是快速读取和时效性：</p>
+</li>
+<li><p>快速读取：内存缓存会将编译解析后的文件，直接存入该进程的内存中，占据该进程一定的内存资源，以方便下次运行使用时的快速读取。</p>
+</li>
+<li><p>时效性：一旦该进程关闭，则该进程的内存则会清空。</p>
+</li>
+<li><p>硬盘缓存(from disk cache)：硬盘缓存则是直接将缓存写入硬盘文件中，读取缓存需要对该缓存存放的硬盘文件进行 I/O 操作，然后重新解析该缓存内容，读取复杂，速度比内存缓存慢。</p>
+</li>
+</ul>
+<p>在浏览器中，浏览器会在 js 和图片等文件解析执行后直接存入内存缓存中，那么当刷新页面时只需直接从内存缓存中读取(from memory cache)；而 css 文件则会存入硬盘文件中，所以每次渲染页面都需要从硬盘读取缓存(from disk cache)。</p>
+<h4 id="协商缓存"><a href="#协商缓存" class="headerlink" title="协商缓存"></a>协商缓存</h4><p>协商缓存就是强制缓存失效后，浏览器携带缓存标识向服务器发起请求，由服务器根据缓存标识决定是否使用缓存的过程，主要有以下两种情况：</p>
+<p>协商缓存生效，返回 304，如下</p>
+<p><img src="14.png#alt=img"></p>
+<p>304</p>
+<p>协商缓存失效，返回 200 和请求结果结果，如下</p>
+<p><img src="15.png#alt=img"></p>
+<p>200</p>
+<p>同样，协商缓存的标识也是在响应报文的 HTTP 头中和请求结果一起返回给浏览器的，控制协商缓存的字段分别有：Last-Modified / If-Modified-Since 和 Etag / If-None-Match，其中 Etag / If-None-Match 的优先级比 Last-Modified / If-Modified-Since 高。</p>
+<h5 id="Last-Modified-If-Modified-Since"><a href="#Last-Modified-If-Modified-Since" class="headerlink" title="Last-Modified / If-Modified-Since"></a>Last-Modified / If-Modified-Since</h5><p>Last-Modified 是服务器响应请求时，返回该资源文件在服务器最后被修改的时间，如下。</p>
+<p><img src="16.png#alt=img"></p>
+<p>last-modify</p>
+<p>If-Modified-Since 则是客户端再次发起该请求时，携带上次请求返回的 Last-Modified 值，通过此字段值告诉服务器该资源上次请求返回的最后被修改时间。服务器收到该请求，发现请求头含有 If-Modified-Since 字段，则会根据 If-Modified-Since 的字段值与该资源在服务器的最后被修改时间做对比，若服务器的资源最后被修改时间大于 If-Modified-Since 的字段值，则重新返回资源，状态码为 200；否则则返回 304，代表资源无更新，可继续使用缓存文件，如下。</p>
+<p><img src="17.png#alt=img"></p>
+<p>If-Modified-Since</p>
+<h5 id="Etag-If-None-Match"><a href="#Etag-If-None-Match" class="headerlink" title="Etag / If-None-Match"></a>Etag / If-None-Match</h5><p>Etag 是服务器响应请求时，返回当前资源文件的一个唯一标识(由服务器生成)，如下。</p>
+<p><img src="18.png#alt=img"></p>
+<p>Etag</p>
+<p>If-None-Match 是客户端再次发起该请求时，携带上次请求返回的唯一标识 Etag 值，通过此字段值告诉服务器该资源上次请求返回的唯一标识值。服务器收到该请求后，发现该请求头中含有 If-None-Match，则会根据 If-None-Match 的字段值与该资源在服务器的 Etag 值做对比，一致则返回 304，代表资源无更新，继续使用缓存文件；不一致则重新返回资源文件，状态码为 200，如下。</p>
+<p><img src="19.jpg#alt=img"></p>
+<p>Etag-match</p>
+<p>注：Etag / If-None-Match 优先级高于 Last-Modified / If-Modified-Since，同时存在则只有 Etag / If-None-Match 生效。</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>强制缓存优先于协商缓存进行，若强制缓存(Expires 和 Cache-Control)生效则直接使用缓存，若不生效则进行协商缓存(Last-Modified / If-Modified-Since 和 Etag / If-None-Match)，协商缓存由服务器决定是否使用缓存，若协商缓存失效，那么代表该请求的缓存失效，重新获取请求结果，再存入浏览器缓存中；生效则返回 304，继续使用缓存，主要过程如下：</p>
+<p><img src="20.jpg#alt=img"></p>
+<p>all</p>
+<p>最后，为你推荐</p>
+<p><a target="_blank" rel="noopener" href="http://mp.weixin.qq.com/s?__biz=MjM5MTA1MjAxMQ==%E2%88%A3=2651226347&idx=1&sn=6dbccc54406f0b075671884b738b1e88&chksm=bd49596f8a3ed079f79cda4b90ac3cb3b1dbdb5bfb8aade962a16a323563bf26a0c75b0a5d7b&scene=21#wechat_redirect">【第 903 期】浏览器缓存机制剖析</a></p>
+<p><a target="_blank" rel="noopener" href="http://mp.weixin.qq.com/s?__biz=MjM5MTA1MjAxMQ==%E2%88%A3=2651226262&idx=1&sn=2128db200b88479face67ed8e095757c&chksm=bd4959128a3ed0041b43a5683c75c4b88c7d35fac909a59c14b4e9fc11e8d408680b171d2706&scene=21#wechat_redirect">【第 887 期】浏览器的缓存机制小结</a></p>
+<p>关于本文作者：@叶河英原文：<a target="_blank" rel="noopener" href="https://heyingye.github.io/2018/04/16/%E5%BD%BB%E5%BA%95%E7%90%86%E8%A7%A3%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/">https://heyingye.github.io/2018/04/16/彻底理解浏览器的缓存机制/</a></p>
+<p><img src="21.jpg#alt=img"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/20/yuque/DOM%E6%A0%91%EF%BC%9AJavaScript%E6%98%AF%E5%A6%82%E4%BD%95%E5%BD%B1%E5%93%8DDOM%E6%A0%91%E6%9E%84%E5%BB%BA%E7%9A%84/" rel="prev" title="DOM树：JavaScript是如何影响DOM树构建的">
+      <i class="fa fa-chevron-left"></i> DOM树：JavaScript是如何影响DOM树构建的
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/20/hello-world/" rel="next" title="Hello World">
+      Hello World <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E8%BF%87%E7%A8%8B%E5%88%86%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text">缓存过程分析</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%BC%BA%E5%88%B6%E7%BC%93%E5%AD%98"><span class="nav-number">2.1.</span> <span class="nav-text">强制缓存</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Expires"><span class="nav-number">2.2.</span> <span class="nav-text">Expires</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Cache-Control"><span class="nav-number">2.3.</span> <span class="nav-text">Cache-Control</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98"><span class="nav-number">3.</span> <span class="nav-text">协商缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Last-Modified-If-Modified-Since"><span class="nav-number">3.1.</span> <span class="nav-text">Last-Modified &#x2F; If-Modified-Since</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Etag-If-None-Match"><span class="nav-number">3.2.</span> <span class="nav-text">Etag &#x2F; If-None-Match</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Adam Blog</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Adam Blog</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
