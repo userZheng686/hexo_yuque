@@ -170,7 +170,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-04-20 16:43:23" itemprop="dateCreated datePublished" datetime="2021-04-20T16:43:23+08:00">2021-04-20</time>
+              <time title="创建时间：2021-04-20 16:46:18" itemprop="dateCreated datePublished" datetime="2021-04-20T16:46:18+08:00">2021-04-20</time>
             </span>
 
           
@@ -241,7 +241,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-04-20 16:33:13 / 修改时间：16:43:53" itemprop="dateCreated datePublished" datetime="2021-04-20T16:33:13+08:00">2021-04-20</time>
+              <time title="创建时间：2021-04-20 16:33:13 / 修改时间：16:46:49" itemprop="dateCreated datePublished" datetime="2021-04-20T16:33:13+08:00">2021-04-20</time>
             </span>
 
           
@@ -270,55 +270,20 @@
 <li>如果分词器解析出来的是 EndTag 标签，比如是 EndTag div，HTML 解析器会查看 Token 栈顶的元素是否是 StarTag div，如果是，就将 StartTag div 从栈中弹出，表示该 div 元素解析完成。</li>
 </ul>
 <p>通过分词器产生的新 Token 就这样不停地压栈和出栈，整个解析过程就这样一直持续下去，直到分词器将所有字节流分词完成。<br>为了更加直观地理解整个过程，下面我们结合一段 HTML 代码（如下），来一步步分析 DOM 树的生成过程。</p>
-<html>
-<body>
-    <div>1</div>
-    <div>test</div>
-</body>
-</html>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>1<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>test<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>这段代码以字节流的形式传给了 HTML 解析器，经过分词器处理，解析出来的第一个 Token 是 StartTag html，解析出来的 Token 会被压入到栈中，并同时创建一个 html 的 DOM 节点，将其加入到 DOM 树中。<br>这里需要补充说明下，HTML 解析器开始工作时，会默认创建了一个根为 document 的空 DOM 结构，同时会将一个 StartTag document 的 Token 压入栈底。然后经过分词器解析出来的第一个 StartTag html Token 会被压入到栈中，并创建一个 html 的 DOM 节点，添加到 document 上，如下图所示<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618907620730-3376aae6-6b79-420c-b91f-59ac0ceec5f8.png#clientId=u027bf477-f5c2-4&from=paste&height=477&id=u650a49a1&margin=%5Bobject%20Object%5D&originHeight=954&originWidth=1276&originalType=url&status=done&style=none&taskId=uccd797b6-dfc1-485a-a49c-7c4aa8811fd&width=638"><br>然后按照同样的流程解析出来 StartTag body 和 StartTag div，其 Token 栈和 DOM 的状态如下图所示：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618907620943-5cdf02d1-0b58-4d0e-858b-984d50560b4e.png#clientId=u027bf477-f5c2-4&from=paste&height=493&id=u850f324e&margin=%5Bobject%20Object%5D&originHeight=986&originWidth=1330&originalType=url&status=done&style=none&taskId=u2fa6a027-ed6a-47b9-b816-54f1e480161&width=665"><br>接下来解析出来的是第一个 div 的文本 Token，渲染引擎会为该 Token 创建一个文本节点，并将该 Token 添加到 DOM 中，它的父节点就是当前 Token 栈顶元素对应的节点，如下图所示：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618907621143-83c2f156-8ccb-4491-88c2-139a5e24ee02.png#clientId=u027bf477-f5c2-4&from=paste&height=495&id=ub3ac6980&margin=%5Bobject%20Object%5D&originHeight=990&originWidth=1394&originalType=url&status=done&style=none&taskId=uecf854da-3caa-4848-a00c-30ba463407f&width=697"><br>再接下来，分词器解析出来第一个 EndTag div，这时候 HTML 解析器会去判断当前栈顶的元素是否是 StartTag div，如果是则从栈顶弹出 StartTag div，如下图所示<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618907622828-9627ca32-6a8c-4955-ad18-298a0c5eb57c.png#clientId=u027bf477-f5c2-4&from=paste&height=469&id=u73f2c2c5&margin=%5Bobject%20Object%5D&originHeight=938&originWidth=1454&originalType=url&status=done&style=none&taskId=u71722cbf-d102-4d7d-ae93-17175541e3a&width=727"><br>按照同样的规则，一路解析，最终结果如下图所示：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618907622662-17a79816-326c-4a4e-8c3b-537a7902b0be.png#clientId=u027bf477-f5c2-4&from=paste&height=503&id=u884e607b&margin=%5Bobject%20Object%5D&originHeight=1006&originWidth=1432&originalType=url&status=done&style=none&taskId=uab8d4e2e-6f8c-4542-9a72-eeb834e0b5b&width=716"><br>通过上面的介绍，相信你已经清楚 DOM 是怎么生成的了。不过在实际生产环境中，HTML 源文件中既包含 CSS 和 JavaScript，又包含图片、音频、视频等文件，所以处理过程远比上面这个示范 Demo 复杂。不过理解了这个简单的 Demo 生成过程，我们就可以往下分析更加复杂的场景了。</p>
 <h2 id="JavaScript-是如何影响-DOM-生成的"><a href="#JavaScript-是如何影响-DOM-生成的" class="headerlink" title="#JavaScript 是如何影响 DOM 生成的"></a><a target="_blank" rel="noopener" href="https://blog.poetries.top/browser-working-principle/guide/part5/lesson22.html#javascript-%E6%98%AF%E5%A6%82%E4%BD%95%E5%BD%B1%E5%93%8D-dom-%E7%94%9F%E6%88%90%E7%9A%84">#</a>JavaScript 是如何影响 DOM 生成的</h2><p>我们再来看看稍微复杂点的 HTML 文件，如下所示：</p>
-<html>
-<body>
-    <div>1</div>
-    <script>
-    let div1 = document.getElementsByTagName('div')[0]
-    div1.innerText = 'time.geekbang'
-    </script>
-    <div>test</div>
-</body>
-</html>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>1<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">      <span class="keyword">let</span> div1 = <span class="built_in">document</span>.getElementsByTagName(<span class="string">&quot;div&quot;</span>)[<span class="number">0</span>];</span></span><br><span class="line"><span class="javascript">      div1.innerText = <span class="string">&quot;time.geekbang&quot;</span>;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>test<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-<p>我在两段 div 中间插入了一段 JavaScript 脚本，这段脚本的解析过程就有点不一样了。script 标签之前，所有的解析流程还是和之前介绍的一样，但是解析到 script 标签时，渲染引擎判断这是一段脚本，此时 HTML 解析器就会暂停 DOM 的解析，因为接下来的 JavaScript 可能要修改当前已经生成的 DOM 结构。<br>通过前面 DOM 生成流程分析，我们已经知道当解析到 script 脚本标签时，其 DOM 树结构如下所示：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618907623068-deff6c00-7d7c-40e6-8241-940fa34ba03c.png#clientId=u027bf477-f5c2-4&from=paste&height=744&id=u4a604cad&margin=%5Bobject%20Object%5D&originHeight=1487&originWidth=1142&originalType=url&status=done&style=none&taskId=u9b76a274-f449-4b95-80cf-9d1deb55ba0&width=571"><br>这时候 HTML 解析器暂停工作，JavaScript 引擎介入，并执行 script 标签中的这段脚本，因为这段 JavaScript 脚本修改了 DOM 中第一个 div 中的内容，所以执行这段脚本之后，div 节点内容已经修改为 time.geekbang 了。脚本执行完成之后，HTML 解析器恢复解析过程，继续解析后续的内容，直至生成最终的 DOM。<br>以上过程应该还是比较好理解的，不过除了在页面中直接内嵌 JavaScript 脚本之外，我们还通常需要在页面中引入 JavaScript 文件，这个解析过程就稍微复杂了些，如下面代码：<br>//foo.js<br>let div1 = document.getElementsByTagName(‘div’)[0]<br>div1.innerText = ‘time.geekbang’</p>
-<html>
-<body>
-    <div>1</div>
-    <script type="text/javascript" src='foo.js'></script>
-    <div>test</div>
-</body>
-</html>
+<p>我在两段 div 中间插入了一段 JavaScript 脚本，这段脚本的解析过程就有点不一样了。script 标签之前，所有的解析流程还是和之前介绍的一样，但是解析到 script 标签时，渲染引擎判断这是一段脚本，此时 HTML 解析器就会暂停 DOM 的解析，因为接下来的 JavaScript 可能要修改当前已经生成的 DOM 结构。<br>通过前面 DOM 生成流程分析，我们已经知道当解析到 script 脚本标签时，其 DOM 树结构如下所示：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618907623068-deff6c00-7d7c-40e6-8241-940fa34ba03c.png#clientId=u027bf477-f5c2-4&from=paste&height=744&id=u4a604cad&margin=%5Bobject%20Object%5D&originHeight=1487&originWidth=1142&originalType=url&status=done&style=none&taskId=u9b76a274-f449-4b95-80cf-9d1deb55ba0&width=571"><br>这时候 HTML 解析器暂停工作，JavaScript 引擎介入，并执行 script 标签中的这段脚本，因为这段 JavaScript 脚本修改了 DOM 中第一个 div 中的内容，所以执行这段脚本之后，div 节点内容已经修改为 time.geekbang 了。脚本执行完成之后，HTML 解析器恢复解析过程，继续解析后续的内容，直至生成最终的 DOM。<br>以上过程应该还是比较好理解的，不过除了在页面中直接内嵌 JavaScript 脚本之外，我们还通常需要在页面中引入 JavaScript 文件，这个解析过程就稍微复杂了些，如下面代码：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//foo.js let div1 = document.getElementsByTagName(&#x27;div&#x27;)[0] div1.innerText =</span><br><span class="line">&#x27;time.geekbang&#x27;</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>1<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span> <span class="attr">src</span>=<span class="string">&quot;foo.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>test<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>这段代码的功能还是和前面那段代码是一样的，不过这里我把内嵌 JavaScript 脚本修改成了通过 JavaScript 文件加载。其整个执行流程还是一样的，执行到 JavaScript 标签时，暂停整个 DOM 的解析，执行 JavaScript 代码，不过这里执行 JavaScript 时，需要先下载这段 JavaScript 代码。这里需要重点关注下载环境，因为 JavaScript 文件的下载过程会阻塞 DOM 解析，而通常下载又是非常耗时的，会受到网络环境、JavaScript 文件大小等因素的影响。<br>不过 Chrome 浏览器做了很多优化，其中一个主要的优化是预解析操作。当渲染引擎收到字节流之后，会开启一个预解析线程，用来分析 HTML 文件中包含的 JavaScript、CSS 等相关文件，解析到相关文件之后，预解析线程会提前下载这些文件。<br>再回到 DOM 解析上，我们知道引入 JavaScript 线程会阻塞 DOM，不过也有一些相关的策略来规避，比如使用 CDN 来加速 JavaScript 文件的加载，压缩 JavaScript 文件的体积。另外，如果 JavaScript 文件中没有操作 DOM 相关代码，就可以将该 JavaScript 脚本设置为异步加载，通过 async 或 defer 来标记代码，使用方式如下所示：</p>
-<script async type="text/javascript" src='foo.js'></script>
-
-<script defer type="text/javascript" src='foo.js'></script>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">async</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span> <span class="attr">src</span>=<span class="string">&quot;foo.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">defer</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span> <span class="attr">src</span>=<span class="string">&quot;foo.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>async 和 defer 虽然都是异步的，不过还有一些差异，使用 async 标志的脚本文件一旦加载完成，会立即执行；而使用了 defer 标记的脚本文件，需要在 DOMContentLoaded 事件之前执行。<br>现在我们知道了 JavaScript 是如何阻塞 DOM 解析的了，那接下来我们再来结合文中代码看看另外一种情况：</p>
-<head>
-    <style src='theme.css'></style>
-</head>
-
-<body>
-    <div>1</div>
-    <script>
-            let div1 = document.getElementsByTagName('div')[0]
-            div1.innerText = 'time.geekbang' // 需要 DOM
-            div1.style.color = 'red'  // 需要 CSSOM
-        </script>
-    <div>test</div>
-</body>
-</html>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">src</span>=<span class="string">&#x27;theme.css&#x27;</span>&gt;</span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>1<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">let</span> div1 = <span class="built_in">document</span>.getElementsByTagName(<span class="string">&#x27;div&#x27;</span>)[<span class="number">0</span>]</span></span><br><span class="line"><span class="javascript">            div1.innerText = <span class="string">&#x27;time.geekbang&#x27;</span> <span class="comment">// 需要 DOM</span></span></span><br><span class="line"><span class="javascript">            div1.style.color = <span class="string">&#x27;red&#x27;</span>  <span class="comment">// 需要 CSSOM</span></span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>test<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>该示例中，JavaScript 代码出现了 div1.style.color = ‘red’ 的语句，它是用来操纵 CSSOM 的，所以在执行 JavaScript 之前，需要先解析 JavaScript 语句之上所有的 CSS 样式。所以如果代码里引用了外部的 CSS 文件，那么在执行 JavaScript 之前，还需要等待外部的 CSS 文件下载完成，并解析生成 CSSOM 对象之后，才能执行 JavaScript 脚本。<br>而 JavaScript 引擎在解析 JavaScript 之前，是不知道 JavaScript 是否操纵了 CSSOM 的，所以渲染引擎在遇到 JavaScript 脚本时，不管该脚本是否操纵了 CSSOM，都会执行 CSS 文件下载，解析操作，再执行 JavaScript 脚本。<br>所以说 JavaScript 脚本是依赖样式表的，这又多了一个阻塞过程。至于如何优化，我们在下篇文章中再来深入探讨。<br>通过上面的分析，我们知道了 JavaScript 会阻塞 DOM 生成，而样式文件又会阻塞 JavaScript 的执行，所以在实际的工程中需要重点关注 JavaScript 文件和样式表文件，使用不当会影响到页面性能的</p>
 
@@ -365,7 +330,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-04-20 12:51:15 / 修改时间：16:43:53" itemprop="dateCreated datePublished" datetime="2021-04-20T12:51:15+08:00">2021-04-20</time>
+              <time title="创建时间：2021-04-20 12:51:15 / 修改时间：16:46:50" itemprop="dateCreated datePublished" datetime="2021-04-20T12:51:15+08:00">2021-04-20</time>
             </span>
 
           
@@ -506,7 +471,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-20 16:43:53" itemprop="dateModified" datetime="2021-04-20T16:43:53+08:00">2021-04-20</time>
+                <time title="修改时间：2021-04-20 16:46:50" itemprop="dateModified" datetime="2021-04-20T16:46:50+08:00">2021-04-20</time>
               </span>
 
           
@@ -729,7 +694,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-20 16:43:53" itemprop="dateModified" datetime="2021-04-20T16:43:53+08:00">2021-04-20</time>
+                <time title="修改时间：2021-04-20 16:46:50" itemprop="dateModified" datetime="2021-04-20T16:46:50+08:00">2021-04-20</time>
               </span>
 
           
@@ -924,7 +889,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-20 16:43:54" itemprop="dateModified" datetime="2021-04-20T16:43:54+08:00">2021-04-20</time>
+                <time title="修改时间：2021-04-20 16:46:50" itemprop="dateModified" datetime="2021-04-20T16:46:50+08:00">2021-04-20</time>
               </span>
 
           
@@ -1023,7 +988,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-20 16:43:54" itemprop="dateModified" datetime="2021-04-20T16:43:54+08:00">2021-04-20</time>
+                <time title="修改时间：2021-04-20 16:46:50" itemprop="dateModified" datetime="2021-04-20T16:46:50+08:00">2021-04-20</time>
               </span>
 
           
@@ -1222,7 +1187,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-20 16:43:54" itemprop="dateModified" datetime="2021-04-20T16:43:54+08:00">2021-04-20</time>
+                <time title="修改时间：2021-04-20 16:46:50" itemprop="dateModified" datetime="2021-04-20T16:46:50+08:00">2021-04-20</time>
               </span>
 
           
@@ -1428,7 +1393,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-20 16:43:54" itemprop="dateModified" datetime="2021-04-20T16:43:54+08:00">2021-04-20</time>
+                <time title="修改时间：2021-04-20 16:46:50" itemprop="dateModified" datetime="2021-04-20T16:46:50+08:00">2021-04-20</time>
               </span>
 
           
@@ -1493,7 +1458,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-20 16:43:54" itemprop="dateModified" datetime="2021-04-20T16:43:54+08:00">2021-04-20</time>
+                <time title="修改时间：2021-04-20 16:46:50" itemprop="dateModified" datetime="2021-04-20T16:46:50+08:00">2021-04-20</time>
               </span>
 
           
