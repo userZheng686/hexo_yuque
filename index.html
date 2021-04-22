@@ -146,7 +146,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/21/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/22/hello-world/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -160,7 +160,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/04/21/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
+            <a href="/2021/04/22/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
         </h2>
 
         <div class="post-meta">
@@ -170,7 +170,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-04-21 13:19:17" itemprop="dateCreated datePublished" datetime="2021-04-21T13:19:17+08:00">2021-04-21</time>
+              <time title="创建时间：2021-04-22 13:45:03" itemprop="dateCreated datePublished" datetime="2021-04-22T13:45:03+08:00">2021-04-22</time>
             </span>
 
           
@@ -216,6 +216,435 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/22/yuque/Position/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/22/yuque/Position/" class="post-title-link" itemprop="url">Position</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-22 00:11:45 / 修改时间：13:45:42" itemprop="dateCreated datePublished" datetime="2021-04-22T00:11:45+08:00">2021-04-22</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="文档流"><a href="#文档流" class="headerlink" title="文档流"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Learn/CSS/CSS_layout/Positioning#%E6%96%87%E6%A1%A3%E6%B5%81">文档流</a></h2><p>定位是一个相当复杂的话题，所以我们深入了解代码之前，让我们审视一下布局理论，并让我们了解它的工作原理。<br>首先，围绕元素内容添加任何内边距、边界和外边距来布置单个元素盒子——这就是  <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/The_box_model">盒模型</a>，我们前面看过。 默认情况下，块级元素的内容宽度是其父元素的宽度的 100％，并且与其内容一样高。内联元素高宽与他们的内容高宽一样。您不能对内联元素设置宽度或高度——它们只是位于块级元素的内容中。  如果要以这种方式控制内联元素的大小，则需要将其设置为类似块级元素  display: block;。<br>这只是解释了单个元素，但是元素相互之间如何交互呢？ <strong>正常的布局流</strong>（在布局介绍文章中提到）是将元素放置在浏览器视口内的系统。默认情况下，块级元素在视口中垂直布局——每个都将显示在上一个元素下面的新行上，并且它们的外边距将分隔开它们。<br>内联元素表现不一样——它们不会出现在新行上；相反，它们互相之间以及任何相邻（或被包裹）的文本内容位于同一行上，只要在父块级元素的宽度内有空间可以这样做。如果没有空间，那么溢流的文本或元素将向下移动到新行。<br>如果两个相邻元素都在其上设置外边距，并且两个外边距接触，则两个外边距中的较大者保留，较小的一个消失——这叫<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_Box_Model/Mastering_margin_collapsing">外边距折叠</a>, 我们之前也遇到过。<br>让我们来看一个简单的例子来解析这一切：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Basic document flow<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">  I am a basic block level element. My adjacent block level elements sit on new</span><br><span class="line">  lines below me.</span><br><span class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">  By default we span 100% of the width of our parent element, and we are as tall</span><br><span class="line">  as our child content. Our total width and height is our content + padding +</span><br><span class="line">  border width/height.</span><br><span class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">  We are separated by our margins. Because of margin collapsing, we are</span><br><span class="line">  separated by the width of one of our margins, not both.</span><br><span class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">  inline elements <span class="tag">&lt;<span class="name">span</span>&gt;</span>like this one<span class="tag">&lt;/<span class="name">span</span>&gt;</span> and <span class="tag">&lt;<span class="name">span</span>&gt;</span>this one<span class="tag">&lt;/<span class="name">span</span>&gt;</span> sit on</span><br><span class="line">  the same line as one another, and adjacent text nodes, if there is space on</span><br><span class="line">  the same line. Overflowing inline elements will</span><br><span class="line">  <span class="tag">&lt;<span class="name">span</span>&gt;</span>wrap onto a new line if possible (like this one containing text)<span class="tag">&lt;/<span class="name">span</span>&gt;</span>,</span><br><span class="line">  or just go on to a new line if not, much like this image will do:</span><br><span class="line">  <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;https://mdn.mozillademos.org/files/13360/long.jpg&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">500px</span>;</span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">0</span> auto;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">p</span> &#123;</span><br><span class="line">  <span class="attribute">background</span>: aqua;</span><br><span class="line">  <span class="attribute">border</span>: <span class="number">3px</span> solid blue;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">10px</span>;</span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">10px</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">span</span> &#123;</span><br><span class="line">  <span class="attribute">background</span>: red;</span><br><span class="line">  <span class="attribute">border</span>: <span class="number">1px</span> solid black;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在我们阅读本文时，我们将多次重复这个例子，因为我们要展示不同定位选项的效果。<br>如果可能，我们希望您在本地计算机上跟随练习 — 从 GitHub 仓库下载一个<a target="_blank" rel="noopener" href="http://mdn.github.io/learning-area/css/css-layout/positioning/0_basic-flow.html">0_basic-flow.html</a> (<a target="_blank" rel="noopener" href="https://github.com/mdn/learning-area/blob/master/css/css-layout/positioning/1_static-positioning.html">源代码</a>) 然后用它作为我们的起步点。</p>
+<h2 id="介绍定位"><a href="#介绍定位" class="headerlink" title="介绍定位"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Learn/CSS/CSS_layout/Positioning#%E4%BB%8B%E7%BB%8D%E5%AE%9A%E4%BD%8D">介绍定位</a></h2><p>定位的整个想法是允许我们覆盖上面描述的基本文档流行为，以产生有趣的效果。如果你想稍微改变布局中一些盒子的位置，使它们的默认布局流程位置稍微有点古怪，不舒服的感觉呢？定位是你的工具。或者，如果您想要创建一个浮动在页面其他部分顶部的 UI 元素，并且/或者始终停留在浏览器窗口内的相同位置，无论页面滚动多少？定位使这种布局工作成为可能。<br>有许多不同类型的定位，您可以对 HTML 元素生效。要使某个元素上的特定类型的定位，我们使用<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/position">position</a>属性。</p>
+<h3 id="静态定位"><a href="#静态定位" class="headerlink" title="静态定位"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Learn/CSS/CSS_layout/Positioning#%E9%9D%99%E6%80%81%E5%AE%9A%E4%BD%8D">静态定位</a></h3><p>静态定位是每个元素获取的默认值——它只是意味着“将元素放入它在文档布局流中的正常位置 ——这里没有什么特别的。<br>为了演示这一点，并为以后的部分设置示例，首先在 HTML 中添加一个 positioned  的  class  到第二个<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/p"><p></a>：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">&quot;positioned&quot;</span>&gt;</span>...<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>现在，将以下规则添加到 CSS 的底部：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.positioned</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: static;</span><br><span class="line">  <span class="attribute">background</span>: yellow;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果现在保存和刷新，除了第 2 段的更新的背景颜色，根本没有差别。这很好——正如我们之前所说，静态定位是默认行为！</p>
+<h3 id="相对定位"><a href="#相对定位" class="headerlink" title="相对定位"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Learn/CSS/CSS_layout/Positioning#%E7%9B%B8%E5%AF%B9%E5%AE%9A%E4%BD%8D">相对定位</a></h3><p>相对定位是我们将要看的第一个位置类型。 它与静态定位非常相似，占据在正常的文档流中，除了你仍然可以修改它的最终位置，包括让它与页面上的其他元素重叠。 让我们继续并更新代码中的 position 属性：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">position</span>: relative;</span><br></pre></td></tr></table></figure>
+
+<p>如果您在此阶段保存并刷新，则结果根本不会发生变化。那么如何修改元素的位置呢？ 您需要使用<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/top">top</a>，<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/bottom">bottom</a>，<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/left">left</a>和<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/right">right</a>属性 ，我们将在下一节中解释。</p>
+<h3 id="介绍-top-bottom-left-right"><a href="#介绍-top-bottom-left-right" class="headerlink" title="介绍 top, bottom, left,  right"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Learn/CSS/CSS_layout/Positioning#%E4%BB%8B%E7%BB%8D_top_bottom_left_right">介绍 top, bottom, left,  right</a></h3><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/top">top</a>,<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/bottom">bottom</a>,<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/left">left</a>, 和<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/right">right</a>  来精确指定要将定位元素移动到的位置。 要尝试这样做，请在 CSS 中的.positioned 规则中添加以下声明：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">top</span>: <span class="number">30px</span>;</span><br><span class="line"><span class="attribute">left</span>: <span class="number">30px</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：</strong>这些属性的值可以采用逻辑上期望的任何单位 ——px，mm，rems，％等。<br>如果你现在保存和刷新，你会得到一个这样的结果：<br>酷，是吗？ 好吧，所以这个结果这可能不是你期待的——为什么它移动到底部和右边，但我们指定顶部和左边？ 听起来不合逻辑，但这只是相对定位工作的方式——你需要考虑一个看不见的力，推动定位的盒子的一侧，移动它的相反方向。 所以例如，如果你指定  top: 30px;一个力推动框的顶部，使它向下移动 30px。</p>
+<h3 id="绝对定位"><a href="#绝对定位" class="headerlink" title="绝对定位"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Learn/CSS/CSS_layout/Positioning#%E7%BB%9D%E5%AF%B9%E5%AE%9A%E4%BD%8D">绝对定位</a></h3><p>绝对定位带来了非常不同的结果。让我们尝试改变代码中的位置声明如下：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">position</span>: absolute;</span><br></pre></td></tr></table></figure>
+
+<p>如果你现在保存和刷新，你应该看到这样：<br>首先，请注意，定位的元素应该在文档流中的间隙不再存在——第一和第三元素已经靠在一起，就像第二个元素不再存在！好吧，在某种程度上，这是真的。绝对定位的元素不再存在于正常文档布局流中。相反，它坐在它自己的层独立于一切。这是非常有用的：这意味着我们可以创建不干扰页面上其他元素的位置的隔离的 UI 功能 。例如，弹出信息框和控制菜单；翻转面板；可以在页面上的任何地方拖放的 UI 功能……<br>第二，注意元素的位置已经改变——这是因为<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/top">top</a>，<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/bottom">bottom</a>，<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/left">left</a>和<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/right">right</a>以不同的方式在绝对定位。 它们指定元素应距离每个包含元素的边的距离，而不是指定元素应该移入的方向。 所以在这种情况下，我们说的绝对定位元素应该位于从“包含元素”的顶部 30px，从左边 30px。</p>
+<p><strong>注意</strong>：如果需要，您可以使用<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/top">top</a>，<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/bottom">bottom</a>，<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/left">left</a>和<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/right">right</a>调整元素大小。 尝试设置  top: 0; bottom: 0; left: 0; right: 0;  和  margin: 0;  对你定位的元素，看看会发生什么！ 之后再回来<br><strong>注意</strong>：是的，margins 仍会影响定位的元素。 然而 margin collapsing 不会。</p>
+<h3 id="定位上下文"><a href="#定位上下文" class="headerlink" title="定位上下文"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Learn/CSS/CSS_layout/Positioning#%E5%AE%9A%E4%BD%8D%E4%B8%8A%E4%B8%8B%E6%96%87">定位上下文</a></h3><p>哪个元素是绝对定位元素的“包含元素“？这取决于绝对定位元素的父元素的 position 属性。(参见  <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#Identifying_the_containing_block">Identifying the containing block</a>).<br>如果所有的父元素都没有显式地定义 position 属性，那么所有的父元素默认情况下 position 属性都是 static。结果，绝对定位元素会被包含在<strong>初始块容器</strong>中。这个初始块容器有着和浏览器视口一样的尺寸，并且<html>元素也被包含在这个容器里面。简单来说，绝对定位元素会被放在<html>元素的外面，并且根据浏览器视口来定位。<br>绝对定位元素在 HTML 源代码中，是被放在<body>中的，但是在最终的布局里面，它离页面(而不是<body>)的左边界、上边界有 30px 的距离。我们可以改变<strong>定位上下文</strong>—— 绝对定位的元素的相对位置元素。通过设置其中一个父元素的定位属性 —— 也就是包含绝对定位元素的那个元素（如果要设置绝对定位元素的相对元素，那么这个元素一定要包含绝对定位元素）。  为了演示这一点，将以下声明添加到您的 body 规则中：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">position</span>: relative;</span><br></pre></td></tr></table></figure>
+
+<p>应该得到以下结果：<br>定位的元素现在相对于<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/body"><body></a>元素。</p>
+<h3 id="介绍-z-index"><a href="#介绍-z-index" class="headerlink" title="介绍 z-index"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Learn/CSS/CSS_layout/Positioning#%E4%BB%8B%E7%BB%8D_z-index">介绍 z-index</a></h3><p>所有这些绝对定位很有趣，但还有另一件事我们还没有考虑到 ——当元素开始重叠，什么决定哪些元素出现在其他元素的顶部？ 在我们已经看到的示例中，我们在定位上下文中只有一个定位的元素，它出现在顶部，因为定位的元素胜过未定位的元素。 当我们有不止一个的时候呢？<br>尝试添加以下到您的 CSS，使第一段也是绝对定位：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">p</span><span class="selector-pseudo">:nth-of-type</span>(<span class="number">1</span>) &#123;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">background</span>: lime;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">10px</span>;</span><br><span class="line">  <span class="attribute">right</span>: <span class="number">30px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此时，您将看到第一段的颜色为绿色，移出文档流程，并位于原始位置上方一点。它也堆叠在原始的  .positioned  段落下，其中两个重叠。这是因为  .positioned  段落是源顺序(HTML 标记)中的第二个段落，并且源顺序中后定位的元素将赢得先定位的元素。<br>您可以更改堆叠顺序吗？是的，您可以使用<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/z-index">z-index</a>属性。 “z-index”是对 z 轴的参考。你可以从源代码中的上一点回想一下，我们使用水平（x 轴）和垂直（y 轴）坐标来讨论网页，以确定像背景图像和阴影偏移之类的东西的位置。 （0,0）位于页面（或元素）的左上角，x 和 y 轴跨页面向右和向下（适合从左到右的语言，无论如何）。<br>网页也有一个 z 轴：一条从屏幕表面到你的脸（或者在屏幕前面你喜欢的任何其他东西）的虚线。<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/z-index">z-index</a>值影响定位元素位于该轴上的位置；正值将它们移动到堆栈上方，负值将它们向下移动到堆栈中。默认情况下，定位的元素都具有 z-index 为 auto，实际上为 0。<br>要更改堆叠顺序，请尝试将以下声明添加到  p:nth-of-type(1)  规则中：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">z-index</span>: <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>你现在应该可以看到完成的例子：<br>请注意，z-index 只接受无单位索引值；你不能指定你想要一个元素是 Z 轴上 23 像素—— 它不这样工作。 较高的值将高于较低的值，这取决于您使用的值。 使用 2 和 3 将产生与 300 和 40000 相同的效果。</p>
+<h3 id="固定定位"><a href="#固定定位" class="headerlink" title="固定定位"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Learn/CSS/CSS_layout/Positioning#%E5%9B%BA%E5%AE%9A%E5%AE%9A%E4%BD%8D">固定定位</a></h3><p>还有一种类型的定位覆盖——fixed。 这与绝对定位的工作方式完全相同，只有一个主要区别：绝对定位固定元素是相对于<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/html"><html></a>元素或其最近的定位祖先，而固定定位固定元素则是相对于浏览器视口本身。 这意味着您可以创建固定的有用的 UI 项目，如持久导航菜单。<br>让我们举一个简单的例子来说明我们的意思。首先，从 CSS 中删除现有的  p:nth-of-type(1)  和.positioned  规则。<br>现在，更新  body  规则以删除 position: relative;  声明并添加固定高度，如此：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">500px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">1400px</span>;</span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">0</span> auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在我们要给<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Heading_Elements"><h1> (en-US)</a>元素  position: fixed;，并让它坐在视口的顶部中心。将以下规则添加到 CSS：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">h1</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: fixed;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">500px</span>;</span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">0</span> auto;</span><br><span class="line">  <span class="attribute">background</span>: white;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">10px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>top: 0;是要使它贴在屏幕的顶部；我们然后给出标题与内容列相同的宽度，并使用可靠的老技巧  <br>margin: 0 auto;  使它居中。 然后我们给它一个白色背景和一些内边距，所以内容将不会在它下面可见。<br>如果您现在保存并刷新，您会看到一个有趣的小效果，标题保持固定，内容显示向上滚动并消失在其下。 但是我们可以改进这一点——目前标题下面挡住一些内容的开头。这是因为定位的标题不再出现在文档流中，所以其他内容向上移动到顶部。 我们要把它向下移动一点；我们可以通过在第一段设置一些顶部边距来做到这一点。添加：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">p</span><span class="selector-pseudo">:nth-of-type</span>(<span class="number">1</span>) &#123;</span><br><span class="line">  <span class="attribute">margin-top</span>: <span class="number">60px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>你现在应该看到完成的例子：</p>
+<h3 id="position-sticky"><a href="#position-sticky" class="headerlink" title="position: sticky"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Learn/CSS/CSS_layout/Positioning#position_sticky">position: sticky</a></h3><p>还有一个可用的位置值称为 position: sticky，比起其他位置值要新一些。它基本上是相对位置和固定位置的混合体，它允许被定位的元素表现得像相对定位一样，直到它滚动到某个阈值点（例如，从视口顶部起 10 像素）为止，此后它就变得固定了。例如，它可用于使导航栏随页面滚动直到特定点，然后粘贴在页面顶部。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.positioned</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: sticky;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">30px</span>;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">30px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>position: sticky 的另一种有趣且常用的用法，是创建一个滚动索引页面。在此页面上，不同的标题会停留在页面顶部。这样的示例的标记可能如下所示：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Sticky positioning<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dl</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dt</span>&gt;</span>A<span class="tag">&lt;/<span class="name">dt</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dd</span>&gt;</span>Apple<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dd</span>&gt;</span>Ant<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dd</span>&gt;</span>Altimeter<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dd</span>&gt;</span>Airplane<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dt</span>&gt;</span>B<span class="tag">&lt;/<span class="name">dt</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dd</span>&gt;</span>Bird<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dd</span>&gt;</span>Buzzard<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dd</span>&gt;</span>Bee<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dd</span>&gt;</span>Banana<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dd</span>&gt;</span>Beanstalk<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dt</span>&gt;</span>C<span class="tag">&lt;/<span class="name">dt</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dd</span>&gt;</span>Calculator<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dd</span>&gt;</span>Cane<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dd</span>&gt;</span>Camera<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dd</span>&gt;</span>Camel<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dt</span>&gt;</span>D<span class="tag">&lt;/<span class="name">dt</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dd</span>&gt;</span>Duck<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dd</span>&gt;</span>Dime<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dd</span>&gt;</span>Dipstick<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dd</span>&gt;</span>Drone<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dt</span>&gt;</span>E<span class="tag">&lt;/<span class="name">dt</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dd</span>&gt;</span>Egg<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dd</span>&gt;</span>Elephant<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dd</span>&gt;</span>Egret<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dl</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>CSS 可能如下所示。在正常布局流中，<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/dt"><dt></a>元素将随内容滚动。当我们在<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/dt"><dt></a>元素上添加 position: sticky，并将<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/top">top</a>的值设置为 0，当标题滚动到视口的顶部时，支持此属性的浏览器会将标题粘贴到那个位置。随后，每个后续标题将替换前一个标题，直到它向上滚动到该位置。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">dt</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: black;</span><br><span class="line">  <span class="attribute">color</span>: white;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">10px</span>;</span><br><span class="line">  <span class="attribute">position</span>: sticky;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">1em</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/21/yuque/BFC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/21/yuque/BFC/" class="post-title-link" itemprop="url">BFC</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-21 23:16:16" itemprop="dateCreated datePublished" datetime="2021-04-21T23:16:16+08:00">2021-04-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 13:45:43" itemprop="dateModified" datetime="2021-04-22T13:45:43+08:00">2021-04-22</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="一、常见定位方案"><a href="#一、常见定位方案" class="headerlink" title="一、常见定位方案"></a>一、常见定位方案</h2><p>在讲 BFC 之前，我们先来了解一下常见的定位方案，定位方案是控制元素的布局，有三种常见方案:</p>
+<ul>
+<li>普通流 (normal flow)</li>
+</ul>
+<p>在普通流中，元素按照其在 HTML 中的先后位置至上而下布局，在这个过程中，行内元素水平排列，直到当行被占满然后换行，块级元素则会被渲染为完整的一个新行，除非另外指定，否则所有元素默认都是普通流定位，也可以说，普通流中元素的位置由该元素在 HTML 文档中的位置决定。</p>
+<ul>
+<li>浮动 (float)</li>
+</ul>
+<p>在浮动布局中，元素首先按照普通流的位置出现，然后根据浮动的方向尽可能的向左边或右边偏移，其效果与印刷排版中的文本环绕相似。</p>
+<ul>
+<li>绝对定位 (absolute positioning)</li>
+</ul>
+<p>在绝对定位布局中，元素会整体脱离普通流，因此绝对定位元素不会对其兄弟元素造成影响，而元素具体的位置由绝对定位的坐标决定。</p>
+<h2 id="二、BFC-概念"><a href="#二、BFC-概念" class="headerlink" title="二、BFC 概念"></a>二、BFC 概念</h2><p>Formatting context(格式化上下文) 是 W3C CSS2.1 规范中的一个概念。它是页面中的一块渲染区域，并且有一套渲染规则，它决定了其子元素将如何定位，以及和其他元素的关系和相互作用。<br>那么 BFC 是什么呢？<br>BFC 即 Block Formatting Contexts (块级格式化上下文)，它属于上述定位方案的普通流。<br><strong>具有 BFC 特性的元素可以看作是隔离了的独立容器，容器里面的元素不会在布局上影响到外面的元素，并且 BFC 具有普通容器所没有的一些特性。</strong><br>通俗一点来讲，可以把 BFC 理解为一个封闭的大箱子，箱子内部的元素无论如何翻江倒海，都不会影响到外部。</p>
+<h2 id="三、触发-BFC"><a href="#三、触发-BFC" class="headerlink" title="三、触发 BFC"></a>三、触发 BFC</h2><p>只要元素满足下面任一条件即可触发 BFC 特性：</p>
+<ul>
+<li>body 根元素</li>
+<li>浮动元素：float 除 none 以外的值</li>
+<li>绝对定位元素：position (absolute、fixed)</li>
+<li>display 为 inline-block、table-cells、flex</li>
+<li>overflow 除了 visible 以外的值 (hidden、auto、scroll)</li>
+</ul>
+<h2 id="四、BFC-特性及应用"><a href="#四、BFC-特性及应用" class="headerlink" title="四、BFC 特性及应用"></a>四、BFC 特性及应用</h2><p><strong>1. 同一个 BFC 下外边距会发生折叠</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  div&#123; width: 100px; height: 100px; background: lightblue; margin: 100px; &#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619018683804-bd87fff6-e9ec-4200-b562-e76351fa92d9.png#clientId=u4c082b2a-d878-4&from=paste&height=342&id=ucf0f710c&margin=%5Bobject%20Object%5D&originHeight=683&originWidth=1267&originalType=url&status=done&style=none&taskId=u8532f707-2c66-4f99-a490-29f6c83a5c3&width=633.5"><br>从效果上看，因为两个 div 元素都处于同一个 BFC 容器下 (这里指 body 元素) 所以第一个 div 的下边距和第二个 div 的上边距发生了重叠，所以两个盒子之间距离只有 100px，而不是 200px。<br>首先这不是 CSS 的 bug，我们可以理解为一种规范，<strong>如果想要避免外边距的重叠，可以将其放在不同的 BFC 容器中。</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;container&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;container&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span> &#123;</span><br><span class="line">  <span class="attribute">overflow</span>: hidden;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">p</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">background</span>: lightblue;</span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">100px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这时候，两个盒子边距就变成了 200px<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619018683787-e5c22afd-b360-4666-993e-34a2ee96f850.png#clientId=u4c082b2a-d878-4&from=paste&height=425&id=u735c0b92&margin=%5Bobject%20Object%5D&originHeight=849&originWidth=1075&originalType=url&status=done&style=none&taskId=u4ce6973a-387d-4a65-bf56-21e600b7a2b&width=537.5"><br><strong>2. BFC 可以包含浮动的元素（清除浮动）</strong>我们都知道，浮动的元素会脱离普通文档流，来看下下面一个例子</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;border: 1px solid #000;&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;width: 100px;height: 100px;background: #eee;float: left;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619018684564-e6f64b86-6745-488b-a134-d1bab1756ee0.png#clientId=u4c082b2a-d878-4&from=paste&height=122&id=u6a3047ee&margin=%5Bobject%20Object%5D&originHeight=244&originWidth=492&originalType=url&status=done&style=none&taskId=ua5573a98-91a9-48e7-bfd7-0ec56d5bb0f&width=246"><br>由于容器内元素浮动，脱离了文档流，所以容器只剩下 2px 的边距高度。如果使触发容器的 BFC，那么容器将会包裹着浮动元素。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;border: 1px solid #000;overflow: hidden&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;width: 100px;height: 100px;background: #eee;float: left;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>效果如图：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619018683847-0902fe78-b1cd-47c1-bf0a-b9b08fb7bb6d.png#clientId=u4c082b2a-d878-4&from=paste&height=126&id=u52f1e6b6&margin=%5Bobject%20Object%5D&originHeight=252&originWidth=416&originalType=url&status=done&style=none&taskId=u45b10683-3eef-4b83-a112-93bd1734a04&width=208"><br><strong>3. BFC 可以阻止元素被浮动元素覆盖</strong>先来看一个文字环绕效果：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;height: 100px;width: 100px;float: left;background: lightblue&quot;</span>&gt;</span></span><br><span class="line">  我是一个左浮动的元素</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;width: 200px; height: 200px;background: #eee&quot;</span>&gt;</span></span><br><span class="line">  我是一个没有设置浮动, 也没有触发 BFC 元素, width: 200px; height:200px;</span><br><span class="line">  background: #eee;</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619018683848-58bd8a60-2428-43ff-b033-fe634fb5e3b5.png#clientId=u4c082b2a-d878-4&from=paste&height=220&id=u9e6f3c9c&margin=%5Bobject%20Object%5D&originHeight=440&originWidth=432&originalType=url&status=done&style=none&taskId=u6a8d6701-fefd-4496-b501-bce6c5929ba&width=216"><br>这时候其实第二个元素有部分被浮动元素所覆盖，(但是文本信息不会被浮动元素所覆盖) 如果想避免元素被覆盖，可触第二个元素的 BFC 特性，在第二个元素中加入<strong>overflow: hidden</strong>，就会变成：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619018684324-49140c56-dab4-446d-a9d9-7db868e2bb44.png#clientId=u4c082b2a-d878-4&from=paste&height=223&id=u58317208&margin=%5Bobject%20Object%5D&originHeight=446&originWidth=640&originalType=url&status=done&style=none&taskId=u6eeeff0e-1778-4f95-97c7-a7ee3ab73f4&width=320"><br>这个方法可以用来实现两列自适应布局，效果不错，这时候左边的宽度固定，右边的内容自适应宽度(去掉上面右边内容的宽度)。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/21/yuque/CSS%E9%80%89%E6%8B%A9%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/21/yuque/CSS%E9%80%89%E6%8B%A9%E5%99%A8/" class="post-title-link" itemprop="url">CSS选择器</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-21 20:59:04" itemprop="dateCreated datePublished" datetime="2021-04-21T20:59:04+08:00">2021-04-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 13:45:43" itemprop="dateModified" datetime="2021-04-22T13:45:43+08:00">2021-04-22</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>选择器是 CSS 规则的一部分且位于 CSS 声明块前。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619017655274-5db7a86c-e8e3-4816-9447-77904d4921e1.png#clientId=ud57f8ad0-29bd-4&from=paste&height=188&id=u8c93161b&margin=%5Bobject%20Object%5D&name=image.png&originHeight=188&originWidth=644&originalType=binary&size=25654&status=done&style=none&taskId=ud13f577f-98d9-4de4-8415-5369bbd6d58&width=644" alt="image.png"><br>选择器可以被分为以下类别：</p>
+<ul>
+<li>简单选择器（Simple selectors）：通过元素类型、class 或 id 匹配一个或多个元素。</li>
+<li>属性选择器（Attribute selectors）：通过 属性 / 属性值 匹配一个或多个元素。</li>
+<li>伪类（Pseudo-classes）：匹配处于确定状态的一个或多个元素，比如被鼠标指针悬停的元素，或当前被选中或未选中的复选框，或元素是 DOM 树中一父节点的第一个子节点。</li>
+<li>伪元素（Pseudo-elements）:匹配处于相关的确定位置的一个或多个元素，例如每个段落的第一个字，或者某个元素之前生成的内容。</li>
+<li>组合器（Combinators）：这里不仅仅是选择器本身，还有以有效的方式组合两个或更多的选择器用于非常特定的选择的方法。例如，你可以只选择 divs 的直系子节点的段落，或者直接跟在 headings 后面的段落。</li>
+<li>多用选择器（Multiple selectors）：这些也不是单独的选择器；这个思路是将以逗号分隔开的多个选择器放在一个 CSS 规则下面， 以将一组声明应用于由这些选择器选择的所有元素。</li>
+</ul>
+<h2 id="简单选择器"><a href="#简单选择器" class="headerlink" title="简单选择器"></a>简单选择器</h2><h3 id="类型选择器（又名：元素选择器）"><a href="#类型选择器（又名：元素选择器）" class="headerlink" title="类型选择器（又名：元素选择器）"></a>类型选择器（又名：元素选择器）</h3><p>此选择器只是一个选择器名和指定的 HTML 元素名的不区分大小写的匹配。这是选择所有指定类型的最简单方式。</p>
+<h3 id="类选择器（Class-selectors）"><a href="#类选择器（Class-selectors）" class="headerlink" title="类选择器（Class selectors）"></a>类选择器（Class selectors）</h3><p>类选择器由一个点“.”以及类后面的类名组成。类名是在 HTML class 文档元素属性中没有空格的任何值。由你自己选择一个名字。同样值得一提的是，文档中的多个元素可以具有相同的类名，而单个元素可以有多个类名(以空格分开多个类名的形式书写)。</p>
+<h3 id="ID-选择器"><a href="#ID-选择器" class="headerlink" title="ID 选择器"></a>ID 选择器</h3><p>ID 选择器由哈希/磅符号 (#)组成，后面是给定元素的 ID 名称。 任何元素都可以使用 id 属性设置唯一的 ID 名称。 由你自己选择的 ID 是什么。 这是选择单个元素的最有效的方式。<br>重要提示：一个 ID 名称必须在文件中是唯一的。关于重复 ID 的行为是不可预测的，比如在一些浏览器只是第一个实例计算，其余的将被忽略。</p>
+<h3 id="通用选择器（Universal-selector）"><a href="#通用选择器（Universal-selector）" class="headerlink" title="通用选择器（Universal selector）"></a>通用选择器（Universal selector）</h3><p>通用选择（*）是最终的王牌。它允许选择在一个页面中的所有元素。由于给每个元素应用同样的规则几乎没有什么实际价值，更常见的做法是与其他选择器结合使用。<br>重要提示：使用通用选择时小心。因为它适用于所有的元素，在大型网页利用它可以对性能有明显的影响：网页可以显示比预期要慢。不会有太多的情况下，您想使用此选择。</p>
+<h3 id="组合器（Combinators）"><a href="#组合器（Combinators）" class="headerlink" title="组合器（Combinators）"></a>组合器（Combinators）</h3><p>在 CSS 中，组合器允许您将多个选择器组合在一起，这允许您在其他元素中选择元素，或者与其他元素相邻。四种可用的类型是：</p>
+<ul>
+<li>后代选择器——（空格键）——允许您选择嵌套在另一个元素中的某个元素（不一定是直接的后代;例如，它可以是一个孙子）。</li>
+<li>子选择器—— &gt; ——允许您选择一个元素，该元素是另一个元素的直接子元素。</li>
+<li>相邻兄弟选择器—— + ——允许您选择一个元素，它是另一个元素的直接兄弟元素(也就是说，在它的旁边，在层次结构的同一层)。</li>
+<li>通用兄弟选择器—— ~ — —允许您选择其他元素的兄弟元素(例如，在层次结构中的相同级别，但不一定就在它的旁边)。<table>
+<thead>
+<tr>
+<th><strong>Combinators</strong></th>
+<th><strong>Select</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A,B</td>
+<td>匹配满足 A（和/或）B 的任意元素.</td>
+</tr>
+<tr>
+<td>A B</td>
+<td>匹配任意元素，满足条件：B 是 A 的后代结点（B 是 A 的子节点，或者 A 的子节点的子节点）</td>
+</tr>
+<tr>
+<td>A &gt; B</td>
+<td>匹配任意元素，满足条件：B 是 A 的直接子节点</td>
+</tr>
+<tr>
+<td>A + B</td>
+<td>匹配任意元素，满足条件：B 是 A 的下一个兄弟节点（AB 有相同的父结点，并且 B 紧跟在 A 的后面）</td>
+</tr>
+<tr>
+<td>A ~ B</td>
+<td>匹配任意元素，满足条件：B 是 A 之后的兄弟节点中的任意一个（AB 有相同的父节点，B 在 A 之后，但不一定是紧挨着 A）</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<p>注：相邻兄弟选择器和通用兄弟选择器只会“向后”选择，DOM 结构靠前的兄弟元素不在选择范围内。<br>这里有一个简单的例子来展示这些工作是如何工作的：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">section</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">h2</span>&gt;</span>Heading 1<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>Paragraph 1<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>Paragraph 2<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>Heading 2<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>Paragraph 3<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>Paragraph 4<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">section</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">section</span> <span class="selector-tag">p</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: blue;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">section</span> &gt; <span class="selector-tag">p</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: yellow;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">h2</span> + <span class="selector-tag">p</span> &#123;</span><br><span class="line">  <span class="attribute">text-transform</span>: uppercase;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">h2</span> ~ <span class="selector-tag">p</span> &#123;</span><br><span class="line">  <span class="attribute">border</span>: <span class="number">1px</span> dashed black;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>CSS 样式的 HTML 如下所示：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">&quot;https://mdn.github.io/learnin...; class=&quot;</span><span class="attr">live-sample-frame</span>&quot; <span class="attr">width</span>=<span class="string">&quot;100%&quot;</span> <span class="attr">frameborder</span>=<span class="string">&quot;0&quot;</span> <span class="attr">height</span>=<span class="string">&quot;270&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>选择器是这样工作的：</p>
+<ul>
+<li>section p 选择了所有的<p>元素——前两个<p>都是<section>元素的直接子元素，而后面的两个<p>元素是<section>元素的孙子元素(它们在<div>里面)。因此，所有的段落文本都是蓝色的。</li>
+<li>section &gt; p 只选择前两个<p>元素，这两个元素是<section>元素的直接子元素（但后两个<p>元素不是，它们不是直接的子元素）。所以只有前两段有黄色的背景色。</li>
+<li>h2 + p 只选择在相同层次结构的<h2>元素之后直接相连的<p>元素—— 在本例中是第一和第三段。因此，这些文本都是大写的。</li>
+<li>h2 ~ p 选择任何在相同的层级上（还有之后的）<h2>元素的<p>元素 ——在这种情况下，所有的段落符合此条件。因此，所有的这些都有一个虚线的边界。</li>
+</ul>
+<h2 id="属性选择器"><a href="#属性选择器" class="headerlink" title="属性选择器"></a>属性选择器</h2><p>属性选择器是一种特殊类型的选择器，它根据元素的 属性和属性值来匹配元素。它们的通用语法由方括号([]) 组成，其中包含属性名称，后跟可选条件以匹配属性的值。 属性选择器可以根据其匹配属性值的方式分为两类：<strong>存在和值属性选择器</strong>和<strong>子串值属性选择器</strong>。</p>
+<h3 id="存在和值（Presence-and-value）属性选择器"><a href="#存在和值（Presence-and-value）属性选择器" class="headerlink" title="存在和值（Presence and value）属性选择器"></a>存在和值（Presence and value）属性选择器</h3><p>这些属性选择器尝试匹配精确的属性值：</p>
+<ul>
+<li>[attr]：该选择器选择包含 attr 属性的所有元素，不论 attr 的值为何。</li>
+<li>[attr=val]：该选择器仅选择 attr 属性被赋值为 val 的所有元素。</li>
+<li>[attr~=val]：该选择器仅选择 attr 属性的值（以空格间隔出多个值）中有包含 val 值的所有元素，比如位于被空格分隔的多个类（class）中的一个类。</li>
+</ul>
+<h3 id="子串值（Substring-value）属性选择器"><a href="#子串值（Substring-value）属性选择器" class="headerlink" title="子串值（Substring value）属性选择器"></a>子串值（Substring value）属性选择器</h3><p>这种情况的属性选择器也被称为“伪正则选择器”，因为它们提供类似 regular expression 的灵活匹配方式（但请注意，这些选择器并不是真正的正则表达式）：</p>
+<ul>
+<li>[attr|=val] : 选择 attr 属性的值以 val（包括 val）或 val-开头的元素（-用来处理语言编码）。</li>
+<li>[attr^=val] : 选择 attr 属性的值以 val 开头（包括 val）的元素。</li>
+<li>[attr$=val] : 选择 attr 属性的值以 val 结尾（包括 val）的元素。</li>
+<li>[attr*=val] : 选择 attr 属性的值中包含字符串 val 的元素。</li>
+</ul>
+<h2 id="伪类和伪元素"><a href="#伪类和伪元素" class="headerlink" title="伪类和伪元素"></a>伪类和伪元素</h2><h3 id="伪类（Pseudo-class）"><a href="#伪类（Pseudo-class）" class="headerlink" title="伪类（Pseudo-class）"></a>伪类（Pseudo-class）</h3><p>一个 CSS<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes">伪类（pseudo-class）</a>是一个以冒号(:)作为前缀的关键字，当你希望样式在特定状态下才被呈现到指定的元素时，你可以往元素的选择器后面加上对应的伪类（pseudo-class）。你可能希望某个元素在处于某种状态下呈现另一种样式，例如当鼠标悬停在元素上面时，或者当一个 checkbox 被禁用或被勾选时，又或者当一个元素是它在 DOM 树中父元素的第一个孩子元素时。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">:active :any :checked :default :dir() :disabled :empty :enabled :first</span><br><span class="line">:first-child :first-of-type :fullscreen :focus :hover :indeterminate :in-range</span><br><span class="line">:invalid :lang() :last-child :last-of-type :left :link :not() :nth-child()</span><br><span class="line">:nth-last-child() :nth-last-of-type() :nth-of-type() :only-child :only-of-type</span><br><span class="line">:optional :out-of-range :read-only :read-write :required :right :root :scope</span><br><span class="line">:target :valid :visited</span><br></pre></td></tr></table></figure>
+
+<h3 id="伪元素"><a href="#伪元素" class="headerlink" title="伪元素"></a>伪元素</h3><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-elements">伪元素（Pseudo-element）</a>跟伪类很像，但它们又有不同的地方。它们都是关键字 —— 但这次伪元素前缀是两个冒号 (::) —— 同样是添加到选择器后面达到指定某个元素的某个部分。<br>::after<br>::before<br>::first-letter<br>::first-line<br>::selection<br>::backdrop</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/21/yuque/%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/21/yuque/%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B/" class="post-title-link" itemprop="url">盒子模型</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-21 18:58:01" itemprop="dateCreated datePublished" datetime="2021-04-21T18:58:01+08:00">2021-04-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 13:45:43" itemprop="dateModified" datetime="2021-04-22T13:45:43+08:00">2021-04-22</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619004343554-4fb7cb99-a0df-4aef-b177-e6d1e82bb550.jpeg#clientId=u600b2deb-6239-4&from=paste&height=520&id=u3acfe243&margin=%5Bobject%20Object%5D&originHeight=523&originWidth=774&originalType=url&status=done&style=none&taskId=ub9ccb4c3-c6c4-4c6d-a761-5241a3b64b1&width=770"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619004514408-4563fb15-7bcb-42bf-ae77-fa8023f72499.jpeg#clientId=u600b2deb-6239-4&from=paste&height=478&id=u0d4694fb&margin=%5Bobject%20Object%5D&originHeight=507&originWidth=761&originalType=url&status=done&style=none&taskId=udf19acdb-7d42-4db0-997e-5b4f2136b78&width=717.5"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/21/yuque/JavaScript%20%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -239,10 +668,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-04-21 13:12:55 / 修改时间：13:19:50" itemprop="dateCreated datePublished" datetime="2021-04-21T13:12:55+08:00">2021-04-21</time>
+              <time title="创建时间：2021-04-21 13:12:55" itemprop="dateCreated datePublished" datetime="2021-04-21T13:12:55+08:00">2021-04-21</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 13:45:43" itemprop="dateModified" datetime="2021-04-22T13:45:43+08:00">2021-04-22</time>
+              </span>
 
           
 
@@ -291,7 +726,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">  methods: &#123;</span><br><span class="line">    refresh() &#123;</span><br><span class="line">      &#x2F;&#x2F; 获取一些数据</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  mounted() &#123;</span><br><span class="line">    setInterval(function () &#123;</span><br><span class="line">      &#x2F;&#x2F; 轮询获取数据</span><br><span class="line">      this.refresh();</span><br><span class="line">    &#125;, 2000);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
 
 <p>上面的组件销毁的时候，setInterval 还是在运行的，里面涉及到的内存都是没法回收的（浏览器会认为这是必须的内存，不是垃圾内存），需要在组件销毁的时候清除计时器，如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;Vuetemplate&gt;</span><br><span class="line">  &lt;div&gt;&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">  methods: &#123;</span><br><span class="line">    refresh() &#123;</span><br><span class="line">      &#x2F;&#x2F; 获取一些数据</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  mounted() &#123;</span><br><span class="line">    this.refreshInterval &#x3D; setInterval(function() &#123;</span><br><span class="line">      &#x2F;&#x2F; 轮询获取数据</span><br><span class="line">      this.refresh()</span><br><span class="line">    &#125;, 2000)</span><br><span class="line">  &#125;,</span><br><span class="line">  beforeDestroy() &#123;</span><br><span class="line">    clearInterval(this.refreshInterval)</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">  methods: &#123;</span><br><span class="line">    refresh() &#123;</span><br><span class="line">      &#x2F;&#x2F; 获取一些数据</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  mounted() &#123;</span><br><span class="line">    this.refreshInterval &#x3D; setInterval(function () &#123;</span><br><span class="line">      &#x2F;&#x2F; 轮询获取数据</span><br><span class="line">      this.refresh();</span><br><span class="line">    &#125;, 2000);</span><br><span class="line">  &#125;,</span><br><span class="line">  beforeDestroy() &#123;</span><br><span class="line">    clearInterval(this.refreshInterval);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
 
 <h3 id="被遗忘的事件监听器"><a href="#被遗忘的事件监听器" class="headerlink" title="被遗忘的事件监听器"></a>被遗忘的事件监听器</h3><p>无用的事件监听器忘记清理是新手最容易犯的错误之一。<br>还是继续使用 vue 组件做例子。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">  mounted() &#123;</span><br><span class="line">    window.addEventListener(&quot;resize&quot;, () &#x3D;&gt; &#123;</span><br><span class="line">      &#x2F;&#x2F; 这里做一些操作</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
@@ -397,7 +832,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-21 13:19:50" itemprop="dateModified" datetime="2021-04-21T13:19:50+08:00">2021-04-21</time>
+                <time title="修改时间：2021-04-22 13:45:43" itemprop="dateModified" datetime="2021-04-22T13:45:43+08:00">2021-04-22</time>
               </span>
 
           
@@ -529,7 +964,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-21 13:19:50" itemprop="dateModified" datetime="2021-04-21T13:19:50+08:00">2021-04-21</time>
+                <time title="修改时间：2021-04-22 13:45:43" itemprop="dateModified" datetime="2021-04-22T13:45:43+08:00">2021-04-22</time>
               </span>
 
           
@@ -716,7 +1151,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-21 13:19:51" itemprop="dateModified" datetime="2021-04-21T13:19:51+08:00">2021-04-21</time>
+                <time title="修改时间：2021-04-22 13:45:44" itemprop="dateModified" datetime="2021-04-22T13:45:44+08:00">2021-04-22</time>
               </span>
 
           
@@ -811,7 +1246,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-21 13:19:51" itemprop="dateModified" datetime="2021-04-21T13:19:51+08:00">2021-04-21</time>
+                <time title="修改时间：2021-04-22 13:45:44" itemprop="dateModified" datetime="2021-04-22T13:45:44+08:00">2021-04-22</time>
               </span>
 
           
@@ -917,726 +1352,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/19/yuque/%E8%B7%A8%E9%A1%B5%E9%9D%A2%E9%80%9A%E4%BF%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Adam Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Adam">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/19/yuque/%E8%B7%A8%E9%A1%B5%E9%9D%A2%E9%80%9A%E4%BF%A1/" class="post-title-link" itemprop="url">跨页面通信</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-19 20:50:53" itemprop="dateCreated datePublished" datetime="2021-04-19T20:50:53+08:00">2021-04-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-21 13:19:51" itemprop="dateModified" datetime="2021-04-21T13:19:51+08:00">2021-04-21</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>在浏览器中，我们可以同时打开多个 Tab 页，每个 Tab 页可以粗略理解为一个“独立”的运行环境，即使是全局对象也不会在多个 Tab 间共享。然而有些时候，我们希望能在这些“独立”的 Tab 页面之间同步页面的数据、信息或状态。</p>
-<p>正如下面这个例子：我在列表页点击“收藏”后，对应的详情页按钮会自动更新为“已收藏”状态；类似的，在详情页点击“收藏”后，列表页中按钮也会更新。</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/gif/21377586/1618909289351-36a24fd7-e6f6-41d8-9682-c09e9b6c384c.gif#clientId=u61de38f8-254c-4&from=paste&height=438&id=u88553d57&margin=%5Bobject%20Object%5D&originHeight=876&originWidth=1364&originalType=url&status=done&style=none&taskId=u3edd39f2-51e8-4eb9-9e3b-cac496758d4&width=682"></p>
-<p>这就是我们所说的前端跨页面通信。</p>
-<p>你知道哪些跨页面通信的方式呢？如果不清楚，下面我就带大家来看看七种跨页面通信的方式。</p>
-<p>–</p>
-<h2 id="一、同源页面间的跨页面通信"><a href="#一、同源页面间的跨页面通信" class="headerlink" title="一、同源页面间的跨页面通信"></a>一、同源页面间的跨页面通信</h2><blockquote>
-<p>以下各种方式的 <a target="_blank" rel="noopener" href="https://alienzhou.github.io/cross-tab-communication/">在线 Demo 可以戳这里 &gt;&gt;</a></p>
-</blockquote>
-<p>浏览器的<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Same-origin_policy">同源策略</a>在下述的一些跨页面通信方法中依然存在限制。因此，我们先来看看，在满足同源策略的情况下，都有哪些技术可以用来实现跨页面通信。</p>
-<h3 id="1-BroadCast-Channel"><a href="#1-BroadCast-Channel" class="headerlink" title="1. BroadCast Channel"></a>1. BroadCast Channel</h3><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/BroadcastChannel">BroadCast Channel</a> 可以帮我们创建一个用于广播的通信频道。当所有页面都监听同一频道的消息时，其中某一个页面通过它发送的消息就会被其他所有页面收到。它的 API 和用法都非常简单。</p>
-<p>下面的方式就可以创建一个标识为<code>AlienZHOU</code>的频道：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const bc &#x3D; new BroadcastChannel(&#39;AlienZHOU&#39;);</span><br></pre></td></tr></table></figure>
-
-<p>各个页面可以通过<code>onmessage</code>来监听被广播的消息：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">bc.onmessage &#x3D; function (e) &#123;</span><br><span class="line">    const data &#x3D; e.data;</span><br><span class="line">    const text &#x3D; &#39;[receive] &#39; + data.msg + &#39; —— tab &#39; + data.from;</span><br><span class="line">    console.log(&#39;[BroadcastChannel] receive message:&#39;, text);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>要发送消息时只需要调用实例上的<code>postMessage</code>方法即可：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bc.postMessage(mydata);</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>Broadcast Channel 的具体的使用方式可以看这篇<a target="_blank" rel="noopener" href="https://juejin.im/post/6844903811228663815">《【3 分钟速览】前端广播式通信：Broadcast Channel》</a>。</p>
-</blockquote>
-<h3 id="2-Service-Worker"><a href="#2-Service-Worker" class="headerlink" title="2. Service Worker"></a>2. Service Worker</h3><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Service_Worker_API">Service Worker</a> 是一个可以长期运行在后台的 Worker，能够实现与页面的双向通信。多页面共享间的 Service Worker 可以共享，将 Service Worker 作为消息的处理中心（中央站）即可实现广播效果。</p>
-<blockquote>
-<p>Service Worker 也是 PWA 中的核心技术之一，由于本文重点不在 PWA ，因此如果想进一步了解 Service Worker，可以阅读我之前的文章<a target="_blank" rel="noopener" href="https://juejin.im/post/6844903588691443725">【PWA 学习与实践】(3) 让你的 WebApp 离线可用</a>。</p>
-</blockquote>
-<p>首先，需要在页面注册 Service Worker：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* 页面逻辑 *&#x2F;</span><br><span class="line">navigator.serviceWorker.register(&#39;..&#x2F;util.sw.js&#39;).then(function () &#123;</span><br><span class="line">    console.log(&#39;Service Worker 注册成功&#39;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>其中<code>../util.sw.js</code>是对应的 Service Worker 脚本。Service Worker 本身并不自动具备“广播通信”的功能，需要我们添加些代码，将其改造成消息中转站：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* ..&#x2F;util.sw.js Service Worker 逻辑 *&#x2F;</span><br><span class="line">self.addEventListener(&#39;message&#39;, function (e) &#123;</span><br><span class="line">    console.log(&#39;service worker receive message&#39;, e.data);</span><br><span class="line">    e.waitUntil(</span><br><span class="line">        self.clients.matchAll().then(function (clients) &#123;</span><br><span class="line">            if (!clients || clients.length &#x3D;&#x3D;&#x3D; 0) &#123;</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line">            clients.forEach(function (client) &#123;</span><br><span class="line">                client.postMessage(e.data);</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;)</span><br><span class="line">    );</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>我们在 Service Worker 中监听了<code>message</code>事件，获取页面（从 Service Worker 的角度叫 client）发送的信息。然后通过<code>self.clients.matchAll()</code>获取当前注册了该 Service Worker 的所有页面，通过调用每个 client（即页面）的<code>postMessage</code>方法，向页面发送消息。这样就把从一处（某个 Tab 页面）收到的消息通知给了其他页面。</p>
-<p>处理完 Service Worker，我们需要在页面监听 Service Worker 发送来的消息：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* 页面逻辑 *&#x2F;</span><br><span class="line">navigator.serviceWorker.addEventListener(&#39;message&#39;, function (e) &#123;</span><br><span class="line">    const data &#x3D; e.data;</span><br><span class="line">    const text &#x3D; &#39;[receive] &#39; + data.msg + &#39; —— tab &#39; + data.from;</span><br><span class="line">    console.log(&#39;[Service Worker] receive message:&#39;, text);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>最后，当需要同步消息时，可以调用 Service Worker 的<code>postMessage</code>方法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* 页面逻辑 *&#x2F;</span><br><span class="line">navigator.serviceWorker.controller.postMessage(mydata);</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-LocalStorage"><a href="#3-LocalStorage" class="headerlink" title="3. LocalStorage"></a>3. LocalStorage</h3><p>LocalStorage 作为前端最常用的本地存储，大家应该已经非常熟悉了；但<code>StorageEvent</code>这个与它相关的事件有些同学可能会比较陌生。</p>
-<p>当 LocalStorage 变化时，会触发<code>storage</code>事件。利用这个特性，我们可以在发送消息时，把消息写入到某个 LocalStorage 中；然后在各个页面内，通过监听<code>storage</code>事件即可收到通知。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">window.addEventListener(&#39;storage&#39;, function (e) &#123;</span><br><span class="line">    if (e.key &#x3D;&#x3D;&#x3D; &#39;ctc-msg&#39;) &#123;</span><br><span class="line">        const data &#x3D; JSON.parse(e.newValue);</span><br><span class="line">        const text &#x3D; &#39;[receive] &#39; + data.msg + &#39; —— tab &#39; + data.from;</span><br><span class="line">        console.log(&#39;[Storage I] receive message:&#39;, text);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>在各个页面添加如上的代码，即可监听到 LocalStorage 的变化。当某个页面需要发送消息时，只需要使用我们熟悉的<code>setItem</code>方法即可：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mydata.st &#x3D; +(new Date);</span><br><span class="line">window.localStorage.setItem(&#39;ctc-msg&#39;, JSON.stringify(mydata));</span><br></pre></td></tr></table></figure>
-
-<p>注意，这里有一个细节：我们在 mydata 上添加了一个取当前毫秒时间戳的<code>.st</code>属性。这是因为，<code>storage</code>事件只有在值真正改变时才会触发。举个例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">window.localStorage.setItem(&#39;test&#39;, &#39;123&#39;);</span><br><span class="line">window.localStorage.setItem(&#39;test&#39;, &#39;123&#39;);</span><br></pre></td></tr></table></figure>
-
-<p>由于第二次的值<code>&#39;123&#39;</code>与第一次的值相同，所以以上的代码只会在第一次<code>setItem</code>时触发<code>storage</code>事件。因此我们通过设置<code>st</code>来保证每次调用时一定会触发<code>storage</code>事件。</p>
-<h3 id="小憩一下"><a href="#小憩一下" class="headerlink" title="小憩一下"></a>小憩一下</h3><p>上面我们看到了三种实现跨页面通信的方式，不论是建立广播频道的 Broadcast Channel，还是使用 Service Worker 的消息中转站，抑或是些 tricky 的<code>storage</code>事件，其都是“广播模式”：一个页面将消息通知给一个“中央站”，再由“中央站”通知给各个页面。</p>
-<blockquote>
-<p>在上面的例子中，这个“中央站”可以是一个 BroadCast Channel 实例、一个 Service Worker 或是 LocalStorage。</p>
-</blockquote>
-<p>下面我们会看到另外两种跨页面通信方式，我把它称为“共享存储+轮询模式”。</p>
-<p>–</p>
-<h3 id="4-Shared-Worker"><a href="#4-Shared-Worker" class="headerlink" title="4. Shared Worker"></a>4. Shared Worker</h3><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/SharedWorker">Shared Worker</a> 是 Worker 家族的另一个成员。普通的 Worker 之间是独立运行、数据互不相通；而多个 Tab 注册的 Shared Worker 则可以实现数据共享。</p>
-<p>Shared Worker 在实现跨页面通信时的问题在于，它无法主动通知所有页面，因此，我们会使用轮询的方式，来拉取最新的数据。思路如下：</p>
-<p>让 Shared Worker 支持两种消息。一种是 post，Shared Worker 收到后会将该数据保存下来；另一种是 get，Shared Worker 收到该消息后会将保存的数据通过<code>postMessage</code>传给注册它的页面。也就是让页面通过 get 来主动获取（同步）最新消息。具体实现如下：</p>
-<p>首先，我们会在页面中启动一个 Shared Worker，启动方式非常简单：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 构造函数的第二个参数是 Shared Worker 名称，也可以留空</span><br><span class="line">const sharedWorker &#x3D; new SharedWorker(&#39;..&#x2F;util.shared.js&#39;, &#39;ctc&#39;);</span><br></pre></td></tr></table></figure>
-
-<p>然后，在该 Shared Worker 中支持 get 与 post 形式的消息：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* ..&#x2F;util.shared.js: Shared Worker 代码 *&#x2F;</span><br><span class="line">let data &#x3D; null;</span><br><span class="line">self.addEventListener(&#39;connect&#39;, function (e) &#123;</span><br><span class="line">    const port &#x3D; e.ports[0];</span><br><span class="line">    port.addEventListener(&#39;message&#39;, function (event) &#123;</span><br><span class="line">        &#x2F;&#x2F; get 指令则返回存储的消息数据</span><br><span class="line">        if (event.data.get) &#123;</span><br><span class="line">            data &amp;&amp; port.postMessage(data);</span><br><span class="line">        &#125;</span><br><span class="line">        &#x2F;&#x2F; 非 get 指令则存储该消息数据</span><br><span class="line">        else &#123;</span><br><span class="line">            data &#x3D; event.data;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    port.start();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>之后，页面定时发送 get 指令的消息给 Shared Worker，轮询最新的消息数据，并在页面监听返回信息：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 定时轮询，发送 get 指令的消息</span><br><span class="line">setInterval(function () &#123;</span><br><span class="line">    sharedWorker.port.postMessage(&#123;get: true&#125;);</span><br><span class="line">&#125;, 1000);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 监听 get 消息的返回数据</span><br><span class="line">sharedWorker.port.addEventListener(&#39;message&#39;, (e) &#x3D;&gt; &#123;</span><br><span class="line">    const data &#x3D; e.data;</span><br><span class="line">    const text &#x3D; &#39;[receive] &#39; + data.msg + &#39; —— tab &#39; + data.from;</span><br><span class="line">    console.log(&#39;[Shared Worker] receive message:&#39;, text);</span><br><span class="line">&#125;, false);</span><br><span class="line">sharedWorker.port.start();</span><br></pre></td></tr></table></figure>
-
-<p>最后，当要跨页面通信时，只需给 Shared Worker <code>postMessage</code>即可：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sharedWorker.port.postMessage(mydata);</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>注意，如果使用<code>addEventListener</code>来添加 Shared Worker 的消息监听，需要显式调用<code>MessagePort.start</code>方法，即上文中的<code>sharedWorker.port.start()</code>；如果使用<code>onmessage</code>绑定监听则不需要。</p>
-</blockquote>
-<h3 id="5-IndexedDB"><a href="#5-IndexedDB" class="headerlink" title="5. IndexedDB"></a>5. IndexedDB</h3><p>除了可以利用 Shared Worker 来共享存储数据，还可以使用其他一些“全局性”（支持跨页面）的存储方案。例如 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API">IndexedDB</a> 或 cookie。</p>
-<blockquote>
-<p>鉴于大家对 cookie 已经很熟悉，加之作为“互联网最早期的存储方案之一”，cookie 已经在实际应用中承受了远多于其设计之初的责任，我们下面会使用 IndexedDB 来实现。</p>
-</blockquote>
-<p>其思路很简单：与 Shared Worker 方案类似，消息发送方将消息存至 IndexedDB 中；接收方（例如所有页面）则通过轮询去获取最新的信息。在这之前，我们先简单封装几个 IndexedDB 的工具方法。</p>
-<ul>
-<li>打开数据库连接：</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">function openStore() &#123;</span><br><span class="line">    const storeName &#x3D; &#39;ctc_aleinzhou&#39;;</span><br><span class="line">    return new Promise(function (resolve, reject) &#123;</span><br><span class="line">        if (!(&#39;indexedDB&#39; in window)) &#123;</span><br><span class="line">            return reject(&#39;don\&#39;t support indexedDB&#39;);</span><br><span class="line">        &#125;</span><br><span class="line">        const request &#x3D; indexedDB.open(&#39;CTC_DB&#39;, 1);</span><br><span class="line">        request.onerror &#x3D; reject;</span><br><span class="line">        request.onsuccess &#x3D;  e &#x3D;&gt; resolve(e.target.result);</span><br><span class="line">        request.onupgradeneeded &#x3D; function (e) &#123;</span><br><span class="line">            const db &#x3D; e.srcElement.result;</span><br><span class="line">            if (e.oldVersion &#x3D;&#x3D;&#x3D; 0 &amp;&amp; !db.objectStoreNames.contains(storeName)) &#123;</span><br><span class="line">                const store &#x3D; db.createObjectStore(storeName, &#123;keyPath: &#39;tag&#39;&#125;);</span><br><span class="line">                store.createIndex(storeName + &#39;Index&#39;, &#39;tag&#39;, &#123;unique: false&#125;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>存储数据</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function saveData(db, data) &#123;</span><br><span class="line">    return new Promise(function (resolve, reject) &#123;</span><br><span class="line">        const STORE_NAME &#x3D; &#39;ctc_aleinzhou&#39;;</span><br><span class="line">        const tx &#x3D; db.transaction(STORE_NAME, &#39;readwrite&#39;);</span><br><span class="line">        const store &#x3D; tx.objectStore(STORE_NAME);</span><br><span class="line">        const request &#x3D; store.put(&#123;tag: &#39;ctc_data&#39;, data&#125;);</span><br><span class="line">        request.onsuccess &#x3D; () &#x3D;&gt; resolve(db);</span><br><span class="line">        request.onerror &#x3D; reject;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>查询/读取数据</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">function query(db) &#123;</span><br><span class="line">    const STORE_NAME &#x3D; &#39;ctc_aleinzhou&#39;;</span><br><span class="line">    return new Promise(function (resolve, reject) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            const tx &#x3D; db.transaction(STORE_NAME, &#39;readonly&#39;);</span><br><span class="line">            const store &#x3D; tx.objectStore(STORE_NAME);</span><br><span class="line">            const dbRequest &#x3D; store.get(&#39;ctc_data&#39;);</span><br><span class="line">            dbRequest.onsuccess &#x3D; e &#x3D;&gt; resolve(e.target.result);</span><br><span class="line">            dbRequest.onerror &#x3D; reject;</span><br><span class="line">        &#125;</span><br><span class="line">        catch (err) &#123;</span><br><span class="line">            reject(err);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>剩下的工作就非常简单了。首先打开数据连接，并初始化数据：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openStore().then(db &#x3D;&gt; saveData(db, null))</span><br></pre></td></tr></table></figure>
-
-<p>对于消息读取，可以在连接与初始化后轮询：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">openStore().then(db &#x3D;&gt; saveData(db, null)).then(function (db) &#123;</span><br><span class="line">    setInterval(function () &#123;</span><br><span class="line">        query(db).then(function (res) &#123;</span><br><span class="line">            if (!res || !res.data) &#123;</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line">            const data &#x3D; res.data;</span><br><span class="line">            const text &#x3D; &#39;[receive] &#39; + data.msg + &#39; —— tab &#39; + data.from;</span><br><span class="line">            console.log(&#39;[Storage I] receive message:&#39;, text);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;, 1000);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>最后，要发送消息时，只需向 IndexedDB 存储数据即可：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">openStore().then(db &#x3D;&gt; saveData(db, null)).then(function (db) &#123;</span><br><span class="line">    &#x2F;&#x2F; …… 省略上面的轮询代码</span><br><span class="line">    &#x2F;&#x2F; 触发 saveData 的方法可以放在用户操作的事件监听内</span><br><span class="line">    saveData(db, mydata);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<h3 id="小憩一下-1"><a href="#小憩一下-1" class="headerlink" title="小憩一下"></a>小憩一下</h3><p>在“广播模式”外，我们又了解了“共享存储+长轮询”这种模式。也许你会认为长轮询没有监听模式优雅，但实际上，有些时候使用“共享存储”的形式时，不一定要搭配长轮询。</p>
-<p>例如，在多 Tab 场景下，我们可能会离开 Tab A 到另一个 Tab B 中操作；过了一会我们从 Tab B 切换回 Tab A 时，希望将之前在 Tab B 中的操作的信息同步回来。这时候，其实只用在 Tab A 中监听<code>visibilitychange</code>这样的事件，来做一次信息同步即可。</p>
-<p>下面，我会再介绍一种通信方式，我把它称为“口口相传”模式。</p>
-<p>–</p>
-<h3 id="6-window-open-window-opener"><a href="#6-window-open-window-opener" class="headerlink" title="6. window.open + window.opener"></a>6. window.open + window.opener</h3><p>当我们使用<code>window.open</code>打开页面时，方法会返回一个被打开页面<code>window</code>的引用。而在未显示指定<code>noopener</code>时，被打开的页面可以通过<code>window.opener</code>获取到打开它的页面的引用 —— 通过这种方式我们就将这些页面建立起了联系（一种树形结构）。</p>
-<p>首先，我们把<code>window.open</code>打开的页面的<code>window</code>对象收集起来：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">let childWins &#x3D; [];</span><br><span class="line">document.getElementById(&#39;btn&#39;).addEventListener(&#39;click&#39;, function () &#123;</span><br><span class="line">    const win &#x3D; window.open(&#39;.&#x2F;some&#x2F;sample&#39;);</span><br><span class="line">    childWins.push(win);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>然后，当我们需要发送消息的时候，作为消息的发起方，一个页面需要同时通知它打开的页面与打开它的页面：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 过滤掉已经关闭的窗口</span><br><span class="line">childWins &#x3D; childWins.filter(w &#x3D;&gt; !w.closed);</span><br><span class="line">if (childWins.length &gt; 0) &#123;</span><br><span class="line">    mydata.fromOpenner &#x3D; false;</span><br><span class="line">    childWins.forEach(w &#x3D;&gt; w.postMessage(mydata));</span><br><span class="line">&#125;</span><br><span class="line">if (window.opener &amp;&amp; !window.opener.closed) &#123;</span><br><span class="line">    mydata.fromOpenner &#x3D; true;</span><br><span class="line">    window.opener.postMessage(mydata);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>注意，我这里先用<code>.closed</code>属性过滤掉已经被关闭的 Tab 窗口。这样，作为消息发送方的任务就完成了。下面看看，作为消息接收方，它需要做什么。</p>
-<p>此时，一个收到消息的页面就不能那么自私了，除了展示收到的消息，它还需要将消息再传递给它所“知道的人”（打开与被它打开的页面）:</p>
-<blockquote>
-<p>需要注意的是，我这里通过判断消息来源，避免将消息回传给发送方，防止消息在两者间死循环的传递。（该方案会有些其他小问题，实际中可以进一步优化）</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">window.addEventListener(&#39;message&#39;, function (e) &#123;</span><br><span class="line">    const data &#x3D; e.data;</span><br><span class="line">    const text &#x3D; &#39;[receive] &#39; + data.msg + &#39; —— tab &#39; + data.from;</span><br><span class="line">    console.log(&#39;[Cross-document Messaging] receive message:&#39;, text);</span><br><span class="line">    &#x2F;&#x2F; 避免消息回传</span><br><span class="line">    if (window.opener &amp;&amp; !window.opener.closed &amp;&amp; data.fromOpenner) &#123;</span><br><span class="line">        window.opener.postMessage(data);</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F; 过滤掉已经关闭的窗口</span><br><span class="line">    childWins &#x3D; childWins.filter(w &#x3D;&gt; !w.closed);</span><br><span class="line">    &#x2F;&#x2F; 避免消息回传</span><br><span class="line">    if (childWins &amp;&amp; !data.fromOpenner) &#123;</span><br><span class="line">        childWins.forEach(w &#x3D;&gt; w.postMessage(data));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>这样，每个节点（页面）都肩负起了传递消息的责任，也就是我说的“口口相传”，而消息就在这个树状结构中流转了起来。</p>
-<h3 id="小憩一下-2"><a href="#小憩一下-2" class="headerlink" title="小憩一下"></a>小憩一下</h3><p>显然，“口口相传”的模式存在一个问题：如果页面不是通过在另一个页面内的<code>window.open</code>打开的（例如直接在地址栏输入，或从其他网站链接过来），这个联系就被打破了。</p>
-<p>除了上面这六个常见方法，其实还有一种（第七种）做法是通过 WebSocket 这类的“服务器推”技术来进行同步。这好比将我们的“中央站”从前端移到了后端。</p>
-<p>关于 WebSocket 与其他“服务器推”技术，不了解的同学可以阅读这篇<a target="_blank" rel="noopener" href="https://juejin.im/post/6844903618043183111">《各类“服务器推”技术原理与实例（Polling/COMET/SSE/WebSocket）》</a></p>
-<p>此外，我还针对以上各种方式写了一个 <a target="_blank" rel="noopener" href="https://alienzhou.github.io/cross-tab-communication/">在线演示的 Demo &gt;&gt;</a></p>
-<p><img src="2.gif#id=Meuzf&originalType=binary&status=done&style=none"></p>
-<h2 id="二、非同源页面之间的通信"><a href="#二、非同源页面之间的通信" class="headerlink" title="二、非同源页面之间的通信"></a>二、非同源页面之间的通信</h2><p>上面我们介绍了七种前端跨页面通信的方法，但它们大都受到同源策略的限制。然而有时候，我们有两个不同域名的产品线，也希望它们下面的所有页面之间能无障碍地通信。那该怎么办呢？</p>
-<p>要实现该功能，可以使用一个用户不可见的 iframe 作为“桥”。由于 iframe 与父页面间可以通过指定<code>origin</code>来忽略同源限制，因此可以在每个页面中嵌入一个 iframe （例如：<code>http://sample.com/bridge.html</code>），而这些 iframe 由于使用的是一个 url，因此属于同源页面，其通信方式可以复用上面第一部分提到的各种方式。</p>
-<p>页面与 iframe 通信非常简单，首先需要在页面中监听 iframe 发来的消息，做相应的业务处理：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* 业务页面代码 *&#x2F;</span><br><span class="line">window.addEventListener(&#39;message&#39;, function (e) &#123;</span><br><span class="line">    &#x2F;&#x2F; …… do something</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>然后，当页面要与其他的同源或非同源页面通信时，会先给 iframe 发送消息：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* 业务页面代码 *&#x2F;</span><br><span class="line">window.frames[0].window.postMessage(mydata, &#39;*&#39;);</span><br></pre></td></tr></table></figure>
-
-<p>其中为了简便此处将<code>postMessage</code>的第二个参数设为了<code>&#39;*&#39;</code>，你也可以设为 iframe 的 URL。iframe 收到消息后，会使用某种跨页面消息通信技术在所有 iframe 间同步消息，例如下面使用的 Broadcast Channel：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* iframe 内代码 *&#x2F;</span><br><span class="line">const bc &#x3D; new BroadcastChannel(&#39;AlienZHOU&#39;);</span><br><span class="line">&#x2F;&#x2F; 收到来自页面的消息后，在 iframe 间进行广播</span><br><span class="line">window.addEventListener(&#39;message&#39;, function (e) &#123;</span><br><span class="line">    bc.postMessage(e.data);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>其他 iframe 收到通知后，则会将该消息同步给所属的页面：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* iframe 内代码 *&#x2F;</span><br><span class="line">&#x2F;&#x2F; 对于收到的（iframe）广播消息，通知给所属的业务页面</span><br><span class="line">bc.onmessage &#x3D; function (e) &#123;</span><br><span class="line">    window.parent.postMessage(e.data, &#39;*&#39;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>下图就是使用 iframe 作为“桥”的非同源页面间通信模式图。</p>
-<p><img src="3.png#id=K3AvO&originalType=binary&status=done&style=none"></p>
-<p>其中“同源跨域通信方案”可以使用文章第一部分提到的某种技术。</p>
-<p>–</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>今天和大家分享了一下跨页面通信的各种方式。</p>
-<p>对于同源页面，常见的方式包括：</p>
-<ul>
-<li>广播模式：Broadcast Channe / Service Worker / LocalStorage + StorageEvent</li>
-<li>共享存储模式：Shared Worker / IndexedDB / cookie</li>
-<li>口口相传模式：window.open + window.opener</li>
-<li>基于服务端：Websocket / Comet / SSE 等</li>
-</ul>
-<p>而对于非同源页面，则可以通过嵌入同源 iframe 作为“桥”，将非同源页面通信转换为同源页面通信。</p>
-<blockquote>
-<p>对文章感兴趣的同学欢迎关注 <a target="_blank" rel="noopener" href="https://github.com/alienzhou/blog">我的博客 &gt;&gt; https://github.com/alienzhou/blog</a></p>
-</blockquote>
-<p>本文在分享的同时，也是为了抛转引玉。如果你有什么其他想法，欢迎一起讨论，提出你的见解和想法~</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/19/yuque/%E8%A1%8C%E5%86%85%E5%85%83%E7%B4%A0%EF%BC%8C%E5%9D%97%E7%8A%B6%E5%85%83%E7%B4%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Adam Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Adam">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/19/yuque/%E8%A1%8C%E5%86%85%E5%85%83%E7%B4%A0%EF%BC%8C%E5%9D%97%E7%8A%B6%E5%85%83%E7%B4%A0/" class="post-title-link" itemprop="url">行内元素，块状元素</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-19 20:31:03" itemprop="dateCreated datePublished" datetime="2021-04-19T20:31:03+08:00">2021-04-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-21 13:19:51" itemprop="dateModified" datetime="2021-04-21T13:19:51+08:00">2021-04-21</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>什么叫行内元素？<br>常见的 span、a、lable、strong、b 等 html 标签都是行内元素<br>什么叫块级元素？<br>常见的 div、p、li、h1、h2、h3、h4 等 html 标签都是块级元素</p>
-<h3 id="略知一二："><a href="#略知一二：" class="headerlink" title="略知一二："></a>略知一二：</h3><p>行内元素有：a, span, label, strong, em, br, img, input, select, textarea, cite,块级元素：div, h1~h6, p, form, ul, li, ol, dl, address, hr, menu, table, fieldset</p>
-<h3 id="粗通皮毛："><a href="#粗通皮毛：" class="headerlink" title="粗通皮毛："></a>粗通皮毛：</h3><h4 id="（行内元素）内联元素-inline-element"><a href="#（行内元素）内联元素-inline-element" class="headerlink" title="（行内元素）内联元素(inline element)"></a>（行内元素）内联元素(inline element)</h4><ul>
-<li>a - 锚点</li>
-<li>abbr - 缩写</li>
-<li>acronym - 首字</li>
-<li>b - 粗体(不推荐)</li>
-<li>bdo - bidi override</li>
-<li>big - 大字体</li>
-<li>br - 换行</li>
-<li>cite - 引用</li>
-<li>code - 计算机代码(在引用源码的时候需要)</li>
-<li>dfn - 定义字段</li>
-<li>em - 强调</li>
-<li>font - 字体设定(不推荐)</li>
-<li>i - 斜体</li>
-<li>img - 图片</li>
-<li>input - 输入框</li>
-<li>kbd - 定义键盘文本</li>
-<li>label - 表格标签</li>
-<li>q - 短引用</li>
-<li>s - 中划线(不推荐)</li>
-<li>samp - 定义范例计算机代码</li>
-<li>select - 项目选择</li>
-<li>small - 小字体文本</li>
-<li>span - 常用内联容器，定义文本内区块</li>
-<li>strike - 中划线</li>
-<li>strong - 粗体强调</li>
-<li>sub - 下标</li>
-<li>sup - 上标</li>
-<li>textarea - 多行文本输入框</li>
-<li>tt - 电传文本</li>
-<li>u - 下划线</li>
-<li>var - 定义变量</li>
-</ul>
-<h4 id="块元素-block-element"><a href="#块元素-block-element" class="headerlink" title="块元素(block element)"></a>块元素(block element)</h4><ul>
-<li>address - 地址</li>
-<li>blockquote - 块引用</li>
-<li>center - 举中对齐块</li>
-<li>dir - 目录列表</li>
-<li>div - 常用块级容易，也是 css layout 的主要标签</li>
-<li>dl - 定义列表</li>
-<li>fieldset - form 控制组</li>
-<li>form - 交互表单</li>
-<li>h1 - 大标题</li>
-<li>h2 - 副标题</li>
-<li>h3 - 3 级标题</li>
-<li>h4 - 4 级标题</li>
-<li>h5 - 5 级标题</li>
-<li>h6 - 6 级标题</li>
-<li>hr - 水平分隔线</li>
-<li>isindex - input prompt</li>
-<li>menu - 菜单列表</li>
-<li>noframes - frames 可选内容，（对于不支持 frame 的浏览器显示此区块内容</li>
-<li>noscript - ）可选脚本内容（对于不支持 script 的浏览器显示此内容）</li>
-<li>ol - 排序表单</li>
-<li>p - 段落</li>
-<li>pre - 格式化文本</li>
-<li>table - 表格</li>
-<li>ul - 非排序列表</li>
-</ul>
-<h4 id="可变元素"><a href="#可变元素" class="headerlink" title="可变元素"></a>可变元素</h4><p>可变元素为根据上下文语境决定该元素为块元素或者行内元素。</p>
-<ul>
-<li>applet - java applet</li>
-<li>button - 按钮</li>
-<li>del - 删除文本</li>
-<li>iframe - inline frame</li>
-<li>ins - 插入的文本</li>
-<li>map - 图片区块(map)</li>
-<li>object - object 对象</li>
-<li>script - 客户端脚本</li>
-</ul>
-<h3 id="驾轻就熟："><a href="#驾轻就熟：" class="headerlink" title="驾轻就熟："></a>驾轻就熟：</h3><h4 id="区别："><a href="#区别：" class="headerlink" title="区别："></a>区别：</h4><ol>
-<li>块级元素会独占一行，其宽度自动填满其父元素宽度行内元素不会独占一行，相邻的行内元素会排列在同一行里，知道一行排不下，才会换行，其宽度随元素的内容而变化</li>
-<li>块级元素可以设置 width, height 属性，【注意：块级元素即使设置了宽度，仍然是独占一行的】行内元素设置 width, height 无效;</li>
-<li>块级元素可以设置 margin 和 padding.行内元素的水平方向的 padding-left,padding-right,margin-left,margin-right 都产生边距效果，但是竖直方向的 padding-top,padding-bottom,margin-top,margin-bottom 都不会产生边距效果。（水平方向有效，竖直方向无效）</li>
-</ol>
-<h3 id="青出於蓝"><a href="#青出於蓝" class="headerlink" title="青出於蓝:"></a>青出於蓝:</h3><ul>
-<li><p>行内元素与块级元素直观上的区别行内元素会在一条直线上排列，都是同一行的，水平方向排列块级元素各占据一行，垂直方向排列。块级元素从新行开始结束接着一个断行。</p>
-</li>
-<li><p>块级元素可以包含行内元素和块级元素。行内元素不能包含块级元素。</p>
-</li>
-<li><p>行内元素与块级元素属性的不同，主要是盒模型属性上行内元素设置 width 无效，height 无效(可以设置 line-height)，margin 上下无效，padding 上下无效</p>
-<p>display：inline 行内元素/内联元素<br>display:block 块级元素<br>display:inline-block 设置成行内块级元素。</p>
-</li>
-</ul>
-<p>行内块级元素:和其他元素同一行（行内元素特点），可以设置元素的宽高等（块级元素特点）；这样的元素有 img input；它们为行内元素，但可以改变宽和高；但我在我印象中，貌似没有默认样式是 inline-block 的元素。</p>
-<h3 id="融会贯通："><a href="#融会贯通：" class="headerlink" title="融会贯通："></a>融会贯通：</h3><ul>
-<li>行内元素属性<ol>
-<li> 行内元素属性标签它和其它标签处在同一行内</li>
-<li> 行内元素属性标签无法设置宽度，高度 行高 距顶部距离 距底部距离</li>
-<li> 行内元素属性标签的宽度是直接由内部的文字或者图片等内容撑开的</li>
-<li> 行内元素属性标签内部不能嵌套行属性标签（a 链接内不能嵌套其他链接）</li>
-</ol>
-</li>
-<li>块级元素属性<ol>
-<li> 每一个块级元素属性标签都是从新的一行开始，而且之后的元素也都会从新的一行开始（因为每一个块属性标签都会直接占据一整行的内容，导致下面的内容也只能从新的一行开始）</li>
-<li> 块级元素属性标签都是可以设置宽度、高度，行高，距顶部距离，距底部距离</li>
-<li> 块级元素属性标签的宽度假如不做设置，会直接默认为父元素宽度的 100%</li>
-<li> 块级元素属性标签是可以直接嵌套的</li>
-<li> p 标签中不能嵌套 div 标签</li>
-</ol>
-</li>
-</ul>
-<h3 id="出类拔萃："><a href="#出类拔萃：" class="headerlink" title="出类拔萃："></a>出类拔萃：</h3><ul>
-<li><p>CSS 设置行内元素的</p>
-<ul>
-<li><p>水平居中 div{text-align:center} /<em>DIV 内的行内元素均会水平居中</em>/</p>
-</li>
-<li><p>垂直居中 div{height:30px; line-height:30px} /<em>DIV 内的行内元素均会垂直居中</em>/</p>
-</li>
-</ul>
-</li>
-<li><p>CSS 设置块级元素的</p>
-<ul>
-<li><p>水平居中</p>
-<ul>
-<li>div p{margin:0 auto; width:500px} /<em>块级元素 p 一定要设置宽度， 才能相当于 DIV 父容器水平居中</em>/-</li>
-</ul>
-</li>
-<li><p>垂直居中 div{width:500px} /*DIV 父容器设置宽度</p>
-<ul>
-<li>*/ div p{margin:0 aut0; height:30px; line-height:30px} /*块级元素 p 也可以加个宽度， 以达到相对于 DIV 父容器的水平居中效果*/</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>在以后的实际项目中，块级元素的垂直居中布局方式可能会碰到比这个更复杂, 会尝试用 inline-block 去解决问题，希望后续多多关注；另外推荐各位一本书肖志华《CSS 核心技术详解》</p>
-<h3 id="返璞归真："><a href="#返璞归真：" class="headerlink" title="返璞归真："></a>返璞归真：</h3><p>在标准文档流里面，块级元素具有以下特点：<br>① 总是在新行上开始，占据一整行；<br>② 高度，行高以及外边距和内边距都可控制；<br>③ 宽带始终是与浏览器宽度一样，与内容无关；<br>④ 它可以容纳内联元素和其他块元素。</p>
-<p>行内元素的特点：<br>① 和其他元素都在一行上；<br>② 高，行高及外边距和内边距部分可改变；<br>③ 宽度只与内容有关；<br>④ 行内元素只能容纳文本或者其他行内元素。<br>不可以设置宽高，其宽度随着内容增加，高度随字体大小而改变，内联元素可以设置外边界，但是外边界不对上下起作用，只能对左右起作用，也可以设置内边界，但是内边界在 ie6 中不对上下起作用，只能对左右起作用</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/19/yuque/%E9%97%AD%E5%8C%85/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Adam Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Adam">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/19/yuque/%E9%97%AD%E5%8C%85/" class="post-title-link" itemprop="url">闭包</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-19 15:41:01" itemprop="dateCreated datePublished" datetime="2021-04-19T15:41:01+08:00">2021-04-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-21 13:19:51" itemprop="dateModified" datetime="2021-04-21T13:19:51+08:00">2021-04-21</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="1、概念"><a href="#1、概念" class="headerlink" title="1、概念"></a>1、概念</h1><p>闭包函数：声明在一个函数中的函数，叫做闭包函数。</p>
-<p>闭包：内部函数总是可以访问其所在的外部函数中声明的参数和变量，即使在其外部函数被返回（寿命终结）了之后。</p>
-<h2 id="2、特点"><a href="#2、特点" class="headerlink" title="2、特点"></a>2、特点</h2><p>让外部访问函数内部变量成为可能；<br>  局部变量会常驻在内存中；<br>  可以避免使用全局变量，防止全局变量污染；<br>  会造成内存泄漏（有一块内存空间被长期占用，而不被释放）</p>
-<h3 id="3、闭包的创建：­­­"><a href="#3、闭包的创建：­­­" class="headerlink" title="3、闭包的创建：­­­"></a>3、闭包的创建：­­­</h3><p>闭包就是可以创建一个独立的环境，每个闭包里面的环境都是独立的，互不干扰。闭包会发生内存泄漏，每次外部函数执行的时 候，外部函数的引用地址不同，都会重新创建一个新的地址。但凡是当前活动对象中有被内部子集引用的数据，那么这个时候，这个数据不删除，保留一根指针给内部活动对象。<br>闭包内存泄漏为： key = value，key 被删除了 value 常驻内存中; 局部变量闭包升级版（中间引用的变量） =&gt; 自由变量；</p>
-<h1 id="4、闭包的应用场景"><a href="#4、闭包的应用场景" class="headerlink" title="4、闭包的应用场景"></a>4、闭包的应用场景</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">funA</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> a = <span class="number">10</span>; <span class="comment">// funA的活动对象之中;</span></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">//匿名函数的活动对象;</span></span><br><span class="line">    alert(a);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> b = funA();</span><br><span class="line">b(); <span class="comment">//10</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">outerFn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> i = <span class="number">0</span>;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">innerFn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    i++;</span><br><span class="line">    <span class="built_in">console</span>.log(i);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> innerFn;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> inner = outerFn(); <span class="comment">//每次外部函数执行的时候,都会开辟一块内存空间,外部函数的地址不同，都会重新创建一个新的地址</span></span><br><span class="line">inner();</span><br><span class="line">inner();</span><br><span class="line">inner();</span><br><span class="line"><span class="keyword">var</span> inner2 = outerFn();</span><br><span class="line">inner2();</span><br><span class="line">inner2();</span><br><span class="line">inner2(); <span class="comment">//1 2 3 1 2 3</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> i = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">outerFn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">innnerFn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    i++;</span><br><span class="line">    <span class="built_in">console</span>.log(i);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> innnerFn;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> inner1 = outerFn();</span><br><span class="line"><span class="keyword">var</span> inner2 = outerFn();</span><br><span class="line">inner1();</span><br><span class="line">inner2();</span><br><span class="line">inner1();</span><br><span class="line">inner2(); <span class="comment">//1 2 3 4</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> a = <span class="number">3</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> ++a;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line">alert(fn()()); <span class="comment">//4</span></span><br><span class="line">alert(fn()()); <span class="comment">//4</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">outerFn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> i = <span class="number">0</span>;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">innnerFn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    i++;</span><br><span class="line">    <span class="built_in">console</span>.log(i);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> innnerFn;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> inner1 = outerFn();</span><br><span class="line"><span class="keyword">var</span> inner2 = outerFn();</span><br><span class="line">inner1();</span><br><span class="line">inner2();</span><br><span class="line">inner1();</span><br><span class="line">inner2(); <span class="comment">//1 1 2 2</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> m = <span class="number">0</span>;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">getM</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> m;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">seta</span>(<span class="params">val</span>) </span>&#123;</span><br><span class="line">    m = val;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">window</span>.g = getM;</span><br><span class="line">  <span class="built_in">window</span>.f = seta;</span><br><span class="line">&#125;)();</span><br><span class="line">f(<span class="number">100</span>);</span><br><span class="line"><span class="built_in">console</span>.info(g()); <span class="comment">//100  闭包找到的是同一地址中父级函数中对应变量最终的值</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> i = <span class="number">0</span>;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">b</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    alert(++i);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> b;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> c = a();</span><br><span class="line">c(); <span class="comment">//1</span></span><br><span class="line">c(); <span class="comment">//2</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> count = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    count++;</span><br><span class="line">    <span class="built_in">console</span>.info(count);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> t1 = f();</span><br><span class="line">t1(); <span class="comment">//1</span></span><br><span class="line">t1(); <span class="comment">//2</span></span><br><span class="line">t1(); <span class="comment">//3</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> add = <span class="function"><span class="keyword">function</span> (<span class="params">x</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> sum = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">var</span> tmp = <span class="function"><span class="keyword">function</span> (<span class="params">x</span>) </span>&#123;</span><br><span class="line">    sum = sum + x;</span><br><span class="line">    <span class="keyword">return</span> tmp;</span><br><span class="line">  &#125;;</span><br><span class="line">  tmp.toString = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">return</span> tmp;</span><br><span class="line">&#125;;</span><br><span class="line">alert(add(<span class="number">1</span>)(<span class="number">2</span>)(<span class="number">3</span>)); <span class="comment">//6</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> lis = <span class="built_in">document</span>.getElementsByTagName(<span class="string">&quot;li&quot;</span>);</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; lis.length; i++) &#123;</span><br><span class="line">  (<span class="function"><span class="keyword">function</span> (<span class="params">i</span>) </span>&#123;</span><br><span class="line">    lis[i].onclick = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="built_in">console</span>.log(i);</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;)(i); <span class="comment">//事件处理函数中闭包的写法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">m1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> x = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(++x);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">m1()(); <span class="comment">//2</span></span><br><span class="line">m1()(); <span class="comment">//2</span></span><br><span class="line">m1()(); <span class="comment">//2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> m2 = m1();</span><br><span class="line">m2(); <span class="comment">//2</span></span><br><span class="line">m2(); <span class="comment">//3</span></span><br><span class="line">m2(); <span class="comment">//4</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fn = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> i = <span class="number">10</span>;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(++i);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> fn;</span><br><span class="line">&#125;)();</span><br><span class="line">fn(); <span class="comment">//11</span></span><br><span class="line">fn(); <span class="comment">//12</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">love1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> num = <span class="number">223</span>;</span><br><span class="line">  <span class="keyword">var</span> me1 = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(num);</span><br><span class="line">  &#125;;</span><br><span class="line">  num++;</span><br><span class="line">  <span class="keyword">return</span> me1;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> loveme1 = love1();</span><br><span class="line">loveme1(); <span class="comment">//输出224</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fun</span>(<span class="params">n, o</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(o);</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    fun: <span class="function"><span class="keyword">function</span> (<span class="params">m</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> fun(m, n);</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> a = fun(<span class="number">0</span>); <span class="comment">//undefined</span></span><br><span class="line">a.fun(<span class="number">1</span>); <span class="comment">//0</span></span><br><span class="line">a.fun(<span class="number">2</span>); <span class="comment">//0</span></span><br><span class="line">a.fun(<span class="number">3</span>); <span class="comment">//0</span></span><br><span class="line"><span class="keyword">var</span> b = fun(<span class="number">0</span>).fun(<span class="number">1</span>).fun(<span class="number">2</span>).fun(<span class="number">3</span>); <span class="comment">//undefined  0  1  2</span></span><br><span class="line"><span class="keyword">var</span> c = fun(<span class="number">0</span>).fun(<span class="number">1</span>);</span><br><span class="line">c.fun(<span class="number">2</span>);</span><br><span class="line">c.fun(<span class="number">3</span>); <span class="comment">//undefined  0  1  1</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> arr = [];</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">    arr[i] = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> i;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> arr;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> list = fn();</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, len = list.length; i &lt; len; i++) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(list[i]());</span><br><span class="line">&#125; <span class="comment">//5 5 5 5 5</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> arr = [];</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">    arr[i] = (<span class="function"><span class="keyword">function</span> (<span class="params">i</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> i;</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125;)(i);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> arr;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> list = fn();</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, len = list.length; i &lt; len; i++) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(list[i]());</span><br><span class="line">&#125; <span class="comment">//0 1 2 3 4</span></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/18/yuque/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Adam Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Adam">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/18/yuque/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" class="post-title-link" itemprop="url">数据类型</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-18 00:19:29" itemprop="dateCreated datePublished" datetime="2021-04-18T00:19:29+08:00">2021-04-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-21 13:19:51" itemprop="dateModified" datetime="2021-04-21T13:19:51+08:00">2021-04-21</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618676788048-988699b0-72f7-4748-9064-1bc417d8ba39.png#clientId=u0f756751-46c8-4&from=paste&height=555&id=ued534341&margin=%5Bobject%20Object%5D&originHeight=788&originWidth=1021&originalType=binary&size=126478&status=done&style=none&taskId=u0d11ffd4-876a-4c72-8173-b5871de923e&width=719.5"></p>
-<h2 id="原始值-primitive-values"><a href="#原始值-primitive-values" class="headerlink" title="原始值( primitive values )"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#%E5%8E%9F%E5%A7%8B%E5%80%BC_primitive_values">原始值( primitive values )</a></h2><p>除 Object 以外的所有类型都是不可变的（值本身无法被改变）。例如，与 C 语言不同，JavaScript 中字符串是不可变的（译注：如，JavaScript 中对字符串的操作一定返回了一个新字符串，原始字符串并没有被改变）。我们称这些类型的值为“原始值”。</p>
-<h3 id="布尔类型"><a href="#布尔类型" class="headerlink" title="布尔类型"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#%E5%B8%83%E5%B0%94%E7%B1%BB%E5%9E%8B">布尔类型</a></h3><p>布尔表示一个逻辑实体，可以有两个值：true 和 false。</p>
-<h3 id="Null-类型"><a href="#Null-类型" class="headerlink" title="Null 类型"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#null_%E7%B1%BB%E5%9E%8B">Null 类型</a></h3><p>Null 类型只有一个值：null，更多详情可查看<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/null">null</a>和<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Glossary/Null">Null</a>。</p>
-<h3 id="Undefined-类型"><a href="#Undefined-类型" class="headerlink" title="Undefined 类型"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#undefined_%E7%B1%BB%E5%9E%8B">Undefined 类型</a></h3><p>一个没有被赋值的变量会有个默认值 undefined，更多详情可查看<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a>和<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Glossary/undefined">Undefined</a>。</p>
-<h3 id="数字类型"><a href="#数字类型" class="headerlink" title="数字类型"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#%E6%95%B0%E5%AD%97%E7%B1%BB%E5%9E%8B">数字类型</a></h3><p>根据 ECMAScript 标准，JavaScript 中只有一种数字类型：基于 IEEE 754 标准的双精度 64 位二进制格式的值（-(253-1) 到 253-1）。<strong>它并没有为整数给出一种特定的类型</strong>。除了能够表示浮点数外，还有一些带符号的值：+Infinity，-Infinity 和 NaN(非数值，Not-a-Number)。<br>要检查值是否大于或小于+/-Infinity，你可以使用常量<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_VALUE">Number.MAX_VALUE</a>和<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/MIN_VALUE">Number.MIN_VALUE</a>。另外在 ECMAScript 6 中，你也可以通过<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger">Number.isSafeInteger()</a>方法还有<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER">Number.MAX_SAFE_INTEGER</a>和<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/MIN_SAFE_INTEGER">Number.MIN_SAFE_INTEGER</a>来检查值是否在双精度浮点数的取值范围内。 超出这个范围，JavaScript 中的数字不再安全了，也就是只有 second mathematical interger 可以在 JavaScript 数字类型中正确表现。<br>数字类型中只有一个整数有两种表示方法： 0 可表示为 -0 和 +0（”0” 是 +0 的简写）。 在实践中，这也几乎没有影响。 例如+0 === -0 为真。 但是，你可能要注意除以 0 的时候：<br>42 / +0; // Infinity<br>42 / -0; // -Infinity</p>
-<p>尽管一个数字常常仅代表它本身的值，但 JavaScript 提供了一些<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators">位运算符</a>。 这些位运算符和一个单一数字通过位操作可以用来表现一些布尔值。然而自从 JavaScript 提供其他的方式来表示一组布尔值（如一个布尔值数组或一个布尔值分配给命名属性的对象）后，这种方式通常被认为是不好的。位操作也容易使代码难以阅读，理解和维护， 在一些非常受限的情况下，可能需要用到这些技术，比如试图应付本地存储的存储限制。 位操作只应该是用来优化尺寸的最后选择。</p>
-<h3 id="BigInt-类型"><a href="#BigInt-类型" class="headerlink" title="BigInt 类型"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#bigint_%E7%B1%BB%E5%9E%8B">BigInt 类型</a></h3><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/BigInt">BigInt</a>类型是 JavaScript 中的一个基础的数值类型，可以用任意精度表示整数。使用 BigInt，您可以安全地存储和操作大整数，甚至可以超过数字的安全整数限制。BigInt 是通过在整数末尾附加  n  或调用构造函数来创建的。<br>通过使用常量<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER">Number.MAX_SAFE_INTEGER</a>，您可以获得可以用数字递增的最安全的值。通过引入 BigInt，您可以操作超过<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER">Number.MAX_SAFE_INTEGER</a>的数字。您可以在下面的示例中观察到这一点，其中递增<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER">Number.MAX_SAFE_INTEGER</a>会返回预期的结果:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="keyword">const</span> x = <span class="number">2n</span> ** <span class="number">53n</span>;</span><br><span class="line"><span class="number">9007199254740992n</span></span><br><span class="line">&gt; <span class="keyword">const</span> y = x + <span class="number">1n</span>;</span><br><span class="line"><span class="number">9007199254740993n</span></span><br></pre></td></tr></table></figure>
-
-<p>可以对 BigInt 使用运算符+、*、-、**和%，就像对数字一样。BigInt 严格来说并不等于一个数字，但它是松散的。<br>在将 BigInt 转换为 Boolean 时，它的行为类似于一个数字：if、||、&amp;&amp;、Boolean  和!。<br>BigInt 不能与数字互换操作。否则，将抛出<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/TypeError">TypeError</a>。</p>
-<h3 id="字符串类型"><a href="#字符串类型" class="headerlink" title="字符串类型"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%B1%BB%E5%9E%8B">字符串类型</a></h3><p>JavaScript 的字符串类型用于表示文本数据。它是一组 16 位的无符号整数值的“元素”。在字符串中的每个元素占据了字符串的位置。第一个元素的索引为 0，下一个是索引 1，依此类推。字符串的长度是它的元素的数量。<br>不同于类 C 语言，JavaScript 字符串是不可更改的。这意味着字符串一旦被创建，就不能被修改。但是，可以基于对原始字符串的操作来创建新的字符串。例如：</p>
-<ul>
-<li>获取一个字符串的子串可通过选择个别字母或者使用<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/substr">String.substr()</a>.</li>
-<li>两个字符串的连接使用连接操作符 (+) 或者<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/concat">String.concat()</a>.</li>
-</ul>
-<h4 id="注意代码中的“字符串类型”！"><a href="#注意代码中的“字符串类型”！" class="headerlink" title="注意代码中的“字符串类型”！"></a>注意代码中的“字符串类型”！</h4><p>可以使用字符串来表达复杂的数据。以下是一些很好的性质：</p>
-<ul>
-<li>容易连接构造复杂的字串符</li>
-<li>字符串容易被调试(你看到的往往在字符串里)</li>
-<li>字符串通常是许多 APIs 的常见标准 (<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/DOM/HTMLInputElement">input fields</a>,<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/Storage">local storage</a>values,<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest">XMLHttpRequest</a>当使用 responseText 等的时候回应) 而且他只能与字符串一同使用。</li>
-</ul>
-<p>使用约定，字符串一般可以用来表达任何数据结构。这不是一个好主意。例如，使用一个分隔符，可以模拟一个列表（而 JavaScript 数组可能更适合）。不幸的是，当分隔符用于列表中的元素时，列表就会被破坏。 可以选择转义字符，等等。所有这些都需要约定，并造成不必要的维护负担。<br>表达文本数据和符号数据时候推荐使用字符串。当表达复杂的数据时，使用字符串解析和适当的缩写。</p>
-<h3 id="符号类型"><a href="#符号类型" class="headerlink" title="符号类型"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#%E7%AC%A6%E5%8F%B7%E7%B1%BB%E5%9E%8B">符号类型</a></h3><p>符号(Symbols)是 ECMAScript 第 6 版新定义的。符号类型是唯一的并且是不可修改的, 并且也可以用来作为 Object 的 key 的值(如下).  在某些语言当中也有类似的原子类型(Atoms). 你也可以认为为它们是 C 里面的枚举类型.  更多细节请看<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Glossary/Symbol">Symbol</a>和  <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Symbol">Symbol</a>。</p>
-<h2 id="对象"><a href="#对象" class="headerlink" title="对象"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#%E5%AF%B9%E8%B1%A1">对象</a></h2><p>在计算机科学中, 对象是指内存中的可以被  <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Glossary/Identifier">标识符</a>引用的一块区域.</p>
-<h3 id="属性"><a href="#属性" class="headerlink" title="属性"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#%E5%B1%9E%E6%80%A7">属性</a></h3><p>在 Javascript 里，对象可以被看作是一组属性的集合。用<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/JavaScript/Guide/Values,_variables,_and_literals#object_literals">对象字面量语法</a>来定义一个对象时，会自动初始化一组属性。（也就是说，你定义一个 var a = “Hello”，那么 a 本身就会有 a.substring 这个方法，以及 a.length 这个属性，以及其它；如果你定义了一个对象，var a = {}，那么 a 就会自动有 a.hasOwnProperty 及 a.constructor 等属性和方法。）而后，这些属性还可以被增减。属性的值可以是任意类型，包括具有复杂数据结构的对象。属性使用键来标识，它的键值可以是一个字符串或者符号值（Symbol）。<br>ECMAScript 定义的对象中有两种属性：数据属性和访问器属性。</p>
-<h4 id="数据属性"><a href="#数据属性" class="headerlink" title="数据属性"></a>数据属性</h4><p>数据属性是键值对，并且每个数据属性拥有下列特性:<br><strong>数据属性的特性(Attributes of a data property)</strong><br>| 特性 | 数据类型 | 描述 | 默认值 |<br>| — | — | — | — |<br>| [[Value]] | 任何 Javascript 类型 | 包含这个属性的数据值。 | undefined |<br>| [[Writable]] | Boolean | 如果该值为  false，则该属性的 [[Value]] 特性 不能被改变。 | false |<br>| [[Enumerable]] | Boolean | 如果该值为  true，则该属性可以用  <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...in">for…in</a>循环来枚举。 | false |<br>| [[Configurable]] | Boolean | 如果该值为  false，则该属性不能被删除，并且 除了 [[Value]] 和 [[Writable]] 以外的特性都不能被改变。 | false |</p>
-<h4 id="访问器属性"><a href="#访问器属性" class="headerlink" title="访问器属性"></a>访问器属性</h4><p>访问器属性有一个或两个访问器函数  (get 和 set) 来存取数值，并且有以下特性:<br>| 特性 | 类型 | 描述 | 默认值 |<br>| — | — | — | — |<br>| [[Get]] | 函数对象或者 undefined | 该函数使用一个空的参数列表，能够在有权访问的情况下读取属性值。另见  <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/get">get</a>。 | undefined |<br>| [[Set]] | 函数对象或者 undefined | 该函数有一个参数，用来写入属性值，另见  <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/set">set</a>。 | undefined |<br>| [[Enumerable]] | Boolean | 如果该值为  true，则该属性可以用<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...in">for…in</a>  循环来枚举。 | false |<br>| [[Configurable]] | Boolean | 如果该值为  false，则该属性不能被删除，并且不能被转变成一个数据属性。 | false |</p>
-<h3 id="“标准的”-对象-和函数"><a href="#“标准的”-对象-和函数" class="headerlink" title="“标准的” 对象, 和函数"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#%E6%A0%87%E5%87%86%E7%9A%84_%E5%AF%B9%E8%B1%A1_%E5%92%8C%E5%87%BD%E6%95%B0">“标准的” 对象, 和函数</a></h3><p>一个 Javascript 对象就是键和值之间的映射.。键是一个字符串（或者<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Symbol">Symbol</a>） ，值可以是任意类型的值。  这使得对象非常符合  <a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Hash_table">哈希表</a>。<br>函数是一个附带可被调用功能的常规对象。</p>
-<h3 id="日期"><a href="#日期" class="headerlink" title="日期"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#%E6%97%A5%E6%9C%9F">日期</a></h3><p>当你想要显示日期时，毋庸置疑，使用内建的<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/JavaScript/Reference/Global_Objects/Date">Date</a>对象。</p>
-<h3 id="有序集-数组和类型数组"><a href="#有序集-数组和类型数组" class="headerlink" title="有序集: 数组和类型数组"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#%E6%9C%89%E5%BA%8F%E9%9B%86_%E6%95%B0%E7%BB%84%E5%92%8C%E7%B1%BB%E5%9E%8B%E6%95%B0%E7%BB%84">有序集: 数组和类型数组</a></h3><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array">数组</a>是一种使用整数作为键(integer-key-ed)属性和长度(length)属性之间关联的常规对象。此外，数组对象还继承了 Array.prototype 的一些操作数组的便捷方法。例如, <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf">indexOf</a> (搜索数组中的一个值) or <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/push">push</a> (向数组中添加一个元素)，等等。  这使得数组是表示列表或集合的最优选择。<br><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays">类型数组(Typed Arrays)</a>是 ECMAScript Edition 6 中新定义的 JavaScript 内建对象，提供了一个基本的二进制数据缓冲区的类数组视图。下面的表格能帮助你找到对等的 C 语言数据类型：</p>
-<h4 id="TypedArray-objects"><a href="#TypedArray-objects" class="headerlink" title="TypedArray objects"></a>TypedArray objects</h4><table>
-<thead>
-<tr>
-<th>Type</th>
-<th>Value Range</th>
-<th>Size in bytes</th>
-<th>Description</th>
-<th>Web IDL type</th>
-<th>Equivalent C type</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array">Int8Array</a></td>
-<td>-128to127</td>
-<td>1</td>
-<td>8-bit two’s complement signed integer</td>
-<td>byte</td>
-<td>int8_t</td>
-</tr>
-<tr>
-<td><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array">Uint8Array</a></td>
-<td>0to255</td>
-<td>1</td>
-<td>8-bit unsigned integer</td>
-<td>octet</td>
-<td>uint8_t</td>
-</tr>
-<tr>
-<td><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray">Uint8ClampedArray</a></td>
-<td>0to255</td>
-<td>1</td>
-<td>8-bit unsigned integer (clamped)</td>
-<td>octet</td>
-<td>uint8_t</td>
-</tr>
-<tr>
-<td><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array">Int16Array</a></td>
-<td>-32768to32767</td>
-<td>2</td>
-<td>16-bit two’s complement signed integer</td>
-<td>short</td>
-<td>int16_t</td>
-</tr>
-<tr>
-<td><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array">Uint16Array</a></td>
-<td>0to65535</td>
-<td>2</td>
-<td>16-bit unsigned integer</td>
-<td>unsigned short</td>
-<td>uint16_t</td>
-</tr>
-<tr>
-<td><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array">Int32Array</a></td>
-<td>-2147483648to2147483647</td>
-<td>4</td>
-<td>32-bit two’s complement signed integer</td>
-<td>long</td>
-<td>int32_t</td>
-</tr>
-<tr>
-<td><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array">Uint32Array</a></td>
-<td>0to4294967295</td>
-<td>4</td>
-<td>32-bit unsigned integer</td>
-<td>unsigned long</td>
-<td>uint32_t</td>
-</tr>
-<tr>
-<td><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array">Float32Array</a></td>
-<td>1.2×10-38to3.4×1038</td>
-<td>4</td>
-<td>32-bit IEEE floating point number (7 significant digits e.g.,1.234567)</td>
-<td>unrestricted float</td>
-<td>float</td>
-</tr>
-<tr>
-<td><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array">Float64Array</a></td>
-<td>5.0×10-324to1.8×10308</td>
-<td>8</td>
-<td>64-bit IEEE floating point number (16 significant digits e.g.,1.23456789012345)</td>
-<td>unrestricted double</td>
-<td>double</td>
-</tr>
-<tr>
-<td><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt64Array">BigInt64Array</a></td>
-<td>-263to263-1</td>
-<td>8</td>
-<td>64-bit two’s complement signed integer</td>
-<td>bigint</td>
-<td>int64_t (signed long long)</td>
-</tr>
-<tr>
-<td><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigUint64Array">BigUint64Array</a></td>
-<td>0to264-1</td>
-<td>8</td>
-<td>64-bit unsigned integer</td>
-<td>bigint</td>
-<td>uint64_t (unsigned long long)</td>
-</tr>
-</tbody></table>
-<h3 id="键控集-Maps-Sets-WeakMaps-WeakSets"><a href="#键控集-Maps-Sets-WeakMaps-WeakSets" class="headerlink" title="键控集: Maps, Sets, WeakMaps, WeakSets"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#%E9%94%AE%E6%8E%A7%E9%9B%86_maps_sets_weakmaps_weaksets">键控集: Maps, Sets, WeakMaps, WeakSets</a></h3><p>这些数据结构把对象的引用当作键，其在 ECMAScript 第 6 版中有介绍。当<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map">Map</a>和<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/WeakMap">WeakMap</a>把一个值和对象关联起来的时候，<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Set">Set</a>和<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/WeakSet">WeakSet</a>表示一组对象。 Map 和 WeakMaps 之间的差别在于，在前者中，对象键是可枚举的。这允许垃圾收集器优化后面的枚举(This allows garbage collection optimizations in the latter case)。<br>在纯 ECMAScript 5 下可以实现 Maps 和 Sets。然而，因为对象并不能进行比较（就对象“小于”示例来讲），所以查询必定是线性的。他们本地实现（包括 WeakMaps）查询所花费的时间可能是对数增长。<br>通常，可以通过直接在对象上设置属性或着使用 data-*属性，来绑定数据到 DOM 节点。然而缺陷是在任何的脚本里，数据都运行在同样的上下文中。Maps 和 WeakMaps 方便将数据私密的绑定到一个对象。</p>
-<h3 id="结构化数据-JSON"><a href="#结构化数据-JSON" class="headerlink" title="结构化数据: JSON"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#%E7%BB%93%E6%9E%84%E5%8C%96%E6%95%B0%E6%8D%AE_json">结构化数据: JSON</a></h3><p>JSON (JavaScript Object Notation) 是一种轻量级的数据交换格式，来源于 JavaScript 同时也被多种语言所使用。 JSON 用于构建通用的数据结构。参见<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Glossary/JSON">JSON</a>以及<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/JSON">JSON</a>了解更多。</p>
-<h3 id="标准库中更多的对象"><a href="#标准库中更多的对象" class="headerlink" title="标准库中更多的对象"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%AD%E6%9B%B4%E5%A4%9A%E7%9A%84%E5%AF%B9%E8%B1%A1">标准库中更多的对象</a></h3><p>JavaScript 有一个内置对象的标准库。请查看<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects">参考</a>来了解更多对象。</p>
-<h2 id="使用-typeof-操作符判断对象类型"><a href="#使用-typeof-操作符判断对象类型" class="headerlink" title="使用 typeof 操作符判断对象类型"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures#%E4%BD%BF%E7%94%A8_typeof_%E6%93%8D%E4%BD%9C%E7%AC%A6%E5%88%A4%E6%96%AD%E5%AF%B9%E8%B1%A1%E7%B1%BB%E5%9E%8B">使用 typeof 操作符判断对象类型</a></h2><p>typeof 运算符可以帮助你查询变量的类型。要了解更多细节和注意事项请阅读<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof">参考页</a>。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1702,7 +1421,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-count">32</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

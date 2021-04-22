@@ -146,6 +146,313 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/16/yuque/%E9%98%B2%E6%8A%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/16/yuque/%E9%98%B2%E6%8A%96/" class="post-title-link" itemprop="url">防抖</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-16 00:20:07" itemprop="dateCreated datePublished" datetime="2021-04-16T00:20:07+08:00">2021-04-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 13:45:45" itemprop="dateModified" datetime="2021-04-22T13:45:45+08:00">2021-04-22</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>防抖<br>作用：在多次触发事件的情况下，只执行一次</p>
+<h2 id="第一版"><a href="#第一版" class="headerlink" title="第一版"></a>第一版</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> debounce = <span class="function"><span class="keyword">function</span> (<span class="params">func</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> timer;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (timer) &#123;</span><br><span class="line">      <span class="built_in">clearTimeout</span>(timer);</span><br><span class="line">    &#125;</span><br><span class="line">    timer = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// func()</span></span><br><span class="line">      <span class="built_in">console</span>.log(<span class="built_in">this</span>);</span><br><span class="line">      func.apply(<span class="built_in">this</span>);</span><br><span class="line">    &#125;, <span class="number">1000</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> fun1 = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="built_in">this</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> debounceTask = debounce(fun1);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> input = <span class="built_in">document</span>.getElementById(<span class="string">&quot;input&quot;</span>);</span><br><span class="line">input.addEventListener(<span class="string">&quot;keydown&quot;</span>, debounceTask);</span><br></pre></td></tr></table></figure>
+
+<p>思路<br>首先定义一个变量   用于接收创建定时器的 id，方便清除定时器<br>在设置定时器前，先判断是否之前创建的定时器存在，如果存在就清除</p>
+<p><strong>问题</strong><br><strong>没有绑定 this</strong><br><strong>没有使用 apply 之前，this 默认指向 window</strong><br><strong>使用 apply 之后，this 就会指向函数执行的环境</strong></p>
+<h2 id="第二版"><a href="#第二版" class="headerlink" title="第二版"></a>第二版</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> debounce = <span class="function"><span class="keyword">function</span> (<span class="params">func, wait</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> timer;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">...args</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (timer) &#123;</span><br><span class="line">      <span class="built_in">clearTimeout</span>(timer);</span><br><span class="line">    &#125;</span><br><span class="line">    timer = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      func.apply(<span class="built_in">this</span>, args);</span><br><span class="line">    &#125;, wait);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>优化<br>两种情况： 1.用户在搜索问题时连续输入内容，在输入最后一个字符时执行函数，函数执行时间间隔小于指定的时间。 2.用户在 star 时，需要第一时间看到反馈，此函数需要立即执行，反馈情况给用户看,下一次调用时间间隔必须大于 wait 才会触发</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> button = <span class="built_in">document</span>.getElementById(<span class="string">&quot;button&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> start = <span class="built_in">document</span>.getElementById(<span class="string">&quot;star&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> divstatue = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (start.style.background == <span class="string">&quot;red&quot;</span>) &#123;</span><br><span class="line">    start.style.background = <span class="string">&quot;blue&quot;</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    start.style.background = <span class="string">&quot;red&quot;</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> debounce2 = <span class="function"><span class="keyword">function</span> (<span class="params">func, wait</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> context, arg;</span><br><span class="line">  <span class="keyword">var</span> timer;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> later = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    timer = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      timer = <span class="literal">null</span>;</span><br><span class="line">      func.apply(context, timer);</span><br><span class="line">    &#125;, wait);</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">...args</span>) </span>&#123;</span><br><span class="line">    context = <span class="built_in">this</span>;</span><br><span class="line">    arg = args;</span><br><span class="line">    <span class="keyword">if</span> (!timer) &#123;</span><br><span class="line">      func.apply(context, arg);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      later();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> debounceTask2 = deboncetest3(divstatue, <span class="number">1000</span>);</span><br><span class="line">button.addEventListener(<span class="string">&quot;click&quot;</span>, debounceTask2);</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/16/yuque/%E5%8E%9F%E5%9E%8B%E9%93%BE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/16/yuque/%E5%8E%9F%E5%9E%8B%E9%93%BE/" class="post-title-link" itemprop="url">原型链</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-16 00:10:24" itemprop="dateCreated datePublished" datetime="2021-04-16T00:10:24+08:00">2021-04-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 13:45:45" itemprop="dateModified" datetime="2021-04-22T13:45:45+08:00">2021-04-22</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618817664656-955abf7c-5632-4f6a-b591-e82db708c64a.png#clientId=uccf41bcf-8151-4&from=paste&height=458&id=ud8de21ca&margin=%5Bobject%20Object%5D&originHeight=590&originWidth=488&originalType=url&status=done&style=none&taskId=ucf3ff63e-39fc-4c78-b538-57a09e40ecf&width=379"></p>
+<p>根据上图，原型总结下来的概念为：</p>
+<ul>
+<li>所有对象都有一个属性<strong>proto</strong>指向一个对象，也就是原型</li>
+<li>每个对象的原型都可以通过 constructor 找到构造函数，构造函数也可以通过 prototype 找到原型</li>
+<li>所有函数都可以通过<strong>proto</strong>找到 Function 对象</li>
+<li>所有对象都可以通过<strong>proto</strong>找到 Object 对象</li>
+<li>对象之间通过<strong>proto</strong>连接起来，这样称之为原型链。当前对象上不存在的属性可以通过原型链一层层往上查找，直到顶层 Object 对象，再往上就是 null 了</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/15/yuque/%E6%B7%B1%E6%8B%B7%E8%B4%9D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/15/yuque/%E6%B7%B1%E6%8B%B7%E8%B4%9D/" class="post-title-link" itemprop="url">深拷贝</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-15 22:54:16" itemprop="dateCreated datePublished" datetime="2021-04-15T22:54:16+08:00">2021-04-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 13:45:45" itemprop="dateModified" datetime="2021-04-22T13:45:45+08:00">2021-04-22</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="简易版"><a href="#简易版" class="headerlink" title="简易版"></a>简易版</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">deepCopy</span>(<span class="params">target</span>) </span>&#123;</span><br><span class="line">  <span class="comment">/*类型检查*/</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> target === <span class="string">&quot;object&quot;</span> &amp;&amp; target != <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> cloneTarge = <span class="built_in">Array</span>.isArray(target) ? [] : &#123;&#125;;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> prop <span class="keyword">in</span> target) &#123;</span><br><span class="line">      <span class="keyword">if</span> (target.hasOwnProperty(prop)) &#123;</span><br><span class="line">        cloneTarge[prop] = target[prop];</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> cloneTarge;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> target;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="三个问题"><a href="#三个问题" class="headerlink" title="三个问题"></a>三个问题</h2><h3 id="1。解决循环引用"><a href="#1。解决循环引用" class="headerlink" title="1。解决循环引用"></a>1。解决循环引用</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">  val: <span class="number">100</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">obj.target = obj;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618498684598-d2c4c952-0587-40d6-8833-6ecb59e6ff8c.png#clientId=uf9685104-9dea-4&from=paste&height=267&id=u506cc515&margin=%5Bobject%20Object%5D&originHeight=267&originWidth=464&originalType=binary&size=13111&status=done&style=none&taskId=ub3498272-98b7-408c-b5be-f28f5ebeb87&width=464"><br>这就是循环引用<br>创建一个 Map。记录下已经拷贝过的对象，如果说已经拷贝过，那直接返回它行了。</p>
+<h4 id="map-和-weakmap"><a href="#map-和-weakmap" class="headerlink" title="map 和 weakmap"></a>map 和 weakmap</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">map</span><br><span class="line">ES6 提供了 Map 数据结构。它类似于对象，也是键值对的集合，但是“键”的范围不限于字符串，各种类型的值（包括对象）都可以当作键。</span><br><span class="line">也就是说，Object 结构提供了“字符串—值”的对应，Map 结构提供了“值—值”的对应，是一种更完善的 Hash 结构实现。</span><br><span class="line">如果你需要“键值对”的数据结构，Map 比 Object 更合适。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> m = <span class="keyword">new</span> <span class="built_in">Map</span>();</span><br><span class="line"><span class="keyword">const</span> o = &#123; <span class="attr">p</span>: <span class="string">&quot;hello world&quot;</span> &#125;;</span><br><span class="line">m.set(o, <span class="string">&quot;content&quot;</span>);</span><br><span class="line">m.get(o); <span class="comment">//content</span></span><br><span class="line">m.has(o); <span class="comment">//true</span></span><br><span class="line">m.delete(o);</span><br><span class="line">m.has(o); <span class="comment">//false</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">	size属性返回 Map 结构的成员总数</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">m.set(<span class="string">&quot;1&quot;</span>, <span class="string">&quot;2&quot;</span>);</span><br><span class="line">m.set(<span class="string">&quot;3&quot;</span>, <span class="string">&quot;4&quot;</span>);</span><br><span class="line"><span class="built_in">console</span>.log(m.size);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">Map.prototype.set(key, value)</span><br><span class="line">set方法设置键名key对应的键值为value，然后返回整个 Map 结构。如果key已经有值，则键值会被更新，否则就新生成该键</span><br><span class="line">set方法返回的是当前的Map对象，因此可以采用链式写法。</span><br><span class="line">m.set().set().set()</span><br><span class="line"></span><br><span class="line">Map.prototype.get(key)</span><br><span class="line">get方法读取key对应的键值，如果找不到key，返回undefined。</span><br><span class="line"></span><br><span class="line">Map.prototype.has(key)</span><br><span class="line">has方法返回一个布尔值，表示某个键是否在当前 Map 对象之中。</span><br><span class="line"></span><br><span class="line">Map.prototype.delete(key)</span><br><span class="line">delete方法删除某个键，返回true。如果删除失败，返回false。</span><br><span class="line"></span><br><span class="line">Map.prototype.clear()</span><br><span class="line">clear方法清除所有成员，没有返回值。</span><br><span class="line"></span><br><span class="line">Map.prototype.keys()：返回键名的遍历器。</span><br><span class="line">Map.prototype.values()：返回键值的遍历器。</span><br><span class="line">Map.prototype.entries()：返回所有成员的遍历器。</span><br><span class="line">Map.prototype.forEach()：遍历 Map 的所有成员</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*keys*/</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> key <span class="keyword">of</span> m.keys()) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(key);</span><br><span class="line">  <span class="comment">/*</span></span><br><span class="line"><span class="comment">      1</span></span><br><span class="line"><span class="comment">      3</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*values*/</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> value <span class="keyword">of</span> m.values()) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(value);</span><br><span class="line">  <span class="comment">/*</span></span><br><span class="line"><span class="comment">      2</span></span><br><span class="line"><span class="comment">    	4</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*entries*/</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> item <span class="keyword">of</span> m.entries()) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(item[<span class="number">0</span>], item[<span class="number">1</span>]);</span><br><span class="line">  <span class="comment">/*</span></span><br><span class="line"><span class="comment">      1 2</span></span><br><span class="line"><span class="comment">      3 4</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*foreach*/</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> [key, value] <span class="keyword">of</span> m) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(key, value);</span><br><span class="line">  <span class="comment">/*</span></span><br><span class="line"><span class="comment">      1 2</span></span><br><span class="line"><span class="comment">      3 4</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">weakmap</span><br><span class="line">WeakMap结构与Map结构类似，也是用于生成键值对的集合。</span><br><span class="line">WeakMap与Map的区别有两点。</span><br><span class="line"></span><br><span class="line">首先，WeakMap只接受对象作为键名（null除外），不接受其他类型的值作为键名。</span><br><span class="line">WeakMap的键名所指向的对象，不计入垃圾回收机制。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// WeakMap 也可以接受一个数组，</span></span><br><span class="line"><span class="comment">// 作为构造函数的参数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> k1 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"><span class="keyword">const</span> k2 = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];</span><br><span class="line"><span class="keyword">const</span> wm2 = <span class="keyword">new</span> <span class="built_in">WeakMap</span>([</span><br><span class="line">  [k1, <span class="string">&quot;foo&quot;</span>],</span><br><span class="line">  [k2, <span class="string">&quot;bar&quot;</span>],</span><br><span class="line">]);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">symbol</span></span><br><span class="line"><span class="comment">Symbol，表示独一无二的值</span></span><br><span class="line"><span class="comment">Symbol函数前不能使用new命令，否则会报错。这是因为生成的 Symbol 是一个原始类型的值，不是对象</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> obj2 = &#123;&#125;;</span><br><span class="line"><span class="keyword">var</span> s1 = <span class="built_in">Symbol</span>(<span class="string">&quot;a&quot;</span>);</span><br><span class="line">obj2[s1] = <span class="string">&quot;hello&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Object.getOwnPropertySymbols()</span></span><br><span class="line"><span class="comment">可以获取指定对象的所有 Symbol 属性名。该方法返回一个数组，成员是当前对象的所有用作属性名的 Symbol 值。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.getOwnPropertySymbols(obj2);</span><br><span class="line"><span class="comment">//[Symbol(a)]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">hasOwnProperty() 方法会返回一个布尔值，指示对象自身属性中是否具有指定的属性（也就是，是否有指定的键）。</span></span><br><span class="line"><span class="comment">obj.hasOwnProperty(prop)</span></span><br><span class="line"><span class="comment">prop</span></span><br><span class="line"><span class="comment">要检测的属性的 String 字符串形式表示的名称，或者 Symbol。</span></span><br><span class="line"><span class="comment">返回值</span></span><br><span class="line"><span class="comment">用来判断某个对象是否含有指定的属性的布尔值 Boolean。</span></span><br><span class="line"><span class="comment">使用 hasOwnProperty 作为属性名</span></span><br><span class="line"><span class="comment">JavaScript 并没有保护 hasOwnProperty 这个属性名，因此，当某个对象可能自有一个占用该属性名的属性时，</span></span><br><span class="line"><span class="comment">就需要使用外部的 hasOwnProperty 获得正确的结果：</span></span><br><span class="line"><span class="comment">// 也可以使用 Object 原型上的 hasOwnProperty 属性</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> foo = &#123;</span><br><span class="line">  hasOwnProperty: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;,</span><br><span class="line">  bar: <span class="string">&quot;Here be dragons&quot;</span>,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">Object</span>.prototype.hasOwnProperty.call(foo, <span class="string">&quot;bar&quot;</span>); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>利用上述知识，可以做出一个深拷贝的函数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> deepcopy2 = <span class="function">(<span class="params">target, hash = <span class="keyword">new</span> <span class="built_in">WeakMap</span>()</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">//对于参数处理</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> target !== <span class="string">&quot;object&quot;</span> || target === <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> target;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (hash.get(target)) &#123;</span><br><span class="line">    <span class="keyword">return</span> hash.get(target);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> clonetarget = <span class="built_in">Array</span>.isArray(target) ? [] : &#123;&#125;;</span><br><span class="line">  hash.set(target, clonetarget);</span><br><span class="line"></span><br><span class="line">  <span class="comment">//针对symbol属性</span></span><br><span class="line">  <span class="keyword">const</span> symKeys = <span class="built_in">Object</span>.getOwnPropertySymbols(target);</span><br><span class="line">  <span class="keyword">if</span> (symKeys.length) &#123;</span><br><span class="line">    symKeys.forEach(<span class="function">(<span class="params">symKey</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">typeof</span> target[symKey] === <span class="string">&quot;object&quot;</span> &amp;&amp; target[symKey] !== <span class="literal">null</span>) &#123;</span><br><span class="line">        clonetarget = deepcopy2(target[symKey]);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        clonetarget[symKey] = target[symKey];</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> i <span class="keyword">in</span> target) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">Object</span>.prototype.hasOwnProperty.call(target, i)) &#123;</span><br><span class="line">      clonetarget[i] =</span><br><span class="line">        <span class="keyword">typeof</span> target[i] === <span class="string">&quot;object&quot;</span> &amp;&amp; target[i] !== <span class="literal">null</span></span><br><span class="line">          ? deepcopy2(target[i], hash)</span><br><span class="line">          : target[i];</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> clonetarget;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;*</span><br><span class="line">分析</span><br><span class="line">首先先判断target是不是对象，如果不是直接返回target 因为基本类型数据拷贝时互相不影响</span><br><span class="line">之后设置一个weakmap，用来缓存数据，因为weakmap的键名所指向的对象不计入垃圾回收机制</span><br><span class="line">判断一下hash有没有target所指向的值，因为target是键名，有就返回，可以避免重复遍历</span><br><span class="line">创建一个变量，用来传进来的symbol属性做判断，获取target的所有属性名</span><br><span class="line">如果属性名不为空，那么就遍历</span><br><span class="line">如果对象的键值不为object或者array这样的对象，那么就直接传值</span><br><span class="line">如果是object或者array这样的对象，那么就递归一次，设置clonetarget[键] &#x3D; target[键]，这样将target的键值赋值给clonetarget,之后返回clonetarget</span><br><span class="line">递归一次之后，在将clonetarget[键] &#x3D; target[键]，这样如果target键值有Object或者array这样的对象的话，那么就用递归，将键值赋给clonetarget</span><br><span class="line">剩下的思路也是一样的</span><br><span class="line">*&#x2F;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/15/yuque/%E6%B5%85%E6%8B%B7%E8%B4%9D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/15/yuque/%E6%B5%85%E6%8B%B7%E8%B4%9D/" class="post-title-link" itemprop="url">浅拷贝</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-15 22:50:15" itemprop="dateCreated datePublished" datetime="2021-04-15T22:50:15+08:00">2021-04-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 13:45:45" itemprop="dateModified" datetime="2021-04-22T13:45:45+08:00">2021-04-22</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>拷贝对象后，修改对象的值不影响另一方<br>浅拷贝只能拷贝一层对象。如果有对象的嵌套，那么浅拷贝将无能为力<br>深拷贝解决无限层的对象嵌套问题，实现彻底的拷贝</p>
+<h2 id="浅拷贝的实现方式"><a href="#浅拷贝的实现方式" class="headerlink" title="浅拷贝的实现方式"></a>浅拷贝的实现方式</h2><h3 id="1-Object-assign"><a href="#1-Object-assign" class="headerlink" title="1.Object.assign"></a>1.Object.assign</h3><h3 id="Object-assign-拷贝的是对象的属性的引用，而不是对象本身"><a href="#Object-assign-拷贝的是对象的属性的引用，而不是对象本身" class="headerlink" title="Object.assign 拷贝的是对象的属性的引用，而不是对象本身"></a>Object.assign 拷贝的是对象的属性的引用，而不是对象本身</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj1 = &#123; <span class="attr">a</span>: <span class="number">1</span>, <span class="attr">b</span>: <span class="number">2</span>, <span class="attr">c</span>: <span class="number">3</span> &#125;;</span><br><span class="line"><span class="keyword">var</span> obj2 = &#123; <span class="attr">a</span>: <span class="number">2</span>, <span class="attr">b</span>: <span class="number">3</span> &#125;;</span><br><span class="line"><span class="keyword">var</span> copy = <span class="built_in">Object</span>.assign(obj1, obj2);</span><br><span class="line"><span class="built_in">console</span>.log(copy);</span><br><span class="line"><span class="comment">//&#123;a: 2, b: 3, c: 3&#125;</span></span><br><span class="line">obj1.a = <span class="number">4</span>;</span><br><span class="line"><span class="built_in">console</span>.log(obj2);</span><br><span class="line"><span class="comment">//&#123;a: 2, b: 3&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> obj3 = &#123;</span><br><span class="line">  a: &#123;</span><br><span class="line">    b: <span class="string">&quot;1&quot;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  c: &#123;</span><br><span class="line">    d: <span class="string">&quot;2&quot;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> obj4 = &#123;&#125;;</span><br><span class="line"><span class="keyword">var</span> copy2 = <span class="built_in">Object</span>.assign(obj4, obj3);</span><br><span class="line"><span class="built_in">console</span>.log(copy2);</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">  a: &#123;b: 2&#125;</span></span><br><span class="line"><span class="comment">  c: &#123;d: &quot;2&quot;&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">obj4.a.b = <span class="number">2</span>;</span><br><span class="line"><span class="built_in">console</span>.log(obj3.a.b); <span class="comment">//2</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-concat-浅拷贝数组"><a href="#2-concat-浅拷贝数组" class="headerlink" title="2.concat 浅拷贝数组"></a>2.concat 浅拷贝数组</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [<span class="number">1</span>, <span class="number">2</span>];</span><br><span class="line"><span class="keyword">var</span> arr2 = arr.concat();</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(arr2); <span class="comment">//[1,2]</span></span><br><span class="line">arr2.push(<span class="number">3</span>); <span class="comment">//[1,2,3]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> arr3 = [<span class="number">1</span>, [<span class="number">2</span>, <span class="number">3</span>]];</span><br><span class="line"><span class="keyword">var</span> arr4 = arr3.concat();</span><br><span class="line"></span><br><span class="line">arr3[<span class="number">1</span>][<span class="number">1</span>] = <span class="number">4</span>;</span><br><span class="line"><span class="built_in">console</span>.log(arr4[<span class="number">1</span>][<span class="number">1</span>]); <span class="comment">//4</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-slice"><a href="#3-slice" class="headerlink" title="3.slice"></a>3.slice</h3><p>更 concat 一样</p>
+<h3 id="4-…展开运算符"><a href="#4-…展开运算符" class="headerlink" title="4. …展开运算符"></a>4. …展开运算符</h3><p>更 slice 是一样的效果</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr5 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"><span class="keyword">var</span> arr6 = [...arr5];</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-手动实现"><a href="#5-手动实现" class="headerlink" title="5.手动实现"></a>5.手动实现</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr7 = []; <span class="comment">//空数组</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> shadowClone = <span class="function"><span class="keyword">function</span> (<span class="params">target, sources</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> prop <span class="keyword">in</span> sources) &#123;</span><br><span class="line">    <span class="keyword">if</span> (target[prop] != sources[prop]) &#123;</span><br><span class="line">      target[prop] = sources[prop];</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> obj5 = &#123;&#125;;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/15/yuque/%E7%BB%A7%E6%89%BF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -177,7 +484,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-21 13:19:52" itemprop="dateModified" datetime="2021-04-21T13:19:52+08:00">2021-04-21</time>
+                <time title="修改时间：2021-04-22 13:45:45" itemprop="dateModified" datetime="2021-04-22T13:45:45+08:00">2021-04-22</time>
               </span>
 
           
@@ -254,7 +561,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-21 13:19:52" itemprop="dateModified" datetime="2021-04-21T13:19:52+08:00">2021-04-21</time>
+                <time title="修改时间：2021-04-22 13:45:45" itemprop="dateModified" datetime="2021-04-22T13:45:45+08:00">2021-04-22</time>
               </span>
 
           
@@ -321,7 +628,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-21 13:19:52" itemprop="dateModified" datetime="2021-04-21T13:19:52+08:00">2021-04-21</time>
+                <time title="修改时间：2021-04-22 13:45:45" itemprop="dateModified" datetime="2021-04-22T13:45:45+08:00">2021-04-22</time>
               </span>
 
           
@@ -386,7 +693,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-21 13:19:52" itemprop="dateModified" datetime="2021-04-21T13:19:52+08:00">2021-04-21</time>
+                <time title="修改时间：2021-04-22 13:45:45" itemprop="dateModified" datetime="2021-04-22T13:45:45+08:00">2021-04-22</time>
               </span>
 
           
@@ -451,7 +758,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-21 13:19:52" itemprop="dateModified" datetime="2021-04-21T13:19:52+08:00">2021-04-21</time>
+                <time title="修改时间：2021-04-22 13:45:45" itemprop="dateModified" datetime="2021-04-22T13:45:45+08:00">2021-04-22</time>
               </span>
 
           
@@ -516,7 +823,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-21 13:19:52" itemprop="dateModified" datetime="2021-04-21T13:19:52+08:00">2021-04-21</time>
+                <time title="修改时间：2021-04-22 13:45:45" itemprop="dateModified" datetime="2021-04-22T13:45:45+08:00">2021-04-22</time>
               </span>
 
           
@@ -546,140 +853,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/13/yuque/bind/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Adam Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Adam">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/13/yuque/bind/" class="post-title-link" itemprop="url">bind</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-13 19:29:35" itemprop="dateCreated datePublished" datetime="2021-04-13T19:29:35+08:00">2021-04-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-21 13:19:52" itemprop="dateModified" datetime="2021-04-21T13:19:52+08:00">2021-04-21</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Function</span>.prototype.bind5 = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> self = <span class="built_in">this</span>;</span><br><span class="line">  <span class="keyword">var</span> arg = [...arguments].slice(<span class="number">1</span>);</span><br><span class="line">  <span class="keyword">var</span> fNop = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> fbound = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> args = [...arguments];</span><br><span class="line">    arg = arg.concat(args);</span><br><span class="line">    self.apply(<span class="built_in">this</span> <span class="keyword">instanceof</span> self ? <span class="built_in">this</span> : context, arg);</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//做出修改</span></span><br><span class="line">  fNop.prototype = <span class="built_in">this</span>.prototype;</span><br><span class="line">  fbound.prototype = <span class="keyword">new</span> fNop();</span><br><span class="line">  <span class="keyword">return</span> fbound;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/13/yuque/%E5%A4%A7%E6%95%B0%E7%9B%B8%E5%8A%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Adam Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Adam">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/13/yuque/%E5%A4%A7%E6%95%B0%E7%9B%B8%E5%8A%A0/" class="post-title-link" itemprop="url">大数相加</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-13 16:13:16" itemprop="dateCreated datePublished" datetime="2021-04-13T16:13:16+08:00">2021-04-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-21 13:19:52" itemprop="dateModified" datetime="2021-04-21T13:19:52+08:00">2021-04-21</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>123</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -745,7 +922,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-count">32</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
