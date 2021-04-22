@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="使 div 水平垂直居中1. flex 布局实现 （元素已知宽度）效果图：  内部 div 要有宽度 123456789101112131415161718192021CSS 代码:&lt;style&gt;    .box&amp;#123;        width: 300px;        height: 300px;        background-color: #ccc;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="居中">
+<meta property="og:url" content="http://example.com/2021/04/23/yuque/%E5%B1%85%E4%B8%AD/index.html">
+<meta property="og:site_name" content="Adam">
+<meta property="og:description" content="使 div 水平垂直居中1. flex 布局实现 （元素已知宽度）效果图：  内部 div 要有宽度 123456789101112131415161718192021CSS 代码:&lt;style&gt;    .box&amp;#123;        width: 300px;        height: 300px;        background-color: #ccc;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2021/04/23/yuque/%E5%B1%85%E4%B8%AD/1.png#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/23/yuque/%E5%B1%85%E4%B8%AD/2.png#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/23/yuque/%E5%B1%85%E4%B8%AD/3.png#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/23/yuque/%E5%B1%85%E4%B8%AD/4.png#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/23/yuque/%E5%B1%85%E4%B8%AD/5.png#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/23/yuque/%E5%B1%85%E4%B8%AD/6.png#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/23/yuque/%E5%B1%85%E4%B8%AD/7.png#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/23/yuque/%E5%B1%85%E4%B8%AD/8.png#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/23/yuque/%E5%B1%85%E4%B8%AD/9.png#alt=img">
+<meta property="article:published_time" content="2021-04-22T16:50:15.000Z">
+<meta property="article:modified_time" content="2021-04-22T16:51:14.750Z">
+<meta property="article:author" content="Adam Blog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/04/23/yuque/%E5%B1%85%E4%B8%AD/1.png#alt=img">
+
+<link rel="canonical" href="http://example.com/2021/04/23/yuque/%E5%B1%85%E4%B8%AD/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>居中 | Adam</title>
+  <meta name="referrer" content="no-referrer" />
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Adam</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/23/yuque/%E5%B1%85%E4%B8%AD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          居中
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-23 00:50:15 / 修改时间：00:51:14" itemprop="dateCreated datePublished" datetime="2021-04-23T00:50:15+08:00">2021-04-23</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="使-div-水平垂直居中"><a href="#使-div-水平垂直居中" class="headerlink" title="使 div 水平垂直居中"></a>使 div 水平垂直居中</h2><h3 id="1-flex-布局实现-（元素已知宽度）"><a href="#1-flex-布局实现-（元素已知宽度）" class="headerlink" title="1. flex 布局实现 （元素已知宽度）"></a>1. flex 布局实现 （元素已知宽度）</h3><p>效果图：</p>
+<p><img src="1.png#alt=img"></p>
+<p>内部 div 要有宽度</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">CSS 代码:</span><br><span class="line">&lt;style&gt;</span><br><span class="line">    .box&#123;</span><br><span class="line">        width: 300px;</span><br><span class="line">        height: 300px;</span><br><span class="line">        background-color: #ccc;</span><br><span class="line">        display: flex;</span><br><span class="line">        display: -webkit-flex;</span><br><span class="line">        justify-content: center;</span><br><span class="line">        align-items: center;</span><br><span class="line">    &#125;</span><br><span class="line">    .box .a&#123;</span><br><span class="line">        width: 100px;</span><br><span class="line">        height: 100px;</span><br><span class="line">        background-color: blue;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br><span class="line">HTML 代码：</span><br><span class="line">&lt;div class&#x3D;&quot;box&quot;&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;a&quot;&gt;&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-position-（元素已知宽度）"><a href="#2-position-（元素已知宽度）" class="headerlink" title="2. position （元素已知宽度）"></a>2. position （元素已知宽度）</h3><p>父元素设置为：position: relative;</p>
+<p>子元素设置为：position: absolute;</p>
+<p>距上 50%，据左 50%，然后减去元素自身宽度的一半距离就可以实现</p>
+<p>效果图：</p>
+<p><img src="2.png#alt=img"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">CSS代码：</span><br><span class="line">&lt;style&gt;</span><br><span class="line">    .box&#123;</span><br><span class="line">        width: 300px;</span><br><span class="line">        height: 300px;</span><br><span class="line">        background-color: red;</span><br><span class="line">        position: relative;</span><br><span class="line">    &#125;</span><br><span class="line">    .box .a&#123;</span><br><span class="line">        width: 100px;</span><br><span class="line">        height: 100px;</span><br><span class="line">        background-color: blue;</span><br><span class="line">        position: absolute;</span><br><span class="line">        left: 50%;</span><br><span class="line">        top: 50%;</span><br><span class="line">        margin: -50px 0 0 -50px;</span><br><span class="line">    &#125;</span><br><span class="line">    &lt;&#x2F;style&gt;</span><br><span class="line"></span><br><span class="line">HTML 代码：</span><br><span class="line">&lt;div class&#x3D;&quot;box&quot;&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;a&quot;&gt;love&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-position-transform-（元素未知宽度）"><a href="#3-position-transform-（元素未知宽度）" class="headerlink" title="3. position transform （元素未知宽度）"></a>3. position transform （元素未知宽度）</h3><p>如果元素未知宽度，只需将上面例子中的 <code>margin: -50px 0 0 -50px;</code>替换为：**<code>transform: translate(-50%,-50%);</code>**</p>
+<p>效果图：</p>
+<p><img src="3.png#alt=img"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">CSS 代码：</span><br><span class="line">&lt;style&gt;</span><br><span class="line">    .box&#123;</span><br><span class="line">        width: 300px;</span><br><span class="line">        height: 300px;</span><br><span class="line">        background-color: red;</span><br><span class="line">        position: relative;</span><br><span class="line">    &#125;</span><br><span class="line">    .box .a&#123;</span><br><span class="line">        background-color: blue;</span><br><span class="line">        position: absolute;</span><br><span class="line">        top: 50%;</span><br><span class="line">        left: 50%;</span><br><span class="line">        transform: translate(-50%, -50%);</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-position（元素已知宽度）（left，right，top，bottom-为-0，maigin：auto-）"><a href="#4-position（元素已知宽度）（left，right，top，bottom-为-0，maigin：auto-）" class="headerlink" title="4. position（元素已知宽度）（left，right，top，bottom 为 0，maigin：auto ）"></a>4. position（元素已知宽度）（left，right，top，bottom 为 0，maigin：auto ）</h3><p>效果图：</p>
+<p><img src="4.png#alt=img"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">CSS 代码：</span><br><span class="line">&lt;style&gt;</span><br><span class="line">    .box&#123;</span><br><span class="line">        width: 300px;</span><br><span class="line">        height: 300px;</span><br><span class="line">        background-color: red;</span><br><span class="line">        position: relative;</span><br><span class="line">    &#125;</span><br><span class="line">    .box .a&#123;</span><br><span class="line">        width: 100px;</span><br><span class="line">        height: 100px;</span><br><span class="line">        background-color: blue;</span><br><span class="line">        position: absolute;</span><br><span class="line">        top: 0;</span><br><span class="line">        bottom: 0;</span><br><span class="line">        left: 0;</span><br><span class="line">        right: 0;</span><br><span class="line">        margin: auto;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br><span class="line">HTML 代码：</span><br><span class="line"> &lt;div class&#x3D;&quot;box&quot;&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;a&quot;&gt;love&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="★-第四种情况方案中，如果子元素不设置宽度和高度，将会铺满整个父级（应用：模态框）"><a href="#★-第四种情况方案中，如果子元素不设置宽度和高度，将会铺满整个父级（应用：模态框）" class="headerlink" title="★ 第四种情况方案中，如果子元素不设置宽度和高度，将会铺满整个父级（应用：模态框）"></a>★ 第四种情况方案中，如果子元素不设置宽度和高度，将会铺满整个父级（应用：模态框）</h3><p>效果图：</p>
+<p><img src="5.png#alt=img"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">CSS 代码：</span><br><span class="line">&lt;style&gt;</span><br><span class="line">    .box&#123;</span><br><span class="line">        width: 300px;</span><br><span class="line">        height: 300px;</span><br><span class="line">        background-color: red;</span><br><span class="line">        position: relative;</span><br><span class="line">    &#125;</span><br><span class="line">    .box .a&#123;</span><br><span class="line">        &#x2F;* 如果不设置宽高，将铺满整个父级*&#x2F;</span><br><span class="line">        background-color: pink;</span><br><span class="line">        position: absolute;</span><br><span class="line">        left: 0;</span><br><span class="line">        right: 0;</span><br><span class="line">        top: 0;</span><br><span class="line">        bottom: 0;</span><br><span class="line">        margin: auto;</span><br><span class="line">        text-align: center;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br><span class="line">HTML:</span><br><span class="line">&lt;div class&#x3D;&quot;box&quot;&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;a&quot;&gt;love&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-table-cell-布局实现"><a href="#5-table-cell-布局实现" class="headerlink" title="5. table-cell 布局实现"></a>5. table-cell 布局实现</h3><p>table 实现垂直居中，子集元素可以是块元素，也可以不是块元素</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">CSS：</span><br><span class="line">&lt;style&gt;</span><br><span class="line">    .box&#123;</span><br><span class="line">        width: 300px;</span><br><span class="line">        height: 300px;</span><br><span class="line">        background-color: red;</span><br><span class="line">        display: table-cell;</span><br><span class="line">        vertical-align: middle;</span><br><span class="line">    &#125;</span><br><span class="line">    .box .a&#123;</span><br><span class="line">        margin-left: 100px;</span><br><span class="line">        width: 100px;</span><br><span class="line">        height: 100px;</span><br><span class="line">        background-color: blue;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br><span class="line"></span><br><span class="line">&lt;div class&#x3D;&quot;box&quot;&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;a&quot;&gt;love&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="使内容（文字，图片）水平垂直居中（table-cell-布局）"><a href="#使内容（文字，图片）水平垂直居中（table-cell-布局）" class="headerlink" title="使内容（文字，图片）水平垂直居中（table-cell 布局）"></a>使内容（文字，图片）水平垂直居中（table-cell 布局）</h2><p>行元素 text-align ：center；</p>
+<p>块元素 ：margin ：0 auto；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">text-align : center  给元素的父级加，可以使文本或者行级元素(例如：图片)水平居中</span><br><span class="line">line-height : 值为元素的高度，可以使元素的文本内容垂直居中</span><br><span class="line">margin: 0 auto 使用条件：父级元素宽度可有可无，子级元素必须使块元素，而且要有宽度（否则继承父级）</span><br></pre></td></tr></table></figure>
+
+<p><code>display：table-cell</code> 会使元素表现的类似一个表格中的单元格 td，利用这个特性可以实现文字的垂直居中效果。同时它也会破坏一些 CSS 属性，使用 table-cell 时最好不要与 float 以及 position: absolute 一起使用，设置了 table-cell 的元素对高度和宽度高度敏感，对 margin 值无反应，可以响 padding 的设置，表现几乎类似一个 td 元素。</p>
+<p>小结：</p>
+<ol>
+<li><p>不要与 float：left， position : absolute， 一起使用</p>
+</li>
+<li><p>可以实现大小不固定元素的垂直居中</p>
+</li>
+<li><p>margin 设置无效，响应 padding 设置</p>
+</li>
+<li><p>对高度和宽度高度敏感</p>
+</li>
+<li><p>不要对 display：table-cell 使用百分比设置宽度和高度</p>
+</li>
+</ol>
+<h3 id="应用："><a href="#应用：" class="headerlink" title="应用："></a>应用：</h3><h3 id="1-使文字水平垂直居中"><a href="#1-使文字水平垂直居中" class="headerlink" title="1. 使文字水平垂直居中"></a>1. 使文字水平垂直居中</h3><p>效果图：</p>
+<p><img src="6.png#alt=img"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">CSS 代码：</span><br><span class="line">&lt;style&gt;</span><br><span class="line">    .box&#123;</span><br><span class="line">        width: 300px;</span><br><span class="line">        height: 300px;</span><br><span class="line">        background-color: red;</span><br><span class="line">        display: table-cell;</span><br><span class="line">        text-align: center;&#x2F;*使元素水平居中 *&#x2F;</span><br><span class="line">        vertical-align: middle;&#x2F;*使元素垂直居中 *&#x2F;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br><span class="line"></span><br><span class="line">HTML 代码：</span><br><span class="line">&lt;div class&#x3D;&quot;box&quot;&gt;love&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
+
+<p>给父级设置 display : table，子集设置 display：tablecell ，子集会充满全屏</p>
+<p><img src="7.png#alt=img"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">CSS 代码：</span><br><span class="line">&lt;style&gt;</span><br><span class="line">    .box&#123;</span><br><span class="line">        width: 300px;</span><br><span class="line">        height: 300px;</span><br><span class="line">        background-color: red;</span><br><span class="line">        display: table;</span><br><span class="line">    &#125;</span><br><span class="line">    .box .a&#123;</span><br><span class="line">        display: table-cell;</span><br><span class="line">        vertical-align: middle;</span><br><span class="line">        text-align: center;</span><br><span class="line">        background-color: blue;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br><span class="line"></span><br><span class="line">HTML ：</span><br><span class="line">&lt;div class&#x3D;&quot;box&quot;&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;a&quot;&gt;love&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-图片水平垂直居中"><a href="#2-图片水平垂直居中" class="headerlink" title="2. 图片水平垂直居中"></a>2. 图片水平垂直居中</h3><p>效果图：</p>
+<p><img src="8.png#alt=img"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;style&gt;</span><br><span class="line">    .box&#123;</span><br><span class="line">        width: 300px;</span><br><span class="line">        height: 300px;</span><br><span class="line">        background-color: skyblue;</span><br><span class="line">        display: table-cell;</span><br><span class="line">        text-align: center;</span><br><span class="line">        vertical-align: middle;</span><br><span class="line">    &#125;</span><br><span class="line">    img&#123;</span><br><span class="line">        &#x2F;* 设置成块元素后，text-align：center 就会失效 *&#x2F;</span><br><span class="line">        width: 100px;</span><br><span class="line">        height: 100px;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br><span class="line"></span><br><span class="line">HTML：</span><br><span class="line">&lt;div class&#x3D;&quot;box&quot;&gt;</span><br><span class="line">    &lt;img src&#x3D;&quot;1.jpg&quot; alt&#x3D;&quot;&quot;&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
+
+<p>中间的图片会随着外层容器的大小而自动水平垂直居中，其实原理和文字水平垂直居中一模一样</p>
+<h3 id="3-元素两端垂直对齐"><a href="#3-元素两端垂直对齐" class="headerlink" title="3. 元素两端垂直对齐"></a>3. 元素两端垂直对齐</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">CSS 代码：</span><br><span class="line">&lt;style&gt;</span><br><span class="line">    *&#123;</span><br><span class="line">        padding: 0;</span><br><span class="line">        margin: 0;</span><br><span class="line">    &#125;</span><br><span class="line">    .box&#123;</span><br><span class="line">        display: table;</span><br><span class="line">        width: 90%;</span><br><span class="line">        margin: 10px  auto;</span><br><span class="line">        padding: 10px;</span><br><span class="line">        border: 1px solid green;</span><br><span class="line">        height: 100px;</span><br><span class="line">    &#125;</span><br><span class="line">    .left,.right&#123;</span><br><span class="line">        display: table-cell;</span><br><span class="line">        width: 20%;</span><br><span class="line">        border: 1px solid red;</span><br><span class="line">    &#125;</span><br><span class="line">    .center&#123;</span><br><span class="line">        &#x2F;* padding-top: 10px; *&#x2F;</span><br><span class="line">        height: 100px;</span><br><span class="line">        background-color: green;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br><span class="line"></span><br><span class="line">HTML：</span><br><span class="line">&lt;div class&#x3D;&quot;box&quot;&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;left&quot;&gt;</span><br><span class="line">        &lt;p&gt;我是左边&lt;&#x2F;p&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;center&quot;&gt;</span><br><span class="line">        &lt;p&gt;我是中间&lt;&#x2F;p&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;right&quot;&gt;</span><br><span class="line">        &lt;p&gt;我是右边&lt;&#x2F;p&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
+
+<p>效果：<img src="9.png#alt=img"></p>
+<p>其中 center 的顶部没有与左右两侧对齐，原因是 left 中的<br>有一个 margin-top ， 而表格布局中默认是文字顶部对齐的，所以 center 会向下移动到首行文字基线对齐，解决办法是为   center 添加与左右两侧中 margin-top 较大者等值的 padding-top 即可。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/22/yuque/css%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="prev" title="css性能优化">
+      <i class="fa fa-chevron-left"></i> css性能优化
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/23/hello-world/" rel="next" title="Hello World">
+      Hello World <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF-div-%E6%B0%B4%E5%B9%B3%E5%9E%82%E7%9B%B4%E5%B1%85%E4%B8%AD"><span class="nav-number">1.</span> <span class="nav-text">使 div 水平垂直居中</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-flex-%E5%B8%83%E5%B1%80%E5%AE%9E%E7%8E%B0-%EF%BC%88%E5%85%83%E7%B4%A0%E5%B7%B2%E7%9F%A5%E5%AE%BD%E5%BA%A6%EF%BC%89"><span class="nav-number">1.1.</span> <span class="nav-text">1. flex 布局实现 （元素已知宽度）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-position-%EF%BC%88%E5%85%83%E7%B4%A0%E5%B7%B2%E7%9F%A5%E5%AE%BD%E5%BA%A6%EF%BC%89"><span class="nav-number">1.2.</span> <span class="nav-text">2. position （元素已知宽度）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-position-transform-%EF%BC%88%E5%85%83%E7%B4%A0%E6%9C%AA%E7%9F%A5%E5%AE%BD%E5%BA%A6%EF%BC%89"><span class="nav-number">1.3.</span> <span class="nav-text">3. position transform （元素未知宽度）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-position%EF%BC%88%E5%85%83%E7%B4%A0%E5%B7%B2%E7%9F%A5%E5%AE%BD%E5%BA%A6%EF%BC%89%EF%BC%88left%EF%BC%8Cright%EF%BC%8Ctop%EF%BC%8Cbottom-%E4%B8%BA-0%EF%BC%8Cmaigin%EF%BC%9Aauto-%EF%BC%89"><span class="nav-number">1.4.</span> <span class="nav-text">4. position（元素已知宽度）（left，right，top，bottom 为 0，maigin：auto ）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%98%85-%E7%AC%AC%E5%9B%9B%E7%A7%8D%E6%83%85%E5%86%B5%E6%96%B9%E6%A1%88%E4%B8%AD%EF%BC%8C%E5%A6%82%E6%9E%9C%E5%AD%90%E5%85%83%E7%B4%A0%E4%B8%8D%E8%AE%BE%E7%BD%AE%E5%AE%BD%E5%BA%A6%E5%92%8C%E9%AB%98%E5%BA%A6%EF%BC%8C%E5%B0%86%E4%BC%9A%E9%93%BA%E6%BB%A1%E6%95%B4%E4%B8%AA%E7%88%B6%E7%BA%A7%EF%BC%88%E5%BA%94%E7%94%A8%EF%BC%9A%E6%A8%A1%E6%80%81%E6%A1%86%EF%BC%89"><span class="nav-number">1.5.</span> <span class="nav-text">★ 第四种情况方案中，如果子元素不设置宽度和高度，将会铺满整个父级（应用：模态框）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-table-cell-%E5%B8%83%E5%B1%80%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.6.</span> <span class="nav-text">5. table-cell 布局实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E5%86%85%E5%AE%B9%EF%BC%88%E6%96%87%E5%AD%97%EF%BC%8C%E5%9B%BE%E7%89%87%EF%BC%89%E6%B0%B4%E5%B9%B3%E5%9E%82%E7%9B%B4%E5%B1%85%E4%B8%AD%EF%BC%88table-cell-%E5%B8%83%E5%B1%80%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">使内容（文字，图片）水平垂直居中（table-cell 布局）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%EF%BC%9A"><span class="nav-number">2.1.</span> <span class="nav-text">应用：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BD%BF%E6%96%87%E5%AD%97%E6%B0%B4%E5%B9%B3%E5%9E%82%E7%9B%B4%E5%B1%85%E4%B8%AD"><span class="nav-number">2.2.</span> <span class="nav-text">1. 使文字水平垂直居中</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%9B%BE%E7%89%87%E6%B0%B4%E5%B9%B3%E5%9E%82%E7%9B%B4%E5%B1%85%E4%B8%AD"><span class="nav-number">2.3.</span> <span class="nav-text">2. 图片水平垂直居中</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%85%83%E7%B4%A0%E4%B8%A4%E7%AB%AF%E5%9E%82%E7%9B%B4%E5%AF%B9%E9%BD%90"><span class="nav-number">2.4.</span> <span class="nav-text">3. 元素两端垂直对齐</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Adam Blog</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">39</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Adam Blog</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
