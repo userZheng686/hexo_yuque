@@ -146,6 +146,147 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/20/yuque/%E5%89%8D%E7%AB%AF%E8%B7%AF%E7%94%B1%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F%EF%BC%9Ahash%E6%A8%A1%E5%BC%8F%E5%92%8C%20history%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/20/yuque/%E5%89%8D%E7%AB%AF%E8%B7%AF%E7%94%B1%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F%EF%BC%9Ahash%E6%A8%A1%E5%BC%8F%E5%92%8C%20history%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">前端路由的两种模式：hash模式和 history模式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-20 12:51:15" itemprop="dateCreated datePublished" datetime="2021-04-20T12:51:15+08:00">2021-04-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 14:41:28" itemprop="dateModified" datetime="2021-04-22T14:41:28+08:00">2021-04-22</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>为什么要使用路由<br>现在的网络应用程序越来越多的使用 AJAX 异步请求完成页面的无缝刷新，导致浏览器的 URL 不会发生任何变化而完成了请求，从而破换了用户浏览体验。同时本次浏览的页面内容在用户下次使用 URL 访问时将无法重新呈现，使用路由可以很好地解决这个问题。</p>
+<p>单页面应用利用了 JavaScript 动态变换网页内容，避免了页面重载；路由则提供了浏览器地址变化，网页内容也跟随变化，两者结合起来则为我们提供了体验良好的单页面 web 应用。</p>
+<h2 id="前端路由实现方式"><a href="#前端路由实现方式" class="headerlink" title="前端路由实现方式"></a>前端路由实现方式</h2><p>路由需要实现三个功能：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">当浏览器地址变化时，切换页面；</span><br><span class="line">点击浏览器【后退】、【前进】按钮，网页内容跟随变化；</span><br><span class="line">刷新浏览器，网页加载当前路由对应内容；</span><br></pre></td></tr></table></figure>
+
+<p>在单页面 web 网页中, 单纯的浏览器地址改变, 网页不会重载，如单纯的 hash 网址改变网页不会变化，因此我们的路由主要是通过监听事件，并利用 js 实现动态改变网页内容，有两种实现方式：</p>
+<ul>
+<li>hash 模式：监听浏览器地址 hash 值变化，执行相应的 js 切换网页；</li>
+<li>history 模式：利用 history API 实现 url 地址改变，网页内容改变；</li>
+</ul>
+<p>它们的区别最明显的就是 hash 会在浏览器地址后面增加#号，而 history 可以自定义地址。</p>
+<h2 id="hash-模式"><a href="#hash-模式" class="headerlink" title="hash 模式"></a>hash 模式</h2><p>使用 window.location.hash 属性及窗口的 onhashchange 事件，可以实现监听浏览器地址 hash 值变化，执行相应的 js 切换网页。下面具体介绍几个使用过程中必须理解的要点：</p>
+<ul>
+<li>hash 指的是地址中#号以及后面的字符，也称为散列值。hash 也称作锚点，本身是用来做页面跳转定位的。如<a target="_blank" rel="noopener" href="http://localhost/index.html#abc">http://localhost/index.html#abc</a>，这里的#abc 就是 hash；</li>
+<li>散列值是不会随请求发送到服务器端的，所以改变 hash，不会重新加载页面；</li>
+<li>监听 window 的 hashchange 事件，当散列值改变时，可以通过 location.hash 来获取和设置 hash 值；</li>
+<li>location.hash 值的变化会直接反应到浏览器地址栏；</li>
+</ul>
+<h2 id="触发-hashchange-事件的几种情况："><a href="#触发-hashchange-事件的几种情况：" class="headerlink" title="触发 hashchange 事件的几种情况："></a>触发 hashchange 事件的几种情况：</h2><ul>
+<li>浏览器地址栏散列值的变化（包括浏览器的前进、后退）会触发 window.location.hash 值的变化，从而触发 onhashchange 事件；</li>
+<li>当浏览器地址栏中 URL 包含哈希如 <a target="_blank" rel="noopener" href="http://www.baidu.com/#home">http://www.baidu.com/#home</a>，这时按下输入，浏览器发送<a target="_blank" rel="noopener" href="http://www.baidu.com/">http://www.baidu.com/</a>请求至服务器，请求完毕之后设置散列值为#home，进而触发 onhashchange 事件；</li>
+<li>当只改变浏览器地址栏 URL 的哈希部分，这时按下回车，浏览器不会发送任何请求至服务器，这时发生的只是设置散列值新修改的哈希值，并触发 onhashchange 事件；</li>
+<li>html 中<a>标签的属性 href 可以设置为页面的元素 ID 如 #top，当点击该链接时页面跳转至该 id 元素所在区域，同时浏览器自动设置 window.location.hash 属性，地址栏中的哈希值也会发生改变，并触发 onhashchange 事件；</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置 url 的 hash，会在当前url后加上&#x27;#abc&#x27;</span></span><br><span class="line"><span class="built_in">window</span>.location.hash = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line"><span class="keyword">let</span> hash = <span class="built_in">window</span>.location.hash; <span class="comment">//&#x27;#abc&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">&quot;hashchange&quot;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">//监听hash变化，点击浏览器的前进后退会触发</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="history-模式"><a href="#history-模式" class="headerlink" title="history 模式"></a>history 模式</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><ul>
+<li>window.history 属性指向 History 对象，它表示当前窗口的浏览历史。当发生改变时，只会改变页面的路径，不会刷新页面。</li>
+<li>History 对象保存了当前窗口访问过的所有页面网址。通过 history.length 可以得出当前窗口一共访问过几个网址。</li>
+<li>由于安全原因，浏览器不允许脚本读取这些地址，但是允许在地址之间导航。</li>
+<li>浏览器工具栏的“前进”和“后退”按钮，其实就是对 History 对象进行操作。</li>
+</ul>
+<h3 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h3><p>History 对象主要有两个属性。</p>
+<ul>
+<li>History.length：当前窗口访问过的网址数量（包括当前网页）</li>
+<li>History.state：History 堆栈最上层的状态值（详见下文）</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 当前窗口访问过多少个网页</span></span><br><span class="line">history.length; <span class="comment">// 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// History 对象的当前状态</span></span><br><span class="line"><span class="comment">// 通常是 undefined，即未设置</span></span><br><span class="line">history.state; <span class="comment">// undefined</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><p><strong>History.back()、History.forward()、History.go()</strong><br>这三个方法用于在历史之中移动。</p>
+<ul>
+<li>**History.back()**：移动到上一个网址，等同于点击浏览器的后退键。对于第一个访问的网址，该方法无效果。</li>
+<li>**History.forward()**：移动到下一个网址，等同于点击浏览器的前进键。对于最后一个访问的网址，该方法无效果。</li>
+<li>**History.go()**：接受一个整数作为参数，以当前网址为基准，移动到参数指定的网址。如果参数超过实际存在的网址范围，该方法无效果；如果不指定参数，默认参数为 0，相当于刷新当前页面。</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">history.back();</span><br><span class="line">history.forward();</span><br><span class="line">history.go(<span class="number">1</span>); <span class="comment">//相当于history.forward()</span></span><br><span class="line">history.go(-<span class="number">1</span>); <span class="comment">//相当于history.back()</span></span><br><span class="line">history.go(<span class="number">0</span>); <span class="comment">// 刷新当前页面</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：移动到以前访问过的页面时，页面通常是从浏览器缓存之中加载，而不是重新要求服务器发送新的网页。</p>
+<p><strong>History.pushState()</strong><br>该方法用于在历史中添加一条记录。pushState()方法不会触发页面刷新，只是导致 History 对象发生变化，地址栏会有变化。</p>
+<p>语法：history.pushState(object, title, url)</p>
+<p>该方法接受三个参数，依次为：</p>
+<ul>
+<li>object：是一个对象，通过 pushState 方法可以将该对象内容传递到新页面中。如果不需要这个对象，此处可以填 null。</li>
+<li>title：指标题，几乎没有浏览器支持该参数，传一个空字符串比较安全。</li>
+<li>url：新的网址，必须与当前页面处在同一个域。不指定的话则为当前的路径，如果设置了一个跨域网址，则会报错。</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> data = &#123; <span class="attr">foo</span>: <span class="string">&quot;bar&quot;</span> &#125;;</span><br><span class="line">history.pushState(data, <span class="string">&quot;&quot;</span>, <span class="string">&quot;2.html&quot;</span>);</span><br><span class="line"><span class="built_in">console</span>.log(history.state); <span class="comment">// &#123;foo: &quot;bar&quot;&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：如果 pushState 的 URL 参数设置了一个新的锚点值（即 hash），并不会触发 hashchange 事件。反过来，如果 URL 的锚点值变了，则会在 History 对象创建一条浏览记录。</p>
+<p>如果 pushState() 方法设置了一个跨域网址，则会报错。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 报错</span></span><br><span class="line"><span class="comment">// 当前网址为 http://example.com</span></span><br><span class="line">history.pushState(<span class="literal">null</span>, <span class="string">&quot;&quot;</span>, <span class="string">&quot;https://twitter.com/hello&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中，pushState 想要插入一个跨域的网址，导致报错。这样设计的目的是，防止恶意代码让用户以为他们是在另一个网站上，因为这个方法不会导致页面跳转。</p>
+<p><strong>History.replaceState()</strong><br>该方法用来修改 History 对象的当前记录，用法与 pushState() 方法一样。<br>假定当前网页是 example.com/example.html。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">history.pushState(&#123; <span class="attr">page</span>: <span class="number">1</span> &#125;, <span class="string">&quot;&quot;</span>, <span class="string">&quot;?page=1&quot;</span>);</span><br><span class="line"><span class="comment">// URL 显示为 http://example.com/example.html?page=1</span></span><br><span class="line"></span><br><span class="line">history.pushState(&#123; <span class="attr">page</span>: <span class="number">2</span> &#125;, <span class="string">&quot;&quot;</span>, <span class="string">&quot;?page=2&quot;</span>);</span><br><span class="line"><span class="comment">// URL 显示为 http://example.com/example.html?page=2</span></span><br><span class="line"></span><br><span class="line">history.replaceState(&#123; <span class="attr">page</span>: <span class="number">3</span> &#125;, <span class="string">&quot;&quot;</span>, <span class="string">&quot;?page=3&quot;</span>);</span><br><span class="line"><span class="comment">// URL 显示为 http://example.com/example.html?page=3</span></span><br><span class="line"></span><br><span class="line">history.back();</span><br><span class="line"><span class="comment">// URL 显示为 http://example.com/example.html?page=1</span></span><br><span class="line"></span><br><span class="line">history.back();</span><br><span class="line"><span class="comment">// URL 显示为 http://example.com/example.html</span></span><br><span class="line"></span><br><span class="line">history.go(<span class="number">2</span>);</span><br><span class="line"><span class="comment">// URL 显示为 http://example.com/example.html?page=3</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>popstate 事件</strong><br>每当 history 对象出现变化时，就会触发 popstate 事件。<br>注意：</p>
+<ul>
+<li>仅仅调用 pushState()方法或 replaceState()方法 ，并不会触发该事件;</li>
+<li>只有用户点击浏览器倒退按钮和前进按钮，或者使用 JavaScript 调用 History.back()、History.forward()、History.go()方法时才会触发。</li>
+<li>另外，该事件只针对同一个文档，如果浏览历史的切换，导致加载不同的文档，该事件也不会触发。</li>
+<li>页面第一次加载的时候，浏览器不会触发 popstate 事件。</li>
+</ul>
+<p>使用的时候，可以为 popstate 事件指定回调函数，回调函数的参数是一个 event 事件对象，它的 state 属性指向当前的 state 对象。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">&quot;popstate&quot;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">  <span class="comment">//e.state 相当于 history.state</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;state: &quot;</span> + <span class="built_in">JSON</span>.stringify(e.state));</span><br><span class="line">  <span class="built_in">console</span>.log(history.state);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Charissa2017/article/details/103841476">点击查看</a><br>通过 history.pushState 实现页面 tab 切换的功能。<br>history 致命的缺点就是当改变页面地址后，强制刷新浏览器时，（如果后端没有做准备的话）会报错，因为刷新是拿当前地址去请求服务器的，如果服务器中没有相应的响应，会出现 404 页面。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/19/yuque/%E8%B7%A8%E9%A1%B5%E9%9D%A2%E9%80%9A%E4%BF%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -177,7 +318,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 14:08:11" itemprop="dateModified" datetime="2021-04-22T14:08:11+08:00">2021-04-22</time>
+                <time title="修改时间：2021-04-22 14:41:28" itemprop="dateModified" datetime="2021-04-22T14:41:28+08:00">2021-04-22</time>
               </span>
 
           
@@ -400,7 +541,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 14:08:11" itemprop="dateModified" datetime="2021-04-22T14:08:11+08:00">2021-04-22</time>
+                <time title="修改时间：2021-04-22 14:41:28" itemprop="dateModified" datetime="2021-04-22T14:41:28+08:00">2021-04-22</time>
               </span>
 
           
@@ -595,7 +736,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 14:08:11" itemprop="dateModified" datetime="2021-04-22T14:08:11+08:00">2021-04-22</time>
+                <time title="修改时间：2021-04-22 14:41:28" itemprop="dateModified" datetime="2021-04-22T14:41:28+08:00">2021-04-22</time>
               </span>
 
           
@@ -694,7 +835,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 14:08:11" itemprop="dateModified" datetime="2021-04-22T14:08:11+08:00">2021-04-22</time>
+                <time title="修改时间：2021-04-22 14:41:28" itemprop="dateModified" datetime="2021-04-22T14:41:28+08:00">2021-04-22</time>
               </span>
 
           
@@ -893,7 +1034,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 14:08:11" itemprop="dateModified" datetime="2021-04-22T14:08:11+08:00">2021-04-22</time>
+                <time title="修改时间：2021-04-22 14:41:28" itemprop="dateModified" datetime="2021-04-22T14:41:28+08:00">2021-04-22</time>
               </span>
 
           
@@ -1099,7 +1240,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 14:08:11" itemprop="dateModified" datetime="2021-04-22T14:08:11+08:00">2021-04-22</time>
+                <time title="修改时间：2021-04-22 14:41:28" itemprop="dateModified" datetime="2021-04-22T14:41:28+08:00">2021-04-22</time>
               </span>
 
           
@@ -1164,7 +1305,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 14:08:11" itemprop="dateModified" datetime="2021-04-22T14:08:11+08:00">2021-04-22</time>
+                <time title="修改时间：2021-04-22 14:41:28" itemprop="dateModified" datetime="2021-04-22T14:41:28+08:00">2021-04-22</time>
               </span>
 
           
@@ -1319,7 +1460,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 14:08:12" itemprop="dateModified" datetime="2021-04-22T14:08:12+08:00">2021-04-22</time>
+                <time title="修改时间：2021-04-22 14:41:29" itemprop="dateModified" datetime="2021-04-22T14:41:29+08:00">2021-04-22</time>
               </span>
 
           
@@ -1545,7 +1686,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 14:08:12" itemprop="dateModified" datetime="2021-04-22T14:08:12+08:00">2021-04-22</time>
+                <time title="修改时间：2021-04-22 14:41:29" itemprop="dateModified" datetime="2021-04-22T14:41:29+08:00">2021-04-22</time>
               </span>
 
           
@@ -1694,266 +1835,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/16/yuque/v8%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Adam Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Adam">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/16/yuque/v8%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" class="post-title-link" itemprop="url">v8垃圾回收</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-16 14:57:33" itemprop="dateCreated datePublished" datetime="2021-04-16T14:57:33+08:00">2021-04-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 14:08:12" itemprop="dateModified" datetime="2021-04-22T14:08:12+08:00">2021-04-22</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>作为目前最流行的 JavaScript 引擎，V8 引擎从出现的那一刻起便广泛受到人们的关注，我们知道，JavaScript 可以高效地运行在浏览器和 Nodejs 这两大宿主环境中，也是因为背后有强大的 V8 引擎在为其保驾护航，甚至成就了 Chrome 在浏览器中的霸主地位。不得不说，V8 引擎为了追求极致的性能和更好的用户体验，为我们做了太多太多，从原始的<code>Full-codegen</code>和<code>Crankshaft</code>编译器升级为<code>Ignition</code>解释器和<code>TurboFan</code>编译器的强强组合，到隐藏类，内联缓存和<code>HotSpot</code>热点代码收集等一系列强有力的优化策略，V8 引擎正在努力降低整体的内存占用和提升到更高的运行性能。</p>
-<p>本篇主要是从 V8 引擎的垃圾回收机制入手，讲解一下在 JavaScript 代码执行的整个生命周期中 V8 引擎是采取怎样的垃圾回收策略来减少内存占比的，当然这部分的知识并不太影响我们写代码的流程，毕竟在一般情况下我们很少会遇到浏览器端出现内存溢出而导致程序崩溃的情况，但是至少我们对这方面有一定的了解之后，能增强我们在写代码过程中对减少内存占用，避免内存泄漏的主观意识，也许能够帮助你写出更加健壮和对 V8 引擎更加友好的代码。本文也是笔者在查阅资料巩固复习的过程中慢慢总结和整理出来的，若文中有错误的地方，还请指正。</p>
-<h3 id="1、为何需要垃圾回收"><a href="#1、为何需要垃圾回收" class="headerlink" title="1、为何需要垃圾回收"></a>1、为何需要垃圾回收</h3><p>我们知道，在 V8 引擎逐行执行 JavaScript 代码的过程中，当遇到函数的情况时，会为其创建一个函数执行上下文(Context)环境并添加到调用堆栈的栈顶，函数的作用域(handleScope)中包含了该函数中声明的所有变量，当该函数执行完毕后，对应的执行上下文从栈顶弹出，函数的作用域会随之销毁，其包含的所有变量也会统一释放并被自动回收。试想如果在这个作用域被销毁的过程中，其中的变量不被回收，即持久占用内存，那么必然会导致内存暴增，从而引发内存泄漏导致程序的性能直线下降甚至崩溃，因此内存在使用完毕之后理当归还给操作系统以保证内存的重复利用。</p>
-<blockquote>
-<p>这个过程就好比你向亲戚朋友借钱，借得多了却不按时归还，那么你再下次借钱的时候肯定没有那么顺利了，或者说你的亲戚朋友不愿意再借你了，导致你的手头有点儿紧(内存泄漏，性能下降)，所以说有借有还，再借不难嘛，毕竟出来混都是要还的。</p>
-</blockquote>
-<p>但是 JavaScript 作为一门高级编程语言，并不像 C 语言或 C++语言中需要手动地申请分配和释放内存，V8 引擎已经帮我们自动进行了内存的分配和管理，好让我们有更多的精力去专注于业务层面的复杂逻辑，这对于我们前端开发人员来说是一项福利，但是随之带来的问题也是显而易见的，那就是由于不用去手动管理内存，导致写代码的过程中不够严谨从而容易引发内存泄漏(毕竟这是别人对你的好，你没有付出过，又怎能体会得到？)。</p>
-<h3 id="2、V8-引擎的内存限制"><a href="#2、V8-引擎的内存限制" class="headerlink" title="2、V8 引擎的内存限制"></a>2、V8 引擎的内存限制</h3><p>虽然 V8 引擎帮助我们实现了自动的垃圾回收管理，解放了我们勤劳的双手，但 V8 引擎中的内存使用也并不是无限制的。具体来说，默认情况下，V8 引擎在<code>64</code>位系统下最多只能使用约<code>1.4GB</code>的内存，在<code>32</code>位系统下最多只能使用约<code>0.7GB</code>的内存，在这样的限制下，必然会导致在 node 中无法直接操作大内存对象，比如将一个<code>2GB</code>大小的文件全部读入内存进行字符串分析处理，即使物理内存高达<code>32GB</code>也无法充分利用计算机的内存资源，那么为什么会有这种限制呢？这个要回到 V8 引擎的设计之初，起初只是作为浏览器端 JavaScript 的执行环境，在浏览器端我们其实很少会遇到使用大量内存的场景，因此也就没有必要将最大内存设置得过高。但这只是一方面，其实还有另外两个主要的原因：</p>
-<ul>
-<li><code>JS单线程机制</code>：作为浏览器的脚本语言，JS 的主要用途是与用户交互以及操作 DOM，那么这也决定了其作为单线程的本质，单线程意味着执行的代码必须按顺序执行，在同一时间只能处理一个任务。试想如果 JS 是多线程的，一个线程在删除 DOM 元素的同时，另一个线程对该元素进行修改操作，那么必然会导致复杂的同步问题。既然 JS 是单线程的，那么也就意味着在 V8 执行垃圾回收时，程序中的其他各种逻辑都要进入暂停等待阶段，直到垃圾回收结束后才会再次重新执行 JS 逻辑。因此，由于 JS 的单线程机制，垃圾回收的过程阻碍了主线程逻辑的执行。</li>
-</ul>
-<blockquote>
-<p>虽然 JS 是单线程的，但是为了能够充分利用操作系统的多核 CPU 计算能力，在 HTML5 中引入了新的 Web Worker 标准，其作用就是为 JS 创造多线程环境，允许主线程创建 Worker 线程，将一些任务分配给后者运行。在主线程运行的同时，Worker 在后台运行，两者互不干扰。等到 Worker 线程完成计算任务，再把结果返回给主线程。这样的好处是， 一些计算密集型或高延迟的任务，被 Worker 线程负担，主线程(通常负责 UI 交互)就会很流畅，不会被阻塞或者拖慢。Web Worker 不是 JS 的一部分，而是通过 JS 访问的浏览器特性，其虽然创造了一个多线程的执行环境，但是子线程完全受主线程控制，不能访问浏览器特定的 API，例如操作 DOM，因此这个新标准并没有改变 JS 单线程的本质。</p>
-</blockquote>
-<ul>
-<li><code>垃圾回收机制</code>：垃圾回收本身也是一件非常耗时的操作，假设 V8 的堆内存为<code>1.5G</code>，那么 V8 做一次小的垃圾回收需要 50ms 以上，而做一次非增量式回收甚至需要 1s 以上，可见其耗时之久，而在这 1s 的时间内，浏览器一直处于等待的状态，同时会失去对用户的响应，如果有动画正在运行，也会造成动画卡顿掉帧的情况，严重影响应用程序的性能。因此如果内存使用过高，那么必然会导致垃圾回收的过程缓慢，也就会导致主线程的等待时间越长，浏览器也就越长时间得不到响应。</li>
-</ul>
-<p>基于以上两点，V8 引擎为了减少对应用的性能造成的影响，采用了一种比较粗暴的手段，那就是直接限制堆内存的大小，毕竟在浏览器端一般也不会遇到需要操作几个 G 内存这样的场景。但是在 node 端，涉及到的<code>I/O</code>操作可能会比浏览器端更加复杂多样，因此更有可能出现内存溢出的情况。不过也没关系，V8 为我们提供了可配置项来让我们手动地调整内存大小，但是需要在 node 初始化的时候进行配置，我们可以通过如下方式来手动设置。</p>
-<p>我们尝试在 node 命令行中输入以下命令：</p>
-<blockquote>
-<p>笔者本地安装的 node 版本为<code>v10.14.2</code>，可通过<code>node -v</code>查看本地 node 的版本号，不同版本可能会导致下面的命令会有所差异。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 该命令可以用来查看node中可用的V8引擎的选项及其含义</span><br><span class="line">node --v8-options</span><br></pre></td></tr></table></figure>
-
-<p>然后我们会在命令行窗口中看到大量关于 V8 的选项，这里我们暂且只关注图中红色选框中的几个选项：</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556392205-53d15a2e-dafc-456b-81c8-8198f4eae507.png#clientId=u856810d9-b761-4&from=drop&id=u4baad9aa&margin=%5Bobject%20Object%5D&originHeight=645&originWidth=562&originalType=binary&size=44221&status=done&style=none&taskId=ue255d879-02ff-4889-8e9e-46a02ad64dd"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 设置新生代内存中单个半空间的内存最小值，单位MB</span><br><span class="line">node --min-semi-space-size&#x3D;1024 xxx.js</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 设置新生代内存中单个半空间的内存最大值，单位MB</span><br><span class="line">node --max-semi-space-size&#x3D;1024 xxx.js</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 设置老生代内存最大值，单位MB</span><br><span class="line">node --max-old-space-size&#x3D;2048 xxx.js</span><br></pre></td></tr></table></figure>
-
-<p>通过以上方法便可以手动放宽 V8 引擎所使用的内存限制，同时 node 也为我们提供了<code>process.memoryUsage()</code>方法来让我们可以查看当前 node 进程所占用的实际内存大小。</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556402385-853c0ca9-4f7c-4ab7-bf08-0132221cb9fe.png#clientId=u856810d9-b761-4&from=drop&id=u8368831f&margin=%5Bobject%20Object%5D&originHeight=76&originWidth=561&originalType=binary&size=3536&status=done&style=none&taskId=u357f1167-4113-407a-b124-120b1572f2c"></p>
-<p>在上图中，包含的几个字段的含义分别如下所示，单位均为字节：</p>
-<ul>
-<li><code>heapTotal</code>：表示 V8 当前申请到的堆内存总大小。</li>
-<li><code>heapUsed</code>：表示当前内存使用量。</li>
-<li><code>external</code>：表示 V8 内部的 C++对象所占用的内存。</li>
-<li><code>rss(resident set size)</code>：表示驻留集大小，是给这个 node 进程分配了多少物理内存，这些物理内存中包含堆，栈和代码片段。对象，闭包等存于堆内存，变量存于栈内存，实际的 JavaScript 源代码存于代码段内存。使用 Worker 线程时，<code>rss</code>将会是一个对整个进程有效的值，而其他字段则只针对当前线程。</li>
-</ul>
-<blockquote>
-<p>在 JS 中声明对象时，该对象的内存就分配在堆中，如果当前已申请的堆内存已经不够分配新的对象，则会继续申请堆内存直到堆的大小超过 V8 的限制为止。</p>
-</blockquote>
-<h3 id="3、V8-的垃圾回收策略"><a href="#3、V8-的垃圾回收策略" class="headerlink" title="3、V8 的垃圾回收策略"></a>3、V8 的垃圾回收策略</h3><p>V8 的垃圾回收策略主要是基于<code>分代式垃圾回收机制</code>，其根据<strong>对象的存活时间</strong>将内存的垃圾回收进行不同的分代，然后对不同的分代采用不同的垃圾回收算法。</p>
-<h4 id="3-1-V8-的内存结构"><a href="#3-1-V8-的内存结构" class="headerlink" title="3.1 V8 的内存结构"></a>3.1 V8 的内存结构</h4><p>在 V8 引擎的堆结构组成中，其实除了<code>新生代</code>和<code>老生代</code>外，还包含其他几个部分，但是垃圾回收的过程主要出现在新生代和老生代，所以对于其他的部分我们没必要做太多的深入，有兴趣的小伙伴儿可以查阅下相关资料，V8 的内存结构主要由以下几个部分组成：</p>
-<ul>
-<li><code>新生代(new_space)</code>：大多数的对象开始都会被分配在这里，这个区域相对较小但是垃圾回收特别频繁，该区域被分为两半，一半用来分配内存，另一半用于在垃圾回收时将需要保留的对象复制过来。</li>
-<li><code>老生代(old_space)</code>：新生代中的对象在存活一段时间后就会被转移到老生代内存区，相对于新生代该内存区域的垃圾回收频率较低。老生代又分为<code>老生代指针区</code>和<code>老生代数据区</code>，前者包含大多数可能存在指向其他对象的指针的对象，后者只保存原始数据对象，这些对象没有指向其他对象的指针。</li>
-<li><code>大对象区(large_object_space)</code>：存放体积超越其他区域大小的对象，每个对象都会有自己的内存，垃圾回收不会移动大对象区。</li>
-<li><code>代码区(code_space)</code>：代码对象，会被分配在这里，唯一拥有执行权限的内存区域。</li>
-<li><code>map区(map_space)</code>：存放 Cell 和 Map，每个区域都是存放相同大小的元素，结构简单(这里没有做具体深入的了解，有清楚的小伙伴儿还麻烦解释下)。</li>
-</ul>
-<p>内存结构图如下所示：</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1618556410928-bcbf5ffb-24e9-4a53-afe9-5e0f67fce05d.jpeg#clientId=u856810d9-b761-4&from=drop&id=u997d73d0&margin=%5Bobject%20Object%5D&originHeight=808&originWidth=720&originalType=binary&size=48717&status=done&style=none&taskId=u2605fe1e-815e-4a97-9954-3bf2ff8d6cf"></p>
-<p>上图中的带斜纹的区域代表暂未使用的内存，新生代(new_space)被划分为了两个部分，其中一部分叫做 inactive new space，表示暂未激活的内存区域，另一部分为激活状态，为什么会划分为两个部分呢，在下一小节我们会讲到。</p>
-<h4 id="3-2-新生代"><a href="#3-2-新生代" class="headerlink" title="3.2 新生代"></a>3.2 新生代</h4><p>在 V8 引擎的内存结构中，新生代主要用于存放存活时间较短的对象。新生代内存是由两个<code>semispace(半空间)</code>构成的，内存最大值在<code>64</code>位系统和<code>32</code>位系统上分别为<code>32MB</code>和<code>16MB</code>，在新生代的垃圾回收过程中主要采用了<code>Scavenge</code>算法。</p>
-<p><code>Scavenge</code>算法是一种典型的牺牲空间换取时间的算法，对于老生代内存来说，可能会存储大量对象，如果在老生代中使用这种算法，势必会造成内存资源的浪费，但是在新生代内存中，大部分对象的生命周期较短，在时间效率上表现可观，所以还是比较适合这种算法。</p>
-<blockquote>
-<p>在<code>Scavenge</code>算法的具体实现中，主要采用了<code>Cheney</code>算法，它将新生代内存一分为二，每一个部分的空间称为<code>semispace</code>，也就是我们在上图中看见的 new_space 中划分的两个区域，其中处于激活状态的区域我们称为<code>From</code>空间，未激活(inactive new space)的区域我们称为<code>To</code>空间。这两个空间中，始终只有一个处于使用状态，另一个处于闲置状态。我们的程序中声明的对象首先会被分配到<code>From</code>空间，当进行垃圾回收时，如果<code>From</code>空间中尚有存活对象，则会被复制到<code>To</code>空间进行保存，非存活的对象会被自动回收。当复制完成后，<code>From</code>空间和<code>To</code>空间完成一次角色互换，<code>To</code>空间会变为新的<code>From</code>空间，原来的<code>From</code>空间则变为<code>To</code>空间。</p>
-</blockquote>
-<p>基于以上算法，我们可以画出如下的流程图：</p>
-<ul>
-<li>假设我们在<code>From</code>空间中分配了三个对象 A、B、C</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556417901-4764a14c-4c18-4238-aef9-c8b8f919bb17.png#clientId=u856810d9-b761-4&from=drop&id=u666fba20&margin=%5Bobject%20Object%5D&originHeight=140&originWidth=584&originalType=binary&size=3213&status=done&style=none&taskId=ude39435b-84fa-4766-8573-92259e0df56"></p>
-<ul>
-<li>当程序主线程任务第一次执行完毕后进入垃圾回收时，发现对象 A 已经没有其他引用，则表示可以对其进行回收</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556552186-c5995ca5-f6cc-42fd-b572-4495eb8e3743.png#clientId=u796c5444-3980-4&from=drop&id=u878ccebe&margin=%5Bobject%20Object%5D&originHeight=148&originWidth=584&originalType=binary&size=4085&status=done&style=none&taskId=u1bde79ac-b19d-4f93-b798-d64d79a4938"></p>
-<ul>
-<li>对象 B 和对象 C 此时依旧处于活跃状态，因此会被复制到<code>To</code>空间中进行保存</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556599984-e1642821-810b-4fc6-985b-d0dae7bcd14e.png#clientId=u796c5444-3980-4&from=drop&id=u21cd25e0&margin=%5Bobject%20Object%5D&originHeight=200&originWidth=584&originalType=binary&size=5733&status=done&style=none&taskId=ucc413b0b-d0ea-4acf-a275-327f48b7537"></p>
-<ul>
-<li>接下来将<code>From</code>空间中的所有非存活对象全部清除</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556605740-2591d281-a67f-492d-a5b4-be933130a798.png#clientId=u796c5444-3980-4&from=drop&id=u282b17e5&margin=%5Bobject%20Object%5D&originHeight=140&originWidth=584&originalType=binary&size=2998&status=done&style=none&taskId=u7213736d-4fa6-4547-8ed3-f6e37e1d245"></p>
-<ul>
-<li>此时<code>From</code>空间中的内存已经清空，开始和<code>To</code>空间完成一次角色互换</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556609297-7e5e4203-7206-4c3b-a2e6-8b5d98d1a54f.png#clientId=u796c5444-3980-4&from=drop&id=ud49d305f&margin=%5Bobject%20Object%5D&originHeight=142&originWidth=584&originalType=binary&size=3012&status=done&style=none&taskId=ucfdf71fa-2f0c-415e-aa25-433ab7c88b7"></p>
-<ul>
-<li>当程序主线程在执行第二个任务时，在<code>From</code>空间中分配了一个新对象 D</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556613855-439e5e39-12ae-46d8-a049-c7498c351a83.png#clientId=u796c5444-3980-4&from=drop&id=uc743071e&margin=%5Bobject%20Object%5D&originHeight=142&originWidth=584&originalType=binary&size=3376&status=done&style=none&taskId=u778168c0-31ae-4811-ac01-85eb29b20c9"></p>
-<ul>
-<li>任务执行完毕后再次进入垃圾回收，发现对象 D 已经没有其他引用，表示可以对其进行回收</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556617549-6777aebb-ab8e-4292-8df0-465f4507c80c.png#clientId=u796c5444-3980-4&from=drop&id=u65b43522&margin=%5Bobject%20Object%5D&originHeight=142&originWidth=584&originalType=binary&size=4154&status=done&style=none&taskId=ubca05d31-6ec7-47e2-81b5-ddfac69fee3"></p>
-<ul>
-<li>对象 B 和对象 C 此时依旧处于活跃状态，再次被复制到<code>To</code>空间中进行保存</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556621148-8d50818f-3fd7-47f4-b287-781685afd0d2.png#clientId=u796c5444-3980-4&from=drop&id=uda7418a7&margin=%5Bobject%20Object%5D&originHeight=198&originWidth=584&originalType=binary&size=5990&status=done&style=none&taskId=u305d4e64-ded8-45eb-9633-2bebcbd5848"></p>
-<ul>
-<li>再次将<code>From</code>空间中的所有非存活对象全部清除</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556625026-ee7ca11f-1e74-4550-b5bc-41bdd7f122f7.png#clientId=u796c5444-3980-4&from=drop&id=uee07d8d7&margin=%5Bobject%20Object%5D&originHeight=142&originWidth=584&originalType=binary&size=2959&status=done&style=none&taskId=u3ff100ac-c1de-4c1f-af19-f79961274c3"></p>
-<ul>
-<li><code>From</code>空间和<code>To</code>空间继续完成一次角色互换</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556629048-c47937bd-be13-40d0-8a63-d2b76a90a269.png#clientId=u796c5444-3980-4&from=drop&id=ua2901259&margin=%5Bobject%20Object%5D&originHeight=142&originWidth=584&originalType=binary&size=2955&status=done&style=none&taskId=ud81f688d-ca47-4720-b5b6-20386c3c3fd"></p>
-<p>通过以上的流程图，我们可以很清楚地看到，<code>Scavenge</code>算法的垃圾回收过程主要就是将存活对象在<code>From</code>空间和<code>To</code>空间之间进行复制，同时完成两个空间之间的角色互换，因此该算法的缺点也比较明显，浪费了一半的内存用于复制。</p>
-<h4 id="3-3-对象晋升"><a href="#3-3-对象晋升" class="headerlink" title="3.3 对象晋升"></a>3.3 对象晋升</h4><p>当一个对象在经过多次复制之后依旧存活，那么它会被认为是一个生命周期较长的对象，在下一次进行垃圾回收时，该对象会被直接转移到老生代中，这种对象从新生代转移到老生代的过程我们称之为<code>晋升</code>。</p>
-<p>对象晋升的条件主要有以下两个：</p>
-<ul>
-<li>对象是否经历过一次<code>Scavenge</code>算法</li>
-<li><code>To</code>空间的内存占比是否已经超过<code>25%</code></li>
-</ul>
-<p>默认情况下，我们创建的对象都会分配在<code>From</code>空间中，当进行垃圾回收时，在将对象从<code>From</code>空间复制到<code>To</code>空间之前，会先检查该对象的内存地址来判断是否已经经历过一次<code>Scavenge</code>算法，如果地址已经发生变动则会将该对象转移到老生代中，不会再被复制到<code>To</code>空间，可以用以下的流程图来表示：</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556633076-66423330-7e8a-4a25-8502-6c4b42b2cb95.png#clientId=u796c5444-3980-4&from=drop&id=u6ee2fff9&margin=%5Bobject%20Object%5D&originHeight=400&originWidth=540&originalType=binary&size=9876&status=done&style=none&taskId=u6ca12477-753c-4755-876f-96c5d406865"></p>
-<p>如果对象没有经历过<code>Scavenge</code>算法，会被复制到<code>To</code>空间，但是如果此时<code>To</code>空间的内存占比已经超过<code>25%</code>，则该对象依旧会被转移到老生代，如下图所示:</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556638016-da33991f-9844-4823-816b-cd17c17d0cc5.png#clientId=u796c5444-3980-4&from=drop&id=u644369fc&margin=%5Bobject%20Object%5D&originHeight=400&originWidth=480&originalType=binary&size=9415&status=done&style=none&taskId=u1b158474-8f22-4bfd-b198-94865150497"></p>
-<p>之所以有<code>25%</code>的内存限制是因为<code>To</code>空间在经历过一次<code>Scavenge</code>算法后会和<code>From</code>空间完成角色互换，会变为<code>From</code>空间，后续的内存分配都是在<code>From</code>空间中进行的，如果内存使用过高甚至溢出，则会影响后续对象的分配，因此超过这个限制之后对象会被直接转移到老生代来进行管理。</p>
-<h4 id="3-4-老生代"><a href="#3-4-老生代" class="headerlink" title="3.4 老生代"></a>3.4 老生代</h4><p>在老生代中，因为管理着大量的存活对象，如果依旧使用<code>Scavenge</code>算法的话，很明显会浪费一半的内存，因此已经不再使用<code>Scavenge</code>算法，而是采用新的算法<code>Mark-Sweep(标记清除)</code>和<code>Mark-Compact(标记整理)</code>来进行管理。</p>
-<p>在早前我们可能听说过一种算法叫做<code>引用计数</code>，该算法的原理比较简单，就是看对象是否还有其他引用指向它，如果没有指向该对象的引用，则该对象会被视为垃圾并被垃圾回收器回收，示例如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 创建了两个对象obj1和obj2，其中obj2作为obj1的属性被obj1引用，因此不会被垃圾回收</span><br><span class="line">let obj1 &#x3D; &#123;</span><br><span class="line">    obj2: &#123;</span><br><span class="line">        a: 1</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 创建obj3并将obj1赋值给obj3，让两个对象指向同一个内存地址</span><br><span class="line">let obj3 &#x3D; obj1;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 将obj1重新赋值，此时原来obj1指向的对象现在只由obj3来表示</span><br><span class="line">obj1 &#x3D; null;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 创建obj4并将obj3.obj2赋值给obj4</span><br><span class="line">&#x2F;&#x2F; 此时obj2所指向的对象有两个引用：一个是作为obj3的属性，另一个是变量obj4</span><br><span class="line">let obj4 &#x3D; obj3.obj2;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 将obj3重新赋值，此时本可以对obj3指向的对象进行回收，但是因为obj3.obj2被obj4所引用，因此依旧不能被回收</span><br><span class="line">obj3 &#x3D; null;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 此时obj3.obj2已经没有指向它的引用，因此obj3指向的对象在此时可以被回收</span><br><span class="line">obj4 &#x3D; null;</span><br></pre></td></tr></table></figure>
-
-<p>上述例子在经过一系列操作后最终对象会被垃圾回收，但是一旦我们碰到<code>循环引用</code>的场景，就会出现问题，我们看下面的例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function foo() &#123;</span><br><span class="line">    let a &#x3D; &#123;&#125;;</span><br><span class="line">    let b &#x3D; &#123;&#125;;</span><br><span class="line">    a.a1 &#x3D; b;</span><br><span class="line">    b.b1 &#x3D; a;</span><br><span class="line">&#125;</span><br><span class="line">foo();</span><br></pre></td></tr></table></figure>
-
-<p>这个例子中我们将对象<code>a</code>的<code>a1</code>属性指向对象<code>b</code>，将对象<code>b</code>的<code>b1</code>属性指向对象<code>a</code>，形成两个对象相互引用，在<code>foo</code>函数执行完毕后，函数的作用域已经被销毁，作用域中包含的变量<code>a</code>和<code>b</code>本应该可以被回收，但是因为采用了<code>引用计数</code>的算法，两个变量均存在指向自身的引用，因此依旧无法被回收，导致内存泄漏。</p>
-<p>因此为了避免循环引用导致的内存泄漏问题，截至 2012 年所有的现代浏览器均放弃了这种算法，转而采用新的<code>Mark-Sweep(标记清除)</code>和<code>Mark-Compact(标记整理)</code>算法。在上面循环引用的例子中，因为变量<code>a</code>和变量<code>b</code>无法从<code>window</code>全局对象访问到，因此无法对其进行标记，所以最终会被回收。</p>
-<p><code>Mark-Sweep(标记清除)</code>分为<code>标记</code>和<code>清除</code>两个阶段，在标记阶段会遍历堆中的所有对象，然后标记活着的对象，在清除阶段中，会将死亡的对象进行清除。<code>Mark-Sweep</code>算法主要是通过判断某个对象是否可以被访问到，从而知道该对象是否应该被回收，具体步骤如下：</p>
-<ul>
-<li>垃圾回收器会在内部构建一个<code>根列表</code>，用于从根节点出发去寻找那些可以被访问到的变量。比如在 JavaScript 中，<code>window</code>全局对象可以看成一个根节点。</li>
-<li>然后，垃圾回收器从所有根节点出发，遍历其可以访问到的子节点，并将其标记为活动的，根节点不能到达的地方即为非活动的，将会被视为垃圾。</li>
-<li>最后，垃圾回收器将会释放所有非活动的内存块，并将其归还给操作系统。</li>
-</ul>
-<blockquote>
-<p>以下几种情况都可以作为根节点：</p>
-</blockquote>
-<blockquote>
-<ol>
-<li>全局对象</li>
-<li>本地函数的局部变量和参数</li>
-<li>当前嵌套调用链上的其他函数的变量和参数</li>
-</ol>
-</blockquote>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/gif/21377586/1618556644747-c6a31323-b04d-4a34-9f74-4d980e9e15d4.gif#clientId=u796c5444-3980-4&from=drop&id=u08dc6f73&margin=%5Bobject%20Object%5D&originHeight=423&originWidth=800&originalType=binary&size=208377&status=done&style=none&taskId=udc49af91-b293-4544-830d-4e4c08d0e94"></p>
-<p>但是<code>Mark-Sweep</code>算法存在一个问题，就是在经历过一次标记清除后，内存空间可能会出现不连续的状态，因为我们所清理的对象的内存地址可能不是连续的，所以就会出现内存碎片的问题，导致后面如果需要分配一个大对象而空闲内存不足以分配，就会提前触发垃圾回收，而这次垃圾回收其实是没必要的，因为我们确实有很多空闲内存，只不过是不连续的。</p>
-<p>为了解决这种内存碎片的问题，<code>Mark-Compact(标记整理)</code>算法被提了出来，该算法主要就是用来解决内存的碎片化问题的，回收过程中将死亡对象清除后，在整理的过程中，会将活动的对象往堆内存的一端进行移动，移动完成后再清理掉边界外的全部内存，我们可以用如下流程图来表示：</p>
-<ul>
-<li>假设在老生代中有 A、B、C、D 四个对象</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556649389-a9d11901-305c-4569-aaca-b3b59772645e.png#clientId=u796c5444-3980-4&from=drop&id=u0a97ec42&margin=%5Bobject%20Object%5D&originHeight=142&originWidth=584&originalType=binary&size=2709&status=done&style=none&taskId=u1f5e86b6-447a-4f6d-9eb5-90649eba3af"></p>
-<ul>
-<li>在垃圾回收的<code>标记</code>阶段，将对象 A 和对象 C 标记为活动的</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556653279-b263985d-8d79-449a-8db3-d02d2ac083c5.png#clientId=u796c5444-3980-4&from=drop&id=ua776187b&margin=%5Bobject%20Object%5D&originHeight=142&originWidth=584&originalType=binary&size=4467&status=done&style=none&taskId=u6ace71ac-69b5-4180-9e0b-44961c9aaa1"></p>
-<ul>
-<li>在垃圾回收的<code>整理</code>阶段，将活动的对象往堆内存的一端移动</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556656810-6157a37c-bde0-4520-8b3a-6dac4d9e4ab0.png#clientId=u796c5444-3980-4&from=drop&id=u81f40d88&margin=%5Bobject%20Object%5D&originHeight=188&originWidth=584&originalType=binary&size=6086&status=done&style=none&taskId=u7a6925ff-d58e-4e71-8cf2-96b4719e797"></p>
-<ul>
-<li>在垃圾回收的<code>清除</code>阶段，将活动对象左侧的内存全部回收</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556660355-6811dad8-6df4-4287-9115-dc391dbc6bb2.png#clientId=u796c5444-3980-4&from=drop&id=ud4ecd8e3&margin=%5Bobject%20Object%5D&originHeight=142&originWidth=584&originalType=binary&size=3863&status=done&style=none&taskId=u6ad31a80-4161-474e-98aa-d680b0d8423"></p>
-<p>至此就完成了一次老生代垃圾回收的全部过程，我们在前文中说过，由于 JS 的单线程机制，垃圾回收的过程会阻碍主线程同步任务的执行，待执行完垃圾回收后才会再次恢复执行主任务的逻辑，这种行为被称为<code>全停顿(stop-the-world)</code>。在标记阶段同样会阻碍主线程的执行，一般来说，老生代会保存大量存活的对象，如果在标记阶段将整个堆内存遍历一遍，那么势必会造成严重的卡顿。</p>
-<p>因此，为了减少垃圾回收带来的停顿时间，V8 引擎又引入了<code>Incremental Marking(增量标记)</code>的概念，即将原本需要一次性遍历堆内存的操作改为增量标记的方式，先标记堆内存中的一部分对象，然后暂停，将执行权重新交给 JS 主线程，待主线程任务执行完毕后再从原来暂停标记的地方继续标记，直到标记完整个堆内存。这个理念其实有点像<code>React</code>框架中的<code>Fiber</code>架构，只有在浏览器的空闲时间才会去遍历<code>Fiber Tree</code>执行对应的任务，否则延迟执行，尽可能少地影响主线程的任务，避免应用卡顿，提升应用性能。</p>
-<p>得益于增量标记的好处，V8 引擎后续继续引入了<code>延迟清理(lazy sweeping)</code>和<code>增量式整理(incremental compaction)</code>，让清理和整理的过程也变成增量式的。同时为了充分利用多核 CPU 的性能，也将引入<code>并行标记</code>和<code>并行清理</code>，进一步地减少垃圾回收对主线程的影响，为应用提升更多的性能。</p>
-<h3 id="4、如何避免内存泄漏"><a href="#4、如何避免内存泄漏" class="headerlink" title="4、如何避免内存泄漏"></a>4、如何避免内存泄漏</h3><p>在我们写代码的过程中，基本上都不太会关注写出怎样的代码才能有效地避免内存泄漏，或者说浏览器和大部分的前端框架在底层已经帮助我们处理了常见的内存泄漏问题，但是我们还是有必要了解一下常见的几种避免内存泄漏的方式，毕竟在面试过程中也是经常考察的要点。</p>
-<h4 id="4-1-尽可能少地创建全局变量"><a href="#4-1-尽可能少地创建全局变量" class="headerlink" title="4.1 尽可能少地创建全局变量"></a>4.1 尽可能少地创建全局变量</h4><p>在 ES5 中以<code>var</code>声明的方式在全局作用域中创建一个变量时，或者在函数作用域中不以任何声明的方式创建一个变量时，都会无形地挂载到<code>window</code>全局对象上，如下所示：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var a &#x3D; 1; &#x2F;&#x2F; 等价于 window.a &#x3D; 1;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function foo() &#123;</span><br><span class="line">    a &#x3D; 1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>等价于</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function foo() &#123;</span><br><span class="line">    window.a &#x3D; 1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>我们在<code>foo</code>函数中创建了一个变量<code>a</code>但是忘记使用<code>var</code>来声明，此时会意想不到地创建一个全局变量并挂载到 window 对象上，另外还有一种比较隐蔽的方式来创建全局变量：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">function foo() &#123;</span><br><span class="line">    this.a &#x3D; 1;</span><br><span class="line">&#125;</span><br><span class="line">foo(); &#x2F;&#x2F; 相当于 window.foo()</span><br></pre></td></tr></table></figure>
-
-<p>当<code>foo</code>函数在调用时，它所指向的运行上下文环境为<code>window</code>全局对象，因此函数中的<code>this</code>指向的其实是<code>window</code>，也就无意创建了一个全局变量。当进行垃圾回收时，在标记阶段因为<code>window</code>对象可以作为根节点，在<code>window</code>上挂载的属性均可以被访问到，并将其标记为活动的从而常驻内存，因此也就不会被垃圾回收，只有在整个进程退出时全局作用域才会被销毁。如果你遇到需要必须使用全局变量的场景，那么请保证一定要在全局变量使用完毕后将其设置为<code>null</code>从而触发回收机制。</p>
-<h4 id="4-2-手动清除定时器"><a href="#4-2-手动清除定时器" class="headerlink" title="4.2 手动清除定时器"></a>4.2 手动清除定时器</h4><p>在我们的应用中经常会有使用<code>setTimeout</code>或者<code>setInterval</code>等定时器的场景，定时器本身是一个非常有用的功能，但是如果我们稍不注意，忘记在适当的时间手动清除定时器，那么很有可能就会导致内存泄漏，示例如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const numbers &#x3D; [];</span><br><span class="line">const foo &#x3D; function() &#123;</span><br><span class="line">    for(let i &#x3D; 0;i &lt; 100000;i++) &#123;</span><br><span class="line">        numbers.push(i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">window.setInterval(foo, 1000);</span><br></pre></td></tr></table></figure>
-
-<p>在这个示例中，由于我们没有手动清除定时器，导致回调任务会不断地执行下去，回调中所引用的<code>numbers</code>变量也不会被垃圾回收，最终导致<code>numbers</code>数组长度无限递增，从而引发内存泄漏。</p>
-<h4 id="4-3-少用闭包"><a href="#4-3-少用闭包" class="headerlink" title="4.3 少用闭包"></a>4.3 少用闭包</h4><p>闭包是 JS 中的一个高级特性，巧妙地利用闭包可以帮助我们实现很多高级功能。一般来说，我们在查找变量时，在本地作用域中查找不到就会沿着作用域链从内向外单向查找，但是闭包的特性可以让我们在外部作用域访问内部作用域中的变量，示例如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">function foo() &#123;</span><br><span class="line">    let local &#x3D; 123;</span><br><span class="line">    return function() &#123;</span><br><span class="line">        return local;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">const bar &#x3D; foo();</span><br><span class="line">console.log(bar()); &#x2F;&#x2F; -&gt; 123</span><br></pre></td></tr></table></figure>
-
-<p>在这个示例中，<code>foo</code>函数执行完毕后会返回一个匿名函数，该函数内部引用了<code>foo</code>函数中的局部变量<code>local</code>，并且通过变量<code>bar</code>来引用这个匿名的函数定义，通过这种闭包的方式我们就可以在<code>foo</code>函数的外部作用域中访问到它的局部变量<code>local</code>。一般情况下，当<code>foo</code>函数执行完毕后，它的作用域会被销毁，但是由于存在变量引用其返回的匿名函数，导致作用域无法得到释放，也就导致<code>local</code>变量无法回收，只有当我们取消掉对匿名函数的引用才会进入垃圾回收阶段。</p>
-<h4 id="4-4-清除-DOM-引用"><a href="#4-4-清除-DOM-引用" class="headerlink" title="4.4 清除 DOM 引用"></a>4.4 清除 DOM 引用</h4><p>以往我们在操作 DOM 元素时，为了避免多次获取 DOM 元素，我们会将 DOM 元素存储在一个数据字典中，示例如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const elements &#x3D; &#123;</span><br><span class="line">    button: document.getElementById(&#39;button&#39;)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">function removeButton() &#123;</span><br><span class="line">    document.body.removeChild(document.getElementById(&#39;button&#39;));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在这个示例中，我们想调用<code>removeButton</code>方法来清除<code>button</code>元素，但是由于在<code>elements</code>字典中存在对<code>button</code>元素的引用，所以即使我们通过<code>removeChild</code>方法移除了<code>button</code>元素，它其实还是依旧存储在内存中无法得到释放，只有我们手动清除对<code>button</code>元素的引用才会被垃圾回收。</p>
-<h4 id="4-5-弱引用"><a href="#4-5-弱引用" class="headerlink" title="4.5 弱引用"></a>4.5 弱引用</h4><p>通过前几个示例我们会发现如果我们一旦疏忽，就会容易地引发内存泄漏的问题，为此，在 ES6 中为我们新增了两个有效的数据结构<code>WeakMap</code>和<code>WeakSet</code>，就是为了解决内存泄漏的问题而诞生的。其表示<code>弱引用</code>，它的键名所引用的对象均是弱引用，弱引用是指垃圾回收的过程中不会将键名对该对象的引用考虑进去，只要所引用的对象没有其他的引用了，垃圾回收机制就会释放该对象所占用的内存。这也就意味着我们不需要关心<code>WeakMap</code>中键名对其他对象的引用，也不需要手动地进行引用清除，我们尝试在 node 中演示一下过程(参考阮一峰 ES6 标准入门中的示例，自己手动实现了一遍)。</p>
-<p>首先打开 node 命令行，输入以下命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node --expose-gc &#x2F;&#x2F; --expose-gc 表示允许手动执行垃圾回收机制</span><br></pre></td></tr></table></figure>
-
-<p>然后我们执行下面的代码。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 手动执行一次垃圾回收保证内存数据准确</span><br><span class="line">&gt; global.gc();</span><br><span class="line">undefined</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 查看当前占用的内存，主要关心heapUsed字段，大小约为4.4MB</span><br><span class="line">&gt; process.memoryUsage();</span><br><span class="line">&#123; rss: 21626880,</span><br><span class="line">  heapTotal: 7585792,</span><br><span class="line">  heapUsed: 4708440,</span><br><span class="line">  external: 8710 &#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 创建一个WeakMap</span><br><span class="line">&gt; let wm &#x3D; new WeakMap();</span><br><span class="line">undefined</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 创建一个数组并赋值给变量key</span><br><span class="line">&gt; let key &#x3D; new Array(1000000);</span><br><span class="line">undefined</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 将WeakMap的键名指向该数组</span><br><span class="line">&#x2F;&#x2F; 此时该数组存在两个引用，一个是key，一个是WeakMap的键名</span><br><span class="line">&#x2F;&#x2F; 注意WeakMap是弱引用</span><br><span class="line">&gt; wm.set(key, 1);</span><br><span class="line">WeakMap &#123; [items unknown] &#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 手动执行一次垃圾回收</span><br><span class="line">&gt; global.gc();</span><br><span class="line">undefined</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 再次查看内存占用大小，heapUsed已经增加到约12MB</span><br><span class="line">&gt; process.memoryUsage();</span><br><span class="line">&#123; rss: 30232576,</span><br><span class="line">  heapTotal: 17694720,</span><br><span class="line">  heapUsed: 13068464,</span><br><span class="line">  external: 8688 &#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 手动清除变量key对数组的引用</span><br><span class="line">&#x2F;&#x2F; 注意这里并没有清除WeakMap中键名对数组的引用</span><br><span class="line">&gt; key &#x3D; null;</span><br><span class="line">null</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 再次执行垃圾回收</span><br><span class="line">&gt; global.gc()</span><br><span class="line">undefined</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 查看内存占用大小，发现heapUsed已经回到了之前的大小(这里约为4.8M，原来为4.4M，稍微有些浮动)</span><br><span class="line">&gt; process.memoryUsage();</span><br><span class="line">&#123; rss: 22110208,</span><br><span class="line">  heapTotal: 9158656,</span><br><span class="line">  heapUsed: 5089752,</span><br><span class="line">  external: 8698 &#125;</span><br></pre></td></tr></table></figure>
-
-<p>在上述示例中，我们发现虽然我们没有手动清除<code>WeakMap</code>中的键名对数组的引用，但是内存依旧已经回到原始的大小，说明该数组已经被回收，那么这个也就是弱引用的具体含义了。</p>
-<h3 id="5、总结"><a href="#5、总结" class="headerlink" title="5、总结"></a>5、总结</h3><p>本文中主要讲解了一下 V8 引擎的垃圾回收机制，并分别从新生代和老生代讲述了不同分代中的垃圾回收策略以及对应的回收算法，之后列出了几种常见的避免内存泄漏的方式来帮助我们写出更加优雅的代码。如果你已经了解过垃圾回收相关的内容，那么这篇文章可以帮助你简单复习加深印象，如果没有了解过，那么笔者也希望这篇文章能够帮助到你了解一些代码层面之外的底层知识点，由于 V8 引擎的源码是用 C++实现的，所以笔者也就没有做这方面的深入了，有兴趣的小伙伴儿可以自行探究，文中有错误的地方，还希望能够在评论区指正。</p>
-<h3 id="6、交流"><a href="#6、交流" class="headerlink" title="6、交流"></a>6、交流</h3><p>如果你觉得这篇文章的内容对你有帮助，能否帮个忙关注一下笔者的公众号[<strong>前端之境</strong>]，每周都会努力原创一些前端技术干货，关注公众号后可以邀你加入前端技术交流群，我们可以一起互相交流，共同进步。</p>
-<p><strong>文章已同步更新至</strong><a target="_blank" rel="noopener" href="https://github.com/qq591468061/xwfe"><strong>Github 博客</strong></a><strong>，若觉文章尚可，欢迎前往 star！</strong></p>
-<p><strong>你的一个点赞，值得让我付出更多的努力！</strong></p>
-<p><strong>逆境中成长，只有不断地学习，才能成为更好的自己，与君共勉！</strong></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556667285-bbce4363-750d-4a66-adc0-9e4a1f52d35e.png#clientId=u796c5444-3980-4&from=drop&id=uc14aed16&margin=%5Bobject%20Object%5D&originHeight=500&originWidth=900&originalType=binary&size=116998&status=done&style=none&taskId=u4c1805e7-8eae-4f97-bd20-55033247308"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -2023,7 +1904,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-count">33</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
