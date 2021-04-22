@@ -146,6 +146,288 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/" class="post-title-link" itemprop="url">浏览器的缓存机制</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-20 16:55:56" itemprop="dateCreated datePublished" datetime="2021-04-20T16:55:56+08:00">2021-04-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 14:56:03" itemprop="dateModified" datetime="2021-04-22T14:56:03+08:00">2021-04-22</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>前言</p>
+<p>如果你还在找工作面试，可以适当的了解下。今日早读文章由@葉河英投稿分享。</p>
+<blockquote>
+<p>@叶河英，腾讯前端工程师，主要研发系统和电商平台项目</p>
+</blockquote>
+<p>正文从这开始～</p>
+<h4 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h4><p>浏览器的缓存机制也就是我们说的 HTTP 缓存机制，其机制是根据 HTTP 报文的缓存标识进行的，所以在分析浏览器缓存机制之前，我们先使用图文简单介绍一下 HTTP 报文，HTTP 报文分为两种：</p>
+<p>HTTP 请求(Request)报文，报文格式为：请求行 – HTTP 头(通用信息头，请求头，实体头) – 请求报文主体(只有 POST 才有报文主体)，如下图</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618909364030-c8cff531-5544-4da3-bf7e-da5d57992f32.png#clientId=u53602b42-01cb-4&from=drop&id=ud465be9b&margin=%5Bobject%20Object%5D&name=1.png&originHeight=310&originWidth=655&originalType=binary&size=13457&status=done&style=none&taskId=u9fece462-bcbd-42ab-9ccb-10d9a500565" alt="1.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618909375119-6588e63f-94e6-4079-9010-6a015d4569d4.png#clientId=u53602b42-01cb-4&from=drop&id=u8303ff41&margin=%5Bobject%20Object%5D&name=2.png&originHeight=39&originWidth=573&originalType=binary&size=1549&status=done&style=none&taskId=u9a3fd632-1bfd-4b7a-9cc2-26588d166e7" alt="2.png"></p>
+<p>HTTP 响应(Response)报文，报文格式为：状态行 – HTTP 头(通用信息头，响应头，实体头) – 响应报文主体，如下图</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618909394217-5348b231-6d40-4eef-9b13-bb0a2817bf4c.png#clientId=u53602b42-01cb-4&from=drop&id=u908dec8e&margin=%5Bobject%20Object%5D&name=3.png&originHeight=195&originWidth=612&originalType=binary&size=5976&status=done&style=none&taskId=u7bb57a1f-fee2-4b37-81c6-c0502b2b3e6" alt="3.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618909401912-091f4013-5c7e-4245-9c05-74772d95b2d0.png#clientId=u53602b42-01cb-4&from=drop&id=u0a30d1df&margin=%5Bobject%20Object%5D&name=4.png&originHeight=40&originWidth=645&originalType=binary&size=2358&status=done&style=none&taskId=u8aff25cd-937d-4851-ab5b-c68810724ee" alt="4.png"></p>
+<p>注：通用信息头指的是请求和响应报文都支持的头域，分别为 Cache-Control、Connection、Date、Pragma、Transfer-Encoding、Upgrade、Via；实体头则是实体信息的实体头域，分别为 Allow、Content-Base、Content-Encoding、Content-Language、Content-Length、Content-Location、Content-MD5、Content-Range、Content-Type、Etag、Expires、Last-Modified、extension-header。这里只是为了方便理解，将通用信息头，响应头/请求头，实体头都归为了 HTTP 头。</p>
+<p>以上的概念在这里我们不做多讲解，只简单介绍，有兴趣的童鞋可以自行研究。</p>
+<h4 id="缓存过程分析"><a href="#缓存过程分析" class="headerlink" title="缓存过程分析"></a>缓存过程分析</h4><p>浏览器与服务器通信的方式为应答模式，即是：浏览器发起 HTTP 请求 – 服务器响应该请求。那么浏览器第一次向服务器发起该请求后拿到请求结果，会根据响应报文中 HTTP 头的缓存标识，决定是否缓存结果，是则将请求结果和缓存标识存入浏览器缓存中，简单的过程如下图：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618909407138-208b28ce-49a8-44a3-aab2-366363ee3fae.png#clientId=u53602b42-01cb-4&from=drop&id=u035c612d&margin=%5Bobject%20Object%5D&name=5.png&originHeight=570&originWidth=761&originalType=binary&size=16659&status=done&style=none&taskId=uc48962a4-ec47-4c69-b231-c35256295d1" alt="5.png"></p>
+<p>由上图我们可以知道：</p>
+<ul>
+<li>浏览器每次发起请求，都会先在浏览器缓存中查找该请求的结果以及缓存标识</li>
+<li>浏览器每次拿到返回的请求结果都会将该结果和缓存标识存入浏览器缓存中</li>
+</ul>
+<p>以上两点结论就是浏览器缓存机制的关键，他确保了每个请求的缓存存入与读取，只要我们再理解浏览器缓存的使用规则，那么所有的问题就迎刃而解了，本文也将围绕着这点进行详细分析。为了方便大家理解，这里我们根据是否需要向服务器重新发起 HTTP 请求将缓存过程分为两个部分，分别是强制缓存和协商缓存。</p>
+<h5 id="强制缓存"><a href="#强制缓存" class="headerlink" title="强制缓存"></a>强制缓存</h5><p>强制缓存就是向浏览器缓存查找该请求结果，并根据该结果的缓存规则来决定是否使用该缓存结果的过程，强制缓存的情况主要有三种(暂不分析协商缓存过程)，如下：</p>
+<p>不存在该缓存结果和缓存标识，强制缓存失效，则直接向服务器发起请求（跟第一次发起请求一致），如下图：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618909414109-3f01acec-1556-4ec6-91b0-caf2816224e1.png#clientId=u53602b42-01cb-4&from=drop&id=ue0dccda0&margin=%5Bobject%20Object%5D&name=6.png&originHeight=384&originWidth=649&originalType=binary&size=11991&status=done&style=none&taskId=uebb43bfb-823e-4ef2-b54b-991fbc02f40" alt="6.png"></p>
+<p>存在该缓存结果和缓存标识，但该结果已失效，强制缓存失效，则使用协商缓存(暂不分析)，如下图</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618909418916-992c3ec9-9d8a-48e3-83dc-62b66f061d91.png#clientId=u53602b42-01cb-4&from=drop&id=u5a2278a1&margin=%5Bobject%20Object%5D&name=7.png&originHeight=407&originWidth=687&originalType=binary&size=13254&status=done&style=none&taskId=u25e5ac14-47c7-419d-b186-471a2fc7914" alt="7.png"></p>
+<p>存在该缓存结果和缓存标识，且该结果尚未失效，强制缓存生效，直接返回该结果，如下图</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618909423684-3acd7bed-0e25-440a-bc2d-a60f8ede828c.png#clientId=u53602b42-01cb-4&from=drop&id=uc74df12d&margin=%5Bobject%20Object%5D&name=8.png&originHeight=340&originWidth=662&originalType=binary&size=10040&status=done&style=none&taskId=u0811a669-a8f4-42a4-a6d3-6acabc9ee68" alt="8.png"></p>
+<blockquote>
+<p>那么强制缓存的缓存规则是什么？</p>
+</blockquote>
+<p>当浏览器向服务器发起请求时，服务器会将缓存规则放入 HTTP 响应报文的 HTTP 头中和请求结果一起返回给浏览器，控制强制缓存的字段分别是 Expires 和 Cache-Control，其中 Cache-Control 优先级比 Expires 高。</p>
+<h5 id="Expires"><a href="#Expires" class="headerlink" title="Expires"></a>Expires</h5><p>Expires 是 HTTP/1.0 控制网页缓存的字段，其值为服务器返回该请求结果缓存的到期时间，即再次发起该请求时，如果客户端的时间小于 Expires 的值时，直接使用缓存结果。</p>
+<blockquote>
+<p>Expires 是 HTTP/1.0 的字段，但是现在浏览器默认使用的是 HTTP/1.1，那么在 HTTP/1.1 中网页缓存还是否由 Expires 控制？</p>
+</blockquote>
+<p>到了 HTTP/1.1，Expire 已经被 Cache-Control 替代，原因在于 Expires 控制缓存的原理是使用客户端的时间与服务端返回的时间做对比，那么如果客户端与服务端的时间因为某些原因（例如时区不同；客户端和服务端有一方的时间不准确）发生误差，那么强制缓存则会直接失效，这样的话强制缓存的存在则毫无意义，那么 Cache-Control 又是如何控制的呢？</p>
+<h5 id="Cache-Control"><a href="#Cache-Control" class="headerlink" title="Cache-Control"></a>Cache-Control</h5><p>在 HTTP/1.1 中，Cache-Control 是最重要的规则，主要用于控制网页缓存，主要取值为：</p>
+<ul>
+<li>public：所有内容都将被缓存（客户端和代理服务器都可缓存）</li>
+<li>private：所有内容只有客户端可以缓存，Cache-Control 的默认取值</li>
+<li>no-cache：客户端缓存内容，但是是否使用缓存则需要经过协商缓存来验证决定</li>
+<li>no-store：所有内容都不会被缓存，即不使用强制缓存，也不使用协商缓存</li>
+<li>max-age=xxx (xxx is numeric)：缓存内容将在 xxx 秒后失效</li>
+</ul>
+<p>接下来，我们直接看一个例子，如下：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618909431941-7b4db55e-257e-4cbf-861c-30e331ca44b0.png#clientId=u53602b42-01cb-4&from=drop&id=u1d24ca0b&margin=%5Bobject%20Object%5D&name=9.png&originHeight=291&originWidth=640&originalType=binary&size=8204&status=done&style=none&taskId=u347557bb-125a-476a-b0fb-355d7a9e64c" alt="9.png"></p>
+<p>由上面的例子我们可以知道：</p>
+<ul>
+<li>HTTP 响应报文中 expires 的时间值，是一个绝对值</li>
+<li>HTTP 响应报文中 Cache-Control 为 max-age=600，是相对值</li>
+</ul>
+<p>由于 Cache-Control 的优先级比 expires，那么直接根据 Cache-Control 的值进行缓存，意思就是说在 600 秒内再次发起该请求，则会直接使用缓存结果，强制缓存生效。</p>
+<p>注：在无法确定客户端的时间是否与服务端的时间同步的情况下，Cache-Control 相比于 expires 是更好的选择，所以同时存在时，只有 Cache-Control 生效。</p>
+<p>了解强制缓存的过程后，我们拓展性的思考一下：</p>
+<blockquote>
+<p>浏览器的缓存存放在哪里，如何在浏览器中判断强制缓存是否生效？</p>
+</blockquote>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1618909444541-37766b84-b8ca-4d4d-82a3-f0926c29e9e5.jpeg#clientId=u53602b42-01cb-4&from=drop&id=u31f8cdd9&margin=%5Bobject%20Object%5D&name=10.jpg&originHeight=442&originWidth=1007&originalType=binary&size=76458&status=done&style=none&taskId=uf25bc11a-a753-4954-b316-76577cda7f5" alt="10.jpg"></p>
+<p>这里我们以博客的请求为例，状态码为灰色的请求则代表使用了强制缓存，请求对应的 Size 值则代表该缓存存放的位置，分别为 from memory cache 和 from disk cache。</p>
+<blockquote>
+<p>那么 from memory cache 和 from disk cache 又分别代表的是什么呢？什么时候会使用 from disk cache，什么时候会使用 from memory cache 呢？</p>
+</blockquote>
+<p>from memory cache 代表使用内存中的缓存，from disk cache 则代表使用的是硬盘中的缓存，浏览器读取缓存的顺序为 memory –&gt; disk。</p>
+<p>虽然我已经直接把结论说出来了，但是相信有不少人对此不能理解，那么接下来我们一起详细分析一下缓存读取问题，这里仍让以我的博客为例进行分析：</p>
+<p>访问<a target="_blank" rel="noopener" href="https://heyingye.github.io/">https://heyingye.github.io/</a> –&gt; 200 –&gt; 关闭博客的标签页 –&gt; 重新打开<a target="_blank" rel="noopener" href="https://heyingye.github.io/">https://heyingye.github.io/</a> –&gt; 200(from disk cache) –&gt; 刷新 –&gt; 200(from memory cache)</p>
+<p>过程如下：</p>
+<ul>
+<li>访问<a target="_blank" rel="noopener" href="https://heyingye.github.io/">https://heyingye.github.io/</a></li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1618909453737-5c92fe5d-57a2-47e3-8f7a-d7703e1b05b2.jpeg#clientId=u53602b42-01cb-4&from=drop&id=u3a481f5c&margin=%5Bobject%20Object%5D&name=11.jpg&originHeight=433&originWidth=1003&originalType=binary&size=66491&status=done&style=none&taskId=u1d4885b4-8020-4360-b7ed-360d72af6be" alt="11.jpg"></p>
+<ul>
+<li>关闭博客的标签页</li>
+<li>重新打开<a target="_blank" rel="noopener" href="https://heyingye.github.io/">https://heyingye.github.io/</a></li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1618909461520-fc33c10c-3ae8-430f-9f1d-a1b1f11b54e2.jpeg#clientId=u53602b42-01cb-4&from=drop&id=ud3495d8e&margin=%5Bobject%20Object%5D&name=12.jpg&originHeight=435&originWidth=1001&originalType=binary&size=71412&status=done&style=none&taskId=u0deff8e6-e6bb-4617-93df-d27d5c37beb" alt="12.jpg"></p>
+<ul>
+<li>刷新</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1618909467649-4afe727b-eaed-4cbd-bf15-af316a774b76.jpeg#clientId=u53602b42-01cb-4&from=drop&id=u5a8e0175&margin=%5Bobject%20Object%5D&name=13.jpg&originHeight=434&originWidth=1005&originalType=binary&size=70933&status=done&style=none&taskId=uf81e5bf4-2477-4a9a-85db-ad8548037fb" alt="13.jpg"></p>
+<p>from disk memory</p>
+<blockquote>
+<p>看到这里可能有人小伙伴问了，最后一个步骤刷新的时候，不是同时存在着 from disk cache 和 from memory cache 吗？</p>
+</blockquote>
+<p>对于这个问题，我们需要了解内存缓存(from memory cache)和硬盘缓存(from disk cache)，如下:</p>
+<ul>
+<li>内存缓存(from memory cache)：内存缓存具有两个特点，分别是快速读取和时效性：</li>
+<li>快速读取：内存缓存会将编译解析后的文件，直接存入该进程的内存中，占据该进程一定的内存资源，以方便下次运行使用时的快速读取。</li>
+<li>时效性：一旦该进程关闭，则该进程的内存则会清空。</li>
+<li>硬盘缓存(from disk cache)：硬盘缓存则是直接将缓存写入硬盘文件中，读取缓存需要对该缓存存放的硬盘文件进行 I/O 操作，然后重新解析该缓存内容，读取复杂，速度比内存缓存慢。</li>
+</ul>
+<p>在浏览器中，浏览器会在 js 和图片等文件解析执行后直接存入内存缓存中，那么当刷新页面时只需直接从内存缓存中读取(from memory cache)；而 css 文件则会存入硬盘文件中，所以每次渲染页面都需要从硬盘读取缓存(from disk cache)。</p>
+<h4 id="协商缓存"><a href="#协商缓存" class="headerlink" title="协商缓存"></a>协商缓存</h4><p>协商缓存就是强制缓存失效后，浏览器携带缓存标识向服务器发起请求，由服务器根据缓存标识决定是否使用缓存的过程，主要有以下两种情况：</p>
+<p>协商缓存生效，返回 304，如下</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618909481004-5098b177-c503-4c04-bdd1-80658c7f4233.png#clientId=u53602b42-01cb-4&from=drop&id=u6a6af472&margin=%5Bobject%20Object%5D&name=14.png&originHeight=547&originWidth=719&originalType=binary&size=16854&status=done&style=none&taskId=u82424bcc-e93e-4ab3-b583-4f8d95b4096" alt="14.png"></p>
+<p>304</p>
+<p>协商缓存失效，返回 200 和请求结果结果，如下</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618909487675-481d0e4a-1013-4e36-bc58-b98c54e937dc.png#clientId=u53602b42-01cb-4&from=drop&id=uc3638e07&margin=%5Bobject%20Object%5D&name=15.png&originHeight=568&originWidth=768&originalType=binary&size=18237&status=done&style=none&taskId=ud0e880f1-6523-4537-855b-e0de5393c49" alt="15.png"></p>
+<p>200</p>
+<p>同样，协商缓存的标识也是在响应报文的 HTTP 头中和请求结果一起返回给浏览器的，控制协商缓存的字段分别有：Last-Modified / If-Modified-Since 和 Etag / If-None-Match，其中 Etag / If-None-Match 的优先级比 Last-Modified / If-Modified-Since 高。</p>
+<h5 id="Last-Modified-If-Modified-Since"><a href="#Last-Modified-If-Modified-Since" class="headerlink" title="Last-Modified / If-Modified-Since"></a>Last-Modified / If-Modified-Since</h5><p>Last-Modified 是服务器响应请求时，返回该资源文件在服务器最后被修改的时间，如下。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618909518468-d9767114-c566-4d87-ac4c-3f8a772ee273.png#clientId=u53602b42-01cb-4&from=drop&id=u5a620baf&margin=%5Bobject%20Object%5D&name=16.png&originHeight=271&originWidth=596&originalType=binary&size=8718&status=done&style=none&taskId=udd18d51d-0fb0-40a4-8699-4b00652be10" alt="16.png"></p>
+<p>last-modify</p>
+<p>If-Modified-Since 则是客户端再次发起该请求时，携带上次请求返回的 Last-Modified 值，通过此字段值告诉服务器该资源上次请求返回的最后被修改时间。服务器收到该请求，发现请求头含有 If-Modified-Since 字段，则会根据 If-Modified-Since 的字段值与该资源在服务器的最后被修改时间做对比，若服务器的资源最后被修改时间大于 If-Modified-Since 的字段值，则重新返回资源，状态码为 200；否则则返回 304，代表资源无更新，可继续使用缓存文件，如下。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618909522276-e005aeec-0185-411c-b05b-bcace3c105cb.png#clientId=u53602b42-01cb-4&from=drop&id=u65f8977d&margin=%5Bobject%20Object%5D&name=17.png&originHeight=347&originWidth=667&originalType=binary&size=50895&status=done&style=none&taskId=u3f615144-bdb0-45cd-a263-1e8826f8fb1" alt="17.png"></p>
+<p>If-Modified-Since</p>
+<h5 id="Etag-If-None-Match"><a href="#Etag-If-None-Match" class="headerlink" title="Etag / If-None-Match"></a>Etag / If-None-Match</h5><p>Etag 是服务器响应请求时，返回当前资源文件的一个唯一标识(由服务器生成)，如下。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618909526528-da4d4142-98de-4047-90e1-77f41b335064.png#clientId=u53602b42-01cb-4&from=drop&id=u86ad4f36&margin=%5Bobject%20Object%5D&name=18.png&originHeight=351&originWidth=666&originalType=binary&size=12113&status=done&style=none&taskId=u8f1e2b61-d780-420b-bc51-35f06eed604" alt="18.png"></p>
+<p>Etag</p>
+<p>If-None-Match 是客户端再次发起该请求时，携带上次请求返回的唯一标识 Etag 值，通过此字段值告诉服务器该资源上次请求返回的唯一标识值。服务器收到该请求后，发现该请求头中含有 If-None-Match，则会根据 If-None-Match 的字段值与该资源在服务器的 Etag 值做对比，一致则返回 304，代表资源无更新，继续使用缓存文件；不一致则重新返回资源文件，状态码为 200，如下。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1618909531126-4fbd8b28-a3f5-4217-8de4-14f5dd84311f.jpeg#clientId=u53602b42-01cb-4&from=drop&id=ub8797af1&margin=%5Bobject%20Object%5D&name=19.jpg&originHeight=400&originWidth=659&originalType=binary&size=62393&status=done&style=none&taskId=u3cf969f5-5489-4259-ab38-f2e37484a10" alt="19.jpg"></p>
+<p>Etag-match</p>
+<p>注：Etag / If-None-Match 优先级高于 Last-Modified / If-Modified-Since，同时存在则只有 Etag / If-None-Match 生效。</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>强制缓存优先于协商缓存进行，若强制缓存(Expires 和 Cache-Control)生效则直接使用缓存，若不生效则进行协商缓存(Last-Modified / If-Modified-Since 和 Etag / If-None-Match)，协商缓存由服务器决定是否使用缓存，若协商缓存失效，那么代表该请求的缓存失效，重新获取请求结果，再存入浏览器缓存中；生效则返回 304，继续使用缓存，主要过程如下：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1618909536635-103002ef-97c3-4eb2-9276-7f91caf23037.jpeg#clientId=u53602b42-01cb-4&from=drop&id=ud97110b6&margin=%5Bobject%20Object%5D&name=20.jpg&originHeight=640&originWidth=946&originalType=binary&size=83767&status=done&style=none&taskId=u359d7b2b-9f0b-4092-9197-55f48ce9397" alt="20.jpg"></p>
+<p>all</p>
+<p>最后，为你推荐</p>
+<p><a target="_blank" rel="noopener" href="http://mp.weixin.qq.com/s?__biz=MjM5MTA1MjAxMQ==%E2%88%A3=2651226347&idx=1&sn=6dbccc54406f0b075671884b738b1e88&chksm=bd49596f8a3ed079f79cda4b90ac3cb3b1dbdb5bfb8aade962a16a323563bf26a0c75b0a5d7b&scene=21#wechat_redirect">【第 903 期】浏览器缓存机制剖析</a></p>
+<p><a target="_blank" rel="noopener" href="http://mp.weixin.qq.com/s?__biz=MjM5MTA1MjAxMQ==%E2%88%A3=2651226262&idx=1&sn=2128db200b88479face67ed8e095757c&chksm=bd4959128a3ed0041b43a5683c75c4b88c7d35fac909a59c14b4e9fc11e8d408680b171d2706&scene=21#wechat_redirect">【第 887 期】浏览器的缓存机制小结</a></p>
+<p>关于本文作者：@叶河英原文：<a target="_blank" rel="noopener" href="https://heyingye.github.io/2018/04/16/%E5%BD%BB%E5%BA%95%E7%90%86%E8%A7%A3%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/">https://heyingye.github.io/2018/04/16/彻底理解浏览器的缓存机制/</a></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1618909540539-69285875-8807-455c-96cd-d20224e2cded.jpeg#clientId=u53602b42-01cb-4&from=drop&id=u5c8e6c73&margin=%5Bobject%20Object%5D&name=21.jpg&originHeight=300&originWidth=720&originalType=binary&size=27893&status=done&style=none&taskId=u170283ba-6951-46a7-9a48-c7441c5b14f" alt="21.jpg"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/20/yuque/DOM%E6%A0%91%EF%BC%9AJavaScript%E6%98%AF%E5%A6%82%E4%BD%95%E5%BD%B1%E5%93%8DDOM%E6%A0%91%E6%9E%84%E5%BB%BA%E7%9A%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/20/yuque/DOM%E6%A0%91%EF%BC%9AJavaScript%E6%98%AF%E5%A6%82%E4%BD%95%E5%BD%B1%E5%93%8DDOM%E6%A0%91%E6%9E%84%E5%BB%BA%E7%9A%84/" class="post-title-link" itemprop="url">DOM树：JavaScript是如何影响DOM树构建的</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-20 16:33:13" itemprop="dateCreated datePublished" datetime="2021-04-20T16:33:13+08:00">2021-04-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 14:56:03" itemprop="dateModified" datetime="2021-04-22T14:56:03+08:00">2021-04-22</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在上一篇文章中，我们通过开发者工具中的网络面板，介绍了网络请求过程的几种性能指标以及对页面加载的影响。<br>而在渲染流水线中，后面的步骤都直接或者间接地依赖于 DOM 结构，所以本文我们就继续沿着网络数据流路径来介绍 DOM 树是怎么生成的。然后再基于 DOM 树的解析流程介绍两块内容：第一个是在解析过程中遇到 JavaScript 脚本，DOM 解析器是如何处理的？第二个是 DOM 解析器是如何处理跨站点资源的？</p>
+<h2 id="什么是-DOM"><a href="#什么是-DOM" class="headerlink" title="什么是 DOM"></a>什么是 DOM</h2><p>从网络传给渲染引擎的 HTML 文件字节流是无法直接被渲染引擎理解的，所以要将其转化为渲染引擎能够理解的内部结构，这个结构就是 DOM。DOM 提供了对 HTML 文档结构化的表述。在渲染引擎中，DOM 有三个层面的作用</p>
+<ul>
+<li>从页面的视角来看，DOM 是生成页面的基础数据结构。</li>
+<li>从 JavaScript 脚本视角来看，DOM 提供给 JavaScript 脚本操作的接口，通过这套接口，JavaScript 可以对 DOM 结构进行访问，从而改变文档的结构、样式和内容。</li>
+<li>从安全视角来看，DOM 是一道安全防护线，一些不安全的内容在 DOM 解析阶段就被拒之门外了。</li>
+</ul>
+<p>简言之，DOM 是表述 HTML 的内部数据结构，它会将 Web 页面和 JavaScript 脚本连接起来，并过滤一些不安全的内容。</p>
+<h2 id="DOM-树如何生成"><a href="#DOM-树如何生成" class="headerlink" title="DOM 树如何生成"></a>DOM 树如何生成</h2><p>在渲染引擎内部，有一个叫 HTML 解析器（HTMLParser）的模块，它的职责就是负责将 HTML 字节流转换为 DOM 结构。所以这里我们需要先要搞清楚 HTML 解析器是怎么工作的。<br>在开始介绍 HTML 解析器之前，我要先解释一个大家在留言区问到过好多次的问题：HTML 解析器是等整个 HTML 文档加载完成之后开始解析的，还是随着 HTML 文档边加载边解析的？<br>在这里我统一解答下，HTML 解析器并不是等整个文档加载完成之后再解析的，而是网络进程加载了多少数据，HTML 解析器便解析多少数据。<br>那详细的流程是怎样的呢？网络进程接收到响应头之后，会根据响应头中的 content-type 字段来判断文件的类型，比如 content-type 的值是“text/html”，那么浏览器就会判断这是一个 HTML 类型的文件，然后为该请求选择或者创建一个渲染进程。渲染进程准备好之后，网络进程和渲染进程之间会建立一个共享数据的管道，网络进程接收到数据后就往这个管道里面放，而渲染进程则从管道的另外一端不断地读取数据，并同时将读取的数据“喂”给 HTML 解析器。你可以把这个管道想象成一个“水管”，网络进程接收到的字节流像水一样倒进这个“水管”，而“水管”的另外一端是渲染进程的 HTML 解析器，它会动态接收字节流，并将其解析为 DOM。<br>解答完这个问题之后，接下来我们就可以来详细聊聊 DOM 的具体生成流程了。<br>前面我们说过代码从网络传输过来是字节流的形式，那么后续字节流是如何转换为 DOM 的呢？你可以参考下图：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618907620967-b8143652-679c-4432-b117-4149f9c03189.png#clientId=u027bf477-f5c2-4&from=paste&height=445&id=udcd704bf&margin=%5Bobject%20Object%5D&originHeight=890&originWidth=1538&originalType=url&status=done&style=none&taskId=uef5c2f39-fdf9-4340-b44b-d9acbba244a&width=769"><br>从图中你可以看出，字节流转换为 DOM 需要三个阶段。<br><strong>第一个阶段，通过分词器将字节流转换为 Token。</strong><br>前面《14 | 编译器和解释器：V8 是如何执行一段 JavaScript 代码的？》文章中我们介绍过，V8 编译 JavaScript 过程中的第一步是做词法分析，将 JavaScript 先分解为一个个 Token。解析 HTML 也是一样的，需要通过分词器先将字节流转换为一个个 Token，分为 Tag Token 和文本 Token。上述 HTML 代码通过词法分析生成的 Token 如下所示：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618907620871-8e241e04-500a-45df-86a9-72fff363f59c.png#clientId=u027bf477-f5c2-4&from=paste&height=170&id=uc7c36f28&margin=%5Bobject%20Object%5D&originHeight=340&originWidth=1442&originalType=url&status=done&style=none&taskId=u5ef0a256-7036-4a52-b96d-b3ff64d0870&width=721"><br>由图可以看出，Tag Token 又分 StartTag 和 EndTag，比如<br>就是 StartTag ，就是 EndTag，分别对于图中的蓝色和红色块，文本 Token 对应的绿色块。<br><strong>至于后续的第二个和第三个阶段是同步进行的，需要将 Token 解析为 DOM 节点，并将 DOM 节点添加到 DOM 树中</strong>。<br>HTML 解析器维护了一个 Token 栈结构，该 Token 栈主要用来计算节点之间的父子关系，在第一个阶段中生成的 Token 会被按照顺序压到这个栈中。具体的处理规则如下所示：</p>
+<ul>
+<li>如果压入到栈中的是 StartTag Token，HTML 解析器会为该 Token 创建一个 DOM 节点，然后将该节点加入到 DOM 树中，它的父节点就是栈中相邻的那个元素生成的节点。</li>
+<li>如果分词器解析出来是文本 Token，那么会生成一个文本节点，然后将该节点加入到 DOM 树中，文本 Token 是不需要压入到栈中，它的父节点就是当前栈顶 Token 所对应的 DOM 节点。</li>
+<li>如果分词器解析出来的是 EndTag 标签，比如是 EndTag div，HTML 解析器会查看 Token 栈顶的元素是否是 StarTag div，如果是，就将 StartTag div 从栈中弹出，表示该 div 元素解析完成。</li>
+</ul>
+<p>通过分词器产生的新 Token 就这样不停地压栈和出栈，整个解析过程就这样一直持续下去，直到分词器将所有字节流分词完成。<br>为了更加直观地理解整个过程，下面我们结合一段 HTML 代码（如下），来一步步分析 DOM 树的生成过程。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>1<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>test<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这段代码以字节流的形式传给了 HTML 解析器，经过分词器处理，解析出来的第一个 Token 是 StartTag html，解析出来的 Token 会被压入到栈中，并同时创建一个 html 的 DOM 节点，将其加入到 DOM 树中。<br>这里需要补充说明下，HTML 解析器开始工作时，会默认创建了一个根为 document 的空 DOM 结构，同时会将一个 StartTag document 的 Token 压入栈底。然后经过分词器解析出来的第一个 StartTag html Token 会被压入到栈中，并创建一个 html 的 DOM 节点，添加到 document 上，如下图所示<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618907620730-3376aae6-6b79-420c-b91f-59ac0ceec5f8.png#clientId=u027bf477-f5c2-4&from=paste&height=477&id=u650a49a1&margin=%5Bobject%20Object%5D&originHeight=954&originWidth=1276&originalType=url&status=done&style=none&taskId=uccd797b6-dfc1-485a-a49c-7c4aa8811fd&width=638"><br>然后按照同样的流程解析出来 StartTag body 和 StartTag div，其 Token 栈和 DOM 的状态如下图所示：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618907620943-5cdf02d1-0b58-4d0e-858b-984d50560b4e.png#clientId=u027bf477-f5c2-4&from=paste&height=493&id=u850f324e&margin=%5Bobject%20Object%5D&originHeight=986&originWidth=1330&originalType=url&status=done&style=none&taskId=u2fa6a027-ed6a-47b9-b816-54f1e480161&width=665"><br>接下来解析出来的是第一个 div 的文本 Token，渲染引擎会为该 Token 创建一个文本节点，并将该 Token 添加到 DOM 中，它的父节点就是当前 Token 栈顶元素对应的节点，如下图所示：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618907621143-83c2f156-8ccb-4491-88c2-139a5e24ee02.png#clientId=u027bf477-f5c2-4&from=paste&height=495&id=ub3ac6980&margin=%5Bobject%20Object%5D&originHeight=990&originWidth=1394&originalType=url&status=done&style=none&taskId=uecf854da-3caa-4848-a00c-30ba463407f&width=697"><br>再接下来，分词器解析出来第一个 EndTag div，这时候 HTML 解析器会去判断当前栈顶的元素是否是 StartTag div，如果是则从栈顶弹出 StartTag div，如下图所示<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618907622828-9627ca32-6a8c-4955-ad18-298a0c5eb57c.png#clientId=u027bf477-f5c2-4&from=paste&height=469&id=u73f2c2c5&margin=%5Bobject%20Object%5D&originHeight=938&originWidth=1454&originalType=url&status=done&style=none&taskId=u71722cbf-d102-4d7d-ae93-17175541e3a&width=727"><br>按照同样的规则，一路解析，最终结果如下图所示：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618907622662-17a79816-326c-4a4e-8c3b-537a7902b0be.png#clientId=u027bf477-f5c2-4&from=paste&height=503&id=u884e607b&margin=%5Bobject%20Object%5D&originHeight=1006&originWidth=1432&originalType=url&status=done&style=none&taskId=uab8d4e2e-6f8c-4542-9a72-eeb834e0b5b&width=716"><br>通过上面的介绍，相信你已经清楚 DOM 是怎么生成的了。不过在实际生产环境中，HTML 源文件中既包含 CSS 和 JavaScript，又包含图片、音频、视频等文件，所以处理过程远比上面这个示范 Demo 复杂。不过理解了这个简单的 Demo 生成过程，我们就可以往下分析更加复杂的场景了。</p>
+<h2 id="JavaScript-是如何影响-DOM-生成的"><a href="#JavaScript-是如何影响-DOM-生成的" class="headerlink" title="JavaScript 是如何影响 DOM 生成的"></a>JavaScript 是如何影响 DOM 生成的</h2><p>我们再来看看稍微复杂点的 HTML 文件，如下所示：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>1<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">      <span class="keyword">let</span> div1 = <span class="built_in">document</span>.getElementsByTagName(<span class="string">&quot;div&quot;</span>)[<span class="number">0</span>];</span></span><br><span class="line"><span class="javascript">      div1.innerText = <span class="string">&quot;time.geekbang&quot;</span>;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>test<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>我在两段 div 中间插入了一段 JavaScript 脚本，这段脚本的解析过程就有点不一样了。script 标签之前，所有的解析流程还是和之前介绍的一样，但是解析到 script 标签时，渲染引擎判断这是一段脚本，此时 HTML 解析器就会暂停 DOM 的解析，因为接下来的 JavaScript 可能要修改当前已经生成的 DOM 结构。<br>通过前面 DOM 生成流程分析，我们已经知道当解析到 script 脚本标签时，其 DOM 树结构如下所示：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618907623068-deff6c00-7d7c-40e6-8241-940fa34ba03c.png#clientId=u027bf477-f5c2-4&from=paste&height=744&id=u4a604cad&margin=%5Bobject%20Object%5D&originHeight=1487&originWidth=1142&originalType=url&status=done&style=none&taskId=u9b76a274-f449-4b95-80cf-9d1deb55ba0&width=571"><br>这时候 HTML 解析器暂停工作，JavaScript 引擎介入，并执行 script 标签中的这段脚本，因为这段 JavaScript 脚本修改了 DOM 中第一个 div 中的内容，所以执行这段脚本之后，div 节点内容已经修改为 time.geekbang 了。脚本执行完成之后，HTML 解析器恢复解析过程，继续解析后续的内容，直至生成最终的 DOM。<br>以上过程应该还是比较好理解的，不过除了在页面中直接内嵌 JavaScript 脚本之外，我们还通常需要在页面中引入 JavaScript 文件，这个解析过程就稍微复杂了些，如下面代码：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//foo.js let div1 = document.getElementsByTagName(&#x27;div&#x27;)[0] div1.innerText =</span><br><span class="line">&#x27;time.geekbang&#x27;</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>1<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span> <span class="attr">src</span>=<span class="string">&quot;foo.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>test<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这段代码的功能还是和前面那段代码是一样的，不过这里我把内嵌 JavaScript 脚本修改成了通过 JavaScript 文件加载。其整个执行流程还是一样的，执行到 JavaScript 标签时，暂停整个 DOM 的解析，执行 JavaScript 代码，不过这里执行 JavaScript 时，需要先下载这段 JavaScript 代码。这里需要重点关注下载环境，因为 JavaScript 文件的下载过程会阻塞 DOM 解析，而通常下载又是非常耗时的，会受到网络环境、JavaScript 文件大小等因素的影响。<br>不过 Chrome 浏览器做了很多优化，其中一个主要的优化是预解析操作。当渲染引擎收到字节流之后，会开启一个预解析线程，用来分析 HTML 文件中包含的 JavaScript、CSS 等相关文件，解析到相关文件之后，预解析线程会提前下载这些文件。<br>再回到 DOM 解析上，我们知道引入 JavaScript 线程会阻塞 DOM，不过也有一些相关的策略来规避，比如使用 CDN 来加速 JavaScript 文件的加载，压缩 JavaScript 文件的体积。另外，如果 JavaScript 文件中没有操作 DOM 相关代码，就可以将该 JavaScript 脚本设置为异步加载，通过 async 或 defer 来标记代码，使用方式如下所示：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">async</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span> <span class="attr">src</span>=<span class="string">&quot;foo.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">defer</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span> <span class="attr">src</span>=<span class="string">&quot;foo.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>async 和 defer 虽然都是异步的，不过还有一些差异，使用 async 标志的脚本文件一旦加载完成，会立即执行；而使用了 defer 标记的脚本文件，需要在 DOMContentLoaded 事件之前执行。<br>现在我们知道了 JavaScript 是如何阻塞 DOM 解析的了，那接下来我们再来结合文中代码看看另外一种情况：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">src</span>=<span class="string">&#x27;theme.css&#x27;</span>&gt;</span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>1<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">let</span> div1 = <span class="built_in">document</span>.getElementsByTagName(<span class="string">&#x27;div&#x27;</span>)[<span class="number">0</span>]</span></span><br><span class="line"><span class="javascript">            div1.innerText = <span class="string">&#x27;time.geekbang&#x27;</span> <span class="comment">// 需要 DOM</span></span></span><br><span class="line"><span class="javascript">            div1.style.color = <span class="string">&#x27;red&#x27;</span>  <span class="comment">// 需要 CSSOM</span></span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>test<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>该示例中，JavaScript 代码出现了 div1.style.color = ‘red’ 的语句，它是用来操纵 CSSOM 的，所以在执行 JavaScript 之前，需要先解析 JavaScript 语句之上所有的 CSS 样式。所以如果代码里引用了外部的 CSS 文件，那么在执行 JavaScript 之前，还需要等待外部的 CSS 文件下载完成，并解析生成 CSSOM 对象之后，才能执行 JavaScript 脚本。<br>而 JavaScript 引擎在解析 JavaScript 之前，是不知道 JavaScript 是否操纵了 CSSOM 的，所以渲染引擎在遇到 JavaScript 脚本时，不管该脚本是否操纵了 CSSOM，都会执行 CSS 文件下载，解析操作，再执行 JavaScript 脚本。<br>所以说 JavaScript 脚本是依赖样式表的，这又多了一个阻塞过程。至于如何优化，我们在下篇文章中再来深入探讨。<br>通过上面的分析，我们知道了 JavaScript 会阻塞 DOM 生成，而样式文件又会阻塞 JavaScript 的执行，所以在实际的工程中需要重点关注 JavaScript 文件和样式表文件，使用不当会影响到页面性能的</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/20/yuque/%E5%89%8D%E7%AB%AF%E8%B7%AF%E7%94%B1%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F%EF%BC%9Ahash%E6%A8%A1%E5%BC%8F%E5%92%8C%20history%E6%A8%A1%E5%BC%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -177,7 +459,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 14:41:28" itemprop="dateModified" datetime="2021-04-22T14:41:28+08:00">2021-04-22</time>
+                <time title="修改时间：2021-04-22 14:56:03" itemprop="dateModified" datetime="2021-04-22T14:56:03+08:00">2021-04-22</time>
               </span>
 
           
@@ -318,7 +600,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 14:41:28" itemprop="dateModified" datetime="2021-04-22T14:41:28+08:00">2021-04-22</time>
+                <time title="修改时间：2021-04-22 14:56:03" itemprop="dateModified" datetime="2021-04-22T14:56:03+08:00">2021-04-22</time>
               </span>
 
           
@@ -541,7 +823,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 14:41:28" itemprop="dateModified" datetime="2021-04-22T14:41:28+08:00">2021-04-22</time>
+                <time title="修改时间：2021-04-22 14:56:03" itemprop="dateModified" datetime="2021-04-22T14:56:03+08:00">2021-04-22</time>
               </span>
 
           
@@ -736,7 +1018,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 14:41:28" itemprop="dateModified" datetime="2021-04-22T14:41:28+08:00">2021-04-22</time>
+                <time title="修改时间：2021-04-22 14:56:03" itemprop="dateModified" datetime="2021-04-22T14:56:03+08:00">2021-04-22</time>
               </span>
 
           
@@ -835,7 +1117,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 14:41:28" itemprop="dateModified" datetime="2021-04-22T14:41:28+08:00">2021-04-22</time>
+                <time title="修改时间：2021-04-22 14:56:03" itemprop="dateModified" datetime="2021-04-22T14:56:03+08:00">2021-04-22</time>
               </span>
 
           
@@ -1034,7 +1316,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 14:41:28" itemprop="dateModified" datetime="2021-04-22T14:41:28+08:00">2021-04-22</time>
+                <time title="修改时间：2021-04-22 14:56:03" itemprop="dateModified" datetime="2021-04-22T14:56:03+08:00">2021-04-22</time>
               </span>
 
           
@@ -1240,7 +1522,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 14:41:28" itemprop="dateModified" datetime="2021-04-22T14:41:28+08:00">2021-04-22</time>
+                <time title="修改时间：2021-04-22 14:56:03" itemprop="dateModified" datetime="2021-04-22T14:56:03+08:00">2021-04-22</time>
               </span>
 
           
@@ -1305,7 +1587,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 14:41:28" itemprop="dateModified" datetime="2021-04-22T14:41:28+08:00">2021-04-22</time>
+                <time title="修改时间：2021-04-22 14:56:04" itemprop="dateModified" datetime="2021-04-22T14:56:04+08:00">2021-04-22</time>
               </span>
 
           
@@ -1425,416 +1707,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/16/yuque/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E6%9C%BA%E5%88%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Adam Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Adam">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/16/yuque/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E6%9C%BA%E5%88%B6/" class="post-title-link" itemprop="url">事件循环机制</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-16 19:47:37" itemprop="dateCreated datePublished" datetime="2021-04-16T19:47:37+08:00">2021-04-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 14:41:29" itemprop="dateModified" datetime="2021-04-22T14:41:29+08:00">2021-04-22</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="答题大纲"><a href="#答题大纲" class="headerlink" title="答题大纲"></a>答题大纲</h3><ol>
-<li>先说基本知识点，宏任务、微任务有哪些</li>
-<li>说事件循环机制过程，边说边画图出来</li>
-<li>说 async/await 执行顺序注意，可以把 chrome 的优化，做法其实是违法了规范的，V8 团队的 PR 这些自信点说出来，显得你很好学，理解得很详细，很透彻。</li>
-<li>把 node 的事件循环也说一下，重复 1、2、3 点，node 中的第 3 点要说的是 node11 前后的事件循环变动点。</li>
-</ol>
-<p>下面就跟着这个大纲走，每个点来说一下吧～</p>
-<h3 id="浏览器中的事件循环"><a href="#浏览器中的事件循环" class="headerlink" title="浏览器中的事件循环"></a>浏览器中的事件循环</h3><p>JavaScript 代码的执行过程中，除了依靠函数调用栈来搞定函数的执行顺序外，还依靠任务队列(task queue)来搞定另外一些代码的执行。整个执行过程，我们称为事件循环过程。一个线程中，事件循环是唯一的，但是任务队列可以拥有多个。任务队列又分为 macro-task（宏任务）与 micro-task（微任务），在最新标准中，它们被分别称为 task 与 jobs。</p>
-<p>macro-task 大概包括：</p>
-<ul>
-<li>script(整体代码)</li>
-<li>setTimeout</li>
-<li>setInterval</li>
-<li>setImmediate</li>
-<li>I/O</li>
-<li>UI render</li>
-</ul>
-<p>micro-task 大概包括:</p>
-<ul>
-<li>process.nextTick</li>
-<li>Promise</li>
-<li>Async/Await(实际就是 promise)</li>
-<li>MutationObserver(html5 新特性)</li>
-</ul>
-<p>整体执行，我画了一个流程图：</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618573781952-7782507e-dfda-41bf-8417-0435c4b684c9.png#clientId=u0fbb7ad9-f0df-4&from=drop&id=u25578fe7&margin=%5Bobject%20Object%5D&originHeight=818&originWidth=1678&originalType=binary&size=59057&status=done&style=none&taskId=u73daa851-8b7c-42da-8bec-df55426c906"></p>
-<p>总的结论就是，执行宏任务，然后执行该宏任务产生的微任务，若微任务在执行过程中产生了新的微任务，则继续执行微任务，微任务执行完毕后，再回到宏任务中进行下一轮循环。举个例子：</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1618573787405-8a3aca03-1875-4117-b918-81ae19c99e11.jpeg#clientId=u0fbb7ad9-f0df-4&from=drop&id=ubfc6d14f&margin=%5Bobject%20Object%5D&originHeight=488&originWidth=1000&originalType=binary&size=80503&status=done&style=none&taskId=ufac4233a-7981-4bb7-8d51-1bbbd5e63f6"></p>
-<p>结合流程图理解，答案输出为：async2 end =&gt; Promise =&gt; async1 end =&gt; promise1 =&gt; promise2 =&gt; setTimeout</p>
-<p>但是，对于 async/await ，我们有个细节还要处理一下。如下：</p>
-<h3 id="async-await-执行顺序"><a href="#async-await-执行顺序" class="headerlink" title="async/await 执行顺序"></a>async/await 执行顺序</h3><p>我们知道<code>async</code>隐式返回 Promise 作为结果的函数,那么可以简单理解为，await 后面的函数执行完毕时，await 会产生一个微任务(Promise.then 是微任务)。但是我们要注意这个微任务产生的时机，它是执行完 await 之后，直接跳出 async 函数，执行其他代码(此处就是协程的运作，A 暂停执行，控制权交给 B)。其他代码执行完毕后，再回到 async 函数去执行剩下的代码，然后把 await 后面的代码注册到微任务队列当中。我们来看个例子：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">&quot;script start&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">await</span> async2();</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;async1 end&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;async2 end&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line">async1();</span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;setTimeout&quot;</span>);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;Promise&quot;</span>);</span><br><span class="line">  resolve();</span><br><span class="line">&#125;)</span><br><span class="line">  .then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;promise1&quot;</span>);</span><br><span class="line">  &#125;)</span><br><span class="line">  .then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;promise2&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&quot;script end&quot;</span>);</span><br><span class="line"><span class="comment">// 旧版输出如下，但是请继续看完本文下面的注意那里，新版有改动</span></span><br><span class="line"><span class="comment">// script start =&gt; async2 end =&gt; Promise =&gt; script end =&gt; promise1 =&gt; promise2 =&gt; async1 end =&gt; setTimeout</span></span><br></pre></td></tr></table></figure>
-
-<p>分析这段代码：</p>
-<ul>
-<li>执行代码，输出<code>script start</code>。</li>
-<li>执行 async1(),会调用 async2(),然后输出<code>async2 end</code>,此时将会保留 async1 函数的上下文，然后跳出 async1 函数。</li>
-<li>遇到 setTimeout，产生一个宏任务</li>
-<li>执行 Promise，输出<code>Promise</code>。遇到 then，产生第一个微任务</li>
-<li>继续执行代码，输出<code>script end</code></li>
-<li>代码逻辑执行完毕(当前宏任务执行完毕)，开始执行当前宏任务产生的微任务队列，输出<code>promise1</code>，该微任务遇到 then，产生一个新的微任务</li>
-<li>执行产生的微任务，输出<code>promise2</code>,当前微任务队列执行完毕。执行权回到 async1</li>
-<li>执行 await,实际上会产生一个 promise 返回，即</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> promise_ = <span class="keyword">new</span> <span class="built_in">Promise</span>((resolve,reject)&#123; resolve(<span class="literal">undefined</span>)&#125;)</span><br></pre></td></tr></table></figure>
-
-<p>执行完成，执行 await 后面的语句，输出<code>async1 end</code></p>
-<ul>
-<li>最后，执行下一个宏任务，即执行 setTimeout，输出<code>setTimeout</code></li>
-</ul>
-<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><p>新版的 chrome 浏览器中不是如上打印的，因为 chrome 优化了,await 变得更快了,输出为:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// script start =&gt; async2 end =&gt; Promise =&gt; script end =&gt; async1 end =&gt; promise1 =&gt; promise2 =&gt; setTimeout</span></span><br></pre></td></tr></table></figure>
-
-<p>但是这种做法其实是违法了规范的，当然规范也是可以更改的，这是 V8 团队的一个 <a target="_blank" rel="noopener" href="https://github.com/tc39/ecma262/pull/1250#issue-197979338">PR</a> ，目前新版打印已经修改。</p>
-<p>知乎上也有相关讨论,可以看看 <a target="_blank" rel="noopener" href="https://www.zhihu.com/question/268007969">https://www.zhihu.com/question/268007969</a></p>
-<p>我们可以分 2 种情况来理解：</p>
-<ol>
-<li> 如果 await 后面直接跟的为一个变量，比如：await 1；这种情况的话相当于直接把 await 后面的代码注册为一个微任务，可以简单理解为 promise.then(await 下面的代码)。然后跳出 async1 函数，执行其他代码，当遇到 promise 函数的时候，会注册 promise.then()函数到微任务队列，注意此时微任务队列里面已经存在 await 后面的微任务。所以这种情况会先执行 await 后面的代码（async1 end），再执行 async1 函数后面注册的微任务代码(promise1,promise2)。</li>
-<li> 如果 await 后面跟的是一个异步函数的调用，比如上面的代码，将代码改成这样：</li>
-</ol>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">&quot;script start&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">await</span> async2();</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;async1 end&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;async2 end&quot;</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve().then(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;async2 end1&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line">async1();</span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;setTimeout&quot;</span>);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;Promise&quot;</span>);</span><br><span class="line">  resolve();</span><br><span class="line">&#125;)</span><br><span class="line">  .then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;promise1&quot;</span>);</span><br><span class="line">  &#125;)</span><br><span class="line">  .then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;promise2&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&quot;script end&quot;</span>);</span><br></pre></td></tr></table></figure>
-
-<p>输出为：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// script start =&gt; async2 end =&gt; Promise =&gt; script end =&gt; async2 end1 =&gt; promise1 =&gt; promise2 =&gt; async1 end =&gt; setTimeout</span></span><br></pre></td></tr></table></figure>
-
-<p>此时执行完 awit 并不先把 await 后面的代码注册到微任务队列中去，而是执行完 await 之后，直接跳出 async1 函数，执行其他代码。然后遇到 promise 的时候，把 promise.then 注册为微任务。其他代码执行完毕后，需要回到 async1 函数去执行剩下的代码，然后把 await 后面的代码注册到微任务队列当中，注意此时微任务队列中是有之前注册的微任务的。所以这种情况会先执行 async1 函数之外的微任务(promise1,promise2)，然后才执行 async1 内注册的微任务(async1 end).</p>
-<p>可以理解为，这种情况下，await 后面的代码会在本轮循环的最后被执行.</p>
-<p>浏览器中有事件循环，node 中也有，事件循环是 node 处理非阻塞 I/O 操作的机制，node 中事件循环的实现是依靠的 libuv 引擎。由于 node 11 之后，事件循环的一些原理发生了变化，这里就以新的标准去讲，最后再列上变化点让大家了解前因后果。</p>
-<h3 id="node-中的事件循环"><a href="#node-中的事件循环" class="headerlink" title="node 中的事件循环"></a>node 中的事件循环</h3><p>浏览器中有事件循环，node 中也有，事件循环是 node 处理非阻塞 I/O 操作的机制，node 中事件循环的实现是依靠的 libuv 引擎。由于 node 11 之后，事件循环的一些原理发生了变化，这里就以新的标准去讲，最后再列上变化点让大家了解前因后果。</p>
-<h4 id="宏任务和微任务"><a href="#宏任务和微任务" class="headerlink" title="宏任务和微任务"></a>宏任务和微任务</h4><p>node 中也有宏任务和微任务，与浏览器中的事件循环类似，其中，</p>
-<p>macro-task 大概包括：</p>
-<ul>
-<li>setTimeout</li>
-<li>setInterval</li>
-<li>setImmediate</li>
-<li>script（整体代码)</li>
-<li>I/O 操作等。</li>
-</ul>
-<p>micro-task 大概包括：</p>
-<ul>
-<li>process.nextTick(与普通微任务有区别，在微任务队列执行之前执行)</li>
-<li>new Promise().then(回调)等。</li>
-</ul>
-<h4 id="node-事件循环整体理解"><a href="#node-事件循环整体理解" class="headerlink" title="node 事件循环整体理解"></a>node 事件循环整体理解</h4><p>先看一张官网的 node 事件循环简化图：</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618573805467-2e96e30d-3f85-40c5-9215-78a7795fa76c.png#clientId=u0fbb7ad9-f0df-4&from=drop&id=u24642caa&margin=%5Bobject%20Object%5D&originHeight=451&originWidth=751&originalType=binary&size=25564&status=done&style=none&taskId=ud4bb323f-7d66-49c8-919b-bb1d659d487"></p>
-<p>图中的每个框被称为事件循环机制的一个阶段，每个阶段都有一个 FIFO 队列来执行回调。虽然每个阶段都是特殊的，但通常情况下，当事件循环进入给定的阶段时，它将执行特定于该阶段的任何操作，然后执行该阶段队列中的回调，直到队列用尽或最大回调数已执行。当该队列已用尽或达到回调限制，事件循环将移动到下一阶段。</p>
-<p>因此，从上面这个简化图中，我们可以分析出 node 的事件循环的阶段顺序为：</p>
-<p>输入数据阶段(incoming data)-&gt;轮询阶段(poll)-&gt;检查阶段(check)-&gt;关闭事件回调阶段(close callback)-&gt;定时器检测阶段(timers)-&gt;I/O 事件回调阶段(I/O callbacks)-&gt;闲置阶段(idle, prepare)-&gt;轮询阶段…</p>
-<h4 id="阶段概述"><a href="#阶段概述" class="headerlink" title="阶段概述"></a>阶段概述</h4><ul>
-<li>定时器检测阶段(timers)：本阶段执行 timer 的回调，即 setTimeout、setInterval 里面的回调函数。</li>
-<li>I/O 事件回调阶段(I/O callbacks)：执行延迟到下一个循环迭代的 I/O 回调，即上一轮循环中未被执行的一些 I/O 回调。</li>
-<li>闲置阶段(idle, prepare)：仅系统内部使用。</li>
-<li>轮询阶段(poll)：检索新的 I/O 事件;执行与 I/O 相关的回调（几乎所有情况下，除了关闭的回调函数，那些由计时器和 setImmediate() 调度的之外），其余情况 node 将在适当的时候在此阻塞。</li>
-<li>检查阶段(check)：setImmediate() 回调函数在这里执行</li>
-<li>关闭事件回调阶段(close callback)：一些关闭的回调函数，如：socket.on(‘close’, …)。</li>
-</ul>
-<h4 id="三大重点阶段"><a href="#三大重点阶段" class="headerlink" title="三大重点阶段"></a>三大重点阶段</h4><p>日常开发中的绝大部分异步任务都是在 poll、check、timers 这 3 个阶段处理的,所以我们来重点看看。</p>
-<h5 id="timers"><a href="#timers" class="headerlink" title="timers"></a>timers</h5><p>timers 阶段会执行 setTimeout 和 setInterval 回调，并且是由 poll 阶段控制的。 同样，在 Node 中定时器指定的时间也不是准确时间，只能是尽快执行。</p>
-<h5 id="poll"><a href="#poll" class="headerlink" title="poll"></a>poll</h5><p>poll 是一个至关重要的阶段，poll 阶段的执行逻辑流程图如下：</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1618573818346-738f855a-9297-4b19-9e7e-4350d4e3e7d1.jpeg#clientId=u0fbb7ad9-f0df-4&from=drop&id=ubb22cbe6&margin=%5Bobject%20Object%5D&originHeight=594&originWidth=625&originalType=binary&size=38789&status=done&style=none&taskId=u17631d17-a0d2-4dfb-acf9-0827e261e10"></p>
-<p>如果当前已经存在定时器，而且有定时器到时间了，拿出来执行，eventLoop 将回到 timers 阶段。</p>
-<p>如果没有定时器, 会去看回调函数队列。</p>
-<ul>
-<li>如果 poll 队列不为空，会遍历回调队列并同步执行，直到队列为空或者达到系统限制</li>
-<li>如果 poll 队列为空时，会有两件事发生<ul>
-<li>如果有 setImmediate 回调需要执行，poll 阶段会停止并且进入到 check 阶段执行回调</li>
-<li>如果没有 setImmediate 回调需要执行，会等待回调被加入到队列中并立即执行回调，这里同样会有个超时时间设置防止一直等待下去,一段时间后自动进入 check 阶段。</li>
-</ul>
-</li>
-</ul>
-<h5 id="check"><a href="#check" class="headerlink" title="check"></a>check</h5><p>check 阶段。这是一个比较简单的阶段，直接执行 setImmdiate 的回调。</p>
-<h4 id="process-nextTick"><a href="#process-nextTick" class="headerlink" title="process.nextTick"></a>process.nextTick</h4><p>process.nextTick 是一个独立于 eventLoop 的任务队列。</p>
-<p>在每一个 eventLoop 阶段完成后会去检查 nextTick 队列，如果里面有任务，会让这部分任务优先于微任务执行。</p>
-<p>看一个例子：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">setImmediate(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;timeout1&quot;</span>);</span><br><span class="line">  <span class="built_in">Promise</span>.resolve().then(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;promise resolve&quot;</span>));</span><br><span class="line">  process.nextTick(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;next tick1&quot;</span>));</span><br><span class="line">&#125;);</span><br><span class="line">setImmediate(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;timeout2&quot;</span>);</span><br><span class="line">  process.nextTick(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;next tick2&quot;</span>));</span><br><span class="line">&#125;);</span><br><span class="line">setImmediate(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;timeout3&quot;</span>));</span><br><span class="line">setImmediate(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;timeout4&quot;</span>));</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>在 node11 之前，因为每一个 eventLoop 阶段完成后会去检查 nextTick 队列，如果里面有任务，会让这部分任务优先于微任务执行，因此上述代码是先进入 check 阶段，执行所有 setImmediate，完成之后执行 nextTick 队列，最后执行微任务队列，因此输出为<code>timeout1=&gt;timeout2=&gt;timeout3=&gt;timeout4=&gt;next tick1=&gt;next tick2=&gt;promise resolve</code></li>
-<li>在 node11 之后，process.nextTick 是微任务的一种,因此上述代码是先进入 check 阶段，执行一个 setImmediate 宏任务，然后执行其微任务队列，再执行下一个宏任务及其微任务,因此输出为<code>timeout1=&gt;next tick1=&gt;promise resolve=&gt;timeout2=&gt;next tick2=&gt;timeout3=&gt;timeout4</code></li>
-</ul>
-<h3 id="node-版本差异说明"><a href="#node-版本差异说明" class="headerlink" title="node 版本差异说明"></a>node 版本差异说明</h3><p>这里主要说明的是 node11 前后的差异，因为 node11 之后一些特性已经向浏览器看齐了，总的变化一句话来说就是，如果是 node11 版本一旦执行一个阶段里的一个宏任务(setTimeout,setInterval 和 setImmediate)就立刻执行对应的微任务队列，一起来看看吧～</p>
-<h4 id="timers-阶段的执行时机变化"><a href="#timers-阶段的执行时机变化" class="headerlink" title="timers 阶段的执行时机变化"></a>timers 阶段的执行时机变化</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;timer1&quot;</span>);</span><br><span class="line">  <span class="built_in">Promise</span>.resolve().then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;promise1&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;timer2&quot;</span>);</span><br><span class="line">  <span class="built_in">Promise</span>.resolve().then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;promise2&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果是 node11 版本一旦执行一个阶段里的一个宏任务(setTimeout,setInterval 和 setImmediate)就立刻执行微任务队列，这就跟浏览器端运行一致，最后的结果为<code>timer1=&gt;promise1=&gt;timer2=&gt;promise2</code></li>
-<li>如果是 node10 及其之前版本要看第一个定时器执行完，第二个定时器是否在完成队列中.<ul>
-<li>如果是第二个定时器还未在完成队列中，最后的结果为<code>timer1=&gt;promise1=&gt;timer2=&gt;promise2</code></li>
-<li>如果是第二个定时器已经在完成队列中，则最后的结果为<code>timer1=&gt;timer2=&gt;promise1=&gt;promise2</code></li>
-</ul>
-</li>
-</ul>
-<h4 id="check-阶段的执行时机变化"><a href="#check-阶段的执行时机变化" class="headerlink" title="check 阶段的执行时机变化"></a>check 阶段的执行时机变化</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">setImmediate(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;immediate1&quot;</span>));</span><br><span class="line">setImmediate(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;immediate2&quot;</span>);</span><br><span class="line">  <span class="built_in">Promise</span>.resolve().then(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;promise resolve&quot;</span>));</span><br><span class="line">&#125;);</span><br><span class="line">setImmediate(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;immediate3&quot;</span>));</span><br><span class="line">setImmediate(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;immediate4&quot;</span>));</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果是 node11 后的版本，会输出<code>immediate1=&gt;immediate2=&gt;promise resolve=&gt;immediate3=&gt;immediate4</code></li>
-<li>如果是 node11 前的版本，会输出<code>immediate1=&gt;immediate2=&gt;immediate3=&gt;immediate4=&gt;promise resolve</code></li>
-</ul>
-<h4 id="nextTick-队列的执行时机变化"><a href="#nextTick-队列的执行时机变化" class="headerlink" title="nextTick 队列的执行时机变化"></a>nextTick 队列的执行时机变化</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">setImmediate(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;timeout1&quot;</span>));</span><br><span class="line">setImmediate(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;timeout2&quot;</span>);</span><br><span class="line">  process.nextTick(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;next tick&quot;</span>));</span><br><span class="line">&#125;);</span><br><span class="line">setImmediate(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;timeout3&quot;</span>));</span><br><span class="line">setImmediate(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;timeout4&quot;</span>));</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果是 node11 后的版本，会输出<code>timeout1=&gt;timeout2=&gt;next tick=&gt;timeout3=&gt;timeout4</code></li>
-<li>如果是 node11 前的版本，会输出<code>timeout1=&gt;timeout2=&gt;timeout3=&gt;timeout4=&gt;next tick</code></li>
-</ul>
-<p>以上几个例子，你应该就能清晰感受到它的变化了，反正记着一个结论，如果是 node11 版本一旦执行一个阶段里的一个宏任务(setTimeout,setInterval 和 setImmediate)就立刻执行对应的微任务队列。</p>
-<h3 id="node-和-浏览器-eventLoop-的主要区别"><a href="#node-和-浏览器-eventLoop-的主要区别" class="headerlink" title="node 和 浏览器 eventLoop 的主要区别"></a>node 和 浏览器 eventLoop 的主要区别</h3><p>两者最主要的区别在于浏览器中的微任务是在每个相应的宏任务中执行的，而 nodejs 中的微任务是在不同阶段之间执行的。</p>
-<h3 id="更多理解资料"><a href="#更多理解资料" class="headerlink" title="更多理解资料"></a>更多理解资料</h3><ul>
-<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI0MzIyMDM5Ng==%E2%88%A3=2649826490&idx=1&sn=5e38c673dfa45dabc1a348597cdd6e82&chksm=f175ee79c602676fc885e145fbaef28e6e88678f852c62fb00b8229cfedcf9ac422bcf20b2e4&scene=21#wechat_redirect">【语音解题系列】说说 JS 的事件循环机制 (含满分答题技巧)</a></li>
-<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/qEmR-N6cANSkKuJt2QO_eg">【语音解题系列】说说 JS 的事件循环机制 (含满分答题技巧)</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/LuckyWinty/fe-weekly-questions/issues">自测题目</a></li>
-</ul>
-<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul>
-<li><a target="_blank" rel="noopener" href="https://juejin.im/book/6844733763675488269/section/6844733763763568654#heading-4">前端面试之道</a></li>
-<li><a target="_blank" rel="noopener" href="https://juejin.im/post/6844903858129338375">一道面试题引发的 node 事件循环深入思考</a></li>
-<li><a target="_blank" rel="noopener" href="https://nodejs.org/zh-cn/docs/guides/event-loop-timers-and-nexttick/">Node.js 事件循环，定时器和 process.nextTick()</a></li>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/33058983">详解 JavaScript 中的 Event Loop（事件循环）机制</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.insiderattack.net/new-changes-to-timers-and-microtasks-from-node-v11-0-0-and-above-68d112743eb3">New Changes to the Timers and Microtasks in Node v11.0.0 ( and above)</a></li>
-</ul>
-<h3 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h3><ul>
-<li>欢迎加我微信(winty230)，拉你进技术群，长期交流学习…</li>
-<li>欢迎关注「前端 Q」,认真学前端，做个有专业的技术人…</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618573825825-d88156eb-e92a-4394-95c6-642ec5c602cd.png#clientId=u0fbb7ad9-f0df-4&from=drop&id=ua550051a&margin=%5Bobject%20Object%5D&originHeight=480&originWidth=480&originalType=binary&size=207122&status=done&style=none&taskId=u875f592c-0be4-4d8f-ac64-3ffb5c9bdb7"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/16/yuque/%E4%BD%9C%E7%94%A8%E5%9F%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Adam Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Adam">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/16/yuque/%E4%BD%9C%E7%94%A8%E5%9F%9F/" class="post-title-link" itemprop="url">作用域</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-16 18:18:01" itemprop="dateCreated datePublished" datetime="2021-04-16T18:18:01+08:00">2021-04-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 14:41:29" itemprop="dateModified" datetime="2021-04-22T14:41:29+08:00">2021-04-22</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>JavaScript 中有一个被称为作用域(Scope)的特性。虽然对于许多新手开发者来说，作用域的概念并不是很容易理解，本文我会尽我所能用最简单的方式来解释作用域和作用域链，希望大家有所收获！</p>
-<p><strong>想阅读更多优质文章请猛戳</strong><a target="_blank" rel="noopener" href="https://github.com/ljianshu/Blog"><strong>GitHub 博客</strong></a></p>
-<h2 id="作用域-Scope"><a href="#作用域-Scope" class="headerlink" title="作用域(Scope)"></a>作用域(Scope)</h2><h3 id="1-什么是作用域"><a href="#1-什么是作用域" class="headerlink" title="1.什么是作用域"></a>1.什么是作用域</h3><p>作用域是在运行时代码中的某些特定部分中变量，函数和对象的可访问性。换句话说，作用域决定了代码区块中变量和其他资源的可见性。可能这两句话并不好理解，我们先来看个例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function outFun2() &#123;</span><br><span class="line">    var inVariable &#x3D; &quot;内层变量2&quot;;</span><br><span class="line">&#125;</span><br><span class="line">outFun2();&#x2F;&#x2F;要先执行这个函数，否则根本不知道里面是啥</span><br><span class="line">console.log(inVariable); &#x2F;&#x2F; Uncaught ReferenceError: inVariable is not defined</span><br></pre></td></tr></table></figure>
-
-<p>从上面的例子可以体会到作用域的概念，变量 inVariable 在全局作用域没有声明，所以在全局作用域下取值会报错。我们可以这样理解：<strong>作用域就是一个独立的地盘，让变量不会外泄、暴露出去</strong>。也就是说<strong>作用域最大的用处就是隔离变量，不同作用域下同名变量不会有冲突。</strong></p>
-<p><strong>ES6 之前 JavaScript 没有块级作用域,只有全局作用域和函数作用域</strong>。ES6 的到来，为我们提供了‘块级作用域’,可通过新增命令 let 和 const 来体现。</p>
-<h3 id="2-全局作用域和函数作用域"><a href="#2-全局作用域和函数作用域" class="headerlink" title="2.全局作用域和函数作用域"></a>2.全局作用域和函数作用域</h3><p>在代码中任何地方都能访问到的对象拥有全局作用域，一般来说以下几种情形拥有全局作用域：</p>
-<ul>
-<li>最外层函数 和在最外层函数外面定义的变量拥有全局作用域</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">var outVariable &#x3D; &quot;我是最外层变量&quot;; &#x2F;&#x2F;最外层变量</span><br><span class="line">function outFun() &#123; &#x2F;&#x2F;最外层函数</span><br><span class="line">    var inVariable &#x3D; &quot;内层变量&quot;;</span><br><span class="line">    function innerFun() &#123; &#x2F;&#x2F;内层函数</span><br><span class="line">        console.log(inVariable);</span><br><span class="line">    &#125;</span><br><span class="line">    innerFun();</span><br><span class="line">&#125;</span><br><span class="line">console.log(outVariable); &#x2F;&#x2F;我是最外层变量</span><br><span class="line">outFun(); &#x2F;&#x2F;内层变量</span><br><span class="line">console.log(inVariable); &#x2F;&#x2F;inVariable is not defined</span><br><span class="line">innerFun(); &#x2F;&#x2F;innerFun is not defined</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>所有末定义直接赋值的变量自动声明为拥有全局作用域</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function outFun2() &#123;</span><br><span class="line">    variable &#x3D; &quot;未定义直接赋值的变量&quot;;</span><br><span class="line">    var inVariable2 &#x3D; &quot;内层变量2&quot;;</span><br><span class="line">&#125;</span><br><span class="line">outFun2();&#x2F;&#x2F;要先执行这个函数，否则根本不知道里面是啥</span><br><span class="line">console.log(variable); &#x2F;&#x2F;未定义直接赋值的变量</span><br><span class="line">console.log(inVariable2); &#x2F;&#x2F;inVariable2 is not defined</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>所有 window 对象的属性拥有全局作用域</li>
-</ul>
-<p>一般情况下，window 对象的内置属性都拥有全局作用域，例如 window.name、window.location、window.top 等等。</p>
-<p>全局作用域有个弊端：如果我们写了很多行 JS 代码，变量定义都没有用函数包括，那么它们就全部都在全局作用域中。这样就会 污染全局命名空间, 容易引起命名冲突。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 张三写的代码中</span><br><span class="line">var data &#x3D; &#123;a: 100&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 李四写的代码中</span><br><span class="line">var data &#x3D; &#123;x: true&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这就是为何 jQuery、Zepto 等库的源码，所有的代码都会放在<code>(function()&#123;....&#125;)()</code>中。因为放在里面的所有变量，都不会被外泄和暴露，不会污染到外面，不会对其他的库或者 JS 脚本造成影响。这是函数作用域的一个体现。</p>
-<p>函数作用域,是指声明在函数内部的变量，和全局作用域相反，局部作用域一般只在固定的代码片段内可访问到，最常见的例如函数内部。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">function doSomething()&#123;</span><br><span class="line">    var blogName&#x3D;&quot;浪里行舟&quot;;</span><br><span class="line">    function innerSay()&#123;</span><br><span class="line">        alert(blogName);</span><br><span class="line">    &#125;</span><br><span class="line">    innerSay();</span><br><span class="line">&#125;</span><br><span class="line">alert(blogName); &#x2F;&#x2F;脚本错误</span><br><span class="line">innerSay(); &#x2F;&#x2F;脚本错误</span><br></pre></td></tr></table></figure>
-
-<p><strong>作用域是分层的，内层作用域可以访问外层作用域的变量，反之则不行</strong>。我们看个例子，用泡泡来比喻作用域可能好理解一点：</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618568347878-7b1e69f1-82cd-44f5-8577-203aec5debf6.png#clientId=u86861ac7-38dd-4&from=drop&height=294&id=u853b9505&margin=%5Bobject%20Object%5D&originHeight=294&originWidth=461&originalType=binary&size=37264&status=done&style=none&taskId=u1902bc6f-4248-4373-9939-5f737f86482&width=461"></p>
-<p>最后输出的结果为 2, 4, 12</p>
-<ul>
-<li>泡泡 1 是全局作用域，有标识符 foo；</li>
-<li>泡泡 2 是作用域 foo，有标识符 a,bar,b；</li>
-<li>泡泡 3 是作用域 bar，仅有标识符 c。</li>
-</ul>
-<p>值得注意的是：<strong>块语句（大括号“｛｝”中间的语句），如 if 和 switch 条件语句或 for 和 while 循环语句，不像函数，它们不会创建一个新的作用域</strong>。在块语句中定义的变量将保留在它们已经存在的作用域中。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">if (true) &#123;</span><br><span class="line">    &#x2F;&#x2F; &#39;if&#39; 条件语句块不会创建一个新的作用域</span><br><span class="line">    var name &#x3D; &#39;Hammad&#39;; &#x2F;&#x2F; name 依然在全局作用域中</span><br><span class="line">&#125;</span><br><span class="line">console.log(name); &#x2F;&#x2F; logs &#39;Hammad&#39;</span><br></pre></td></tr></table></figure>
-
-<p>JS 的初学者经常需要花点时间才能习惯变量提升，而如果不理解这种特有行为，就可能导致 bug 。正因为如此， ES6 引入了块级作用域，让变量的生命周期更加可控。</p>
-<h3 id="3-块级作用域"><a href="#3-块级作用域" class="headerlink" title="3.块级作用域"></a>3.块级作用域</h3><p>块级作用域可通过新增命令 let 和 const 声明，所声明的变量在指定块的作用域外无法被访问。块级作用域在如下情况被创建：</p>
-<ol>
-<li>在一个函数内部</li>
-<li>在一个代码块（由一对花括号包裹）内部</li>
-</ol>
-<p>let 声明的语法与 var 的语法一致。你基本上可以用 let 来代替 var 进行变量声明，但会将变量的作用域限制在当前代码块中。块级作用域有以下几个特点：</p>
-<ul>
-<li>声明变量不会提升到代码块顶部</li>
-</ul>
-<p>let/const 声明并不会被提升到当前代码块的顶部，因此你需要手动将 let/const 声明放置到顶部，以便让变量在整个代码块内部可用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function getValue(condition) &#123;</span><br><span class="line">if (condition) &#123;</span><br><span class="line">let value &#x3D; &quot;blue&quot;;</span><br><span class="line">return value;</span><br><span class="line">&#125; else &#123;</span><br><span class="line">&#x2F;&#x2F; value 在此处不可用</span><br><span class="line">return null;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; value 在此处不可用</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>禁止重复声明</li>
-</ul>
-<p>如果一个标识符已经在代码块内部被定义，那么在此代码块内使用同一个标识符进行 let 声明就会导致抛出错误。例如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var count &#x3D; 30;</span><br><span class="line">let count &#x3D; 40; &#x2F;&#x2F; Uncaught SyntaxError: Identifier &#39;count&#39; has already been declared</span><br></pre></td></tr></table></figure>
-
-<p>在本例中， count 变量被声明了两次：一次使用 var ，另一次使用 let 。因为 let 不能在同一作用域内重复声明一个已有标识符，此处的 let 声明就会抛出错误。但如果在嵌套的作用域内使用 let 声明一个同名的新变量，则不会抛出错误。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var count &#x3D; 30;</span><br><span class="line">&#x2F;&#x2F; 不会抛出错误</span><br><span class="line">if (condition) &#123;</span><br><span class="line">let count &#x3D; 40;</span><br><span class="line">&#x2F;&#x2F; 其他代码</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>循环中的绑定块作用域的妙用</li>
-</ul>
-<p>开发者可能最希望实现 for 循环的块级作用域了，因为可以把声明的计数器变量限制在循环内，例如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">for (let i &#x3D; 0; i &lt; 10; i++) &#123;</span><br><span class="line">  &#x2F;&#x2F; ...</span><br><span class="line">&#125;</span><br><span class="line">console.log(i);</span><br><span class="line">&#x2F;&#x2F; ReferenceError: i is not defined</span><br></pre></td></tr></table></figure>
-
-<p>上面代码中，计数器 i 只在 for 循环体内有效，在循环体外引用就会报错。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var a &#x3D; [];</span><br><span class="line">for (var i &#x3D; 0; i &lt; 10; i++) &#123;</span><br><span class="line">  a[i] &#x3D; function () &#123;</span><br><span class="line">    console.log(i);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line">a[6](); &#x2F;&#x2F; 10</span><br></pre></td></tr></table></figure>
-
-<p>上面代码中，变量 i 是 var 命令声明的，在全局范围内都有效，所以全局只有一个变量 i。每一次循环，变量 i 的值都会发生改变，而循环内被赋给数组 a 的函数内部的 console.log(i)，里面的 i 指向的就是全局的 i。也就是说，所有数组 a 的成员里面的 i，指向的都是同一个 i，导致运行时输出的是最后一轮的 i 的值，也就是 10。</p>
-<p>如果使用 let，声明的变量仅在块级作用域内有效，最后输出的是 6。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var a &#x3D; [];</span><br><span class="line">for (let i &#x3D; 0; i &lt; 10; i++) &#123;</span><br><span class="line">  a[i] &#x3D; function () &#123;</span><br><span class="line">    console.log(i);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line">a[6](); &#x2F;&#x2F; 6</span><br></pre></td></tr></table></figure>
-
-<p>上面代码中，变量 i 是 let 声明的，当前的 i 只在本轮循环有效，所以每一次循环的 i 其实都是一个新的变量，所以最后输出的是 6。你可能会问，如果每一轮循环的变量 i 都是重新声明的，那它怎么知道上一轮循环的值，从而计算出本轮循环的值？这是因为 JavaScript 引擎内部会记住上一轮循环的值，初始化本轮的变量 i 时，就在上一轮循环的基础上进行计算。</p>
-<p>另外，for 循环还有一个特别之处，就是设置循环变量的那部分是一个父作用域，而循环体内部是一个单独的子作用域。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">for (let i &#x3D; 0; i &lt; 3; i++) &#123;</span><br><span class="line">  let i &#x3D; &#39;abc&#39;;</span><br><span class="line">  console.log(i);</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; abc</span><br><span class="line">&#x2F;&#x2F; abc</span><br><span class="line">&#x2F;&#x2F; abc</span><br></pre></td></tr></table></figure>
-
-<p>上面代码正确运行，输出了 3 次 abc。这表明函数内部的变量 i 与循环变量 i 不在同一个作用域，有各自单独的作用域。</p>
-<h2 id="作用域链"><a href="#作用域链" class="headerlink" title="作用域链"></a>作用域链</h2><h3 id="1-什么是自由变量"><a href="#1-什么是自由变量" class="headerlink" title="1.什么是自由变量"></a>1.什么是自由变量</h3><p>首先认识一下什么叫做 <strong>自由变量</strong> 。如下代码中，<code>console.log(a)</code>要得到 a 变量，但是在当前的作用域中没有定义 a（可对比一下 b）。当前作用域没有定义的变量，这成为 自由变量 。自由变量的值如何得到 —— 向父级作用域寻找（注意：这种说法并不严谨，下文会重点解释）。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var a &#x3D; 100</span><br><span class="line">function fn() &#123;</span><br><span class="line">    var b &#x3D; 200</span><br><span class="line">    console.log(a) &#x2F;&#x2F; 这里的a在这里就是一个自由变量</span><br><span class="line">    console.log(b)</span><br><span class="line">&#125;</span><br><span class="line">fn()</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-什么是作用域链"><a href="#2-什么是作用域链" class="headerlink" title="2.什么是作用域链"></a>2.什么是作用域链</h3><p>如果父级也没呢？再一层一层向上寻找，直到找到全局作用域还是没找到，就宣布放弃。这种一层一层的关系，就是 作用域链 。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">var a &#x3D; 100</span><br><span class="line">function F1() &#123;</span><br><span class="line">    var b &#x3D; 200</span><br><span class="line">    function F2() &#123;</span><br><span class="line">        var c &#x3D; 300</span><br><span class="line">        console.log(a) &#x2F;&#x2F; 自由变量，顺作用域链向父作用域找</span><br><span class="line">        console.log(b) &#x2F;&#x2F; 自由变量，顺作用域链向父作用域找</span><br><span class="line">        console.log(c) &#x2F;&#x2F; 本作用域的变量</span><br><span class="line">    &#125;</span><br><span class="line">    F2()</span><br><span class="line">&#125;</span><br><span class="line">F1()</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-关于自由变量的取值"><a href="#3-关于自由变量的取值" class="headerlink" title="3.关于自由变量的取值"></a>3.关于自由变量的取值</h3><p>关于自由变量的值，上文提到要到父作用域中取，其实有时候这种解释会产生歧义。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">var x &#x3D; 10</span><br><span class="line">function fn() &#123;</span><br><span class="line">  console.log(x)</span><br><span class="line">&#125;</span><br><span class="line">function show(f) &#123;</span><br><span class="line">  var x &#x3D; 20</span><br><span class="line">  (function() &#123;</span><br><span class="line">    f() &#x2F;&#x2F;10，而不是20</span><br><span class="line">  &#125;)()</span><br><span class="line">&#125;</span><br><span class="line">show(fn)</span><br></pre></td></tr></table></figure>
-
-<p>在 fn 函数中，取自由变量 x 的值时，要到哪个作用域中取？——要到创建 fn 函数的那个作用域中取，<strong>无论 fn 函数将在哪里调用</strong>。</p>
-<p>所以，不要在用以上说法了。相比而言，用这句话描述会更加贴切:<strong>要到创建这个函数的那个域”。 作用域中取值,这里强调的是“创建”，而不是“调用”</strong>，切记切记——其实这就是所谓的”静态作用域”</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">var a &#x3D; 10</span><br><span class="line">function fn() &#123;</span><br><span class="line">  var b &#x3D; 20</span><br><span class="line">  function bar() &#123;</span><br><span class="line">    console.log(a + b) &#x2F;&#x2F;30</span><br><span class="line">  &#125;</span><br><span class="line">  return bar</span><br><span class="line">&#125;</span><br><span class="line">var x &#x3D; fn(),</span><br><span class="line">  b &#x3D; 200</span><br><span class="line">x() &#x2F;&#x2F;bar()</span><br></pre></td></tr></table></figure>
-
-<p>fn()返回的是 bar 函数，赋值给 x。执行 x()，即执行 bar 函数代码。取 b 的值时，直接在 fn 作用域取出。取 a 的值时，试图在 fn 作用域取，但是取不到，只能转向创建 fn 的那个作用域中去查找，结果找到了,所以最后的结果是 30</p>
-<h2 id="作用域与执行上下文"><a href="#作用域与执行上下文" class="headerlink" title="作用域与执行上下文"></a>作用域与执行上下文</h2><p>许多开发人员经常混淆作用域和执行上下文的概念，误认为它们是相同的概念，但事实并非如此。</p>
-<p>我们知道 JavaScript 属于解释型语言，JavaScript 的执行分为：解释和执行两个阶段,这两个阶段所做的事并不一样：</p>
-<h3 id="解释阶段："><a href="#解释阶段：" class="headerlink" title="解释阶段："></a>解释阶段：</h3><ul>
-<li>词法分析</li>
-<li>语法分析</li>
-<li>作用域规则确定</li>
-</ul>
-<h3 id="执行阶段："><a href="#执行阶段：" class="headerlink" title="执行阶段："></a>执行阶段：</h3><ul>
-<li>创建执行上下文</li>
-<li>执行函数代码</li>
-<li>垃圾回收</li>
-</ul>
-<p>JavaScript 解释阶段便会确定作用域规则，因此作用域在函数定义时就已经确定了，而不是在函数调用时确定，但是执行上下文是函数执行之前创建的。执行上下文最明显的就是 this 的指向是执行时确定的。而作用域访问的变量是编写代码的结构确定的。</p>
-<p>作用域和执行上下文之间最大的区别是： <strong>执行上下文在运行时确定，随时可能改变；作用域在定义时就确定，并且不会改变</strong>。</p>
-<p>一个作用域下可能包含若干个上下文环境。有可能从来没有过上下文环境（函数从来就没有被调用过）；有可能有过，现在函数被调用完毕后，上下文环境被销毁了；有可能同时存在一个或多个（闭包）。<strong>同一个作用域下，不同的调用会产生不同的执行上下文环境，继而产生不同的变量的值</strong>。</p>
-<p><strong>给大家推荐一个好用的 BUG 监控工具</strong><a target="_blank" rel="noopener" href="https://www.fundebug.com/?utm_source=liao"><strong>Fundebug</strong></a><strong>，欢迎免费试用！</strong></p>
-<p>欢迎关注公众号：<strong>前端工匠</strong>，你的成长我们一起见证！如果你感觉有收获，欢迎给我打赏,以激励我更多输出优质开源内容</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618568367206-228fd607-a241-405c-9887-aa0d1698b534.png#clientId=u86861ac7-38dd-4&from=drop&id=u57884e8e&margin=%5Bobject%20Object%5D&originHeight=372&originWidth=1179&originalType=binary&size=533174&status=done&style=none&taskId=uf98150e8-7678-4277-9772-679cf28bd81"></p>
-<h2 id="参考文章和书籍"><a href="#参考文章和书籍" class="headerlink" title="参考文章和书籍"></a>参考文章和书籍</h2><ul>
-<li><a target="_blank" rel="noopener" href="http://www.cnblogs.com/wangfupeng1988/p/4001284.html">深入理解 javascript 原型和闭包系列</a></li>
-<li><a target="_blank" rel="noopener" href="https://juejin.im/book/6844733713780047886/section/6844733713830379533">Web 前端面试指南与高频考题解析</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/creeperyang/blog/issues/16">深入理解 JS 中声明提升、作用域（链）和关键字</a><code>this</code></li>
-<li><a target="_blank" rel="noopener" href="http://www.cnblogs.com/lhb25/archive/2011/09/06/javascript-scope-chain.html">JavaScript 开发进阶：理解 JavaScript 作用域和作用域链</a></li>
-<li><a target="_blank" rel="noopener" href="https://gaohaoyang.github.io/2015/05/20/scope/#top">JavaScript 作用域和作用域链</a></li>
-<li><a target="_blank" rel="noopener" href="https://book.douban.com/subject/27072230/">深入理解 ES6</a></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1904,7 +1776,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-count">35</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
