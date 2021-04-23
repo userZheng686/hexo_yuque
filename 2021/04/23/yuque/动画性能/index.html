@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="先总结几个要点精简 DOM，合理布局使用 transform 代替 left、top 减少使用引起页面重排的属性开启硬件加速尽量避免浏览器创建不必要的图形层尽量减少 js 动画，如需要，使用对性能友好的 requestAnimationFrame使用 chrome performance 工具调试动画性能 我们知道网页动画的每一帧都是一次重新渲染，每秒低于 24 镇的动画，人眼就能感受到停顿，每秒">
+<meta property="og:type" content="article">
+<meta property="og:title" content="动画性能">
+<meta property="og:url" content="http://example.com/2021/04/23/yuque/%E5%8A%A8%E7%94%BB%E6%80%A7%E8%83%BD/index.html">
+<meta property="og:site_name" content="Adam">
+<meta property="og:description" content="先总结几个要点精简 DOM，合理布局使用 transform 代替 left、top 减少使用引起页面重排的属性开启硬件加速尽量避免浏览器创建不必要的图形层尽量减少 js 动画，如需要，使用对性能友好的 requestAnimationFrame使用 chrome performance 工具调试动画性能 我们知道网页动画的每一帧都是一次重新渲染，每秒低于 24 镇的动画，人眼就能感受到停顿，每秒">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/webp/21377586/1619156045002-3bd51fc7-149d-4148-8cdb-8f69404dc3db.webp#clientId=u31f05833-5d5b-4&from=paste&height=343&id=u16107b32&margin=%5Bobject%20Object%5D&originHeight=343&originWidth=720&originalType=url&status=done&style=none&taskId=u333ca95c-b807-450e-8286-cfd761dd888&width=720">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/webp/21377586/1619156083886-901015cf-1400-451a-ba59-92d020065dcb.webp#clientId=u31f05833-5d5b-4&from=paste&height=343&id=u1605db33&margin=%5Bobject%20Object%5D&originHeight=343&originWidth=720&originalType=url&status=done&style=none&taskId=udccd0b91-b739-46c6-9380-cb2ecd9cfc4&width=720">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/webp/21377586/1619156167485-d5405de1-1137-43f6-a0fb-4f771e179840.webp#clientId=u31f05833-5d5b-4&from=paste&height=1025&id=uc382e09a&margin=%5Bobject%20Object%5D&originHeight=1025&originWidth=455&originalType=url&status=done&style=none&taskId=u1c0285ca-7c7f-4067-8a14-431f977d49d&width=455">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/webp/21377586/1619156180032-59cfbfa7-4237-41ed-8435-2d49044fabfe.webp#clientId=u31f05833-5d5b-4&from=paste&height=844&id=udfd3f826&margin=%5Bobject%20Object%5D&originHeight=844&originWidth=510&originalType=url&status=done&style=none&taskId=u9a529281-896c-46be-9a13-9eaeec7a309&width=510">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/webp/21377586/1619156221113-60d5de53-69da-44b1-8baa-f44ed8ba14a2.webp#clientId=u31f05833-5d5b-4&from=paste&height=436&id=u51e4f365&margin=%5Bobject%20Object%5D&originHeight=485&originWidth=947&originalType=url&status=done&style=none&taskId=u740ae6c5-5d30-4705-a621-dd62062dcc7&width=851.5">
+<meta property="article:published_time" content="2021-04-23T05:33:32.000Z">
+<meta property="article:modified_time" content="2021-04-23T07:14:35.019Z">
+<meta property="article:author" content="Adam Blog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/webp/21377586/1619156045002-3bd51fc7-149d-4148-8cdb-8f69404dc3db.webp#clientId=u31f05833-5d5b-4&from=paste&height=343&id=u16107b32&margin=%5Bobject%20Object%5D&originHeight=343&originWidth=720&originalType=url&status=done&style=none&taskId=u333ca95c-b807-450e-8286-cfd761dd888&width=720">
+
+<link rel="canonical" href="http://example.com/2021/04/23/yuque/%E5%8A%A8%E7%94%BB%E6%80%A7%E8%83%BD/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>动画性能 | Adam</title>
+  <meta name="referrer" content="no-referrer" />
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Adam</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/23/yuque/%E5%8A%A8%E7%94%BB%E6%80%A7%E8%83%BD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          动画性能
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-23 13:33:32 / 修改时间：15:14:35" itemprop="dateCreated datePublished" datetime="2021-04-23T13:33:32+08:00">2021-04-23</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>先总结几个要点<br><strong>精简 DOM，合理布局</strong><br><strong>使用 transform 代替 left、top 减少使用引起页面重排的属性</strong><br><strong>开启硬件加速</strong><br><strong>尽量避免浏览器创建不必要的图形层</strong><br><strong>尽量减少 js 动画，如需要，使用对性能友好的 requestAnimationFrame</strong><br><strong>使用 chrome performance 工具调试动画性能</strong></p>
+<p>我们知道网页动画的每一帧都是一次重新渲染，每秒低于 24 镇的动画，人眼就能感受到停顿，每秒 30-60 帧才能比较流畅 浏览器会按照大多数显示器的刷新频率 60Hz 来刷新动画， 如果想达到 60FPS,就意味着每一帧的任务耗时不能高于 16 毫秒。</p>
+<p>通过下图我们可以了解浏览器渲染每一帧的过程<br><img src="https://cdn.nlark.com/yuque/0/2021/webp/21377586/1619156045002-3bd51fc7-149d-4148-8cdb-8f69404dc3db.webp#clientId=u31f05833-5d5b-4&from=paste&height=343&id=u16107b32&margin=%5Bobject%20Object%5D&originHeight=343&originWidth=720&originalType=url&status=done&style=none&taskId=u333ca95c-b807-450e-8286-cfd761dd888&width=720"></p>
+<ul>
+<li>1.JavaScript。一般来说，我们会使用 JavaScript 来实现一些视觉变化的效果。比如用 jQuery 的 animate 函数做一个动画、对一个数据集进行排序或者往页面里添加一些 DOM 元素等。当然，除了 JavaScript，还有其他一些常用方法也可以实现视觉变化效果，比如：CSS Animations、Transitions 和 Web Animation API。</li>
+<li>2.样式计算。此过程是根据匹配选择器（例如 .headline 或 .nav &gt; .nav__item）计算出哪些元素应用哪些 CSS 3. 规则的过程。从中知道规则之后，将应用规则并计算每个元素的最终样式。</li>
+<li>3.布局。在知道对一个元素应用哪些规则之后，浏览器即可开始计算它要占据的空间大小及其在屏幕的位置。网页的布局模式意味着一个元素可能影响其他元素，例如 元素的宽度一般会影响其子元素的宽度以及树中各处的节点，因此对于浏览器来说，布局过程是经常发生的。</li>
+<li>4.绘制。绘制是填充像素的过程。它涉及绘出文本、颜色、图像、边框和阴影，基本上包括元素的每个可视部分。绘制一般是在多个表面（通常称为层）上完成的。</li>
+<li>5.合成。由于页面的各部分可能被绘制到多层，由此它们需要按正确顺序绘制到屏幕上，以便正确渲染页面。对于与另一元素重叠的元素来说，这点特别重要，因为一个错误可能使一个元素错误地出现在另一个元素的上层。</li>
+<li>“生成布局”（flow）和”绘制”（paint）这两步，合称为”渲染”（render）。重新渲染就是需要重新生成布局和重新绘制。 有上述的渲染流水线我们可以得知重绘不一定需要重排，重排必然导致重绘</li>
+<li>重排和重绘会不断触发，这是不可避免的。但是，它们非常耗费资源，是导致网页性能低下的根本原因。 提高网页性能，就是要降低”重排”和”重绘”的频率和成本，尽量少触发重新渲染。</li>
+<li>重排还重绘会消耗大量的 CPU 和 GPU 资源，前端新能优化最主要的优化点就是尽量减少重绘和重排。</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/webp/21377586/1619156083886-901015cf-1400-451a-ba59-92d020065dcb.webp#clientId=u31f05833-5d5b-4&from=paste&height=343&id=u1605db33&margin=%5Bobject%20Object%5D&originHeight=343&originWidth=720&originalType=url&status=done&style=none&taskId=udccd0b91-b739-46c6-9380-cb2ecd9cfc4&width=720"></p>
+<h1 id="影响网页渲染的因素"><a href="#影响网页渲染的因素" class="headerlink" title="影响网页渲染的因素"></a>影响网页渲染的因素</h1><p>其中最简单的，样式表越简单，重绘和重排越快，重绘和重排的 DOM 元素层级越高，成本就越高，所以我们在开发前端页面时就需要精简 DOM 元素，合理布局。<br>另外 Table 元素的重排和重绘成本要高于 div，所以我们提倡使用 div+css 布局，尽量避免使用 table 布局。<br>还有其他对渲染性能有影响的操作，比如：</p>
+<ul>
+<li>DOM 元素读写分离</li>
+<li>让进行大量动画的元素脱离文档流，减少重排开销</li>
+<li>通过改变元素的 class 或 csstext 一次性的更改样式</li>
+<li>缓存 DOM 元素的位置信息，避免不必要的属性读取</li>
+<li>尽量使用离线 DOM</li>
+<li>使用 css3 transform 优化动画性能</li>
+</ul>
+<h1 id="使用-css3-transform"><a href="#使用-css3-transform" class="headerlink" title="使用 css3 transform"></a>使用 css3 transform</h1><p>该 CSS 属性可以旋转，缩放，倾斜，或者上传给定的元素。这是通过修改 CSS 可视格式模型的坐标空间来实现的。<br>如果该属性的值不是 none，则会创建一个堆叠上下文。在这种情况下，该对象将充当 position: fixed 的包含块（所以 position: fixed 的元素将会被他覆盖）。</p>
+<p><strong>css3 transform 的执行效率</strong><br>我们通过一个例子来解释为什么 transform 的动画执行效果更佳。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 对应图<span class="number">1</span>-- &gt; <span class="selector-tag">div</span> &#123;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">transition</span>: height <span class="number">1s</span> linear;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">div</span><span class="selector-pseudo">:hover</span> &#123;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">200px</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;!-- 对应图<span class="number">2</span> -- &gt; <span class="selector-tag">div</span> &#123;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">scale</span>(<span class="number">0.5</span>);</span><br><span class="line">  <span class="attribute">transition</span>: transform <span class="number">1s</span> linear;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">div</span><span class="selector-pseudo">:hover</span> &#123;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">scale</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>一个从 height: 100px 到 height: 200px 的 动画按照下面的流程图来执行各种操作 橙色方框的操作比较耗时，绿色方框的操作比较快速<br><img src="https://cdn.nlark.com/yuque/0/2021/webp/21377586/1619156167485-d5405de1-1137-43f6-a0fb-4f771e179840.webp#clientId=u31f05833-5d5b-4&from=paste&height=1025&id=uc382e09a&margin=%5Bobject%20Object%5D&originHeight=1025&originWidth=455&originalType=url&status=done&style=none&taskId=u1c0285ca-7c7f-4067-8a14-431f977d49d&width=455"><br><img src="https://cdn.nlark.com/yuque/0/2021/webp/21377586/1619156180032-59cfbfa7-4237-41ed-8435-2d49044fabfe.webp#clientId=u31f05833-5d5b-4&from=paste&height=844&id=udfd3f826&margin=%5Bobject%20Object%5D&originHeight=844&originWidth=510&originalType=url&status=done&style=none&taskId=u9a529281-896c-46be-9a13-9eaeec7a309&width=510"><br>因为每一帧的变化浏览器都在进行布局、绘制、把新的位图交给 GPU 内存，但是在将位图加载到 GPU 内存中的操作是个相对耗时的操作。<br>GPU 在如下方面很快：</p>
+<ul>
+<li>绘制位图到屏幕上</li>
+<li>可不断的绘制相同的位图</li>
+<li>将同一位图进行位移、旋转、缩放</li>
+</ul>
+<p>我们看使用了 transform 属性的动画执行过程（图二），这个无疑是效率最优的执行方式。</p>
+<h1 id="层的引入（参考-无线性能优化：Composite）"><a href="#层的引入（参考-无线性能优化：Composite）" class="headerlink" title="层的引入（参考-无线性能优化：Composite）"></a>层的引入（<a target="_blank" rel="noopener" href="https://links.jianshu.com/go?to=http://taobaofed.org/blog/2016/04/25/performance-composite/">参考-无线性能优化：Composite</a>）</h1><p>页面一旦在装入并解析完成后，就会表示为许多 Web 开发者所熟悉的结构：DOM。然而，在页面的渲染过程中，浏览器还具有一系列并不直接暴露给开发者的页面中间表示方式。这些表示方式中最重要的结构就是层。<br>在 Chrome 中实际上有几种不同类型的层：掌管 DOM 子树的渲染层（RenderLayer）以及掌管渲染层子树的图形层（GraphicsLayer），某些特殊的渲染层会被认为是合成层（Compositing Layers，合成层拥有单独的 GraphicsLayer。<br>拥有单独 GraphicsLayer 的层，都会将位图存储在共享内存中，作为纹理上传到 GPU 中，最后由 GPU 将多个位图进行合成，然后 draw 到屏幕上。<br>什么渲染层会提升为合成层？Chrome 在这方面采用的规则仍在随着时间推移逐渐发展变化，但在目前下面这些因素都会引起 Chrome 创建层：</p>
+<ul>
+<li>进行 3D 或者透视变换的 CSS 属性</li>
+<li>使用硬件加速视频解码的<video>元素</li>
+<li>具有 3D（WebGL）上下文或者硬件加速的 2D 上下文的<canvas>元素</li>
+<li>组合型插件（即 Flash）</li>
+<li>具有有 CSS 透明度动画或者使用动画式 Webkit 变换的元素</li>
+<li>具有硬件加速的 CSS 滤镜的元素</li>
+<li>子元素中存在具有组合层的元素的元素（换句话说，就是存在具有自己的层的子元素的元素）</li>
+<li>同级元素中有 Z 索引比其小的元素，而且该 Z 索引比较小的元素具有组合层（换句话说就是在组合层之上进行渲染的元素）</li>
+</ul>
+<p>提升为合成层简单说来有以下几点好处</p>
+<ul>
+<li>合成层的位图，会交由 GPU 合成，比 CPU 处理要快</li>
+<li>当需要 repaint 时，只需要 repaint 本身，不会影响到其他的层</li>
+<li>对于 transform 和 opacity 效果，不会触发 layout 和 paint</li>
+</ul>
+<p>合成层的好处是不会影响到其他元素的绘制，因此，为了减少动画元素对其他元素的影响，从而减少 paint，我们需要把动画效果中的元素提升为合成层。<br>提升合成层的最好方式是使用 CSS 的 will-change 属性。从上一节合成层产生原因中，可以知道 will-change 设置为 opacity、transform、top、left、bottom、right 可以将元素提升为合成层。<br>对于那些目前还不支持 will-change 属性的浏览器，目前常用的是使用一个 3D transform 属性来强制提升为合成层：transofrm: translateZ(0)<br>通常情况下开启硬件加速会提高动画的流畅性，但是过多的合成层也会造成性能瓶颈，过多的合成层会占用大量的内存空间，<br>对于合成层占用内存的问题，这里有两个 demo 进行了验证。<br><a target="_blank" rel="noopener" href="https://links.jianshu.com/go?to=http://taobaofed.github.io/demo/performance-composite-demo/memory/multi-layers-expect.html">demo 1</a> 和 <a target="_blank" rel="noopener" href="https://links.jianshu.com/go?to=http://taobaofed.github.io/demo/performance-composite-demo/memory/multi-layers.html">demo 2</a> 中，会创建 2000 个同样的 div 元素，不同的是 <a target="_blank" rel="noopener" href="https://links.jianshu.com/go?to=http://taobaofed.github.io/demo/performance-composite-demo/memory/multi-layers.html">demo 2</a> 中的元素通过 will-change 都提升为了合成层，而两个 demo 页面的内存消耗却有很明显的差别。<br><img src="https://cdn.nlark.com/yuque/0/2021/webp/21377586/1619156221113-60d5de53-69da-44b1-8baa-f44ed8ba14a2.webp#clientId=u31f05833-5d5b-4&from=paste&height=436&id=u51e4f365&margin=%5Bobject%20Object%5D&originHeight=485&originWidth=947&originalType=url&status=done&style=none&taskId=u740ae6c5-5d30-4705-a621-dd62062dcc7&width=851.5"></p>
+<h1 id="网页动画的渲染"><a href="#网页动画的渲染" class="headerlink" title="网页动画的渲染"></a>网页动画的渲染</h1><p>有一些 JavaScript 方法可以调节重新渲染，大幅提高网页性能。<br>其中最重要的，就是 window.requestAnimationFrame() 方法。它可以将某些代码放到下一次重新渲染时执行。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.requestAnimationFrame(fn);</span><br></pre></td></tr></table></figure>
+
+<p>****window.requestIdleCallback()****也可以用来调节重新渲染。它指定只有当一帧的末尾有空闲时间，才会执行回调函数。只有当前帧的运行时间小于 16.66ms 时，函数 fn 才会执行。否则，就推迟到下一帧，如果下一帧也没有空闲时间，就推迟到下下一帧，以此类推</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">requestIdleCallback(fn);</span><br></pre></td></tr></table></figure>
+
+<p>它还可以接受第二个参数，表示指定的毫秒数。如果在指定 的这段时间之内，每一帧都没有空闲时间，那么函数 fn 将会强制执行。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">requestIdleCallback(fn, <span class="number">5000</span>);</span><br></pre></td></tr></table></figure>
+
+<h1 id="Chrome-Devtool-Performance"><a href="#Chrome-Devtool-Performance" class="headerlink" title="Chrome Devtool Performance"></a>Chrome Devtool Performance</h1><p>怎么去分析页面运行时的性能表现，Chrome Devtool Performance 是一个很好的选择。这里请大家参考这篇文章<a target="_blank" rel="noopener" href="https://links.jianshu.com/go?to=https://zhuanlan.zhihu.com/p/29879682">全新 Chrome Devtool Performance 使用指南</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/23/yuque/%E5%A4%A7%E9%87%8F%E5%9B%BE%E7%89%87%E5%8A%A0%E8%BD%BD%E4%BC%98%E5%8C%96/" rel="prev" title="大量图片加载优化">
+      <i class="fa fa-chevron-left"></i> 大量图片加载优化
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/23/hello-world/" rel="next" title="Hello World">
+      Hello World <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BD%B1%E5%93%8D%E7%BD%91%E9%A1%B5%E6%B8%B2%E6%9F%93%E7%9A%84%E5%9B%A0%E7%B4%A0"><span class="nav-number">1.</span> <span class="nav-text">影响网页渲染的因素</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-css3-transform"><span class="nav-number">2.</span> <span class="nav-text">使用 css3 transform</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B1%82%E7%9A%84%E5%BC%95%E5%85%A5%EF%BC%88%E5%8F%82%E8%80%83-%E6%97%A0%E7%BA%BF%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%EF%BC%9AComposite%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">层的引入（参考-无线性能优化：Composite）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BD%91%E9%A1%B5%E5%8A%A8%E7%94%BB%E7%9A%84%E6%B8%B2%E6%9F%93"><span class="nav-number">4.</span> <span class="nav-text">网页动画的渲染</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Chrome-Devtool-Performance"><span class="nav-number">5.</span> <span class="nav-text">Chrome Devtool Performance</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Adam Blog</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">47</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Adam Blog</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
