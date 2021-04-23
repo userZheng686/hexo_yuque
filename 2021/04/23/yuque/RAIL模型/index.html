@@ -27,13 +27,13 @@
 <meta property="og:site_name" content="Adam">
 <meta property="og:description" content="RAIL 是一个以用户为中心的性能模型，它把用户的体验拆分成几个关键点（例如，tap，scroll，load），并且帮你定义好了每一个的性能指标。 有以下四个方面：  Response Animation Idle Load   聚焦用户以下是用户对性能延迟的感知：    延迟时间 用户感知    0-16ms 很流畅   0-100ms 基本流畅   100-1000ms 感觉到网站上有一些加载">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2021/04/23/yuque/RAIL%E6%A8%A1%E5%9E%8B/1.png#alt=img">
-<meta property="og:image" content="http://example.com/2021/04/23/yuque/RAIL%E6%A8%A1%E5%9E%8B/2.png#alt=img">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619150771872-117600c0-b2a9-43ed-a90b-b8247570bdff.png#clientId=ub5665ef9-7048-4&from=drop&id=u486a7804&margin=%5Bobject%20Object%5D&name=1.png&originHeight=504&originWidth=1390&originalType=binary&size=53426&status=done&style=none&taskId=u9d743441-e052-4807-8e12-3db9d757539">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619150777984-c9507c61-f117-4ce2-923a-8ee977344b57.png#clientId=ub5665ef9-7048-4&from=drop&id=u97430f32&margin=%5Bobject%20Object%5D&name=2.png&originHeight=1200&originWidth=2400&originalType=binary&size=235602&status=done&style=none&taskId=u4b853e52-ee45-4c14-8c7f-bdb6320bad2">
 <meta property="article:published_time" content="2021-04-23T04:03:14.000Z">
-<meta property="article:modified_time" content="2021-04-23T04:04:07.340Z">
+<meta property="article:modified_time" content="2021-04-23T04:13:36.819Z">
 <meta property="article:author" content="Adam Blog">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2021/04/23/yuque/RAIL%E6%A8%A1%E5%9E%8B/1.png#alt=img">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619150771872-117600c0-b2a9-43ed-a90b-b8247570bdff.png#clientId=ub5665ef9-7048-4&from=drop&id=u486a7804&margin=%5Bobject%20Object%5D&name=1.png&originHeight=504&originWidth=1390&originalType=binary&size=53426&status=done&style=none&taskId=u9d743441-e052-4807-8e12-3db9d757539">
 
 <link rel="canonical" href="http://example.com/2021/04/23/yuque/RAIL%E6%A8%A1%E5%9E%8B/">
 
@@ -178,7 +178,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-04-23 12:03:14 / 修改时间：12:04:07" itemprop="dateCreated datePublished" datetime="2021-04-23T12:03:14+08:00">2021-04-23</time>
+              <time title="创建时间：2021-04-23 12:03:14 / 修改时间：12:13:36" itemprop="dateCreated datePublished" datetime="2021-04-23T12:03:14+08:00">2021-04-23</time>
             </span>
 
           
@@ -200,7 +200,7 @@
 <li>Idle</li>
 <li>Load</li>
 </ul>
-<p><img src="1.png#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619150771872-117600c0-b2a9-43ed-a90b-b8247570bdff.png#clientId=ub5665ef9-7048-4&from=drop&id=u486a7804&margin=%5Bobject%20Object%5D&name=1.png&originHeight=504&originWidth=1390&originalType=binary&size=53426&status=done&style=none&taskId=u9d743441-e052-4807-8e12-3db9d757539" alt="1.png"></p>
 <h2 id="聚焦用户"><a href="#聚焦用户" class="headerlink" title="聚焦用户"></a>聚焦用户</h2><p>以下是用户对性能延迟的感知：</p>
 <table>
 <thead>
@@ -242,7 +242,7 @@
 <p>idle task：除了要处理输入事件，浏览器还有其它任务要做，这些任务会占用部分时间，一般情况会花费 50ms 的时间，输入事件的响应则排在其后。</p>
 </blockquote>
 <p>下图是 idle task 对 input response 的影响：</p>
-<p><img src="2.png#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619150777984-c9507c61-f117-4ce2-923a-8ee977344b57.png#clientId=ub5665ef9-7048-4&from=drop&id=u97430f32&margin=%5Bobject%20Object%5D&name=2.png&originHeight=1200&originWidth=2400&originalType=binary&size=235602&status=done&style=none&taskId=u4b853e52-ee45-4c14-8c7f-bdb6320bad2" alt="2.png"></p>
 <h2 id="Animation-在-10ms-内产生一帧"><a href="#Animation-在-10ms-内产生一帧" class="headerlink" title="Animation: 在 10ms 内产生一帧"></a>Animation: 在 10ms 内产生一帧</h2><h3 id="目标-1"><a href="#目标-1" class="headerlink" title="目标"></a>目标</h3><ul>
 <li>产生每一帧的时间不要超过 10ms，为了保证浏览器 60 帧，每一帧的时间在 16ms 左右，但浏览器需要用 6ms 来渲染每一帧。</li>
 <li>旨在视觉上的平滑。用户对帧率变化感知很敏感。</li>
@@ -313,8 +313,8 @@
       <i class="fa fa-chevron-left"></i> this指向
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/04/23/hello-world/" rel="next" title="Hello World">
-      Hello World <i class="fa fa-chevron-right"></i>
+    <a href="/2021/04/23/yuque/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%89%8B%E6%AE%B5/" rel="next" title="性能优化手段">
+      性能优化手段 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -388,7 +388,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-count">44</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
