@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="页面布局是 CSS 的一个重点应用，例如：而实现页面布局主要应用到两种方法，一种是CSS 浮动，一种是Flexbox（IE9 以上），本文主要讲的是 CSS 浮动，下一篇文章将阐述 Flexbox。 浮动元素什么是浮动元素：浮动元素同时处于常规流内和流外的元素。其中块级元素认为浮动元素不存在，而浮动元素会影响行内元素的布局，浮动元素会通过影响行内元素间接影响了包含块的布局。常规流：页面上从左往右，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浮动">
+<meta property="og:url" content="http://example.com/2021/04/23/yuque/%E6%B5%AE%E5%8A%A8/index.html">
+<meta property="og:site_name" content="Adam">
+<meta property="og:description" content="页面布局是 CSS 的一个重点应用，例如：而实现页面布局主要应用到两种方法，一种是CSS 浮动，一种是Flexbox（IE9 以上），本文主要讲的是 CSS 浮动，下一篇文章将阐述 Flexbox。 浮动元素什么是浮动元素：浮动元素同时处于常规流内和流外的元素。其中块级元素认为浮动元素不存在，而浮动元素会影响行内元素的布局，浮动元素会通过影响行内元素间接影响了包含块的布局。常规流：页面上从左往右，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619146953214-6eed72b4-4298-495c-a102-898368d09ad4.png#clientId=u3dd556fe-de2a-4&from=paste&height=352&id=u855d221f&margin=%5Bobject%20Object%5D&name=image.png&originHeight=352&originWidth=403&originalType=binary&size=18863&status=done&style=none&taskId=u9200601b-2bf4-48f6-9483-45483faad6f&width=403">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619147229902-4673d52d-70f9-478e-adea-7b20d3d8950e.png#clientId=u3dd556fe-de2a-4&from=paste&height=195&id=uc054066a&margin=%5Bobject%20Object%5D&name=image.png&originHeight=195&originWidth=732&originalType=binary&size=83482&status=done&style=none&taskId=udf3b458b-8f49-4e66-89a6-76fa62b2260&width=732">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619147337086-bbbe8792-e580-421d-9bb2-ec0b637fa630.png#clientId=u3dd556fe-de2a-4&from=paste&height=227&id=u37fc5218&margin=%5Bobject%20Object%5D&name=image.png&originHeight=227&originWidth=732&originalType=binary&size=4433&status=done&style=none&taskId=u99d50c93-721b-4ea8-8032-35592e09c65&width=732">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619147351522-7de19830-7fd5-46ca-8c78-4deb7fad9719.png#clientId=u3dd556fe-de2a-4&from=paste&height=226&id=ud232f1d9&margin=%5Bobject%20Object%5D&name=image.png&originHeight=226&originWidth=732&originalType=binary&size=5293&status=done&style=none&taskId=ubee4f117-405f-4bea-bf75-279079dc0ab&width=732">
+<meta property="article:published_time" content="2021-04-23T03:01:11.000Z">
+<meta property="article:modified_time" content="2021-04-23T03:32:04.487Z">
+<meta property="article:author" content="Adam Blog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619146953214-6eed72b4-4298-495c-a102-898368d09ad4.png#clientId=u3dd556fe-de2a-4&from=paste&height=352&id=u855d221f&margin=%5Bobject%20Object%5D&name=image.png&originHeight=352&originWidth=403&originalType=binary&size=18863&status=done&style=none&taskId=u9200601b-2bf4-48f6-9483-45483faad6f&width=403">
+
+<link rel="canonical" href="http://example.com/2021/04/23/yuque/%E6%B5%AE%E5%8A%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>浮动 | Adam</title>
+  <meta name="referrer" content="no-referrer" />
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Adam</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/23/yuque/%E6%B5%AE%E5%8A%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          浮动
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-23 11:01:11 / 修改时间：11:32:04" itemprop="dateCreated datePublished" datetime="2021-04-23T11:01:11+08:00">2021-04-23</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>页面布局是 CSS 的一个重点应用，例如：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619146953214-6eed72b4-4298-495c-a102-898368d09ad4.png#clientId=u3dd556fe-de2a-4&from=paste&height=352&id=u855d221f&margin=%5Bobject%20Object%5D&name=image.png&originHeight=352&originWidth=403&originalType=binary&size=18863&status=done&style=none&taskId=u9200601b-2bf4-48f6-9483-45483faad6f&width=403" alt="image.png"><br>而实现页面布局主要应用到两种方法，一种是<strong>CSS 浮动</strong>，一种是<strong>Flexbox</strong>（IE9 以上），本文主要讲的是 CSS 浮动，下一篇文章将阐述 Flexbox。</p>
+<h2 id="浮动元素"><a href="#浮动元素" class="headerlink" title="浮动元素"></a>浮动元素</h2><p><strong>什么是浮动元素：</strong>浮动元素同时处于常规流内和流外的元素。其中块级元素认为浮动元素不存在，而浮动元素会影响行内元素的布局，浮动元素会通过影响行内元素间接影响了包含块的布局。<br><strong>常规流：</strong>页面上从左往右，从上往下排列的元素流，就是常规流<strong>脱离常规流：</strong>绝对定位，fixed 定位的元素有自己固定的位置，脱离了常规流<strong>包含块：</strong>一个元素离它最近的块级元素是它的包含块<br>下面详细描述以上的内容，举个?：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>JS Bin<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line">    .border &#123;</span><br><span class="line"><span class="css">      <span class="attribute">border</span>: <span class="number">2px</span> solid;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .common-div &#123;</span><br><span class="line"><span class="css">      <span class="attribute">width</span>: <span class="number">160px</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">height</span>: <span class="number">50px</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">background-color</span>: red;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .float-red &#123;</span><br><span class="line"><span class="css">      <span class="attribute">width</span>: <span class="number">100px</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">height</span>: <span class="number">50px</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">background-color</span>: <span class="number">#fcc</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">float</span>: left;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .float-blue &#123;</span><br><span class="line"><span class="css">      <span class="attribute">width</span>: <span class="number">100px</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">height</span>: <span class="number">50px</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">background-color</span>: <span class="number">#09c</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">float</span>: left;</span></span><br><span class="line">    &#125;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;border&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;float-red&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;common-div&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;float-blue&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</span><br><span class="line">      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim</span><br><span class="line">      veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea</span><br><span class="line">      commodo consequat. Duis aute irure dolor in reprehenderit in voluptate</span><br><span class="line">      velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat</span><br><span class="line">      cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id</span><br><span class="line">      est laborum.</span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>上面这段代码显示的样子如下：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619147229902-4673d52d-70f9-478e-adea-7b20d3d8950e.png#clientId=u3dd556fe-de2a-4&from=paste&height=195&id=uc054066a&margin=%5Bobject%20Object%5D&name=image.png&originHeight=195&originWidth=732&originalType=binary&size=83482&status=done&style=none&taskId=udf3b458b-8f49-4e66-89a6-76fa62b2260&width=732" alt="image.png"></p>
+<ul>
+<li>块级元素认为浮动元素不存在：红色的块级元素没有受到粉色浮动元素的影响，还展示在左上角的位置，但是被粉色元素盖住了左边的部分</li>
+<li>浮动元素会影响行内元素：文字部分被蓝色浮动元素影响，空出了蓝色浮动元素的部分</li>
+<li>浮动元素会间接影响了包含块的布局：浮动元素影响了文字部分吗，使之多出了一行，文字部分撑高了最外面的 border 框，所以间接影响了包含块的布局。</li>
+</ul>
+<p>其中，<strong>浮动元素的摆放</strong>会遵循如下的规则：</p>
+<ul>
+<li>尽量靠上</li>
+<li>尽量靠左</li>
+<li>尽量一个挨着一个</li>
+<li>不能超出包含块，除非元素比包含块更宽</li>
+<li>不能超过所在行的最高点</li>
+<li>不能超过它前面浮动元素的最高点</li>
+<li>行内元素绕着浮动元素摆放：左浮动元素的右边和右浮动元素的左边会出浮动元素</li>
+</ul>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><p>浮动元素并不能撑起包含块，这和我们的预期并不相符。通过以下的办法可以将包含块撑开，称之为<strong>闭合浮动</strong><br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619147337086-bbbe8792-e580-421d-9bb2-ec0b637fa630.png#clientId=u3dd556fe-de2a-4&from=paste&height=227&id=u37fc5218&margin=%5Bobject%20Object%5D&name=image.png&originHeight=227&originWidth=732&originalType=binary&size=4433&status=done&style=none&taskId=u99d50c93-721b-4ea8-8032-35592e09c65&width=732" alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619147351522-7de19830-7fd5-46ca-8c78-4deb7fad9719.png#clientId=u3dd556fe-de2a-4&from=paste&height=226&id=ud232f1d9&margin=%5Bobject%20Object%5D&name=image.png&originHeight=226&originWidth=732&originalType=binary&size=5293&status=done&style=none&taskId=ubee4f117-405f-4bea-bf75-279079dc0ab&width=732" alt="image.png"></p>
+<h3 id="闭合浮动的方法："><a href="#闭合浮动的方法：" class="headerlink" title="闭合浮动的方法："></a>闭合浮动的方法：</h3><ul>
+<li>**BFC:**1) 包含块设置 overflow:hidden 或者 2)包含块设置 display:table-cell/table/flex…</li>
+</ul>
+<blockquote>
+<p><strong>BFC：块级格式化上下文。它是一个独立的渲染区域，只有 Block-level box 参与， 它规定了内部的块级元素如何布局，并且与这个区域外部毫不相干。</strong>只要<strong>符合以下的条件就是 BFC:</strong></p>
+<ol>
+<li>根元素</li>
+<li>float 属性不为 none</li>
+<li>position 为 absolute 或 fixed</li>
+<li>display 为 inline-block, table-cell, table-caption, flex, inline-flex</li>
+<li>overflow 不为 visible</li>
+</ol>
+</blockquote>
+<p>相应的背景文档可以参阅：<a target="_blank" rel="noopener" href="http://www.cnblogs.com/lhb25/p/inside-block-formatting-ontext.html">《BFC 的神奇原理》</a></p>
+<ul>
+<li><strong>伪元素</strong>：</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.clearfix</span><span class="selector-pseudo">::after</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">&quot;&quot;</span>;</span><br><span class="line">  <span class="attribute">display</span>: block;</span><br><span class="line">  <span class="attribute">clear</span>: both;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>clear:both;意味着块级元素的左边和右边都不能有浮动元素。在包含块的末尾建立了一个内容为空的伪元素，并设置 clear:both，使这个元素位于所有的浮动元素之后，从而撑开了包含块的高。</p>
+</blockquote>
+<ul>
+<li><strong>包含块自己也浮动</strong></li>
+</ul>
+<p>这个方法也是 w3c 使用的方法。不过，下一个元素会受到这个浮动元素的影响。为了解决这个问题，有些人选择对布局中的所有东西进行浮动，然后使用适当的有意义的元素（常常是站点的页脚）对这些浮动进行清理。这有助于减少或消除不必要的标记。<br>相应的背景文档：<a target="_blank" rel="noopener" href="http://www.w3school.com.cn/css/css_positioning_floating.asp">《W3C CSS 浮动》</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/23/yuque/%E5%B1%85%E4%B8%AD/" rel="prev" title="居中">
+      <i class="fa fa-chevron-left"></i> 居中
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/23/yuque/this%E6%8C%87%E5%90%91/" rel="next" title="this指向">
+      this指向 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%AE%E5%8A%A8%E5%85%83%E7%B4%A0"><span class="nav-number">1.</span> <span class="nav-text">浮动元素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AD%E5%90%88%E6%B5%AE%E5%8A%A8%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%9A"><span class="nav-number">2.1.</span> <span class="nav-text">闭合浮动的方法：</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Adam Blog</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">41</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Adam Blog</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

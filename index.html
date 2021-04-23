@@ -170,7 +170,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-04-23 00:50:36" itemprop="dateCreated datePublished" datetime="2021-04-23T00:50:36+08:00">2021-04-23</time>
+              <time title="创建时间：2021-04-23 11:31:23" itemprop="dateCreated datePublished" datetime="2021-04-23T11:31:23+08:00">2021-04-23</time>
             </span>
 
           
@@ -216,6 +216,195 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/23/yuque/this%E6%8C%87%E5%90%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/23/yuque/this%E6%8C%87%E5%90%91/" class="post-title-link" itemprop="url">this指向</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-23 11:13:15 / 修改时间：11:32:04" itemprop="dateCreated datePublished" datetime="2021-04-23T11:13:15+08:00">2021-04-23</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>其实 JS 中的 this 是一个非常简单的东西，只需要理解它的执行规则就 OK。<br>在这里不想像其他博客一样展示太多的代码例子弄得天花乱坠， 反而不易理解。<br>call/apply/bind 可以显示绑定, 这里就不说了。<br>主要这些场隐式绑定的场景讨论:</p>
+<ol>
+<li>全局上下文</li>
+<li>直接调用函数</li>
+<li>对象.方法的形式调用</li>
+<li>DOM 事件绑定(特殊)</li>
+<li>new 构造函数绑定</li>
+<li>箭头函数</li>
+</ol>
+<h2 id="1-全局上下文"><a href="#1-全局上下文" class="headerlink" title="1. 全局上下文"></a>1. 全局上下文</h2><p>全局上下文默认 this 指向 window, 严格模式下指向 undefined。</p>
+<h2 id="2-直接调用函数"><a href="#2-直接调用函数" class="headerlink" title="2. 直接调用函数"></a>2. 直接调用函数</h2><p>比如:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">  a: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">let</span> func = obj.a;</span><br><span class="line">func();</span><br></pre></td></tr></table></figure>
+
+<p>这种情况是直接调用。this 相当于全局上下文的情况。</p>
+<h2 id="3-对象-方法的形式调用"><a href="#3-对象-方法的形式调用" class="headerlink" title="3. 对象.方法的形式调用"></a>3. 对象.方法的形式调用</h2><p>还是刚刚的例子，我如果这样写:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">obj.a();</span><br></pre></td></tr></table></figure>
+
+<p>这就是对象.方法的情况，this 指向这个对象</p>
+<h2 id="4-DOM-事件绑定"><a href="#4-DOM-事件绑定" class="headerlink" title="4. DOM 事件绑定"></a>4. DOM 事件绑定</h2><p>onclick 和 addEventerListener 中 this 默认指向绑定事件的元素。<br>IE 比较奇异，使用 attachEvent，里面的 this 默认指向 window。</p>
+<h2 id="5-new-构造函数"><a href="#5-new-构造函数" class="headerlink" title="5. new+构造函数"></a>5. new+构造函数</h2><p>此时构造函数中的 this 指向实例对象。</p>
+<h2 id="6-箭头函数？"><a href="#6-箭头函数？" class="headerlink" title="6. 箭头函数？"></a>6. 箭头函数？</h2><p>箭头函数没有 this, 因此也不能绑定。里面的 this 会指向当前最近的非箭头函数的 this，找不到就是 window(严格模式是 undefined)。比如:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">  a: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">do</span> = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="built_in">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">do</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">obj.a(); <span class="comment">// 找到最近的非箭头函数a，a现在绑定着obj, 因此箭头函数中的this是obj</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>优先级: new &gt; call、apply、bind &gt; 对象.方法 &gt; 直接调用。</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/23/yuque/%E6%B5%AE%E5%8A%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/23/yuque/%E6%B5%AE%E5%8A%A8/" class="post-title-link" itemprop="url">浮动</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-23 11:01:11 / 修改时间：11:32:04" itemprop="dateCreated datePublished" datetime="2021-04-23T11:01:11+08:00">2021-04-23</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>页面布局是 CSS 的一个重点应用，例如：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619146953214-6eed72b4-4298-495c-a102-898368d09ad4.png#clientId=u3dd556fe-de2a-4&from=paste&height=352&id=u855d221f&margin=%5Bobject%20Object%5D&name=image.png&originHeight=352&originWidth=403&originalType=binary&size=18863&status=done&style=none&taskId=u9200601b-2bf4-48f6-9483-45483faad6f&width=403" alt="image.png"><br>而实现页面布局主要应用到两种方法，一种是<strong>CSS 浮动</strong>，一种是<strong>Flexbox</strong>（IE9 以上），本文主要讲的是 CSS 浮动，下一篇文章将阐述 Flexbox。</p>
+<h2 id="浮动元素"><a href="#浮动元素" class="headerlink" title="浮动元素"></a>浮动元素</h2><p><strong>什么是浮动元素：</strong>浮动元素同时处于常规流内和流外的元素。其中块级元素认为浮动元素不存在，而浮动元素会影响行内元素的布局，浮动元素会通过影响行内元素间接影响了包含块的布局。<br><strong>常规流：</strong>页面上从左往右，从上往下排列的元素流，就是常规流<strong>脱离常规流：</strong>绝对定位，fixed 定位的元素有自己固定的位置，脱离了常规流<strong>包含块：</strong>一个元素离它最近的块级元素是它的包含块<br>下面详细描述以上的内容，举个?：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>JS Bin<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line">    .border &#123;</span><br><span class="line"><span class="css">      <span class="attribute">border</span>: <span class="number">2px</span> solid;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .common-div &#123;</span><br><span class="line"><span class="css">      <span class="attribute">width</span>: <span class="number">160px</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">height</span>: <span class="number">50px</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">background-color</span>: red;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .float-red &#123;</span><br><span class="line"><span class="css">      <span class="attribute">width</span>: <span class="number">100px</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">height</span>: <span class="number">50px</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">background-color</span>: <span class="number">#fcc</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">float</span>: left;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .float-blue &#123;</span><br><span class="line"><span class="css">      <span class="attribute">width</span>: <span class="number">100px</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">height</span>: <span class="number">50px</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">background-color</span>: <span class="number">#09c</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">float</span>: left;</span></span><br><span class="line">    &#125;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;border&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;float-red&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;common-div&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;float-blue&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</span><br><span class="line">      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim</span><br><span class="line">      veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea</span><br><span class="line">      commodo consequat. Duis aute irure dolor in reprehenderit in voluptate</span><br><span class="line">      velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat</span><br><span class="line">      cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id</span><br><span class="line">      est laborum.</span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>上面这段代码显示的样子如下：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619147229902-4673d52d-70f9-478e-adea-7b20d3d8950e.png#clientId=u3dd556fe-de2a-4&from=paste&height=195&id=uc054066a&margin=%5Bobject%20Object%5D&name=image.png&originHeight=195&originWidth=732&originalType=binary&size=83482&status=done&style=none&taskId=udf3b458b-8f49-4e66-89a6-76fa62b2260&width=732" alt="image.png"></p>
+<ul>
+<li>块级元素认为浮动元素不存在：红色的块级元素没有受到粉色浮动元素的影响，还展示在左上角的位置，但是被粉色元素盖住了左边的部分</li>
+<li>浮动元素会影响行内元素：文字部分被蓝色浮动元素影响，空出了蓝色浮动元素的部分</li>
+<li>浮动元素会间接影响了包含块的布局：浮动元素影响了文字部分吗，使之多出了一行，文字部分撑高了最外面的 border 框，所以间接影响了包含块的布局。</li>
+</ul>
+<p>其中，<strong>浮动元素的摆放</strong>会遵循如下的规则：</p>
+<ul>
+<li>尽量靠上</li>
+<li>尽量靠左</li>
+<li>尽量一个挨着一个</li>
+<li>不能超出包含块，除非元素比包含块更宽</li>
+<li>不能超过所在行的最高点</li>
+<li>不能超过它前面浮动元素的最高点</li>
+<li>行内元素绕着浮动元素摆放：左浮动元素的右边和右浮动元素的左边会出浮动元素</li>
+</ul>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><p>浮动元素并不能撑起包含块，这和我们的预期并不相符。通过以下的办法可以将包含块撑开，称之为<strong>闭合浮动</strong><br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619147337086-bbbe8792-e580-421d-9bb2-ec0b637fa630.png#clientId=u3dd556fe-de2a-4&from=paste&height=227&id=u37fc5218&margin=%5Bobject%20Object%5D&name=image.png&originHeight=227&originWidth=732&originalType=binary&size=4433&status=done&style=none&taskId=u99d50c93-721b-4ea8-8032-35592e09c65&width=732" alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619147351522-7de19830-7fd5-46ca-8c78-4deb7fad9719.png#clientId=u3dd556fe-de2a-4&from=paste&height=226&id=ud232f1d9&margin=%5Bobject%20Object%5D&name=image.png&originHeight=226&originWidth=732&originalType=binary&size=5293&status=done&style=none&taskId=ubee4f117-405f-4bea-bf75-279079dc0ab&width=732" alt="image.png"></p>
+<h3 id="闭合浮动的方法："><a href="#闭合浮动的方法：" class="headerlink" title="闭合浮动的方法："></a>闭合浮动的方法：</h3><ul>
+<li>**BFC:**1) 包含块设置 overflow:hidden 或者 2)包含块设置 display:table-cell/table/flex…</li>
+</ul>
+<blockquote>
+<p><strong>BFC：块级格式化上下文。它是一个独立的渲染区域，只有 Block-level box 参与， 它规定了内部的块级元素如何布局，并且与这个区域外部毫不相干。</strong>只要<strong>符合以下的条件就是 BFC:</strong></p>
+<ol>
+<li>根元素</li>
+<li>float 属性不为 none</li>
+<li>position 为 absolute 或 fixed</li>
+<li>display 为 inline-block, table-cell, table-caption, flex, inline-flex</li>
+<li>overflow 不为 visible</li>
+</ol>
+</blockquote>
+<p>相应的背景文档可以参阅：<a target="_blank" rel="noopener" href="http://www.cnblogs.com/lhb25/p/inside-block-formatting-ontext.html">《BFC 的神奇原理》</a></p>
+<ul>
+<li><strong>伪元素</strong>：</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.clearfix</span><span class="selector-pseudo">::after</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">&quot;&quot;</span>;</span><br><span class="line">  <span class="attribute">display</span>: block;</span><br><span class="line">  <span class="attribute">clear</span>: both;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>clear:both;意味着块级元素的左边和右边都不能有浮动元素。在包含块的末尾建立了一个内容为空的伪元素，并设置 clear:both，使这个元素位于所有的浮动元素之后，从而撑开了包含块的高。</p>
+</blockquote>
+<ul>
+<li><strong>包含块自己也浮动</strong></li>
+</ul>
+<p>这个方法也是 w3c 使用的方法。不过，下一个元素会受到这个浮动元素的影响。为了解决这个问题，有些人选择对布局中的所有东西进行浮动，然后使用适当的有意义的元素（常常是站点的页脚）对这些浮动进行清理。这有助于减少或消除不必要的标记。<br>相应的背景文档：<a target="_blank" rel="noopener" href="http://www.w3school.com.cn/css/css_positioning_floating.asp">《W3C CSS 浮动》</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/23/yuque/%E5%B1%85%E4%B8%AD/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -241,7 +430,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-04-23 00:50:15 / 修改时间：00:51:14" itemprop="dateCreated datePublished" datetime="2021-04-23T00:50:15+08:00">2021-04-23</time>
+              <time title="创建时间：2021-04-23 00:50:15 / 修改时间：11:32:04" itemprop="dateCreated datePublished" datetime="2021-04-23T00:50:15+08:00">2021-04-23</time>
             </span>
 
           
@@ -256,7 +445,7 @@
 
       
           <h2 id="使-div-水平垂直居中"><a href="#使-div-水平垂直居中" class="headerlink" title="使 div 水平垂直居中"></a>使 div 水平垂直居中</h2><h3 id="1-flex-布局实现-（元素已知宽度）"><a href="#1-flex-布局实现-（元素已知宽度）" class="headerlink" title="1. flex 布局实现 （元素已知宽度）"></a>1. flex 布局实现 （元素已知宽度）</h3><p>效果图：</p>
-<p><img src="1.png#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619146489383-dabd2076-1f04-4e82-81e3-d86d1d22eafb.png#clientId=u1943cb8a-69e5-4&from=drop&height=383&id=u363d0ddb&margin=%5Bobject%20Object%5D&name=1.png&originHeight=383&originWidth=386&originalType=binary&size=3576&status=done&style=none&taskId=uc34a2d5e-e2c5-41bd-b804-d7e156eb83a&width=386" alt="1.png"></p>
 <p>内部 div 要有宽度</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">CSS 代码:</span><br><span class="line">&lt;style&gt;</span><br><span class="line">    .box&#123;</span><br><span class="line">        width: 300px;</span><br><span class="line">        height: 300px;</span><br><span class="line">        background-color: #ccc;</span><br><span class="line">        display: flex;</span><br><span class="line">        display: -webkit-flex;</span><br><span class="line">        justify-content: center;</span><br><span class="line">        align-items: center;</span><br><span class="line">    &#125;</span><br><span class="line">    .box .a&#123;</span><br><span class="line">        width: 100px;</span><br><span class="line">        height: 100px;</span><br><span class="line">        background-color: blue;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br><span class="line">HTML 代码：</span><br><span class="line">&lt;div class&#x3D;&quot;box&quot;&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;a&quot;&gt;&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
 
@@ -264,20 +453,20 @@
 <p>子元素设置为：position: absolute;</p>
 <p>距上 50%，据左 50%，然后减去元素自身宽度的一半距离就可以实现</p>
 <p>效果图：</p>
-<p><img src="2.png#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619146703137-b0763b8f-94bb-406d-97c8-b6c1e4314c40.png#clientId=u1943cb8a-69e5-4&from=drop&height=387&id=u2049101e&margin=%5Bobject%20Object%5D&name=2.png&originHeight=387&originWidth=388&originalType=binary&size=3643&status=done&style=none&taskId=uf4db9e4e-1137-4b7f-8dad-b432a4ba36d&width=388" alt="2.png"></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">CSS代码：</span><br><span class="line">&lt;style&gt;</span><br><span class="line">    .box&#123;</span><br><span class="line">        width: 300px;</span><br><span class="line">        height: 300px;</span><br><span class="line">        background-color: red;</span><br><span class="line">        position: relative;</span><br><span class="line">    &#125;</span><br><span class="line">    .box .a&#123;</span><br><span class="line">        width: 100px;</span><br><span class="line">        height: 100px;</span><br><span class="line">        background-color: blue;</span><br><span class="line">        position: absolute;</span><br><span class="line">        left: 50%;</span><br><span class="line">        top: 50%;</span><br><span class="line">        margin: -50px 0 0 -50px;</span><br><span class="line">    &#125;</span><br><span class="line">    &lt;&#x2F;style&gt;</span><br><span class="line"></span><br><span class="line">HTML 代码：</span><br><span class="line">&lt;div class&#x3D;&quot;box&quot;&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;a&quot;&gt;love&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
 
-<h3 id="3-position-transform-（元素未知宽度）"><a href="#3-position-transform-（元素未知宽度）" class="headerlink" title="3. position transform （元素未知宽度）"></a>3. position transform （元素未知宽度）</h3><p>如果元素未知宽度，只需将上面例子中的 <code>margin: -50px 0 0 -50px;</code>替换为：**<code>transform: translate(-50%,-50%);</code>**</p>
+<h3 id="3-position-transform-（元素未知宽度）"><a href="#3-position-transform-（元素未知宽度）" class="headerlink" title="3. position transform （元素未知宽度）"></a>3. position transform （元素未知宽度）</h3><p>如果元素未知宽度，只需将上面例子中的 <code>margin: -50px 0 0 -50px;</code>替换为：<code>**transform: translate(-50%,-50%);**</code></p>
 <p>效果图：</p>
-<p><img src="3.png#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619146710342-80aa21c0-0c3d-4f5d-9f94-08aaabb7c981.png#clientId=u1943cb8a-69e5-4&from=drop&id=ubda98303&margin=%5Bobject%20Object%5D&name=3.png&originHeight=388&originWidth=390&originalType=binary&size=3061&status=done&style=none&taskId=u9cf78fcd-6b8f-42ca-96f3-93594b69ff2" alt="3.png"></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">CSS 代码：</span><br><span class="line">&lt;style&gt;</span><br><span class="line">    .box&#123;</span><br><span class="line">        width: 300px;</span><br><span class="line">        height: 300px;</span><br><span class="line">        background-color: red;</span><br><span class="line">        position: relative;</span><br><span class="line">    &#125;</span><br><span class="line">    .box .a&#123;</span><br><span class="line">        background-color: blue;</span><br><span class="line">        position: absolute;</span><br><span class="line">        top: 50%;</span><br><span class="line">        left: 50%;</span><br><span class="line">        transform: translate(-50%, -50%);</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br></pre></td></tr></table></figure>
 
 <h3 id="4-position（元素已知宽度）（left，right，top，bottom-为-0，maigin：auto-）"><a href="#4-position（元素已知宽度）（left，right，top，bottom-为-0，maigin：auto-）" class="headerlink" title="4. position（元素已知宽度）（left，right，top，bottom 为 0，maigin：auto ）"></a>4. position（元素已知宽度）（left，right，top，bottom 为 0，maigin：auto ）</h3><p>效果图：</p>
-<p><img src="4.png#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619146715247-987c1c49-5d53-464e-b8b1-67c5ebaf4017.png#clientId=u1943cb8a-69e5-4&from=drop&id=ud37941b7&margin=%5Bobject%20Object%5D&name=4.png&originHeight=379&originWidth=381&originalType=binary&size=3339&status=done&style=none&taskId=ud7db8148-4b76-4e28-83f5-8b0f7f3a754" alt="4.png"></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">CSS 代码：</span><br><span class="line">&lt;style&gt;</span><br><span class="line">    .box&#123;</span><br><span class="line">        width: 300px;</span><br><span class="line">        height: 300px;</span><br><span class="line">        background-color: red;</span><br><span class="line">        position: relative;</span><br><span class="line">    &#125;</span><br><span class="line">    .box .a&#123;</span><br><span class="line">        width: 100px;</span><br><span class="line">        height: 100px;</span><br><span class="line">        background-color: blue;</span><br><span class="line">        position: absolute;</span><br><span class="line">        top: 0;</span><br><span class="line">        bottom: 0;</span><br><span class="line">        left: 0;</span><br><span class="line">        right: 0;</span><br><span class="line">        margin: auto;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br><span class="line">HTML 代码：</span><br><span class="line"> &lt;div class&#x3D;&quot;box&quot;&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;a&quot;&gt;love&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
 
 <h3 id="★-第四种情况方案中，如果子元素不设置宽度和高度，将会铺满整个父级（应用：模态框）"><a href="#★-第四种情况方案中，如果子元素不设置宽度和高度，将会铺满整个父级（应用：模态框）" class="headerlink" title="★ 第四种情况方案中，如果子元素不设置宽度和高度，将会铺满整个父级（应用：模态框）"></a>★ 第四种情况方案中，如果子元素不设置宽度和高度，将会铺满整个父级（应用：模态框）</h3><p>效果图：</p>
-<p><img src="5.png#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619146723119-e126b7f1-ae6e-4c5d-b0ea-5ffebbde520b.png#clientId=u1943cb8a-69e5-4&from=drop&id=u7e7631e4&margin=%5Bobject%20Object%5D&name=5.png&originHeight=385&originWidth=383&originalType=binary&size=2233&status=done&style=none&taskId=u1f75ae94-26cd-41fd-abd5-029063df33b" alt="5.png"></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">CSS 代码：</span><br><span class="line">&lt;style&gt;</span><br><span class="line">    .box&#123;</span><br><span class="line">        width: 300px;</span><br><span class="line">        height: 300px;</span><br><span class="line">        background-color: red;</span><br><span class="line">        position: relative;</span><br><span class="line">    &#125;</span><br><span class="line">    .box .a&#123;</span><br><span class="line">        &#x2F;* 如果不设置宽高，将铺满整个父级*&#x2F;</span><br><span class="line">        background-color: pink;</span><br><span class="line">        position: absolute;</span><br><span class="line">        left: 0;</span><br><span class="line">        right: 0;</span><br><span class="line">        top: 0;</span><br><span class="line">        bottom: 0;</span><br><span class="line">        margin: auto;</span><br><span class="line">        text-align: center;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br><span class="line">HTML:</span><br><span class="line">&lt;div class&#x3D;&quot;box&quot;&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;a&quot;&gt;love&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
 
 <h3 id="5-table-cell-布局实现"><a href="#5-table-cell-布局实现" class="headerlink" title="5. table-cell 布局实现"></a>5. table-cell 布局实现</h3><p>table 实现垂直居中，子集元素可以是块元素，也可以不是块元素</p>
@@ -302,21 +491,21 @@
 </li>
 </ol>
 <h3 id="应用："><a href="#应用：" class="headerlink" title="应用："></a>应用：</h3><h3 id="1-使文字水平垂直居中"><a href="#1-使文字水平垂直居中" class="headerlink" title="1. 使文字水平垂直居中"></a>1. 使文字水平垂直居中</h3><p>效果图：</p>
-<p><img src="6.png#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619146730971-89bcdf26-3547-4a3d-9cc3-2673a82d9439.png#clientId=u1943cb8a-69e5-4&from=drop&id=uef0b35ec&margin=%5Bobject%20Object%5D&name=6.png&originHeight=381&originWidth=383&originalType=binary&size=3066&status=done&style=none&taskId=u1bbc8b83-a76f-476b-b72f-50989af3026" alt="6.png"></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">CSS 代码：</span><br><span class="line">&lt;style&gt;</span><br><span class="line">    .box&#123;</span><br><span class="line">        width: 300px;</span><br><span class="line">        height: 300px;</span><br><span class="line">        background-color: red;</span><br><span class="line">        display: table-cell;</span><br><span class="line">        text-align: center;&#x2F;*使元素水平居中 *&#x2F;</span><br><span class="line">        vertical-align: middle;&#x2F;*使元素垂直居中 *&#x2F;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br><span class="line"></span><br><span class="line">HTML 代码：</span><br><span class="line">&lt;div class&#x3D;&quot;box&quot;&gt;love&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
 
 <p>给父级设置 display : table，子集设置 display：tablecell ，子集会充满全屏</p>
-<p><img src="7.png#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619146739628-200a0b17-947b-4200-80ae-7f48517d1006.png#clientId=u1943cb8a-69e5-4&from=drop&id=udb323d0b&margin=%5Bobject%20Object%5D&name=7.png&originHeight=387&originWidth=384&originalType=binary&size=2833&status=done&style=none&taskId=ub1d9b6dc-817e-4786-a20d-534bd5b6eeb" alt="7.png"></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">CSS 代码：</span><br><span class="line">&lt;style&gt;</span><br><span class="line">    .box&#123;</span><br><span class="line">        width: 300px;</span><br><span class="line">        height: 300px;</span><br><span class="line">        background-color: red;</span><br><span class="line">        display: table;</span><br><span class="line">    &#125;</span><br><span class="line">    .box .a&#123;</span><br><span class="line">        display: table-cell;</span><br><span class="line">        vertical-align: middle;</span><br><span class="line">        text-align: center;</span><br><span class="line">        background-color: blue;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br><span class="line"></span><br><span class="line">HTML ：</span><br><span class="line">&lt;div class&#x3D;&quot;box&quot;&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;a&quot;&gt;love&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
 
 <h3 id="2-图片水平垂直居中"><a href="#2-图片水平垂直居中" class="headerlink" title="2. 图片水平垂直居中"></a>2. 图片水平垂直居中</h3><p>效果图：</p>
-<p><img src="8.png#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619146745642-78df967f-a0a4-42b0-831a-7168154d7358.png#clientId=u1943cb8a-69e5-4&from=drop&id=u4c238944&margin=%5Bobject%20Object%5D&name=8.png&originHeight=384&originWidth=389&originalType=binary&size=34468&status=done&style=none&taskId=u9143a9de-a281-49df-98fd-3be4d19a41d" alt="8.png"></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;style&gt;</span><br><span class="line">    .box&#123;</span><br><span class="line">        width: 300px;</span><br><span class="line">        height: 300px;</span><br><span class="line">        background-color: skyblue;</span><br><span class="line">        display: table-cell;</span><br><span class="line">        text-align: center;</span><br><span class="line">        vertical-align: middle;</span><br><span class="line">    &#125;</span><br><span class="line">    img&#123;</span><br><span class="line">        &#x2F;* 设置成块元素后，text-align：center 就会失效 *&#x2F;</span><br><span class="line">        width: 100px;</span><br><span class="line">        height: 100px;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br><span class="line"></span><br><span class="line">HTML：</span><br><span class="line">&lt;div class&#x3D;&quot;box&quot;&gt;</span><br><span class="line">    &lt;img src&#x3D;&quot;1.jpg&quot; alt&#x3D;&quot;&quot;&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
 
 <p>中间的图片会随着外层容器的大小而自动水平垂直居中，其实原理和文字水平垂直居中一模一样</p>
 <h3 id="3-元素两端垂直对齐"><a href="#3-元素两端垂直对齐" class="headerlink" title="3. 元素两端垂直对齐"></a>3. 元素两端垂直对齐</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">CSS 代码：</span><br><span class="line">&lt;style&gt;</span><br><span class="line">    *&#123;</span><br><span class="line">        padding: 0;</span><br><span class="line">        margin: 0;</span><br><span class="line">    &#125;</span><br><span class="line">    .box&#123;</span><br><span class="line">        display: table;</span><br><span class="line">        width: 90%;</span><br><span class="line">        margin: 10px  auto;</span><br><span class="line">        padding: 10px;</span><br><span class="line">        border: 1px solid green;</span><br><span class="line">        height: 100px;</span><br><span class="line">    &#125;</span><br><span class="line">    .left,.right&#123;</span><br><span class="line">        display: table-cell;</span><br><span class="line">        width: 20%;</span><br><span class="line">        border: 1px solid red;</span><br><span class="line">    &#125;</span><br><span class="line">    .center&#123;</span><br><span class="line">        &#x2F;* padding-top: 10px; *&#x2F;</span><br><span class="line">        height: 100px;</span><br><span class="line">        background-color: green;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br><span class="line"></span><br><span class="line">HTML：</span><br><span class="line">&lt;div class&#x3D;&quot;box&quot;&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;left&quot;&gt;</span><br><span class="line">        &lt;p&gt;我是左边&lt;&#x2F;p&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;center&quot;&gt;</span><br><span class="line">        &lt;p&gt;我是中间&lt;&#x2F;p&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;right&quot;&gt;</span><br><span class="line">        &lt;p&gt;我是右边&lt;&#x2F;p&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
 
-<p>效果：<img src="9.png#alt=img"></p>
+<p>效果：<img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619146755174-14790b24-3a33-481b-8e5d-57f769eb50cf.png#clientId=u1943cb8a-69e5-4&from=drop&id=u6260be18&margin=%5Bobject%20Object%5D&name=9.png&originHeight=769&originWidth=1886&originalType=binary&size=51074&status=done&style=none&taskId=ub6d67e66-1825-45bd-a167-0cd508b34f4" alt="9.png"></p>
 <p>其中 center 的顶部没有与左右两侧对齐，原因是 left 中的<br>有一个 margin-top ， 而表格布局中默认是文字顶部对齐的，所以 center 会向下移动到首行文字基线对齐，解决办法是为   center 添加与左右两侧中 margin-top 较大者等值的 padding-top 即可。</p>
 
       
@@ -368,7 +557,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-23 00:51:15" itemprop="dateModified" datetime="2021-04-23T00:51:15+08:00">2021-04-23</time>
+                <time title="修改时间：2021-04-23 11:32:04" itemprop="dateModified" datetime="2021-04-23T11:32:04+08:00">2021-04-23</time>
               </span>
 
           
@@ -534,7 +723,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-23 00:51:15" itemprop="dateModified" datetime="2021-04-23T00:51:15+08:00">2021-04-23</time>
+                <time title="修改时间：2021-04-23 11:32:04" itemprop="dateModified" datetime="2021-04-23T11:32:04+08:00">2021-04-23</time>
               </span>
 
           
@@ -713,7 +902,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-23 00:51:16" itemprop="dateModified" datetime="2021-04-23T00:51:16+08:00">2021-04-23</time>
+                <time title="修改时间：2021-04-23 11:32:05" itemprop="dateModified" datetime="2021-04-23T11:32:05+08:00">2021-04-23</time>
               </span>
 
           
@@ -1001,7 +1190,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-23 00:51:16" itemprop="dateModified" datetime="2021-04-23T00:51:16+08:00">2021-04-23</time>
+                <time title="修改时间：2021-04-23 11:32:05" itemprop="dateModified" datetime="2021-04-23T11:32:05+08:00">2021-04-23</time>
               </span>
 
           
@@ -1131,7 +1320,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-23 00:51:16" itemprop="dateModified" datetime="2021-04-23T00:51:16+08:00">2021-04-23</time>
+                <time title="修改时间：2021-04-23 11:32:05" itemprop="dateModified" datetime="2021-04-23T11:32:05+08:00">2021-04-23</time>
               </span>
 
           
@@ -1204,7 +1393,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-23 00:51:16" itemprop="dateModified" datetime="2021-04-23T00:51:16+08:00">2021-04-23</time>
+                <time title="修改时间：2021-04-23 11:32:05" itemprop="dateModified" datetime="2021-04-23T11:32:05+08:00">2021-04-23</time>
               </span>
 
           
@@ -1449,497 +1638,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/22/yuque/flex/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Adam Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Adam">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/22/yuque/flex/" class="post-title-link" itemprop="url">flex</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-22 14:07:22" itemprop="dateCreated datePublished" datetime="2021-04-22T14:07:22+08:00">2021-04-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-23 00:51:16" itemprop="dateModified" datetime="2021-04-23T00:51:16+08:00">2021-04-23</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近在项目中，遇到布局问题，有时候，需要堆叠很多的样式，去排版，一定程度上增加了代码量，那么有没有更加方便的布局方式呢？👇<br>48 张图带你从 0 到 1 掌握 flex 布局方式。<br><code>flex布局</code>在某种程度上，简便我们布局的一个难题，接下来的篇幅将介绍它的使用 👇<br><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cad4dc9d88834a8e831c03de2b9e624c~tplv-k3u1fbpfcp-zoom-1.image#alt=flex-%E5%B8%83%E5%B1%80%E8%AF%A6%E8%A7%A3"><br>需要本文的 Xmind 导图的话，移步公众号–<strong>前端 UpUp</strong>,回复<code>flex</code>关键字即可。</p>
-<h2 id="flex-基本概念"><a href="#flex-基本概念" class="headerlink" title="flex 基本概念"></a>flex 基本概念</h2><p>要想熟练掌握 flex 布局的话，你需要理解两个概念：<code>轴</code>和<code>容器</code>👇<br><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/30ae5302cb1c4488af8e011bcdb9a64b~tplv-k3u1fbpfcp-zoom-1.image#alt=flex%E5%B8%83%E5%B1%80%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><br>从上面图来看，我们将 flex 布局分为两部分讲，<code>轴</code>和<code>容器</code>。<br><strong>轴</strong></p>
-<ul>
-<li>主轴（mian axis）</li>
-<li>交叉轴（cross axis）</li>
-</ul>
-<p><strong>容器</strong></p>
-<ul>
-<li>父容器（container)</li>
-<li>子容器（item）</li>
-</ul>
-<p>打个预防针，<code>flex布局</code>涉及到 12 个 CSS 属性，父容器,子容器各 6 个。<br>接下来先梳理常见的属性，不常见的放在进阶部分来梳理。</p>
-<h3 id="轴"><a href="#轴" class="headerlink" title="轴"></a>轴</h3><p>我们知道，<code>轴</code>包括<code>主轴</code>和<code>交叉轴</code>,那么它们的方向是如何决定呢？我们直接从一张图看懂它 👇<br><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8563c81d90394784b32c023b725f454c~tplv-k3u1fbpfcp-zoom-1.image#alt=flex%E8%BD%B4%E7%9A%84%E6%A6%82%E5%BF%B5"><br>默认情况下，<strong>主轴</strong>的方向是从左向右的，<strong>交叉轴</strong>垂直于主轴，逆时针方向 90 度，那么接下来我们看<strong>flex-direction</strong>是如何决定主轴的。讲这个之前，我们需要明白 👇</p>
-<ul>
-<li><p>交叉轴是由主轴决定的，主轴又是由 flex-direction 决定的。</p>
-</li>
-<li><p>flex-direction 属性设置在父容器上，这样子才可以生效。</p>
-</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">flex-direction</span>: row | row-reverse | column | column-reverse;</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/47eeb569967e4c2eb64c2b539f8b35ee~tplv-k3u1fbpfcp-zoom-1.image#alt=flex-direction%E5%8F%96%E5%80%BC"><br>首先布局如下 👇</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;wrapper&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;flex1&quot;</span>&gt;</span>子盒子#flex1: 1<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;flex2&quot;</span>&gt;</span>子盒子#flex2: 1<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>接下来，我们看看他们的效果吧 👇</p>
-<hr>
-<h4 id="flex-direction-row"><a href="#flex-direction-row" class="headerlink" title="flex-direction: row"></a>flex-direction: row</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">当你给父盒子(wrapper)设置属性</span><br><span class="line">flex-direction: row</span><br></pre></td></tr></table></figure>
-
-<p>效果 👇<br><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/63c8d0fdfb00435c8c25c0eb0c4b8d8e~tplv-k3u1fbpfcp-zoom-1.image#alt=flex-direction-row"><br><strong>结论</strong></p>
-<ul>
-<li>flex 容器的主轴被定义为与文本方向相同。 主轴起点和主轴终点与内容方向相同。</li>
-<li>简单理解就是<strong>主轴沿着水平方向向右</strong></li>
-</ul>
-<hr>
-<h4 id="flex-direction-row-reverse"><a href="#flex-direction-row-reverse" class="headerlink" title="flex-direction: row-reverse"></a>flex-direction: row-reverse</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">当你给父盒子(wrapper)设置属性</span><br><span class="line">flex-direction: row-reverse</span><br></pre></td></tr></table></figure>
-
-<p>效果 👇<br><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8f20b904b939419aafd9060969262108~tplv-k3u1fbpfcp-zoom-1.image#alt="><br>我们可以看到这两个盒子的位置发生了变化，这个就是主轴起点和主轴终点位置<strong>置换</strong>的原因。<br><strong>结论</strong></p>
-<ul>
-<li>表现和 row 相同，但是置换了主轴起点和主轴终点。</li>
-<li>简单理解就是<strong>主轴沿着水平方向向左</strong>，与文本方向相反。</li>
-</ul>
-<hr>
-<h4 id="flex-direction-column"><a href="#flex-direction-column" class="headerlink" title="flex-direction: column"></a>flex-direction: column</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">当你给父盒子(wrapper)设置属性</span><br><span class="line">flex-direction: column</span><br></pre></td></tr></table></figure>
-
-<p>效果 👇<br><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/263bf603893b49da987fbfdda7e61e5d~tplv-k3u1fbpfcp-zoom-1.image#alt=flex-direction-column"><br>可以看到，子盒子的布局发生了变化，形成了在 Y 轴上的布局方式,并且书写方式跟布局一样。<br><strong>结论</strong></p>
-<ul>
-<li>flex 容器的主轴和块轴相同。主轴起点与主轴终点和书写模式的前后点相同</li>
-<li>简单的理解，就是主轴变成 Y 轴方向，方向从上到下布局。</li>
-</ul>
-<hr>
-<h4 id="flex-direction-column-reverse"><a href="#flex-direction-column-reverse" class="headerlink" title="flex-direction: column-reverse"></a>flex-direction: column-reverse</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">当你给父盒子(wrapper)设置属性</span><br><span class="line">flex-direction: column-reverse</span><br></pre></td></tr></table></figure>
-
-<p>效果 👇<br><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/76432fefc1b449fb81dc3f257788b1cd~tplv-k3u1fbpfcp-zoom-1.image#alt=flex-direction-column-reverse"><br>可以看到，子盒子的布局跟 column 差不多，唯一不同的是，方向上发生了变化。<br><strong>结论</strong></p>
-<ul>
-<li>表现和<code>column</code>相同，但是置换了主轴起点和主轴终点</li>
-<li>简单的理解，就是主轴变成 Y 轴方向，方向从下到上，与书写的方向相反。</li>
-</ul>
-<hr>
-<h3 id="容器"><a href="#容器" class="headerlink" title="容器"></a>容器</h3><p>这里就分为<strong>父容器</strong>和<strong>子容器</strong>，我们先来看看父容器 👇</p>
-<h4 id="父容器"><a href="#父容器" class="headerlink" title="父容器"></a>父容器</h4><ul>
-<li>justify-content:  <strong>设置子元素在主轴方向上的对齐方式</strong></li>
-<li>align-items： <strong>设置子元素在交叉轴方向上的对齐方式</strong></li>
-</ul>
-<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4b1bdef0b27d4256a91c3e72bbc83fce~tplv-k3u1fbpfcp-zoom-1.image#alt=%E7%88%B6%E5%AE%B9%E5%99%A8%E5%B8%B8%E8%A7%81%E5%B1%9E%E6%80%A7"></p>
-<hr>
-<h4 id="justify-content"><a href="#justify-content" class="headerlink" title="justify-content"></a>justify-content</h4><p>这个属性设置在父容器上，<strong>决定子元素在主轴方向上的对齐方式</strong>，我们看看它们具体表现吧 👇</p>
-<hr>
-<h4 id="justify-content-flex-start"><a href="#justify-content-flex-start" class="headerlink" title="justify-content: flex-start"></a>justify-content: flex-start</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">当你给父盒子(wrapper)设置属性</span><br><span class="line">justify-content: flex-start</span><br></pre></td></tr></table></figure>
-
-<p>效果 👇<br><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5ec9455f3adf4e82b9db1afb15d23a02~tplv-k3u1fbpfcp-zoom-1.image#alt=justify-content-flex-start"><br><strong>结论</strong>，子元素沿着主轴方向开始对齐。</p>
-<hr>
-<h4 id="justify-content-flex-end"><a href="#justify-content-flex-end" class="headerlink" title="justify-content: flex-end"></a>justify-content: flex-end</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">当你给父盒子(wrapper)设置属性</span><br><span class="line">justify-content: flex-end</span><br></pre></td></tr></table></figure>
-
-<p>效果 👇<br><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c9a466a6f5a64a77ac6478ae6c804d73~tplv-k3u1fbpfcp-zoom-1.image#alt=justify-content-flex-end"><br><strong>结论</strong>，子元素沿着主轴方向终点对齐。</p>
-<hr>
-<h4 id="justify-content-center"><a href="#justify-content-center" class="headerlink" title="justify-content: center"></a>justify-content: center</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">当你给父盒子(wrapper)设置属性</span><br><span class="line">justify-content: center</span><br></pre></td></tr></table></figure>
-
-<p>效果 👇<br><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/35b82988c18c49ebbf5cbde7f1d86f60~tplv-k3u1fbpfcp-zoom-1.image#alt=justify-content-center"><br><strong>结论</strong>，子元素在主轴方向上水平居中。</p>
-<hr>
-<h4 id="justify-content-space-between"><a href="#justify-content-space-between" class="headerlink" title="justify-content: space-between"></a>justify-content: space-between</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">当你给父盒子(wrapper)设置属性</span><br><span class="line">justify-content: space-between</span><br></pre></td></tr></table></figure>
-
-<p>效果 👇<br><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d75e64a2ddfb43b5b5728f65a81f34e2~tplv-k3u1fbpfcp-zoom-1.image#alt=justify-content-space-between"><br><strong>结论</strong>，子元素在主轴方向上<strong>两端对齐，项目之间间隔相等</strong>。</p>
-<hr>
-<h4 id="justify-content-space-around"><a href="#justify-content-space-around" class="headerlink" title="justify-content: space-around"></a>justify-content: space-around</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">当你给父盒子(wrapper)设置属性</span><br><span class="line">justify-content: space-around</span><br></pre></td></tr></table></figure>
-
-<p>效果 👇<br><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5c605040c45343a78b6596051d61e228~tplv-k3u1fbpfcp-zoom-1.image#alt=justify-content-space-around"><br><strong>结论</strong>，子元素在主轴方向上<strong>均匀排列每个元素，每个元素周围分配相同的空间</strong>。</p>
-<hr>
-<h4 id="align-items"><a href="#align-items" class="headerlink" title="align-items"></a>align-items</h4><p>这个属性设置在父容器上，<strong>决定子元素在交叉轴方向上的对齐方式</strong>，我们看看它们具体表现吧 👇</p>
-<hr>
-<h4 id="align-items-flex-start"><a href="#align-items-flex-start" class="headerlink" title="align-items: flex-start"></a>align-items: flex-start</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">当你给父盒子(wrapper)设置属性</span><br><span class="line">align-items: flex-start</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/dcc92ecd68c34b0fb3ea75e2ff0b912b~tplv-k3u1fbpfcp-zoom-1.image#alt=align-items-flex-start"><br><strong>结论</strong>，子元素在交叉轴方向上起点对齐。</p>
-<hr>
-<h4 id="align-items-flex-end"><a href="#align-items-flex-end" class="headerlink" title="align-items: flex-end"></a>align-items: flex-end</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">当你给父盒子(wrapper)设置属性</span><br><span class="line">align-items: flex-end</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a50fe990f88341d0a85b823b9ff3fb44~tplv-k3u1fbpfcp-zoom-1.image#alt=align-items-flexend"><br><strong>结论</strong>，子元素在交叉轴方向上终点对齐。</p>
-<hr>
-<h4 id="align-items-center"><a href="#align-items-center" class="headerlink" title="align-items: center"></a>align-items: center</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">当你给父盒子(wrapper)设置属性</span><br><span class="line">align-items: center</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/00f3b616efd946a5bffa5ffda877a78b~tplv-k3u1fbpfcp-zoom-1.image#alt=align-items-center"><br><strong>结论</strong>，子元素在交叉轴方向上居中对齐。</p>
-<hr>
-<h4 id="align-items-baseline"><a href="#align-items-baseline" class="headerlink" title="align-items: baseline"></a>align-items: baseline</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">当你给父盒子(wrapper)设置属性</span><br><span class="line">align-items: baseline</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7bfe338236564e179134b7e961505951~tplv-k3u1fbpfcp-zoom-1.image#alt=align-items--baseline"><br><strong>结论</strong>，子元素在交叉轴方向上以文字基线对齐，具体不清楚的，可以自行百度。</p>
-<hr>
-<h4 id="align-items-stretch"><a href="#align-items-stretch" class="headerlink" title="align-items: stretch"></a>align-items: stretch</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">当你给父盒子(wrapper)设置属性</span><br><span class="line">align-items: stretch</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e641e25027ad41ec806f37756c0468d3~tplv-k3u1fbpfcp-zoom-1.image#alt=align-items--stretch"><br><strong>结论</strong>，这个属性是默认的，如果项目未设置高度或者设为 auto，将占满整个容器的高度。</p>
-<hr>
-<h4 id="子容器"><a href="#子容器" class="headerlink" title="子容器"></a>子容器</h4><p>先看张图片<br><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3d534c220aa642b7a60e67c9b8f19acd~tplv-k3u1fbpfcp-zoom-1.image#alt=%E5%AD%90%E5%AE%B9%E5%99%A8%E5%B8%B8%E8%A7%81%E7%9A%84%E5%B1%9E%E6%80%A7"><br>子容器的话，这里就介绍两个属性 👇</p>
-<ul>
-<li><p><code>flex</code>属性 定义在主轴是如何伸缩的</p>
-<ul>
-<li>子容器是有弹性的，它们会自动填充剩余空间，子容器的伸缩比由<code>flex</code>属性决定。</li>
-<li>flex 是多个属性的缩写，允许 1-3 个值的连写，具体参考上面的图。</li>
-</ul>
-</li>
-<li><p><code>align-self</code>属性 <strong>单独设置子容器如何沿交叉轴排列</strong></p>
-<ul>
-<li>每个子容器都可以单独定义沿交叉轴排列方式。</li>
-<li>该属性的取值跟父容器中的 align-items 属性一致，如果两者相同的话，则以子容器<code>align-self</code>属性为主。</li>
-</ul>
-</li>
-</ul>
-<h4 id="flex-作用规则"><a href="#flex-作用规则" class="headerlink" title="flex 作用规则"></a>flex 作用规则</h4><ul>
-<li><p>三个属性的简写，是 flex-grow  flex-shrink flex-basis 的简写</p>
-</li>
-<li><p>常用简化写法 👇</p>
-<ul>
-<li>flex:1 —&gt;  flex:1 1 0%;</li>
-<li>flex:3 —&gt; flex:3 1 0%;</li>
-<li>注意:flexbox 布局和原来的布局是两个概念，部分 css 属性在 flexbox 盒子里面不起作用，eg：float， clear， column,vertical-align 等等</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">注意👉flex-grow  flex-shrink flex-basis 这三个属性会在后续介绍</span><br></pre></td></tr></table></figure>
-
-<p>具体的 flex 取值问题，可以参照下面的图 👇<br><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7d9db21dde9249ecbaa9204fd2397e4e~tplv-k3u1fbpfcp-zoom-1.image#alt=flex%E5%8F%96%E5%80%BC%E9%97%AE%E9%A2%98"></p>
-<hr>
-<h4 id="align-self-作用规则"><a href="#align-self-作用规则" class="headerlink" title="align-self 作用规则"></a><strong>align-self 作用规则</strong></h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 起始端对齐</span><br><span class="line">align-self : flex-start;</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/aa6a46b24f2b45d3ac93f9a9fffad31e~tplv-k3u1fbpfcp-zoom-1.image#alt=align-self-flexStart"></p>
-<hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 末尾段对齐</span><br><span class="line">align-self : flex-end;</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e986cd6721f0486aaeb54ffe2dc93591~tplv-k3u1fbpfcp-zoom-1.image#alt=align-self-flex-end"></p>
-<hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">基线对齐&#x2F;&#x2F; 末尾段对齐</span><br><span class="line">align-self : baseline;</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5442ea2af1804d82a9cb9c977008ef0c~tplv-k3u1fbpfcp-zoom-1.image#alt=align-self-baseline"><br>可以看到的话，它们对齐的方式是第一行文字的基线。</p>
-<hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">拉伸对齐</span><br><span class="line">align-self : stretch;</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bc1e80a04f504faa9b066974baea3972~tplv-k3u1fbpfcp-zoom-1.image#alt=align-items-stretch"></p>
-<hr>
-<h2 id="flex-更深入了解"><a href="#flex-更深入了解" class="headerlink" title="flex 更深入了解"></a>flex 更深入了解</h2><p>上面介绍的常见几个属性掌握的话，基本上可以满足日常的开发布局需求，剩下的一些属性，接下来将梳理一遍，这样子的话，早日成为<code>flex布局进阶者</code>。</p>
-<h3 id="父容器-1"><a href="#父容器-1" class="headerlink" title="父容器"></a>父容器</h3><ul>
-<li><p><strong>flex-wrap</strong>   设置换行方式</p>
-<ul>
-<li>绝对子容器是否可以选择换行，一般而言有三种状态，支持换行的话，也支持逆序换行。</li>
-</ul>
-</li>
-<li><p><strong>flex-flow</strong> 设置轴向与换行组合</p>
-<ul>
-<li>是 flex-direction 和 flex-wrap 的简写。</li>
-<li>所以只要掌握，<code>flex-direction</code> 和 <code>flex-wrap</code>即可。</li>
-</ul>
-</li>
-<li><p><strong>align-content</strong>   多行沿交叉轴对齐方式</p>
-<ul>
-<li>当子容器多行排列时，设置行与行之间的对齐方式。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h4 id="flex-wrap"><a href="#flex-wrap" class="headerlink" title="flex-wrap"></a>flex-wrap</h4><p>设置子容器的换行方式，通常有三个取值 👇</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flex-wrap: wrap | nowrap | wrap-reverse</span><br></pre></td></tr></table></figure>
-
-<p>三种情况 👇</p>
-<hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 允许换行</span><br><span class="line">flex-wrap : wrap</span><br></pre></td></tr></table></figure>
-
-<p>效果 👇<br><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/06dd94f540de40faaaa41b5fea90a989~tplv-k3u1fbpfcp-zoom-1.image#alt=flex-wrap-wrap"></p>
-<hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 不允许换行</span><br><span class="line">flex-wrap : nowrap</span><br></pre></td></tr></table></figure>
-
-<p>效果 👇<br><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7d07888feba24c06a1b9c6cec1ab364b~tplv-k3u1fbpfcp-zoom-1.image#alt=flex-wrap-nowrap"></p>
-<hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 允许逆向换行</span><br><span class="line">flex-wrap : wrap-reverse</span><br></pre></td></tr></table></figure>
-
-<p>效果 👇<br><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/93dcac99b7a742309d55b831f1e8ecfd~tplv-k3u1fbpfcp-zoom-1.image#alt=flex-wrap-wrapReverse"></p>
-<hr>
-<h4 id="flex-flow"><a href="#flex-flow" class="headerlink" title="flex-flow"></a>flex-flow</h4><p>先来一张图 👇<br><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bee4c1a1e2aa4939aaec1168df9df15d~tplv-k3u1fbpfcp-zoom-1.image#alt=flex-flow%E5%8F%96%E5%80%BC"><br><code>更多取值信息请查看</code> <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/CSS/flex-direction"><code>flex-direction</code></a> 和 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/CSS/flex-wrap"><code>flex-wrap</code></a><br>可以查看 MDN 上，或者把之前的<code>flex-direction</code> 和 <code>flex-wrap</code> 两者取值看过一遍，那么使用这个属性就没有问题啦，这里也就不过多的举例子了，取值有三种情况 👇</p>
-<ul>
-<li><p>单独设置 flex-direction 取值，比如</p>
-<p>-</p>
-</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">flex-flow</span>: row | column;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>单独设置 flex-wrap 取值</p>
-<p>-</p>
-</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">flex-flow</span>: wrap | nowrap | wrap-reverse;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>同时设置两者取值</p>
-<p>-</p>
-</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">flex-flow</span>: row wrap</span><br><span class="line">flex-flow: column nowrap</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h4 id="align-content"><a href="#align-content" class="headerlink" title="align-content"></a>align-content</h4><p>这个属性是定义子容器在交叉轴的排列方式，也就是对齐方式。<br>首先上一张图 👇<br><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e94951ca10cd4dc8bf74069ac13d6966~tplv-k3u1fbpfcp-zoom-1.image#alt=align-content%E5%8F%96%E5%80%BC"><br>根据这些取值，我们来看看布局效果吧 👇</p>
-<hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 起始端对齐</span><br><span class="line">align-content: flex-start</span><br></pre></td></tr></table></figure>
-
-<p>效果 👇<br><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b00aaeb582d3474e838db709ec66c3a8~tplv-k3u1fbpfcp-zoom-1.image#alt=align-content-flex-start"></p>
-<hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 末尾段对齐</span><br><span class="line">align-content: flex-end</span><br></pre></td></tr></table></figure>
-
-<p>效果 👇<br><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ab3d9265288840fdb83e79f544a15d97~tplv-k3u1fbpfcp-zoom-1.image#alt=align-content-flex-end"></p>
-<hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 居中对齐</span><br><span class="line">align-content: center</span><br></pre></td></tr></table></figure>
-
-<p>效果 👇<br><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/023e04770fc54d7a93a5473fc2dbbd1e~tplv-k3u1fbpfcp-zoom-1.image#alt=align-content-center"></p>
-<hr>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 等间距均匀分布</span><br><span class="line"><span class="attribute">align-content</span>: space-between;</span><br></pre></td></tr></table></figure>
-
-<p>效果 👇<br><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/145a1df4a0ca4a13b7320b762bf01a33~tplv-k3u1fbpfcp-zoom-1.image#alt=align-content-space-around"></p>
-<hr>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 等边距均匀分布</span><br><span class="line"><span class="attribute">align-content</span>: space-around;</span><br></pre></td></tr></table></figure>
-
-<p>效果 👇<br><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/666d82d1ba6142599a534f47c45e99ba~tplv-k3u1fbpfcp-zoom-1.image#alt=align-content-space-around"></p>
-<hr>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 拉伸对齐</span><br><span class="line"><span class="attribute">align-content</span>: stretch;</span><br></pre></td></tr></table></figure>
-
-<p>效果 👇<br><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7fded204fd3e42babecb11f16eb51480~tplv-k3u1fbpfcp-zoom-1.image#alt=align-content-stretch"></p>
-<hr>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 基线对齐</span><br><span class="line"><span class="attribute">align-content</span>: baseline;</span><br></pre></td></tr></table></figure>
-
-<p>效果 👇<br><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8a8fda3bbdd140cdad6ee1cd6977bf76~tplv-k3u1fbpfcp-zoom-1.image#alt=align-content-baseline"></p>
-<hr>
-<h3 id="子容器-1"><a href="#子容器-1" class="headerlink" title="子容器"></a>子容器</h3><ul>
-<li><p><strong>flex-grow</strong> 设置扩展比例</p>
-</li>
-<li><p><strong>flex-shrink</strong> 设置收缩比例</p>
-</li>
-<li><p><strong>flex-basis</strong> 设置基准大小</p>
-</li>
-<li><p><strong>order</strong> 设置排列顺序</p>
-</li>
-</ul>
-<hr>
-<h4 id="flex-grow"><a href="#flex-grow" class="headerlink" title="flex-grow"></a>flex-grow</h4><p>子容器弹性伸展的比例，简单理解，就是把剩余的空间按比例分配给子容器。<br>我们看个例子<br><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8a4012640173402682c321785435b058~tplv-k3u1fbpfcp-zoom-1.image#alt=flex-grow%E5%8F%96%E5%80%BC"></p>
-<hr>
-<h4 id="flex-shrink"><a href="#flex-shrink" class="headerlink" title="flex-shrink"></a>flex-shrink</h4><p>子容器弹性收缩的比例。简单理解，就是当你子容器超出的部分，会按照对应的比例给子容器减去对应的值。<br>我们来看下效果 👇<br><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/25a4c764286f4d41b9d7610764379c4b~tplv-k3u1fbpfcp-zoom-1.image#alt=flex-shrink-%E5%8F%96%E5%80%BC%E4%B8%BA0"><br>当取值为 0 时，就会溢出，那么我们给它们设置一个值 👇<br><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8f15ec185cdb4910a882c2fd6863aee4~tplv-k3u1fbpfcp-zoom-1.image#alt=flex-shrink-%E5%8F%96%E5%80%BC%E4%B8%BA1"><br>这样子的超出的部分就会按照比列减去。</p>
-<hr>
-<h4 id="flex-basis"><a href="#flex-basis" class="headerlink" title="flex-basis"></a>flex-basis</h4><p>有几个点需要注意的是 👇</p>
-<ul>
-<li><p>在不伸缩的情况下，<code>flex-basis</code>给子容器设置大小才有作用。</p>
-</li>
-<li><p>当主轴为横向时，即 👇</p>
-<p>-</p>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flex-direction：row | row-reverse</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p><code>flex-basis</code>设置的大小为宽度，并且会覆盖 witdh 值</p>
-</li>
-<li><p>当主轴为纵向时，即 👇</p>
-<p>-</p>
-</li>
-</ul>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flex-direction：column | column-reverse</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>flex-basis</code>设置的大小为高度，并且会覆盖 height 值</li>
-</ul>
-<p>我们来看看两种情况 👇</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">当主轴为横向时</span><br><span class="line">flex-direction：row | row-reverse</span><br></pre></td></tr></table></figure>
-
-<p>效果 👇<br><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ef58a221bff243f48efdf0df099bd95b~tplv-k3u1fbpfcp-zoom-1.image#alt=flex-basis-%E4%B8%BB%E8%BD%B4%E6%A8%AA%E5%90%91%E6%97%B6"></p>
-<hr>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">当主轴为纵向时</span><br><span class="line">flex-direction：column | column-reverse</span><br></pre></td></tr></table></figure>
-
-<p>效果 👇<br><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/04b4154eee254445a2b8b32d90983d80~tplv-k3u1fbpfcp-zoom-1.image#alt=flex-basis-%E4%B8%BB%E8%BD%B4%E7%BA%B5%E5%90%91%E6%97%B6"></p>
-<hr>
-<h4 id="order"><a href="#order" class="headerlink" title="order"></a>order</h4><ul>
-<li>每个子容器的<code>order</code>属性默认为 0</li>
-<li>通过设置<code>order</code>属性值，改变子容器的排列顺序。</li>
-<li>可以是负值，数值越小的话，排的越靠前。</li>
-</ul>
-<p>直接看效果图 👇<br><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a4c34d31c8fe4273b0905933fd3f3291~tplv-k3u1fbpfcp-zoom-1.image#alt=flex-order"></p>
-<hr>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这个时候，是不是需要总结一下呢 👇<br>先看看子容器属性 👇<br><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0c5e529f03d345dab4534bf84b1cfd1d~tplv-k3u1fbpfcp-zoom-1.image#alt=flex-%E5%AD%90%E5%AE%B9%E5%99%A8%E5%B1%9E%E6%80%A7"></p>
-<hr>
-<p>再看看父容器属性 👇<br><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e2e9733b84e040f296f827ff4148f235~tplv-k3u1fbpfcp-zoom-1.image#alt=flex-%E7%88%B6%E5%AE%B9%E5%99%A8%E5%B1%9E%E6%80%A7"><br>梳理的是常见的属性值，对于一些不常见的属性值，请<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Glossary/Flex">移步 MDN</a></p>
-<h2 id="❤️-感谢大家"><a href="#❤️-感谢大家" class="headerlink" title="❤️ 感谢大家"></a>❤️ 感谢大家</h2><p>如果你觉得这篇内容对你挺有有帮助的话：</p>
-<ol>
-<li><p>点赞支持下吧，让更多的人也能看到这篇内容（收藏不点赞，都是耍流氓 -_-）</p>
-</li>
-<li><p>关注公众号<strong>前端 UpUp</strong>，定期为你推送好文。</p>
-</li>
-<li><p>觉得不错的话，也可以阅读 TianTian 近期梳理的文章（感谢掘友的鼓励与支持 🌹🌹🌹）：</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://juejin.im/post/6864398060702760968">「查缺补漏」我的 2020 前端面试秘籍，为你秋招保驾护航</a>(400+👍)</li>
-<li><a target="_blank" rel="noopener" href="https://juejin.im/post/6862855292577644552">「面经」你可能需要的三轮网易面经</a>(320+👍)</li>
-<li><a target="_blank" rel="noopener" href="https://juejin.im/post/6859888538004783118">「一劳永逸」由浅入深配置 webpack4</a>(820+👍)</li>
-<li><a target="_blank" rel="noopener" href="https://juejin.im/post/6857287743966281736">「查缺补漏」巩固你的 HTTP 知识体系</a>(940+👍)</li>
-<li><a target="_blank" rel="noopener" href="https://juejin.im/post/6854573215830933512">「一劳永逸」送你 21 道高频 JavaScript 手写面试题</a>(620+👍)</li>
-<li><a target="_blank" rel="noopener" href="https://juejin.im/post/6854573215830933512">「查缺补漏」送你 18 道浏览器面试题</a>(790+👍)</li>
-<li><a target="_blank" rel="noopener" href="https://juejin.im/post/6854573211443544078">「查缺补漏」送你 54 道 JavaScript 面试题</a>(640+👍)</li>
-</ul>
-</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/21/yuque/BFC/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Adam Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Adam">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/21/yuque/BFC/" class="post-title-link" itemprop="url">BFC</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-21 23:16:16" itemprop="dateCreated datePublished" datetime="2021-04-21T23:16:16+08:00">2021-04-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-23 00:51:16" itemprop="dateModified" datetime="2021-04-23T00:51:16+08:00">2021-04-23</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="一、常见定位方案"><a href="#一、常见定位方案" class="headerlink" title="一、常见定位方案"></a>一、常见定位方案</h2><p>在讲 BFC 之前，我们先来了解一下常见的定位方案，定位方案是控制元素的布局，有三种常见方案:</p>
-<ul>
-<li>普通流 (normal flow)</li>
-</ul>
-<p>在普通流中，元素按照其在 HTML 中的先后位置至上而下布局，在这个过程中，行内元素水平排列，直到当行被占满然后换行，块级元素则会被渲染为完整的一个新行，除非另外指定，否则所有元素默认都是普通流定位，也可以说，普通流中元素的位置由该元素在 HTML 文档中的位置决定。</p>
-<ul>
-<li>浮动 (float)</li>
-</ul>
-<p>在浮动布局中，元素首先按照普通流的位置出现，然后根据浮动的方向尽可能的向左边或右边偏移，其效果与印刷排版中的文本环绕相似。</p>
-<ul>
-<li>绝对定位 (absolute positioning)</li>
-</ul>
-<p>在绝对定位布局中，元素会整体脱离普通流，因此绝对定位元素不会对其兄弟元素造成影响，而元素具体的位置由绝对定位的坐标决定。</p>
-<h2 id="二、BFC-概念"><a href="#二、BFC-概念" class="headerlink" title="二、BFC 概念"></a>二、BFC 概念</h2><p>Formatting context(格式化上下文) 是 W3C CSS2.1 规范中的一个概念。它是页面中的一块渲染区域，并且有一套渲染规则，它决定了其子元素将如何定位，以及和其他元素的关系和相互作用。<br>那么 BFC 是什么呢？<br>BFC 即 Block Formatting Contexts (块级格式化上下文)，它属于上述定位方案的普通流。<br><strong>具有 BFC 特性的元素可以看作是隔离了的独立容器，容器里面的元素不会在布局上影响到外面的元素，并且 BFC 具有普通容器所没有的一些特性。</strong><br>通俗一点来讲，可以把 BFC 理解为一个封闭的大箱子，箱子内部的元素无论如何翻江倒海，都不会影响到外部。</p>
-<h2 id="三、触发-BFC"><a href="#三、触发-BFC" class="headerlink" title="三、触发 BFC"></a>三、触发 BFC</h2><p>只要元素满足下面任一条件即可触发 BFC 特性：</p>
-<ul>
-<li>body 根元素</li>
-<li>浮动元素：float 除 none 以外的值</li>
-<li>绝对定位元素：position (absolute、fixed)</li>
-<li>display 为 inline-block、table-cells、flex</li>
-<li>overflow 除了 visible 以外的值 (hidden、auto、scroll)</li>
-</ul>
-<h2 id="四、BFC-特性及应用"><a href="#四、BFC-特性及应用" class="headerlink" title="四、BFC 特性及应用"></a>四、BFC 特性及应用</h2><p><strong>1. 同一个 BFC 下外边距会发生折叠</strong></p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  div&#123; width: 100px; height: 100px; background: lightblue; margin: 100px; &#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619018683804-bd87fff6-e9ec-4200-b562-e76351fa92d9.png#clientId=u4c082b2a-d878-4&from=paste&height=342&id=ucf0f710c&margin=%5Bobject%20Object%5D&originHeight=683&originWidth=1267&originalType=url&status=done&style=none&taskId=u8532f707-2c66-4f99-a490-29f6c83a5c3&width=633.5"><br>从效果上看，因为两个 div 元素都处于同一个 BFC 容器下 (这里指 body 元素) 所以第一个 div 的下边距和第二个 div 的上边距发生了重叠，所以两个盒子之间距离只有 100px，而不是 200px。<br>首先这不是 CSS 的 bug，我们可以理解为一种规范，<strong>如果想要避免外边距的重叠，可以将其放在不同的 BFC 容器中。</strong></p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;container&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;container&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span> &#123;</span><br><span class="line">  <span class="attribute">overflow</span>: hidden;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">p</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">background</span>: lightblue;</span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">100px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这时候，两个盒子边距就变成了 200px<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619018683787-e5c22afd-b360-4666-993e-34a2ee96f850.png#clientId=u4c082b2a-d878-4&from=paste&height=425&id=u735c0b92&margin=%5Bobject%20Object%5D&originHeight=849&originWidth=1075&originalType=url&status=done&style=none&taskId=u4ce6973a-387d-4a65-bf56-21e600b7a2b&width=537.5"><br><strong>2. BFC 可以包含浮动的元素（清除浮动）</strong>我们都知道，浮动的元素会脱离普通文档流，来看下下面一个例子</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;border: 1px solid #000;&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;width: 100px;height: 100px;background: #eee;float: left;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619018684564-e6f64b86-6745-488b-a134-d1bab1756ee0.png#clientId=u4c082b2a-d878-4&from=paste&height=122&id=u6a3047ee&margin=%5Bobject%20Object%5D&originHeight=244&originWidth=492&originalType=url&status=done&style=none&taskId=ua5573a98-91a9-48e7-bfd7-0ec56d5bb0f&width=246"><br>由于容器内元素浮动，脱离了文档流，所以容器只剩下 2px 的边距高度。如果使触发容器的 BFC，那么容器将会包裹着浮动元素。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;border: 1px solid #000;overflow: hidden&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;width: 100px;height: 100px;background: #eee;float: left;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>效果如图：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619018683847-0902fe78-b1cd-47c1-bf0a-b9b08fb7bb6d.png#clientId=u4c082b2a-d878-4&from=paste&height=126&id=u52f1e6b6&margin=%5Bobject%20Object%5D&originHeight=252&originWidth=416&originalType=url&status=done&style=none&taskId=u45b10683-3eef-4b83-a112-93bd1734a04&width=208"><br><strong>3. BFC 可以阻止元素被浮动元素覆盖</strong>先来看一个文字环绕效果：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;height: 100px;width: 100px;float: left;background: lightblue&quot;</span>&gt;</span></span><br><span class="line">  我是一个左浮动的元素</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;width: 200px; height: 200px;background: #eee&quot;</span>&gt;</span></span><br><span class="line">  我是一个没有设置浮动, 也没有触发 BFC 元素, width: 200px; height:200px;</span><br><span class="line">  background: #eee;</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619018683848-58bd8a60-2428-43ff-b033-fe634fb5e3b5.png#clientId=u4c082b2a-d878-4&from=paste&height=220&id=u9e6f3c9c&margin=%5Bobject%20Object%5D&originHeight=440&originWidth=432&originalType=url&status=done&style=none&taskId=u6a8d6701-fefd-4496-b501-bce6c5929ba&width=216"><br>这时候其实第二个元素有部分被浮动元素所覆盖，(但是文本信息不会被浮动元素所覆盖) 如果想避免元素被覆盖，可触第二个元素的 BFC 特性，在第二个元素中加入<strong>overflow: hidden</strong>，就会变成：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619018684324-49140c56-dab4-446d-a9d9-7db868e2bb44.png#clientId=u4c082b2a-d878-4&from=paste&height=223&id=u58317208&margin=%5Bobject%20Object%5D&originHeight=446&originWidth=640&originalType=url&status=done&style=none&taskId=u6eeeff0e-1778-4f95-97c7-a7ee3ab73f4&width=320"><br>这个方法可以用来实现两列自适应布局，效果不错，这时候左边的宽度固定，右边的内容自适应宽度(去掉上面右边内容的宽度)。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2005,7 +1707,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">39</span>
+          <span class="site-state-item-count">41</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
