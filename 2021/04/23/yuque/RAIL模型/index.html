@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="RAIL 是一个以用户为中心的性能模型，它把用户的体验拆分成几个关键点（例如，tap，scroll，load），并且帮你定义好了每一个的性能指标。 有以下四个方面：  Response Animation Idle Load   聚焦用户以下是用户对性能延迟的感知：    延迟时间 用户感知    0-16ms 很流畅   0-100ms 基本流畅   100-1000ms 感觉到网站上有一些加载">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RAIL模型">
+<meta property="og:url" content="http://example.com/2021/04/23/yuque/RAIL%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:site_name" content="Adam">
+<meta property="og:description" content="RAIL 是一个以用户为中心的性能模型，它把用户的体验拆分成几个关键点（例如，tap，scroll，load），并且帮你定义好了每一个的性能指标。 有以下四个方面：  Response Animation Idle Load   聚焦用户以下是用户对性能延迟的感知：    延迟时间 用户感知    0-16ms 很流畅   0-100ms 基本流畅   100-1000ms 感觉到网站上有一些加载">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2021/04/23/yuque/RAIL%E6%A8%A1%E5%9E%8B/1.png#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/23/yuque/RAIL%E6%A8%A1%E5%9E%8B/2.png#alt=img">
+<meta property="article:published_time" content="2021-04-23T04:03:14.000Z">
+<meta property="article:modified_time" content="2021-04-23T04:04:07.340Z">
+<meta property="article:author" content="Adam Blog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/04/23/yuque/RAIL%E6%A8%A1%E5%9E%8B/1.png#alt=img">
+
+<link rel="canonical" href="http://example.com/2021/04/23/yuque/RAIL%E6%A8%A1%E5%9E%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>RAIL模型 | Adam</title>
+  <meta name="referrer" content="no-referrer" />
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Adam</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/23/yuque/RAIL%E6%A8%A1%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RAIL模型
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-23 12:03:14 / 修改时间：12:04:07" itemprop="dateCreated datePublished" datetime="2021-04-23T12:03:14+08:00">2021-04-23</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>RAIL 是一个以用户为中心的性能模型，它把用户的体验拆分成几个关键点（例如，tap，scroll，load），并且帮你定义好了每一个的性能指标。</p>
+<p>有以下四个方面：</p>
+<ul>
+<li>Response</li>
+<li>Animation</li>
+<li>Idle</li>
+<li>Load</li>
+</ul>
+<p><img src="1.png#alt=img"></p>
+<h2 id="聚焦用户"><a href="#聚焦用户" class="headerlink" title="聚焦用户"></a>聚焦用户</h2><p>以下是用户对性能延迟的感知：</p>
+<table>
+<thead>
+<tr>
+<th>延迟时间</th>
+<th>用户感知</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0-16ms</td>
+<td>很流畅</td>
+</tr>
+<tr>
+<td>0-100ms</td>
+<td>基本流畅</td>
+</tr>
+<tr>
+<td>100-1000ms</td>
+<td>感觉到网站上有一些加载任务</td>
+</tr>
+<tr>
+<td>1000ms or more</td>
+<td>失去耐心了</td>
+</tr>
+<tr>
+<td>10000ms or more</td>
+<td>直接离开，不会再访问了</td>
+</tr>
+</tbody></table>
+<h2 id="Response-事件处理最好在-50ms-内完成"><a href="#Response-事件处理最好在-50ms-内完成" class="headerlink" title="Response: 事件处理最好在 50ms 内完成"></a>Response: 事件处理最好在 50ms 内完成</h2><h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><ul>
+<li>用户的输入到响应的时间不超过 100ms，给用户的感受是瞬间就完成了。</li>
+</ul>
+<h3 id="优化方案"><a href="#优化方案" class="headerlink" title="优化方案"></a>优化方案</h3><ul>
+<li>事件处理函数在 50ms 内完成，考虑到 idle task 的情况，事件会排队，等待时间大概在 50ms。适用于 click，toggle，starting animations 等，不适用于 drag 和 scroll。</li>
+<li>复杂的 js 计算尽可能放在后台，如 web worker，避免对用户输入造成阻塞</li>
+<li>超过 50ms 的响应，一定要提供反馈，比如倒计时，进度百分比等。</li>
+</ul>
+<blockquote>
+<p>idle task：除了要处理输入事件，浏览器还有其它任务要做，这些任务会占用部分时间，一般情况会花费 50ms 的时间，输入事件的响应则排在其后。</p>
+</blockquote>
+<p>下图是 idle task 对 input response 的影响：</p>
+<p><img src="2.png#alt=img"></p>
+<h2 id="Animation-在-10ms-内产生一帧"><a href="#Animation-在-10ms-内产生一帧" class="headerlink" title="Animation: 在 10ms 内产生一帧"></a>Animation: 在 10ms 内产生一帧</h2><h3 id="目标-1"><a href="#目标-1" class="headerlink" title="目标"></a>目标</h3><ul>
+<li>产生每一帧的时间不要超过 10ms，为了保证浏览器 60 帧，每一帧的时间在 16ms 左右，但浏览器需要用 6ms 来渲染每一帧。</li>
+<li>旨在视觉上的平滑。用户对帧率变化感知很敏感。</li>
+</ul>
+<h3 id="优化方案-1"><a href="#优化方案-1" class="headerlink" title="优化方案"></a>优化方案</h3><ul>
+<li>在一些高压点上，比如动画，不要去挑战 cpu，尽可能地少做事，如：取 offset，设置 style 等操作。尽可能地保证 60 帧的体验。</li>
+<li>在渲染性能上，针对不同的动画做一些特定优化</li>
+</ul>
+<blockquote>
+<p>动画不只是 UI 的视觉效果，以下行为都属于</p>
+</blockquote>
+<blockquote>
+<ul>
+<li>视觉动画，如渐隐渐显，tweens，loading 等</li>
+<li>滚动，包含弹性滚动，松开手指后，滚动会持续一段距离</li>
+<li>拖拽，缩放，经常伴随着用户行为</li>
+</ul>
+</blockquote>
+<h2 id="Idle-最大化空闲时间"><a href="#Idle-最大化空闲时间" class="headerlink" title="Idle: 最大化空闲时间"></a>Idle: 最大化空闲时间</h2><h3 id="目标-2"><a href="#目标-2" class="headerlink" title="目标"></a>目标</h3><ul>
+<li>最大化空闲时间，以增大 50ms 内响应用户输入的几率</li>
+</ul>
+<h3 id="优化方案-2"><a href="#优化方案-2" class="headerlink" title="优化方案"></a>优化方案</h3><ul>
+<li>用空闲时间来完成一些延后的工作，如先加载页面可见的部分，然后利用空闲时间加载剩余部分，此处可以使用 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback">requestIdleCallback API</a></li>
+<li>在空闲时间内执行的任务尽量控制在 50ms 以内，如果更长的话，会影响 input handle 的 pending 时间</li>
+<li>如果用户在空闲时间任务进行时进行交互，必须以此为最高优先级，并暂停空闲时间的任务</li>
+</ul>
+<h2 id="Load-传输内容到页面可交互的时间不超过-5-秒"><a href="#Load-传输内容到页面可交互的时间不超过-5-秒" class="headerlink" title="Load: 传输内容到页面可交互的时间不超过 5 秒"></a>Load: 传输内容到页面可交互的时间不超过 5 秒</h2><p>如果页面加载比较慢，用户的交点可能会离开。加载很快的页面，用户平均停留时间会变长，跳出率会更低，也就有更高的广告查看率</p>
+<h3 id="目标-3"><a href="#目标-3" class="headerlink" title="目标"></a>目标</h3><ul>
+<li>优化加载速度，可以根据设备、网络等条件。目前，比较好的一个方式是，让你的页面在一个中配的 3G 网络手机上打开时间不超过 5 秒</li>
+<li>对于第二次打开，尽量不超过 2 秒</li>
+</ul>
+<h3 id="优化方案-3"><a href="#优化方案-3" class="headerlink" title="优化方案"></a>优化方案</h3><ul>
+<li>在手机设备上测试加载性能，选用中配的 3G 网络（400kb/s，400ms RTT），可以使用 <a target="_blank" rel="noopener" href="https://www.webpagetest.org/easy">WebPageTest</a> 来测试</li>
+<li>要注意的是，即使用户的网络是 4G，但因为丢包或者网络波动，可能会比预期的更慢</li>
+<li><a target="_blank" rel="noopener" href="https://web.dev/render-blocking-resources/">禁用渲染阻塞的资源，延后加载</a></li>
+<li>可以采用 <a target="_blank" rel="noopener" href="https://web.dev/native-lazy-loading/">lazy load</a>，<a target="_blank" rel="noopener" href="https://web.dev/reduce-javascript-payloads-with-code-splitting/">code-splitting</a> 等 <a target="_blank" rel="noopener" href="https://web.dev/fast/">其他优化</a> 手段，让第一次加载的资源更少</li>
+</ul>
+<h2 id="分析-RAIL-用的工具"><a href="#分析-RAIL-用的工具" class="headerlink" title="分析 RAIL 用的工具"></a>分析 RAIL 用的工具</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://developers.google.com/web/tools/chrome-devtools">Chrome DevTools</a></li>
+<li><a target="_blank" rel="noopener" href="https://web.dev/measure/">Lighthouse</a></li>
+<li><a target="_blank" rel="noopener" href="https://webpagetest.org/easy">WebPageTest</a></li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>RAIL 是一个旅程，为了提升用户在网站的交互体验而不断探索。你需要去理解用户如何感知你的站点，这样才能设置最佳的性能目标</p>
+<ul>
+<li>聚焦用户</li>
+<li>100ms 内响应用户的输入</li>
+<li>10ms 内产生 1 帧，在滚动或者动画执行时</li>
+<li>最大化主线程的空闲时间</li>
+<li>5s 内让网页变得可交互</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://web.dev/rail/">https://web.dev/rail/</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/23/yuque/this%E6%8C%87%E5%90%91/" rel="prev" title="this指向">
+      <i class="fa fa-chevron-left"></i> this指向
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/23/hello-world/" rel="next" title="Hello World">
+      Hello World <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%81%9A%E7%84%A6%E7%94%A8%E6%88%B7"><span class="nav-number">1.</span> <span class="nav-text">聚焦用户</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Response-%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E6%9C%80%E5%A5%BD%E5%9C%A8-50ms-%E5%86%85%E5%AE%8C%E6%88%90"><span class="nav-number">2.</span> <span class="nav-text">Response: 事件处理最好在 50ms 内完成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87"><span class="nav-number">2.1.</span> <span class="nav-text">目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88"><span class="nav-number">2.2.</span> <span class="nav-text">优化方案</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Animation-%E5%9C%A8-10ms-%E5%86%85%E4%BA%A7%E7%94%9F%E4%B8%80%E5%B8%A7"><span class="nav-number">3.</span> <span class="nav-text">Animation: 在 10ms 内产生一帧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87-1"><span class="nav-number">3.1.</span> <span class="nav-text">目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88-1"><span class="nav-number">3.2.</span> <span class="nav-text">优化方案</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Idle-%E6%9C%80%E5%A4%A7%E5%8C%96%E7%A9%BA%E9%97%B2%E6%97%B6%E9%97%B4"><span class="nav-number">4.</span> <span class="nav-text">Idle: 最大化空闲时间</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87-2"><span class="nav-number">4.1.</span> <span class="nav-text">目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88-2"><span class="nav-number">4.2.</span> <span class="nav-text">优化方案</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Load-%E4%BC%A0%E8%BE%93%E5%86%85%E5%AE%B9%E5%88%B0%E9%A1%B5%E9%9D%A2%E5%8F%AF%E4%BA%A4%E4%BA%92%E7%9A%84%E6%97%B6%E9%97%B4%E4%B8%8D%E8%B6%85%E8%BF%87-5-%E7%A7%92"><span class="nav-number">5.</span> <span class="nav-text">Load: 传输内容到页面可交互的时间不超过 5 秒</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87-3"><span class="nav-number">5.1.</span> <span class="nav-text">目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88-3"><span class="nav-number">5.2.</span> <span class="nav-text">优化方案</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%9E%90-RAIL-%E7%94%A8%E7%9A%84%E5%B7%A5%E5%85%B7"><span class="nav-number">6.</span> <span class="nav-text">分析 RAIL 用的工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">8.</span> <span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Adam Blog</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Adam Blog</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

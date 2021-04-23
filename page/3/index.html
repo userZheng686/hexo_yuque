@@ -146,6 +146,229 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/19/yuque/%E8%B7%A8%E9%A1%B5%E9%9D%A2%E9%80%9A%E4%BF%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/19/yuque/%E8%B7%A8%E9%A1%B5%E9%9D%A2%E9%80%9A%E4%BF%A1/" class="post-title-link" itemprop="url">跨页面通信</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-19 20:50:53" itemprop="dateCreated datePublished" datetime="2021-04-19T20:50:53+08:00">2021-04-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-23 12:04:10" itemprop="dateModified" datetime="2021-04-23T12:04:10+08:00">2021-04-23</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>在浏览器中，我们可以同时打开多个 Tab 页，每个 Tab 页可以粗略理解为一个“独立”的运行环境，即使是全局对象也不会在多个 Tab 间共享。然而有些时候，我们希望能在这些“独立”的 Tab 页面之间同步页面的数据、信息或状态。</p>
+<p>正如下面这个例子：我在列表页点击“收藏”后，对应的详情页按钮会自动更新为“已收藏”状态；类似的，在详情页点击“收藏”后，列表页中按钮也会更新。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/gif/21377586/1618909289351-36a24fd7-e6f6-41d8-9682-c09e9b6c384c.gif#clientId=u61de38f8-254c-4&from=paste&height=438&id=u88553d57&margin=%5Bobject%20Object%5D&originHeight=876&originWidth=1364&originalType=url&status=done&style=none&taskId=u3edd39f2-51e8-4eb9-9e3b-cac496758d4&width=682"></p>
+<p>这就是我们所说的前端跨页面通信。</p>
+<p>你知道哪些跨页面通信的方式呢？如果不清楚，下面我就带大家来看看七种跨页面通信的方式。</p>
+<p>–</p>
+<h2 id="一、同源页面间的跨页面通信"><a href="#一、同源页面间的跨页面通信" class="headerlink" title="一、同源页面间的跨页面通信"></a>一、同源页面间的跨页面通信</h2><blockquote>
+<p>以下各种方式的 <a target="_blank" rel="noopener" href="https://alienzhou.github.io/cross-tab-communication/">在线 Demo 可以戳这里 &gt;&gt;</a></p>
+</blockquote>
+<p>浏览器的<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Same-origin_policy">同源策略</a>在下述的一些跨页面通信方法中依然存在限制。因此，我们先来看看，在满足同源策略的情况下，都有哪些技术可以用来实现跨页面通信。</p>
+<h3 id="1-BroadCast-Channel"><a href="#1-BroadCast-Channel" class="headerlink" title="1. BroadCast Channel"></a>1. BroadCast Channel</h3><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/BroadcastChannel">BroadCast Channel</a> 可以帮我们创建一个用于广播的通信频道。当所有页面都监听同一频道的消息时，其中某一个页面通过它发送的消息就会被其他所有页面收到。它的 API 和用法都非常简单。</p>
+<p>下面的方式就可以创建一个标识为<code>AlienZHOU</code>的频道：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const bc &#x3D; new BroadcastChannel(&#39;AlienZHOU&#39;);</span><br></pre></td></tr></table></figure>
+
+<p>各个页面可以通过<code>onmessage</code>来监听被广播的消息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">bc.onmessage &#x3D; function (e) &#123;</span><br><span class="line">    const data &#x3D; e.data;</span><br><span class="line">    const text &#x3D; &#39;[receive] &#39; + data.msg + &#39; —— tab &#39; + data.from;</span><br><span class="line">    console.log(&#39;[BroadcastChannel] receive message:&#39;, text);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>要发送消息时只需要调用实例上的<code>postMessage</code>方法即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bc.postMessage(mydata);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Broadcast Channel 的具体的使用方式可以看这篇<a target="_blank" rel="noopener" href="https://juejin.im/post/6844903811228663815">《【3 分钟速览】前端广播式通信：Broadcast Channel》</a>。</p>
+</blockquote>
+<h3 id="2-Service-Worker"><a href="#2-Service-Worker" class="headerlink" title="2. Service Worker"></a>2. Service Worker</h3><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Service_Worker_API">Service Worker</a> 是一个可以长期运行在后台的 Worker，能够实现与页面的双向通信。多页面共享间的 Service Worker 可以共享，将 Service Worker 作为消息的处理中心（中央站）即可实现广播效果。</p>
+<blockquote>
+<p>Service Worker 也是 PWA 中的核心技术之一，由于本文重点不在 PWA ，因此如果想进一步了解 Service Worker，可以阅读我之前的文章<a target="_blank" rel="noopener" href="https://juejin.im/post/6844903588691443725">【PWA 学习与实践】(3) 让你的 WebApp 离线可用</a>。</p>
+</blockquote>
+<p>首先，需要在页面注册 Service Worker：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* 页面逻辑 *&#x2F;</span><br><span class="line">navigator.serviceWorker.register(&#39;..&#x2F;util.sw.js&#39;).then(function () &#123;</span><br><span class="line">    console.log(&#39;Service Worker 注册成功&#39;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>其中<code>../util.sw.js</code>是对应的 Service Worker 脚本。Service Worker 本身并不自动具备“广播通信”的功能，需要我们添加些代码，将其改造成消息中转站：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* ..&#x2F;util.sw.js Service Worker 逻辑 *&#x2F;</span><br><span class="line">self.addEventListener(&#39;message&#39;, function (e) &#123;</span><br><span class="line">    console.log(&#39;service worker receive message&#39;, e.data);</span><br><span class="line">    e.waitUntil(</span><br><span class="line">        self.clients.matchAll().then(function (clients) &#123;</span><br><span class="line">            if (!clients || clients.length &#x3D;&#x3D;&#x3D; 0) &#123;</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line">            clients.forEach(function (client) &#123;</span><br><span class="line">                client.postMessage(e.data);</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;)</span><br><span class="line">    );</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>我们在 Service Worker 中监听了<code>message</code>事件，获取页面（从 Service Worker 的角度叫 client）发送的信息。然后通过<code>self.clients.matchAll()</code>获取当前注册了该 Service Worker 的所有页面，通过调用每个 client（即页面）的<code>postMessage</code>方法，向页面发送消息。这样就把从一处（某个 Tab 页面）收到的消息通知给了其他页面。</p>
+<p>处理完 Service Worker，我们需要在页面监听 Service Worker 发送来的消息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* 页面逻辑 *&#x2F;</span><br><span class="line">navigator.serviceWorker.addEventListener(&#39;message&#39;, function (e) &#123;</span><br><span class="line">    const data &#x3D; e.data;</span><br><span class="line">    const text &#x3D; &#39;[receive] &#39; + data.msg + &#39; —— tab &#39; + data.from;</span><br><span class="line">    console.log(&#39;[Service Worker] receive message:&#39;, text);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>最后，当需要同步消息时，可以调用 Service Worker 的<code>postMessage</code>方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* 页面逻辑 *&#x2F;</span><br><span class="line">navigator.serviceWorker.controller.postMessage(mydata);</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-LocalStorage"><a href="#3-LocalStorage" class="headerlink" title="3. LocalStorage"></a>3. LocalStorage</h3><p>LocalStorage 作为前端最常用的本地存储，大家应该已经非常熟悉了；但<code>StorageEvent</code>这个与它相关的事件有些同学可能会比较陌生。</p>
+<p>当 LocalStorage 变化时，会触发<code>storage</code>事件。利用这个特性，我们可以在发送消息时，把消息写入到某个 LocalStorage 中；然后在各个页面内，通过监听<code>storage</code>事件即可收到通知。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">window.addEventListener(&#39;storage&#39;, function (e) &#123;</span><br><span class="line">    if (e.key &#x3D;&#x3D;&#x3D; &#39;ctc-msg&#39;) &#123;</span><br><span class="line">        const data &#x3D; JSON.parse(e.newValue);</span><br><span class="line">        const text &#x3D; &#39;[receive] &#39; + data.msg + &#39; —— tab &#39; + data.from;</span><br><span class="line">        console.log(&#39;[Storage I] receive message:&#39;, text);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>在各个页面添加如上的代码，即可监听到 LocalStorage 的变化。当某个页面需要发送消息时，只需要使用我们熟悉的<code>setItem</code>方法即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mydata.st &#x3D; +(new Date);</span><br><span class="line">window.localStorage.setItem(&#39;ctc-msg&#39;, JSON.stringify(mydata));</span><br></pre></td></tr></table></figure>
+
+<p>注意，这里有一个细节：我们在 mydata 上添加了一个取当前毫秒时间戳的<code>.st</code>属性。这是因为，<code>storage</code>事件只有在值真正改变时才会触发。举个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">window.localStorage.setItem(&#39;test&#39;, &#39;123&#39;);</span><br><span class="line">window.localStorage.setItem(&#39;test&#39;, &#39;123&#39;);</span><br></pre></td></tr></table></figure>
+
+<p>由于第二次的值<code>&#39;123&#39;</code>与第一次的值相同，所以以上的代码只会在第一次<code>setItem</code>时触发<code>storage</code>事件。因此我们通过设置<code>st</code>来保证每次调用时一定会触发<code>storage</code>事件。</p>
+<h3 id="小憩一下"><a href="#小憩一下" class="headerlink" title="小憩一下"></a>小憩一下</h3><p>上面我们看到了三种实现跨页面通信的方式，不论是建立广播频道的 Broadcast Channel，还是使用 Service Worker 的消息中转站，抑或是些 tricky 的<code>storage</code>事件，其都是“广播模式”：一个页面将消息通知给一个“中央站”，再由“中央站”通知给各个页面。</p>
+<blockquote>
+<p>在上面的例子中，这个“中央站”可以是一个 BroadCast Channel 实例、一个 Service Worker 或是 LocalStorage。</p>
+</blockquote>
+<p>下面我们会看到另外两种跨页面通信方式，我把它称为“共享存储+轮询模式”。</p>
+<p>–</p>
+<h3 id="4-Shared-Worker"><a href="#4-Shared-Worker" class="headerlink" title="4. Shared Worker"></a>4. Shared Worker</h3><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/SharedWorker">Shared Worker</a> 是 Worker 家族的另一个成员。普通的 Worker 之间是独立运行、数据互不相通；而多个 Tab 注册的 Shared Worker 则可以实现数据共享。</p>
+<p>Shared Worker 在实现跨页面通信时的问题在于，它无法主动通知所有页面，因此，我们会使用轮询的方式，来拉取最新的数据。思路如下：</p>
+<p>让 Shared Worker 支持两种消息。一种是 post，Shared Worker 收到后会将该数据保存下来；另一种是 get，Shared Worker 收到该消息后会将保存的数据通过<code>postMessage</code>传给注册它的页面。也就是让页面通过 get 来主动获取（同步）最新消息。具体实现如下：</p>
+<p>首先，我们会在页面中启动一个 Shared Worker，启动方式非常简单：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 构造函数的第二个参数是 Shared Worker 名称，也可以留空</span><br><span class="line">const sharedWorker &#x3D; new SharedWorker(&#39;..&#x2F;util.shared.js&#39;, &#39;ctc&#39;);</span><br></pre></td></tr></table></figure>
+
+<p>然后，在该 Shared Worker 中支持 get 与 post 形式的消息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* ..&#x2F;util.shared.js: Shared Worker 代码 *&#x2F;</span><br><span class="line">let data &#x3D; null;</span><br><span class="line">self.addEventListener(&#39;connect&#39;, function (e) &#123;</span><br><span class="line">    const port &#x3D; e.ports[0];</span><br><span class="line">    port.addEventListener(&#39;message&#39;, function (event) &#123;</span><br><span class="line">        &#x2F;&#x2F; get 指令则返回存储的消息数据</span><br><span class="line">        if (event.data.get) &#123;</span><br><span class="line">            data &amp;&amp; port.postMessage(data);</span><br><span class="line">        &#125;</span><br><span class="line">        &#x2F;&#x2F; 非 get 指令则存储该消息数据</span><br><span class="line">        else &#123;</span><br><span class="line">            data &#x3D; event.data;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    port.start();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>之后，页面定时发送 get 指令的消息给 Shared Worker，轮询最新的消息数据，并在页面监听返回信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 定时轮询，发送 get 指令的消息</span><br><span class="line">setInterval(function () &#123;</span><br><span class="line">    sharedWorker.port.postMessage(&#123;get: true&#125;);</span><br><span class="line">&#125;, 1000);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 监听 get 消息的返回数据</span><br><span class="line">sharedWorker.port.addEventListener(&#39;message&#39;, (e) &#x3D;&gt; &#123;</span><br><span class="line">    const data &#x3D; e.data;</span><br><span class="line">    const text &#x3D; &#39;[receive] &#39; + data.msg + &#39; —— tab &#39; + data.from;</span><br><span class="line">    console.log(&#39;[Shared Worker] receive message:&#39;, text);</span><br><span class="line">&#125;, false);</span><br><span class="line">sharedWorker.port.start();</span><br></pre></td></tr></table></figure>
+
+<p>最后，当要跨页面通信时，只需给 Shared Worker <code>postMessage</code>即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sharedWorker.port.postMessage(mydata);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意，如果使用<code>addEventListener</code>来添加 Shared Worker 的消息监听，需要显式调用<code>MessagePort.start</code>方法，即上文中的<code>sharedWorker.port.start()</code>；如果使用<code>onmessage</code>绑定监听则不需要。</p>
+</blockquote>
+<h3 id="5-IndexedDB"><a href="#5-IndexedDB" class="headerlink" title="5. IndexedDB"></a>5. IndexedDB</h3><p>除了可以利用 Shared Worker 来共享存储数据，还可以使用其他一些“全局性”（支持跨页面）的存储方案。例如 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API">IndexedDB</a> 或 cookie。</p>
+<blockquote>
+<p>鉴于大家对 cookie 已经很熟悉，加之作为“互联网最早期的存储方案之一”，cookie 已经在实际应用中承受了远多于其设计之初的责任，我们下面会使用 IndexedDB 来实现。</p>
+</blockquote>
+<p>其思路很简单：与 Shared Worker 方案类似，消息发送方将消息存至 IndexedDB 中；接收方（例如所有页面）则通过轮询去获取最新的信息。在这之前，我们先简单封装几个 IndexedDB 的工具方法。</p>
+<ul>
+<li>打开数据库连接：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">function openStore() &#123;</span><br><span class="line">    const storeName &#x3D; &#39;ctc_aleinzhou&#39;;</span><br><span class="line">    return new Promise(function (resolve, reject) &#123;</span><br><span class="line">        if (!(&#39;indexedDB&#39; in window)) &#123;</span><br><span class="line">            return reject(&#39;don\&#39;t support indexedDB&#39;);</span><br><span class="line">        &#125;</span><br><span class="line">        const request &#x3D; indexedDB.open(&#39;CTC_DB&#39;, 1);</span><br><span class="line">        request.onerror &#x3D; reject;</span><br><span class="line">        request.onsuccess &#x3D;  e &#x3D;&gt; resolve(e.target.result);</span><br><span class="line">        request.onupgradeneeded &#x3D; function (e) &#123;</span><br><span class="line">            const db &#x3D; e.srcElement.result;</span><br><span class="line">            if (e.oldVersion &#x3D;&#x3D;&#x3D; 0 &amp;&amp; !db.objectStoreNames.contains(storeName)) &#123;</span><br><span class="line">                const store &#x3D; db.createObjectStore(storeName, &#123;keyPath: &#39;tag&#39;&#125;);</span><br><span class="line">                store.createIndex(storeName + &#39;Index&#39;, &#39;tag&#39;, &#123;unique: false&#125;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>存储数据</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function saveData(db, data) &#123;</span><br><span class="line">    return new Promise(function (resolve, reject) &#123;</span><br><span class="line">        const STORE_NAME &#x3D; &#39;ctc_aleinzhou&#39;;</span><br><span class="line">        const tx &#x3D; db.transaction(STORE_NAME, &#39;readwrite&#39;);</span><br><span class="line">        const store &#x3D; tx.objectStore(STORE_NAME);</span><br><span class="line">        const request &#x3D; store.put(&#123;tag: &#39;ctc_data&#39;, data&#125;);</span><br><span class="line">        request.onsuccess &#x3D; () &#x3D;&gt; resolve(db);</span><br><span class="line">        request.onerror &#x3D; reject;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查询/读取数据</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">function query(db) &#123;</span><br><span class="line">    const STORE_NAME &#x3D; &#39;ctc_aleinzhou&#39;;</span><br><span class="line">    return new Promise(function (resolve, reject) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            const tx &#x3D; db.transaction(STORE_NAME, &#39;readonly&#39;);</span><br><span class="line">            const store &#x3D; tx.objectStore(STORE_NAME);</span><br><span class="line">            const dbRequest &#x3D; store.get(&#39;ctc_data&#39;);</span><br><span class="line">            dbRequest.onsuccess &#x3D; e &#x3D;&gt; resolve(e.target.result);</span><br><span class="line">            dbRequest.onerror &#x3D; reject;</span><br><span class="line">        &#125;</span><br><span class="line">        catch (err) &#123;</span><br><span class="line">            reject(err);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>剩下的工作就非常简单了。首先打开数据连接，并初始化数据：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openStore().then(db &#x3D;&gt; saveData(db, null))</span><br></pre></td></tr></table></figure>
+
+<p>对于消息读取，可以在连接与初始化后轮询：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">openStore().then(db &#x3D;&gt; saveData(db, null)).then(function (db) &#123;</span><br><span class="line">    setInterval(function () &#123;</span><br><span class="line">        query(db).then(function (res) &#123;</span><br><span class="line">            if (!res || !res.data) &#123;</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line">            const data &#x3D; res.data;</span><br><span class="line">            const text &#x3D; &#39;[receive] &#39; + data.msg + &#39; —— tab &#39; + data.from;</span><br><span class="line">            console.log(&#39;[Storage I] receive message:&#39;, text);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;, 1000);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>最后，要发送消息时，只需向 IndexedDB 存储数据即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">openStore().then(db &#x3D;&gt; saveData(db, null)).then(function (db) &#123;</span><br><span class="line">    &#x2F;&#x2F; …… 省略上面的轮询代码</span><br><span class="line">    &#x2F;&#x2F; 触发 saveData 的方法可以放在用户操作的事件监听内</span><br><span class="line">    saveData(db, mydata);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="小憩一下-1"><a href="#小憩一下-1" class="headerlink" title="小憩一下"></a>小憩一下</h3><p>在“广播模式”外，我们又了解了“共享存储+长轮询”这种模式。也许你会认为长轮询没有监听模式优雅，但实际上，有些时候使用“共享存储”的形式时，不一定要搭配长轮询。</p>
+<p>例如，在多 Tab 场景下，我们可能会离开 Tab A 到另一个 Tab B 中操作；过了一会我们从 Tab B 切换回 Tab A 时，希望将之前在 Tab B 中的操作的信息同步回来。这时候，其实只用在 Tab A 中监听<code>visibilitychange</code>这样的事件，来做一次信息同步即可。</p>
+<p>下面，我会再介绍一种通信方式，我把它称为“口口相传”模式。</p>
+<p>–</p>
+<h3 id="6-window-open-window-opener"><a href="#6-window-open-window-opener" class="headerlink" title="6. window.open + window.opener"></a>6. window.open + window.opener</h3><p>当我们使用<code>window.open</code>打开页面时，方法会返回一个被打开页面<code>window</code>的引用。而在未显示指定<code>noopener</code>时，被打开的页面可以通过<code>window.opener</code>获取到打开它的页面的引用 —— 通过这种方式我们就将这些页面建立起了联系（一种树形结构）。</p>
+<p>首先，我们把<code>window.open</code>打开的页面的<code>window</code>对象收集起来：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">let childWins &#x3D; [];</span><br><span class="line">document.getElementById(&#39;btn&#39;).addEventListener(&#39;click&#39;, function () &#123;</span><br><span class="line">    const win &#x3D; window.open(&#39;.&#x2F;some&#x2F;sample&#39;);</span><br><span class="line">    childWins.push(win);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>然后，当我们需要发送消息的时候，作为消息的发起方，一个页面需要同时通知它打开的页面与打开它的页面：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 过滤掉已经关闭的窗口</span><br><span class="line">childWins &#x3D; childWins.filter(w &#x3D;&gt; !w.closed);</span><br><span class="line">if (childWins.length &gt; 0) &#123;</span><br><span class="line">    mydata.fromOpenner &#x3D; false;</span><br><span class="line">    childWins.forEach(w &#x3D;&gt; w.postMessage(mydata));</span><br><span class="line">&#125;</span><br><span class="line">if (window.opener &amp;&amp; !window.opener.closed) &#123;</span><br><span class="line">    mydata.fromOpenner &#x3D; true;</span><br><span class="line">    window.opener.postMessage(mydata);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意，我这里先用<code>.closed</code>属性过滤掉已经被关闭的 Tab 窗口。这样，作为消息发送方的任务就完成了。下面看看，作为消息接收方，它需要做什么。</p>
+<p>此时，一个收到消息的页面就不能那么自私了，除了展示收到的消息，它还需要将消息再传递给它所“知道的人”（打开与被它打开的页面）:</p>
+<blockquote>
+<p>需要注意的是，我这里通过判断消息来源，避免将消息回传给发送方，防止消息在两者间死循环的传递。（该方案会有些其他小问题，实际中可以进一步优化）</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">window.addEventListener(&#39;message&#39;, function (e) &#123;</span><br><span class="line">    const data &#x3D; e.data;</span><br><span class="line">    const text &#x3D; &#39;[receive] &#39; + data.msg + &#39; —— tab &#39; + data.from;</span><br><span class="line">    console.log(&#39;[Cross-document Messaging] receive message:&#39;, text);</span><br><span class="line">    &#x2F;&#x2F; 避免消息回传</span><br><span class="line">    if (window.opener &amp;&amp; !window.opener.closed &amp;&amp; data.fromOpenner) &#123;</span><br><span class="line">        window.opener.postMessage(data);</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F; 过滤掉已经关闭的窗口</span><br><span class="line">    childWins &#x3D; childWins.filter(w &#x3D;&gt; !w.closed);</span><br><span class="line">    &#x2F;&#x2F; 避免消息回传</span><br><span class="line">    if (childWins &amp;&amp; !data.fromOpenner) &#123;</span><br><span class="line">        childWins.forEach(w &#x3D;&gt; w.postMessage(data));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>这样，每个节点（页面）都肩负起了传递消息的责任，也就是我说的“口口相传”，而消息就在这个树状结构中流转了起来。</p>
+<h3 id="小憩一下-2"><a href="#小憩一下-2" class="headerlink" title="小憩一下"></a>小憩一下</h3><p>显然，“口口相传”的模式存在一个问题：如果页面不是通过在另一个页面内的<code>window.open</code>打开的（例如直接在地址栏输入，或从其他网站链接过来），这个联系就被打破了。</p>
+<p>除了上面这六个常见方法，其实还有一种（第七种）做法是通过 WebSocket 这类的“服务器推”技术来进行同步。这好比将我们的“中央站”从前端移到了后端。</p>
+<p>关于 WebSocket 与其他“服务器推”技术，不了解的同学可以阅读这篇<a target="_blank" rel="noopener" href="https://juejin.im/post/6844903618043183111">《各类“服务器推”技术原理与实例（Polling/COMET/SSE/WebSocket）》</a></p>
+<p>此外，我还针对以上各种方式写了一个 <a target="_blank" rel="noopener" href="https://alienzhou.github.io/cross-tab-communication/">在线演示的 Demo &gt;&gt;</a></p>
+<p><img src="2.gif#id=Meuzf&originalType=binary&status=done&style=none"></p>
+<h2 id="二、非同源页面之间的通信"><a href="#二、非同源页面之间的通信" class="headerlink" title="二、非同源页面之间的通信"></a>二、非同源页面之间的通信</h2><p>上面我们介绍了七种前端跨页面通信的方法，但它们大都受到同源策略的限制。然而有时候，我们有两个不同域名的产品线，也希望它们下面的所有页面之间能无障碍地通信。那该怎么办呢？</p>
+<p>要实现该功能，可以使用一个用户不可见的 iframe 作为“桥”。由于 iframe 与父页面间可以通过指定<code>origin</code>来忽略同源限制，因此可以在每个页面中嵌入一个 iframe （例如：<code>http://sample.com/bridge.html</code>），而这些 iframe 由于使用的是一个 url，因此属于同源页面，其通信方式可以复用上面第一部分提到的各种方式。</p>
+<p>页面与 iframe 通信非常简单，首先需要在页面中监听 iframe 发来的消息，做相应的业务处理：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* 业务页面代码 *&#x2F;</span><br><span class="line">window.addEventListener(&#39;message&#39;, function (e) &#123;</span><br><span class="line">    &#x2F;&#x2F; …… do something</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>然后，当页面要与其他的同源或非同源页面通信时，会先给 iframe 发送消息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* 业务页面代码 *&#x2F;</span><br><span class="line">window.frames[0].window.postMessage(mydata, &#39;*&#39;);</span><br></pre></td></tr></table></figure>
+
+<p>其中为了简便此处将<code>postMessage</code>的第二个参数设为了<code>&#39;*&#39;</code>，你也可以设为 iframe 的 URL。iframe 收到消息后，会使用某种跨页面消息通信技术在所有 iframe 间同步消息，例如下面使用的 Broadcast Channel：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* iframe 内代码 *&#x2F;</span><br><span class="line">const bc &#x3D; new BroadcastChannel(&#39;AlienZHOU&#39;);</span><br><span class="line">&#x2F;&#x2F; 收到来自页面的消息后，在 iframe 间进行广播</span><br><span class="line">window.addEventListener(&#39;message&#39;, function (e) &#123;</span><br><span class="line">    bc.postMessage(e.data);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>其他 iframe 收到通知后，则会将该消息同步给所属的页面：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* iframe 内代码 *&#x2F;</span><br><span class="line">&#x2F;&#x2F; 对于收到的（iframe）广播消息，通知给所属的业务页面</span><br><span class="line">bc.onmessage &#x3D; function (e) &#123;</span><br><span class="line">    window.parent.postMessage(e.data, &#39;*&#39;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>下图就是使用 iframe 作为“桥”的非同源页面间通信模式图。</p>
+<p><img src="3.png#id=K3AvO&originalType=binary&status=done&style=none"></p>
+<p>其中“同源跨域通信方案”可以使用文章第一部分提到的某种技术。</p>
+<p>–</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>今天和大家分享了一下跨页面通信的各种方式。</p>
+<p>对于同源页面，常见的方式包括：</p>
+<ul>
+<li>广播模式：Broadcast Channe / Service Worker / LocalStorage + StorageEvent</li>
+<li>共享存储模式：Shared Worker / IndexedDB / cookie</li>
+<li>口口相传模式：window.open + window.opener</li>
+<li>基于服务端：Websocket / Comet / SSE 等</li>
+</ul>
+<p>而对于非同源页面，则可以通过嵌入同源 iframe 作为“桥”，将非同源页面通信转换为同源页面通信。</p>
+<blockquote>
+<p>对文章感兴趣的同学欢迎关注 <a target="_blank" rel="noopener" href="https://github.com/alienzhou/blog">我的博客 &gt;&gt; https://github.com/alienzhou/blog</a></p>
+</blockquote>
+<p>本文在分享的同时，也是为了抛转引玉。如果你有什么其他想法，欢迎一起讨论，提出你的见解和想法~</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/19/yuque/%E8%A1%8C%E5%86%85%E5%85%83%E7%B4%A0%EF%BC%8C%E5%9D%97%E7%8A%B6%E5%85%83%E7%B4%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -177,7 +400,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-23 11:32:07" itemprop="dateModified" datetime="2021-04-23T11:32:07+08:00">2021-04-23</time>
+                <time title="修改时间：2021-04-23 12:04:10" itemprop="dateModified" datetime="2021-04-23T12:04:10+08:00">2021-04-23</time>
               </span>
 
           
@@ -372,7 +595,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-23 11:32:07" itemprop="dateModified" datetime="2021-04-23T11:32:07+08:00">2021-04-23</time>
+                <time title="修改时间：2021-04-23 12:04:10" itemprop="dateModified" datetime="2021-04-23T12:04:10+08:00">2021-04-23</time>
               </span>
 
           
@@ -471,7 +694,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-23 11:32:07" itemprop="dateModified" datetime="2021-04-23T11:32:07+08:00">2021-04-23</time>
+                <time title="修改时间：2021-04-23 12:04:10" itemprop="dateModified" datetime="2021-04-23T12:04:10+08:00">2021-04-23</time>
               </span>
 
           
@@ -670,7 +893,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-23 11:32:07" itemprop="dateModified" datetime="2021-04-23T11:32:07+08:00">2021-04-23</time>
+                <time title="修改时间：2021-04-23 12:04:10" itemprop="dateModified" datetime="2021-04-23T12:04:10+08:00">2021-04-23</time>
               </span>
 
           
@@ -876,7 +1099,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-23 11:32:07" itemprop="dateModified" datetime="2021-04-23T11:32:07+08:00">2021-04-23</time>
+                <time title="修改时间：2021-04-23 12:04:10" itemprop="dateModified" datetime="2021-04-23T12:04:10+08:00">2021-04-23</time>
               </span>
 
           
@@ -941,7 +1164,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-23 11:32:08" itemprop="dateModified" datetime="2021-04-23T11:32:08+08:00">2021-04-23</time>
+                <time title="修改时间：2021-04-23 12:04:10" itemprop="dateModified" datetime="2021-04-23T12:04:10+08:00">2021-04-23</time>
               </span>
 
           
@@ -1096,7 +1319,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-23 11:32:08" itemprop="dateModified" datetime="2021-04-23T11:32:08+08:00">2021-04-23</time>
+                <time title="修改时间：2021-04-23 12:04:10" itemprop="dateModified" datetime="2021-04-23T12:04:10+08:00">2021-04-23</time>
               </span>
 
           
@@ -1322,7 +1545,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-23 11:32:08" itemprop="dateModified" datetime="2021-04-23T11:32:08+08:00">2021-04-23</time>
+                <time title="修改时间：2021-04-23 12:04:11" itemprop="dateModified" datetime="2021-04-23T12:04:11+08:00">2021-04-23</time>
               </span>
 
           
@@ -1506,7 +1729,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-23 11:32:08" itemprop="dateModified" datetime="2021-04-23T11:32:08+08:00">2021-04-23</time>
+                <time title="修改时间：2021-04-23 12:04:11" itemprop="dateModified" datetime="2021-04-23T12:04:11+08:00">2021-04-23</time>
               </span>
 
           
@@ -1731,79 +1954,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/16/yuque/%E9%98%B2%E6%8A%96/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Adam Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Adam">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/16/yuque/%E9%98%B2%E6%8A%96/" class="post-title-link" itemprop="url">防抖</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-16 00:20:07" itemprop="dateCreated datePublished" datetime="2021-04-16T00:20:07+08:00">2021-04-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-23 11:32:08" itemprop="dateModified" datetime="2021-04-23T11:32:08+08:00">2021-04-23</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>防抖<br>作用：在多次触发事件的情况下，只执行一次</p>
-<h2 id="第一版"><a href="#第一版" class="headerlink" title="第一版"></a>第一版</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> debounce = <span class="function"><span class="keyword">function</span> (<span class="params">func</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> timer;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (timer) &#123;</span><br><span class="line">      <span class="built_in">clearTimeout</span>(timer);</span><br><span class="line">    &#125;</span><br><span class="line">    timer = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// func()</span></span><br><span class="line">      <span class="built_in">console</span>.log(<span class="built_in">this</span>);</span><br><span class="line">      func.apply(<span class="built_in">this</span>);</span><br><span class="line">    &#125;, <span class="number">1000</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> fun1 = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="built_in">this</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> debounceTask = debounce(fun1);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> input = <span class="built_in">document</span>.getElementById(<span class="string">&quot;input&quot;</span>);</span><br><span class="line">input.addEventListener(<span class="string">&quot;keydown&quot;</span>, debounceTask);</span><br></pre></td></tr></table></figure>
-
-<p>思路<br>首先定义一个变量   用于接收创建定时器的 id，方便清除定时器<br>在设置定时器前，先判断是否之前创建的定时器存在，如果存在就清除</p>
-<p><strong>问题</strong><br><strong>没有绑定 this</strong><br><strong>没有使用 apply 之前，this 默认指向 window</strong><br><strong>使用 apply 之后，this 就会指向函数执行的环境</strong></p>
-<h2 id="第二版"><a href="#第二版" class="headerlink" title="第二版"></a>第二版</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> debounce = <span class="function"><span class="keyword">function</span> (<span class="params">func, wait</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> timer;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">...args</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (timer) &#123;</span><br><span class="line">      <span class="built_in">clearTimeout</span>(timer);</span><br><span class="line">    &#125;</span><br><span class="line">    timer = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      func.apply(<span class="built_in">this</span>, args);</span><br><span class="line">    &#125;, wait);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>优化<br>两种情况： 1.用户在搜索问题时连续输入内容，在输入最后一个字符时执行函数，函数执行时间间隔小于指定的时间。 2.用户在 star 时，需要第一时间看到反馈，此函数需要立即执行，反馈情况给用户看,下一次调用时间间隔必须大于 wait 才会触发</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> button = <span class="built_in">document</span>.getElementById(<span class="string">&quot;button&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> start = <span class="built_in">document</span>.getElementById(<span class="string">&quot;star&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> divstatue = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (start.style.background == <span class="string">&quot;red&quot;</span>) &#123;</span><br><span class="line">    start.style.background = <span class="string">&quot;blue&quot;</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    start.style.background = <span class="string">&quot;red&quot;</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> debounce2 = <span class="function"><span class="keyword">function</span> (<span class="params">func, wait</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> context, arg;</span><br><span class="line">  <span class="keyword">var</span> timer;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> later = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    timer = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      timer = <span class="literal">null</span>;</span><br><span class="line">      func.apply(context, timer);</span><br><span class="line">    &#125;, wait);</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">...args</span>) </span>&#123;</span><br><span class="line">    context = <span class="built_in">this</span>;</span><br><span class="line">    arg = args;</span><br><span class="line">    <span class="keyword">if</span> (!timer) &#123;</span><br><span class="line">      func.apply(context, arg);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      later();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> debounceTask2 = deboncetest3(divstatue, <span class="number">1000</span>);</span><br><span class="line">button.addEventListener(<span class="string">&quot;click&quot;</span>, debounceTask2);</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1873,7 +2023,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">41</span>
+          <span class="site-state-item-count">42</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
