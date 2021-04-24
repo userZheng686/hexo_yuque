@@ -146,6 +146,117 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/23/yuque/%E6%B5%AE%E5%8A%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/23/yuque/%E6%B5%AE%E5%8A%A8/" class="post-title-link" itemprop="url">浮动</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-23 11:01:11" itemprop="dateCreated datePublished" datetime="2021-04-23T11:01:11+08:00">2021-04-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-24 23:46:55" itemprop="dateModified" datetime="2021-04-24T23:46:55+08:00">2021-04-24</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>页面布局是 CSS 的一个重点应用，例如：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619146953214-6eed72b4-4298-495c-a102-898368d09ad4.png#clientId=u3dd556fe-de2a-4&from=paste&height=352&id=u855d221f&margin=%5Bobject%20Object%5D&name=image.png&originHeight=352&originWidth=403&originalType=binary&size=18863&status=done&style=none&taskId=u9200601b-2bf4-48f6-9483-45483faad6f&width=403" alt="image.png"><br>而实现页面布局主要应用到两种方法，一种是<strong>CSS 浮动</strong>，一种是<strong>Flexbox</strong>（IE9 以上），本文主要讲的是 CSS 浮动，下一篇文章将阐述 Flexbox。</p>
+<h2 id="浮动元素"><a href="#浮动元素" class="headerlink" title="浮动元素"></a>浮动元素</h2><p><strong>什么是浮动元素：</strong>浮动元素同时处于常规流内和流外的元素。其中块级元素认为浮动元素不存在，而浮动元素会影响行内元素的布局，浮动元素会通过影响行内元素间接影响了包含块的布局。<br><strong>常规流：</strong>页面上从左往右，从上往下排列的元素流，就是常规流<strong>脱离常规流：</strong>绝对定位，fixed 定位的元素有自己固定的位置，脱离了常规流<strong>包含块：</strong>一个元素离它最近的块级元素是它的包含块<br>下面详细描述以上的内容，举个?：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>JS Bin<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line">    .border &#123;</span><br><span class="line"><span class="css">      <span class="attribute">border</span>: <span class="number">2px</span> solid;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .common-div &#123;</span><br><span class="line"><span class="css">      <span class="attribute">width</span>: <span class="number">160px</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">height</span>: <span class="number">50px</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">background-color</span>: red;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .float-red &#123;</span><br><span class="line"><span class="css">      <span class="attribute">width</span>: <span class="number">100px</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">height</span>: <span class="number">50px</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">background-color</span>: <span class="number">#fcc</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">float</span>: left;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .float-blue &#123;</span><br><span class="line"><span class="css">      <span class="attribute">width</span>: <span class="number">100px</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">height</span>: <span class="number">50px</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">background-color</span>: <span class="number">#09c</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">float</span>: left;</span></span><br><span class="line">    &#125;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;border&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;float-red&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;common-div&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;float-blue&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</span><br><span class="line">      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim</span><br><span class="line">      veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea</span><br><span class="line">      commodo consequat. Duis aute irure dolor in reprehenderit in voluptate</span><br><span class="line">      velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat</span><br><span class="line">      cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id</span><br><span class="line">      est laborum.</span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>上面这段代码显示的样子如下：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619147229902-4673d52d-70f9-478e-adea-7b20d3d8950e.png#clientId=u3dd556fe-de2a-4&from=paste&height=195&id=uc054066a&margin=%5Bobject%20Object%5D&name=image.png&originHeight=195&originWidth=732&originalType=binary&size=83482&status=done&style=none&taskId=udf3b458b-8f49-4e66-89a6-76fa62b2260&width=732" alt="image.png"></p>
+<ul>
+<li>块级元素认为浮动元素不存在：红色的块级元素没有受到粉色浮动元素的影响，还展示在左上角的位置，但是被粉色元素盖住了左边的部分</li>
+<li>浮动元素会影响行内元素：文字部分被蓝色浮动元素影响，空出了蓝色浮动元素的部分</li>
+<li>浮动元素会间接影响了包含块的布局：浮动元素影响了文字部分吗，使之多出了一行，文字部分撑高了最外面的 border 框，所以间接影响了包含块的布局。</li>
+</ul>
+<p>其中，<strong>浮动元素的摆放</strong>会遵循如下的规则：</p>
+<ul>
+<li>尽量靠上</li>
+<li>尽量靠左</li>
+<li>尽量一个挨着一个</li>
+<li>不能超出包含块，除非元素比包含块更宽</li>
+<li>不能超过所在行的最高点</li>
+<li>不能超过它前面浮动元素的最高点</li>
+<li>行内元素绕着浮动元素摆放：左浮动元素的右边和右浮动元素的左边会出浮动元素</li>
+</ul>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><p>浮动元素并不能撑起包含块，这和我们的预期并不相符。通过以下的办法可以将包含块撑开，称之为<strong>闭合浮动</strong><br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619147337086-bbbe8792-e580-421d-9bb2-ec0b637fa630.png#clientId=u3dd556fe-de2a-4&from=paste&height=227&id=u37fc5218&margin=%5Bobject%20Object%5D&name=image.png&originHeight=227&originWidth=732&originalType=binary&size=4433&status=done&style=none&taskId=u99d50c93-721b-4ea8-8032-35592e09c65&width=732" alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619147351522-7de19830-7fd5-46ca-8c78-4deb7fad9719.png#clientId=u3dd556fe-de2a-4&from=paste&height=226&id=ud232f1d9&margin=%5Bobject%20Object%5D&name=image.png&originHeight=226&originWidth=732&originalType=binary&size=5293&status=done&style=none&taskId=ubee4f117-405f-4bea-bf75-279079dc0ab&width=732" alt="image.png"></p>
+<h3 id="闭合浮动的方法："><a href="#闭合浮动的方法：" class="headerlink" title="闭合浮动的方法："></a>闭合浮动的方法：</h3><ul>
+<li>**BFC:**1) 包含块设置 overflow:hidden 或者 2)包含块设置 display:table-cell/table/flex…</li>
+</ul>
+<blockquote>
+<p><strong>BFC：块级格式化上下文。它是一个独立的渲染区域，只有 Block-level box 参与， 它规定了内部的块级元素如何布局，并且与这个区域外部毫不相干。</strong>只要<strong>符合以下的条件就是 BFC:</strong></p>
+<ol>
+<li>根元素</li>
+<li>float 属性不为 none</li>
+<li>position 为 absolute 或 fixed</li>
+<li>display 为 inline-block, table-cell, table-caption, flex, inline-flex</li>
+<li>overflow 不为 visible</li>
+</ol>
+</blockquote>
+<p>相应的背景文档可以参阅：<a target="_blank" rel="noopener" href="http://www.cnblogs.com/lhb25/p/inside-block-formatting-ontext.html">《BFC 的神奇原理》</a></p>
+<ul>
+<li><strong>伪元素</strong>：</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.clearfix</span><span class="selector-pseudo">::after</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">&quot;&quot;</span>;</span><br><span class="line">  <span class="attribute">display</span>: block;</span><br><span class="line">  <span class="attribute">clear</span>: both;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>clear:both;意味着块级元素的左边和右边都不能有浮动元素。在包含块的末尾建立了一个内容为空的伪元素，并设置 clear:both，使这个元素位于所有的浮动元素之后，从而撑开了包含块的高。</p>
+</blockquote>
+<ul>
+<li><strong>包含块自己也浮动</strong></li>
+</ul>
+<p>这个方法也是 w3c 使用的方法。不过，下一个元素会受到这个浮动元素的影响。为了解决这个问题，有些人选择对布局中的所有东西进行浮动，然后使用适当的有意义的元素（常常是站点的页脚）对这些浮动进行清理。这有助于减少或消除不必要的标记。<br>相应的背景文档：<a target="_blank" rel="noopener" href="http://www.w3school.com.cn/css/css_positioning_floating.asp">《W3C CSS 浮动》</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/23/yuque/%E5%B1%85%E4%B8%AD/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -177,7 +288,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-24 18:51:15" itemprop="dateModified" datetime="2021-04-24T18:51:15+08:00">2021-04-24</time>
+                <time title="修改时间：2021-04-24 23:46:55" itemprop="dateModified" datetime="2021-04-24T23:46:55+08:00">2021-04-24</time>
               </span>
 
           
@@ -304,7 +415,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-24 18:51:15" itemprop="dateModified" datetime="2021-04-24T18:51:15+08:00">2021-04-24</time>
+                <time title="修改时间：2021-04-24 23:46:55" itemprop="dateModified" datetime="2021-04-24T23:46:55+08:00">2021-04-24</time>
               </span>
 
           
@@ -470,7 +581,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-24 18:51:15" itemprop="dateModified" datetime="2021-04-24T18:51:15+08:00">2021-04-24</time>
+                <time title="修改时间：2021-04-24 23:46:56" itemprop="dateModified" datetime="2021-04-24T23:46:56+08:00">2021-04-24</time>
               </span>
 
           
@@ -649,7 +760,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-24 18:51:16" itemprop="dateModified" datetime="2021-04-24T18:51:16+08:00">2021-04-24</time>
+                <time title="修改时间：2021-04-24 23:46:56" itemprop="dateModified" datetime="2021-04-24T23:46:56+08:00">2021-04-24</time>
               </span>
 
           
@@ -937,7 +1048,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-24 18:51:16" itemprop="dateModified" datetime="2021-04-24T18:51:16+08:00">2021-04-24</time>
+                <time title="修改时间：2021-04-24 23:46:56" itemprop="dateModified" datetime="2021-04-24T23:46:56+08:00">2021-04-24</time>
               </span>
 
           
@@ -1067,7 +1178,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-24 18:51:16" itemprop="dateModified" datetime="2021-04-24T18:51:16+08:00">2021-04-24</time>
+                <time title="修改时间：2021-04-24 23:46:56" itemprop="dateModified" datetime="2021-04-24T23:46:56+08:00">2021-04-24</time>
               </span>
 
           
@@ -1140,7 +1251,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-24 18:51:16" itemprop="dateModified" datetime="2021-04-24T18:51:16+08:00">2021-04-24</time>
+                <time title="修改时间：2021-04-24 23:46:56" itemprop="dateModified" datetime="2021-04-24T23:46:56+08:00">2021-04-24</time>
               </span>
 
           
@@ -1420,7 +1531,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-24 18:51:16" itemprop="dateModified" datetime="2021-04-24T18:51:16+08:00">2021-04-24</time>
+                <time title="修改时间：2021-04-24 23:46:57" itemprop="dateModified" datetime="2021-04-24T23:46:57+08:00">2021-04-24</time>
               </span>
 
           
@@ -1803,7 +1914,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-24 18:51:16" itemprop="dateModified" datetime="2021-04-24T18:51:16+08:00">2021-04-24</time>
+                <time title="修改时间：2021-04-24 23:46:57" itemprop="dateModified" datetime="2021-04-24T23:46:57+08:00">2021-04-24</time>
               </span>
 
           
@@ -1857,151 +1968,6 @@
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;height: 100px;width: 100px;float: left;background: lightblue&quot;</span>&gt;</span></span><br><span class="line">  我是一个左浮动的元素</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;width: 200px; height: 200px;background: #eee&quot;</span>&gt;</span></span><br><span class="line">  我是一个没有设置浮动, 也没有触发 BFC 元素, width: 200px; height:200px;</span><br><span class="line">  background: #eee;</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619018683848-58bd8a60-2428-43ff-b033-fe634fb5e3b5.png#clientId=u4c082b2a-d878-4&from=paste&height=220&id=u9e6f3c9c&margin=%5Bobject%20Object%5D&originHeight=440&originWidth=432&originalType=url&status=done&style=none&taskId=u6a8d6701-fefd-4496-b501-bce6c5929ba&width=216"><br>这时候其实第二个元素有部分被浮动元素所覆盖，(但是文本信息不会被浮动元素所覆盖) 如果想避免元素被覆盖，可触第二个元素的 BFC 特性，在第二个元素中加入<strong>overflow: hidden</strong>，就会变成：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619018684324-49140c56-dab4-446d-a9d9-7db868e2bb44.png#clientId=u4c082b2a-d878-4&from=paste&height=223&id=u58317208&margin=%5Bobject%20Object%5D&originHeight=446&originWidth=640&originalType=url&status=done&style=none&taskId=u6eeeff0e-1778-4f95-97c7-a7ee3ab73f4&width=320"><br>这个方法可以用来实现两列自适应布局，效果不错，这时候左边的宽度固定，右边的内容自适应宽度(去掉上面右边内容的宽度)。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/21/yuque/CSS%E9%80%89%E6%8B%A9%E5%99%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Adam Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Adam">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/21/yuque/CSS%E9%80%89%E6%8B%A9%E5%99%A8/" class="post-title-link" itemprop="url">CSS选择器</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-21 20:59:04" itemprop="dateCreated datePublished" datetime="2021-04-21T20:59:04+08:00">2021-04-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-24 18:51:16" itemprop="dateModified" datetime="2021-04-24T18:51:16+08:00">2021-04-24</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>选择器是 CSS 规则的一部分且位于 CSS 声明块前。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619017655274-5db7a86c-e8e3-4816-9447-77904d4921e1.png#clientId=ud57f8ad0-29bd-4&from=paste&height=188&id=u8c93161b&margin=%5Bobject%20Object%5D&name=image.png&originHeight=188&originWidth=644&originalType=binary&size=25654&status=done&style=none&taskId=ud13f577f-98d9-4de4-8415-5369bbd6d58&width=644" alt="image.png"><br>选择器可以被分为以下类别：</p>
-<ul>
-<li>简单选择器（Simple selectors）：通过元素类型、class 或 id 匹配一个或多个元素。</li>
-<li>属性选择器（Attribute selectors）：通过 属性 / 属性值 匹配一个或多个元素。</li>
-<li>伪类（Pseudo-classes）：匹配处于确定状态的一个或多个元素，比如被鼠标指针悬停的元素，或当前被选中或未选中的复选框，或元素是 DOM 树中一父节点的第一个子节点。</li>
-<li>伪元素（Pseudo-elements）:匹配处于相关的确定位置的一个或多个元素，例如每个段落的第一个字，或者某个元素之前生成的内容。</li>
-<li>组合器（Combinators）：这里不仅仅是选择器本身，还有以有效的方式组合两个或更多的选择器用于非常特定的选择的方法。例如，你可以只选择 divs 的直系子节点的段落，或者直接跟在 headings 后面的段落。</li>
-<li>多用选择器（Multiple selectors）：这些也不是单独的选择器；这个思路是将以逗号分隔开的多个选择器放在一个 CSS 规则下面， 以将一组声明应用于由这些选择器选择的所有元素。</li>
-</ul>
-<h2 id="简单选择器"><a href="#简单选择器" class="headerlink" title="简单选择器"></a>简单选择器</h2><h3 id="类型选择器（又名：元素选择器）"><a href="#类型选择器（又名：元素选择器）" class="headerlink" title="类型选择器（又名：元素选择器）"></a>类型选择器（又名：元素选择器）</h3><p>此选择器只是一个选择器名和指定的 HTML 元素名的不区分大小写的匹配。这是选择所有指定类型的最简单方式。</p>
-<h3 id="类选择器（Class-selectors）"><a href="#类选择器（Class-selectors）" class="headerlink" title="类选择器（Class selectors）"></a>类选择器（Class selectors）</h3><p>类选择器由一个点“.”以及类后面的类名组成。类名是在 HTML class 文档元素属性中没有空格的任何值。由你自己选择一个名字。同样值得一提的是，文档中的多个元素可以具有相同的类名，而单个元素可以有多个类名(以空格分开多个类名的形式书写)。</p>
-<h3 id="ID-选择器"><a href="#ID-选择器" class="headerlink" title="ID 选择器"></a>ID 选择器</h3><p>ID 选择器由哈希/磅符号 (#)组成，后面是给定元素的 ID 名称。 任何元素都可以使用 id 属性设置唯一的 ID 名称。 由你自己选择的 ID 是什么。 这是选择单个元素的最有效的方式。<br>重要提示：一个 ID 名称必须在文件中是唯一的。关于重复 ID 的行为是不可预测的，比如在一些浏览器只是第一个实例计算，其余的将被忽略。</p>
-<h3 id="通用选择器（Universal-selector）"><a href="#通用选择器（Universal-selector）" class="headerlink" title="通用选择器（Universal selector）"></a>通用选择器（Universal selector）</h3><p>通用选择（*）是最终的王牌。它允许选择在一个页面中的所有元素。由于给每个元素应用同样的规则几乎没有什么实际价值，更常见的做法是与其他选择器结合使用。<br>重要提示：使用通用选择时小心。因为它适用于所有的元素，在大型网页利用它可以对性能有明显的影响：网页可以显示比预期要慢。不会有太多的情况下，您想使用此选择。</p>
-<h3 id="组合器（Combinators）"><a href="#组合器（Combinators）" class="headerlink" title="组合器（Combinators）"></a>组合器（Combinators）</h3><p>在 CSS 中，组合器允许您将多个选择器组合在一起，这允许您在其他元素中选择元素，或者与其他元素相邻。四种可用的类型是：</p>
-<ul>
-<li>后代选择器——（空格键）——允许您选择嵌套在另一个元素中的某个元素（不一定是直接的后代;例如，它可以是一个孙子）。</li>
-<li>子选择器—— &gt; ——允许您选择一个元素，该元素是另一个元素的直接子元素。</li>
-<li>相邻兄弟选择器—— + ——允许您选择一个元素，它是另一个元素的直接兄弟元素(也就是说，在它的旁边，在层次结构的同一层)。</li>
-<li>通用兄弟选择器—— ~ — —允许您选择其他元素的兄弟元素(例如，在层次结构中的相同级别，但不一定就在它的旁边)。<table>
-<thead>
-<tr>
-<th><strong>Combinators</strong></th>
-<th><strong>Select</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>A,B</td>
-<td>匹配满足 A（和/或）B 的任意元素.</td>
-</tr>
-<tr>
-<td>A B</td>
-<td>匹配任意元素，满足条件：B 是 A 的后代结点（B 是 A 的子节点，或者 A 的子节点的子节点）</td>
-</tr>
-<tr>
-<td>A &gt; B</td>
-<td>匹配任意元素，满足条件：B 是 A 的直接子节点</td>
-</tr>
-<tr>
-<td>A + B</td>
-<td>匹配任意元素，满足条件：B 是 A 的下一个兄弟节点（AB 有相同的父结点，并且 B 紧跟在 A 的后面）</td>
-</tr>
-<tr>
-<td>A ~ B</td>
-<td>匹配任意元素，满足条件：B 是 A 之后的兄弟节点中的任意一个（AB 有相同的父节点，B 在 A 之后，但不一定是紧挨着 A）</td>
-</tr>
-</tbody></table>
-</li>
-</ul>
-<p>注：相邻兄弟选择器和通用兄弟选择器只会“向后”选择，DOM 结构靠前的兄弟元素不在选择范围内。<br>这里有一个简单的例子来展示这些工作是如何工作的：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">section</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">h2</span>&gt;</span>Heading 1<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>Paragraph 1<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>Paragraph 2<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>Heading 2<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>Paragraph 3<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>Paragraph 4<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">section</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">section</span> <span class="selector-tag">p</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: blue;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">section</span> &gt; <span class="selector-tag">p</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: yellow;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">h2</span> + <span class="selector-tag">p</span> &#123;</span><br><span class="line">  <span class="attribute">text-transform</span>: uppercase;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">h2</span> ~ <span class="selector-tag">p</span> &#123;</span><br><span class="line">  <span class="attribute">border</span>: <span class="number">1px</span> dashed black;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>CSS 样式的 HTML 如下所示：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">&quot;https://mdn.github.io/learnin...; class=&quot;</span><span class="attr">live-sample-frame</span>&quot; <span class="attr">width</span>=<span class="string">&quot;100%&quot;</span> <span class="attr">frameborder</span>=<span class="string">&quot;0&quot;</span> <span class="attr">height</span>=<span class="string">&quot;270&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>选择器是这样工作的：</p>
-<ul>
-<li>section p 选择了所有的<p>元素——前两个<p>都是<section>元素的直接子元素，而后面的两个<p>元素是<section>元素的孙子元素(它们在<div>里面)。因此，所有的段落文本都是蓝色的。</li>
-<li>section &gt; p 只选择前两个<p>元素，这两个元素是<section>元素的直接子元素（但后两个<p>元素不是，它们不是直接的子元素）。所以只有前两段有黄色的背景色。</li>
-<li>h2 + p 只选择在相同层次结构的<h2>元素之后直接相连的<p>元素—— 在本例中是第一和第三段。因此，这些文本都是大写的。</li>
-<li>h2 ~ p 选择任何在相同的层级上（还有之后的）<h2>元素的<p>元素 ——在这种情况下，所有的段落符合此条件。因此，所有的这些都有一个虚线的边界。</li>
-</ul>
-<h2 id="属性选择器"><a href="#属性选择器" class="headerlink" title="属性选择器"></a>属性选择器</h2><p>属性选择器是一种特殊类型的选择器，它根据元素的 属性和属性值来匹配元素。它们的通用语法由方括号([]) 组成，其中包含属性名称，后跟可选条件以匹配属性的值。 属性选择器可以根据其匹配属性值的方式分为两类：<strong>存在和值属性选择器</strong>和<strong>子串值属性选择器</strong>。</p>
-<h3 id="存在和值（Presence-and-value）属性选择器"><a href="#存在和值（Presence-and-value）属性选择器" class="headerlink" title="存在和值（Presence and value）属性选择器"></a>存在和值（Presence and value）属性选择器</h3><p>这些属性选择器尝试匹配精确的属性值：</p>
-<ul>
-<li>[attr]：该选择器选择包含 attr 属性的所有元素，不论 attr 的值为何。</li>
-<li>[attr=val]：该选择器仅选择 attr 属性被赋值为 val 的所有元素。</li>
-<li>[attr~=val]：该选择器仅选择 attr 属性的值（以空格间隔出多个值）中有包含 val 值的所有元素，比如位于被空格分隔的多个类（class）中的一个类。</li>
-</ul>
-<h3 id="子串值（Substring-value）属性选择器"><a href="#子串值（Substring-value）属性选择器" class="headerlink" title="子串值（Substring value）属性选择器"></a>子串值（Substring value）属性选择器</h3><p>这种情况的属性选择器也被称为“伪正则选择器”，因为它们提供类似 regular expression 的灵活匹配方式（但请注意，这些选择器并不是真正的正则表达式）：</p>
-<ul>
-<li>[attr|=val] : 选择 attr 属性的值以 val（包括 val）或 val-开头的元素（-用来处理语言编码）。</li>
-<li>[attr^=val] : 选择 attr 属性的值以 val 开头（包括 val）的元素。</li>
-<li>[attr$=val] : 选择 attr 属性的值以 val 结尾（包括 val）的元素。</li>
-<li>[attr*=val] : 选择 attr 属性的值中包含字符串 val 的元素。</li>
-</ul>
-<h2 id="伪类和伪元素"><a href="#伪类和伪元素" class="headerlink" title="伪类和伪元素"></a>伪类和伪元素</h2><h3 id="伪类（Pseudo-class）"><a href="#伪类（Pseudo-class）" class="headerlink" title="伪类（Pseudo-class）"></a>伪类（Pseudo-class）</h3><p>一个 CSS<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes">伪类（pseudo-class）</a>是一个以冒号(:)作为前缀的关键字，当你希望样式在特定状态下才被呈现到指定的元素时，你可以往元素的选择器后面加上对应的伪类（pseudo-class）。你可能希望某个元素在处于某种状态下呈现另一种样式，例如当鼠标悬停在元素上面时，或者当一个 checkbox 被禁用或被勾选时，又或者当一个元素是它在 DOM 树中父元素的第一个孩子元素时。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">:active :any :checked :default :dir() :disabled :empty :enabled :first</span><br><span class="line">:first-child :first-of-type :fullscreen :focus :hover :indeterminate :in-range</span><br><span class="line">:invalid :lang() :last-child :last-of-type :left :link :not() :nth-child()</span><br><span class="line">:nth-last-child() :nth-last-of-type() :nth-of-type() :only-child :only-of-type</span><br><span class="line">:optional :out-of-range :read-only :read-write :required :right :root :scope</span><br><span class="line">:target :valid :visited</span><br></pre></td></tr></table></figure>
-
-<h3 id="伪元素"><a href="#伪元素" class="headerlink" title="伪元素"></a>伪元素</h3><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-elements">伪元素（Pseudo-element）</a>跟伪类很像，但它们又有不同的地方。它们都是关键字 —— 但这次伪元素前缀是两个冒号 (::) —— 同样是添加到选择器后面达到指定某个元素的某个部分。<br>::after<br>::before<br>::first-letter<br>::first-line<br>::selection<br>::backdrop</p>
 
       
     </div>
@@ -2086,7 +2052,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">47</span>
+          <span class="site-state-item-count">48</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

@@ -170,7 +170,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-04-24 18:50:37" itemprop="dateCreated datePublished" datetime="2021-04-24T18:50:37+08:00">2021-04-24</time>
+              <time title="创建时间：2021-04-24 23:46:18" itemprop="dateCreated datePublished" datetime="2021-04-24T23:46:18+08:00">2021-04-24</time>
             </span>
 
           
@@ -216,6 +216,158 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/24/yuque/URL%E5%88%B0%E6%B5%8F%E8%A7%88%E5%99%A8%E6%98%BE%E7%A4%BA%E9%A1%B5%E9%9D%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/24/yuque/URL%E5%88%B0%E6%B5%8F%E8%A7%88%E5%99%A8%E6%98%BE%E7%A4%BA%E9%A1%B5%E9%9D%A2/" class="post-title-link" itemprop="url">URL到浏览器显示页面</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-24 23:46:03 / 修改时间：23:46:54" itemprop="dateCreated datePublished" datetime="2021-04-24T23:46:03+08:00">2021-04-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>面试中常被问到的问题，此问题包含 web 开发中从前端到后端到运维的绝大多数知识，主要考察面试者知识的广度。本文会根据作者了解的程度增加不断更新，不足之处欢迎评论区补充。</p>
+</blockquote>
+<h2 id="浏览器中输入网址。"><a href="#浏览器中输入网址。" class="headerlink" title="浏览器中输入网址。"></a>浏览器中输入网址。</h2><ul>
+<li>http 或 https</li>
+<li>url 的组成：<a target="_blank" rel="noopener" href="https://blog.csdn.net/ergouge/article/details/8185219">详解 url 的组成</a></li>
+</ul>
+<h2 id="通过-DNS-解析域名的实际-IP-地址"><a href="#通过-DNS-解析域名的实际-IP-地址" class="headerlink" title="通过 DNS 解析域名的实际 IP 地址"></a>通过 DNS 解析域名的实际 IP 地址</h2><p>发送至 DNS 服务器并获得域名对应的 WEB 服务器的 ip 地址。</p>
+<p>DNS 解析首先会从你的浏览器的缓存中去寻找是否有这个网址对应的 IP 地址，如果没有就向 OS 系统的 DNS 缓存中寻找，如果没有就是路由器的 DNS 缓存， 如果没有就是 ISP 的 DNS 缓存中寻找。</p>
+<p>所以，缓存的寻找过程就是： 浏览器 -&gt; 系统 -&gt; 路由器 -&gt; ISP。</p>
+<p>如果在某一个缓存中找到的话，就直接跳到下一步。</p>
+<p>如果都没有找到的话，就会向 ISP 或者公共的域名解析服务发起 DNS 查找请求。这个查找的过程还是一个递归查询的过程。</p>
+<h2 id="检查浏览器是否有缓存"><a href="#检查浏览器是否有缓存" class="headerlink" title="检查浏览器是否有缓存"></a>检查浏览器是否有缓存</h2><ol>
+<li>通过<code>Cache-Control</code>和<code>Expires</code>来检查是否命中强缓存，命中则直接取本地磁盘的 html（状态码为 200 from disk(or memory)  cache，内存 or 磁盘）；</li>
+<li>如果没有命中强缓存，则会向服务器发起请求（先进行下一步的 TCP 连接），服务器通过<code>Etag</code>和<code>Last-Modify</code>来与服务器确认返回的响应是否被更改（协商缓存），若无更改则返回状态码（304 Not Modified）,浏览器取本地缓存；</li>
+<li>若强缓存和协商缓存都没有命中则返回请求结果。</li>
+</ol>
+<h2 id="与-WEB-服务器建立-TCP-连接。"><a href="#与-WEB-服务器建立-TCP-连接。" class="headerlink" title="与 WEB 服务器建立 TCP 连接。"></a>与 WEB 服务器建立 TCP 连接。</h2><p>TCP 协议通过三次握手建立连接。</p>
+<ul>
+<li>客户端通过 <code>SYN</code> 报文段发送连接请求，确定服务端是否开启端口准备连接。状态设置为 <code>SYN_SEND</code>;</li>
+<li>服务器如果有开着的端口并且决定接受连接，就会返回一个 <code>SYN+ACK</code> 报文段给客户端，状态设置为 <code>SYN_RECV</code>；</li>
+<li>客户端收到服务器的 <code>SYN+ACK</code> 报文段，向服务器发送 <code>ACK</code> 报文段表示确认。此时客户端和服务器都设置为 <code>ESTABLISHED</code> 状态。连接建立，可以开始数据传输了。</li>
+</ul>
+<p>翻译成大白话就是：</p>
+<ol>
+<li><strong>客户端</strong>：你能接收到我的消息吗？</li>
+<li><strong>服务端</strong>：可以的，那你能接收到我的回复吗？</li>
+<li><strong>客户端</strong>：可以，那我们开始聊正事吧。</li>
+</ol>
+<p><strong>为什么是 3 次？</strong>：避免历史连接，确认客户端发来的请求是这次通信的人。</p>
+<p><strong>为什么不是 4 次？</strong>：3 次够了第四次浪费</p>
+<h2 id="若协议是-https-则会做加密"><a href="#若协议是-https-则会做加密" class="headerlink" title="若协议是 https 则会做加密"></a>若协议是 https 则会做加密</h2><blockquote>
+<p>HTTPS = HTTP + 加密 + 认证 + 完整性保护</p>
+</blockquote>
+<ol>
+<li><p>要先申请 CA 证书，并安装在服务器上（一个文件，配置 nginx 支持监听 443 端口开启 ssl 并设置证书路径）</p>
+</li>
+<li><p>浏览器发送请求；</p>
+</li>
+<li><p>网站从浏览器发过来的加密规则中选一组自身也支持的加密算法和 hash 算法，并向浏览器发送带有公钥的证书，当然证书还包含了很多信息，如网站地址、证书的颁发机构、过期时间等。</p>
+</li>
+<li><p>浏览器解析证书。</p>
+<ul>
+<li>验证证书的合法性。如颁发机构是否合法、证书中的网站地址是否与访问的地址一致，若不合法，则浏览器提示证书不受信任，若合法，浏览器会显示一个小锁头。</li>
+<li>若合法，或用户接受了不合法的证书，浏览器会生成一串随机数的密码（即密钥），并用证书中提供的公钥加密。</li>
+<li>使用约定好的 hash 计算握手消息，并使用生成的随机数（即密钥）对消息进行加密，最后将之前生成的所有消息一并发送给网站服务器。</li>
+</ul>
+</li>
+<li><p>网站服务器解析消息。用已有的私钥将密钥解密出来，然后用密钥解密发过来的握手消息，并验证是否跟浏览器传过来的一致。然后再用密钥加密一段握手消息，发送给浏览器。</p>
+</li>
+<li><p>浏览器解密并计算握手消息的 HASH，如果与服务端发来的 HASH 一致，此时握手过程结束，之后所有的通信数据将由之前浏览器生成的随机密码并利用对称加密算法进行加密。这里浏览器与网站互相发送加密的握手消息并验证，目的是为了保证双方都获得了一致的密码，并且可以正常的加密解密数据，为后续真正数据的传输做一次测试。</p>
+</li>
+</ol>
+<p>下图表示 https 加密通信的过程：</p>
+<p><img src="1.png#alt="></p>
+<h2 id="浏览器发送请求获取页面-html"><a href="#浏览器发送请求获取页面-html" class="headerlink" title="浏览器发送请求获取页面 html"></a>浏览器发送请求获取页面 html</h2><p>浏览器向 WEB 服务器的 ip 地址发送相应的 http get 请求页面 html。</p>
+<p>通常的请求行是: 请求的方式（<code>get</code>或<code>post</code>） + 请求的资源的位置<code>（url） + HTTP/[版本号](HTTP/1.1)</code></p>
+<p>发起 http 请求的过程主要是组装 http 报文并将报文发向指定地址的过程。</p>
+<p>http 协议的具体信息可以参考：<a target="_blank" rel="noopener" href="https://www.runoob.com/http/http-tutorial.html">HTTP 介绍教程</a></p>
+<h2 id="服务器响应-html"><a href="#服务器响应-html" class="headerlink" title="服务器响应 html"></a>服务器响应 html</h2><p>这里的服务器可能是 server 或者是<code>cdn</code></p>
+<p>注：cdn - 内容分发网络，可用来加快传输速度，主要用来存储静态文件，例如前端的 html、css、js、图片文件等。具体请参考：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/a64675c6b73b">CDN 概念基本介绍</a></p>
+<p>服务器上可能会通过<code>nginx</code>等设置静态资源代理，将 url 对应的 html 等静态资源返回。</p>
+<p><code>nginx</code>是常用的反向代理服务器，介绍请见：<a target="_blank" rel="noopener" href="https://www.w3cschool.cn/nginx/">Nginx 入门指南</a></p>
+<p>如果网站是博客或者其他需要<code>seo</code>友好的页面，就需要做<code>服务端渲染</code>，这时服务器会根据模版和数据渲染好 html 文件返回给前端。</p>
+<p>常见的服务端渲染方案有：<code>ejs</code>、<code>art-template</code>、等模版语法，也有基于 vue、react 等框架的服务端渲染框架<code>nuxt.js</code>及<code>next.js</code>等。</p>
+<h2 id="浏览器解析-HTML"><a href="#浏览器解析-HTML" class="headerlink" title="浏览器解析 HTML"></a>浏览器解析 HTML</h2><ul>
+<li>浏览器下载 HTML 数据，将 html 文档解析成为一个个<code>标签</code>，这些标签组成了<code>树状结构</code></li>
+<li>如果解析到<code>style</code>标签则开始解析 css，如果解析到 link 标签则先异步下载，完成后解析 css。</li>
+<li>如果遇到<code>script</code>标签，判断是行内写法则直接解析执行，如果是 src 引入则<code>同步下载</code>脚本文件，下载完成<code>立即执行</code>，注意这里下载过程是<code>阻塞</code>的，其他流程都会等下载完成后执行。</li>
+</ul>
+<p>浏览器解析 HTML 文档过程内容较多，详情请看:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/Alan_1550587588/article/details/80297765">浏览器解析 HTML 文档过程</a></li>
+</ul>
+<h2 id="浏览器渲染页面"><a href="#浏览器渲染页面" class="headerlink" title="浏览器渲染页面"></a>浏览器渲染页面</h2><p>浏览器渲染页面的过程主要是解析 html 文档组成<code>标签节点树</code>，解析 css 形成<code>样式规则树</code>，标签节点树和样式规则树共同组成<code>渲染树</code>，浏览器最终显示渲染树形成页面。</p>
+<ol>
+<li>浏览器会将 HTML 解析成一个 DOM 树，DOM 树的构建过程是一个深度遍历过程：当前节点的所有子节点都构建好后才会去构建当前节点的下一个兄弟节点。（更具体的解析 HTML 过程看上一篇博客：点击打开链接）</li>
+<li>将 CSS 解析成 CSS Rule Tree（css 规则树） 。</li>
+<li>解析完成后，浏览器引擎会根据 DOM 树和 CSS 规则树来构造 Render Tree。注意：Render Tree 渲染树并不等同于 DOM 树，因为一些像 Header 或 display:none 的东西就没必要放在渲染树中了。</li>
+<li>有了 Render Tree，浏览器已经能知道网页中有哪些节点、各个节点的 CSS 定义以及他们的从属关系。下一步进行 layout，进入布局处理阶段，即计算出每个节点在屏幕中的位置。</li>
+<li>再下一步就是绘制，即遍历 RenderTree，并使用用户界面后端层绘制每个节点。根据计算好的信息绘制整个页面。</li>
+</ol>
+<p><img src="2.png#alt="></p>
+<p>注意：上述这个过程是逐步完成的，为了更好的用户体验，渲染引擎将会尽可能早的将内容呈现到屏幕上，并不会等到所有的 html 都解析完成之后再去构建和布局 render 树。它是解析完一部分内容就显示一部分内容，同时，可能还在通过网络下载其余内容。</p>
+<h2 id="浏览器解析执行-js-脚本"><a href="#浏览器解析执行-js-脚本" class="headerlink" title="浏览器解析执行 js 脚本"></a>浏览器解析执行 js 脚本</h2><p>这个过程中可能会有 dom 操作、ajax 发起的 http 网络请求等。</p>
+<h2 id="浏览器发起网络请求"><a href="#浏览器发起网络请求" class="headerlink" title="浏览器发起网络请求"></a>浏览器发起网络请求</h2><p>web-socket、ajax 等，这个过程通常是为了获取数据</p>
+<h2 id="服务器响应-ajax-请求"><a href="#服务器响应-ajax-请求" class="headerlink" title="服务器响应 ajax 请求"></a>服务器响应 ajax 请求</h2><ul>
+<li>ajax 请求在到达真正的 server 之前，可能还会经过网关全线校验、消息队列或 nginx 等负载均衡处理</li>
+<li>到达 server 后，后端会解析 http 请求报文，得到 url、请求参数、http 头、cookie 等等信息</li>
+<li>登录校验、权限校验（cookie 校验、jwt 权限校验等）</li>
+<li>可能会查询数据库，进行常用的 CRUD（增删改查）等操作</li>
+<li>返回响应数据</li>
+</ul>
+<h2 id="浏览器处理事件循环等异步逻辑。"><a href="#浏览器处理事件循环等异步逻辑。" class="headerlink" title="浏览器处理事件循环等异步逻辑。"></a>浏览器处理事件循环等异步逻辑。</h2><p>setTimeout、setInterval、Promise 等宏任务、微任务队列</p>
+<h3 id="不足之处，欢迎在评论区补充，作者会不断更新"><a href="#不足之处，欢迎在评论区补充，作者会不断更新" class="headerlink" title="不足之处，欢迎在评论区补充，作者会不断更新"></a>不足之处，欢迎在评论区补充，作者会不断更新</h3>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/24/yuque/promise_async_generator%E5%8E%9F%E7%90%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -241,7 +393,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-04-24 18:48:01 / 修改时间：18:51:14" itemprop="dateCreated datePublished" datetime="2021-04-24T18:48:01+08:00">2021-04-24</time>
+              <time title="创建时间：2021-04-24 18:48:01 / 修改时间：23:46:55" itemprop="dateCreated datePublished" datetime="2021-04-24T18:48:01+08:00">2021-04-24</time>
             </span>
 
           
@@ -556,7 +708,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-24 18:51:14" itemprop="dateModified" datetime="2021-04-24T18:51:14+08:00">2021-04-24</time>
+                <time title="修改时间：2021-04-24 23:46:55" itemprop="dateModified" datetime="2021-04-24T23:46:55+08:00">2021-04-24</time>
               </span>
 
           
@@ -682,7 +834,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-24 18:51:14" itemprop="dateModified" datetime="2021-04-24T18:51:14+08:00">2021-04-24</time>
+                <time title="修改时间：2021-04-24 23:46:55" itemprop="dateModified" datetime="2021-04-24T23:46:55+08:00">2021-04-24</time>
               </span>
 
           
@@ -784,7 +936,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-24 18:51:14" itemprop="dateModified" datetime="2021-04-24T18:51:14+08:00">2021-04-24</time>
+                <time title="修改时间：2021-04-24 23:46:55" itemprop="dateModified" datetime="2021-04-24T23:46:55+08:00">2021-04-24</time>
               </span>
 
           
@@ -883,7 +1035,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-24 18:51:14" itemprop="dateModified" datetime="2021-04-24T18:51:14+08:00">2021-04-24</time>
+                <time title="修改时间：2021-04-24 23:46:55" itemprop="dateModified" datetime="2021-04-24T23:46:55+08:00">2021-04-24</time>
               </span>
 
           
@@ -1141,7 +1293,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-24 18:51:14" itemprop="dateModified" datetime="2021-04-24T18:51:14+08:00">2021-04-24</time>
+                <time title="修改时间：2021-04-24 23:46:55" itemprop="dateModified" datetime="2021-04-24T23:46:55+08:00">2021-04-24</time>
               </span>
 
           
@@ -1206,7 +1358,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-24 18:51:14" itemprop="dateModified" datetime="2021-04-24T18:51:14+08:00">2021-04-24</time>
+                <time title="修改时间：2021-04-24 23:46:55" itemprop="dateModified" datetime="2021-04-24T23:46:55+08:00">2021-04-24</time>
               </span>
 
           
@@ -1372,7 +1524,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-24 18:51:14" itemprop="dateModified" datetime="2021-04-24T18:51:14+08:00">2021-04-24</time>
+                <time title="修改时间：2021-04-24 23:46:55" itemprop="dateModified" datetime="2021-04-24T23:46:55+08:00">2021-04-24</time>
               </span>
 
           
@@ -1412,117 +1564,6 @@
 <blockquote>
 <p>优先级: new &gt; call、apply、bind &gt; 对象.方法 &gt; 直接调用。</p>
 </blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/23/yuque/%E6%B5%AE%E5%8A%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Adam Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Adam">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/23/yuque/%E6%B5%AE%E5%8A%A8/" class="post-title-link" itemprop="url">浮动</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-23 11:01:11" itemprop="dateCreated datePublished" datetime="2021-04-23T11:01:11+08:00">2021-04-23</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-24 18:51:15" itemprop="dateModified" datetime="2021-04-24T18:51:15+08:00">2021-04-24</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>页面布局是 CSS 的一个重点应用，例如：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619146953214-6eed72b4-4298-495c-a102-898368d09ad4.png#clientId=u3dd556fe-de2a-4&from=paste&height=352&id=u855d221f&margin=%5Bobject%20Object%5D&name=image.png&originHeight=352&originWidth=403&originalType=binary&size=18863&status=done&style=none&taskId=u9200601b-2bf4-48f6-9483-45483faad6f&width=403" alt="image.png"><br>而实现页面布局主要应用到两种方法，一种是<strong>CSS 浮动</strong>，一种是<strong>Flexbox</strong>（IE9 以上），本文主要讲的是 CSS 浮动，下一篇文章将阐述 Flexbox。</p>
-<h2 id="浮动元素"><a href="#浮动元素" class="headerlink" title="浮动元素"></a>浮动元素</h2><p><strong>什么是浮动元素：</strong>浮动元素同时处于常规流内和流外的元素。其中块级元素认为浮动元素不存在，而浮动元素会影响行内元素的布局，浮动元素会通过影响行内元素间接影响了包含块的布局。<br><strong>常规流：</strong>页面上从左往右，从上往下排列的元素流，就是常规流<strong>脱离常规流：</strong>绝对定位，fixed 定位的元素有自己固定的位置，脱离了常规流<strong>包含块：</strong>一个元素离它最近的块级元素是它的包含块<br>下面详细描述以上的内容，举个?：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>JS Bin<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line">    .border &#123;</span><br><span class="line"><span class="css">      <span class="attribute">border</span>: <span class="number">2px</span> solid;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .common-div &#123;</span><br><span class="line"><span class="css">      <span class="attribute">width</span>: <span class="number">160px</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">height</span>: <span class="number">50px</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">background-color</span>: red;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .float-red &#123;</span><br><span class="line"><span class="css">      <span class="attribute">width</span>: <span class="number">100px</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">height</span>: <span class="number">50px</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">background-color</span>: <span class="number">#fcc</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">float</span>: left;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .float-blue &#123;</span><br><span class="line"><span class="css">      <span class="attribute">width</span>: <span class="number">100px</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">height</span>: <span class="number">50px</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">background-color</span>: <span class="number">#09c</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">float</span>: left;</span></span><br><span class="line">    &#125;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;border&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;float-red&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;common-div&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;float-blue&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</span><br><span class="line">      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim</span><br><span class="line">      veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea</span><br><span class="line">      commodo consequat. Duis aute irure dolor in reprehenderit in voluptate</span><br><span class="line">      velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat</span><br><span class="line">      cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id</span><br><span class="line">      est laborum.</span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>上面这段代码显示的样子如下：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619147229902-4673d52d-70f9-478e-adea-7b20d3d8950e.png#clientId=u3dd556fe-de2a-4&from=paste&height=195&id=uc054066a&margin=%5Bobject%20Object%5D&name=image.png&originHeight=195&originWidth=732&originalType=binary&size=83482&status=done&style=none&taskId=udf3b458b-8f49-4e66-89a6-76fa62b2260&width=732" alt="image.png"></p>
-<ul>
-<li>块级元素认为浮动元素不存在：红色的块级元素没有受到粉色浮动元素的影响，还展示在左上角的位置，但是被粉色元素盖住了左边的部分</li>
-<li>浮动元素会影响行内元素：文字部分被蓝色浮动元素影响，空出了蓝色浮动元素的部分</li>
-<li>浮动元素会间接影响了包含块的布局：浮动元素影响了文字部分吗，使之多出了一行，文字部分撑高了最外面的 border 框，所以间接影响了包含块的布局。</li>
-</ul>
-<p>其中，<strong>浮动元素的摆放</strong>会遵循如下的规则：</p>
-<ul>
-<li>尽量靠上</li>
-<li>尽量靠左</li>
-<li>尽量一个挨着一个</li>
-<li>不能超出包含块，除非元素比包含块更宽</li>
-<li>不能超过所在行的最高点</li>
-<li>不能超过它前面浮动元素的最高点</li>
-<li>行内元素绕着浮动元素摆放：左浮动元素的右边和右浮动元素的左边会出浮动元素</li>
-</ul>
-<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><p>浮动元素并不能撑起包含块，这和我们的预期并不相符。通过以下的办法可以将包含块撑开，称之为<strong>闭合浮动</strong><br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619147337086-bbbe8792-e580-421d-9bb2-ec0b637fa630.png#clientId=u3dd556fe-de2a-4&from=paste&height=227&id=u37fc5218&margin=%5Bobject%20Object%5D&name=image.png&originHeight=227&originWidth=732&originalType=binary&size=4433&status=done&style=none&taskId=u99d50c93-721b-4ea8-8032-35592e09c65&width=732" alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619147351522-7de19830-7fd5-46ca-8c78-4deb7fad9719.png#clientId=u3dd556fe-de2a-4&from=paste&height=226&id=ud232f1d9&margin=%5Bobject%20Object%5D&name=image.png&originHeight=226&originWidth=732&originalType=binary&size=5293&status=done&style=none&taskId=ubee4f117-405f-4bea-bf75-279079dc0ab&width=732" alt="image.png"></p>
-<h3 id="闭合浮动的方法："><a href="#闭合浮动的方法：" class="headerlink" title="闭合浮动的方法："></a>闭合浮动的方法：</h3><ul>
-<li>**BFC:**1) 包含块设置 overflow:hidden 或者 2)包含块设置 display:table-cell/table/flex…</li>
-</ul>
-<blockquote>
-<p><strong>BFC：块级格式化上下文。它是一个独立的渲染区域，只有 Block-level box 参与， 它规定了内部的块级元素如何布局，并且与这个区域外部毫不相干。</strong>只要<strong>符合以下的条件就是 BFC:</strong></p>
-<ol>
-<li>根元素</li>
-<li>float 属性不为 none</li>
-<li>position 为 absolute 或 fixed</li>
-<li>display 为 inline-block, table-cell, table-caption, flex, inline-flex</li>
-<li>overflow 不为 visible</li>
-</ol>
-</blockquote>
-<p>相应的背景文档可以参阅：<a target="_blank" rel="noopener" href="http://www.cnblogs.com/lhb25/p/inside-block-formatting-ontext.html">《BFC 的神奇原理》</a></p>
-<ul>
-<li><strong>伪元素</strong>：</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.clearfix</span><span class="selector-pseudo">::after</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">&quot;&quot;</span>;</span><br><span class="line">  <span class="attribute">display</span>: block;</span><br><span class="line">  <span class="attribute">clear</span>: both;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>clear:both;意味着块级元素的左边和右边都不能有浮动元素。在包含块的末尾建立了一个内容为空的伪元素，并设置 clear:both，使这个元素位于所有的浮动元素之后，从而撑开了包含块的高。</p>
-</blockquote>
-<ul>
-<li><strong>包含块自己也浮动</strong></li>
-</ul>
-<p>这个方法也是 w3c 使用的方法。不过，下一个元素会受到这个浮动元素的影响。为了解决这个问题，有些人选择对布局中的所有东西进行浮动，然后使用适当的有意义的元素（常常是站点的页脚）对这些浮动进行清理。这有助于减少或消除不必要的标记。<br>相应的背景文档：<a target="_blank" rel="noopener" href="http://www.w3school.com.cn/css/css_positioning_floating.asp">《W3C CSS 浮动》</a></p>
 
       
     </div>
@@ -1607,7 +1648,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">47</span>
+          <span class="site-state-item-count">48</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
