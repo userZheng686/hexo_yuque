@@ -27,13 +27,13 @@
 <meta property="og:site_name" content="Adam">
 <meta property="og:description" content="笔者刚接触async&#x2F;await时，就被其暂停执行的特性吸引了，心想在没有原生 API 支持的情况下，await 居然能挂起当前方法，实现暂停执行，我感到十分好奇。好奇心驱使我一层一层剥开有关 JS 异步编程的一切。阅读完本文，读者应该能够了解：  Promise的实现原理 async&#x2F;await的实现原理 Generator的实现原理  Promise 实现在成文过程中，笔者查阅了很多讲解 Pr">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2021/04/24/yuque/promise_async_generator%E5%8E%9F%E7%90%86/1.webp#alt=img">
-<meta property="og:image" content="http://example.com/2021/04/24/yuque/promise_async_generator%E5%8E%9F%E7%90%86/2.jpg#alt=img">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/webp/21377586/1619261340785-d4ebe2d3-dbff-4710-96d6-bbc7abc32282.webp#clientId=u0787e3d2-71b0-4&from=drop&height=174&id=u478ca980&margin=%5Bobject%20Object%5D&name=1.webp&originHeight=174&originWidth=318&originalType=binary&size=6028&status=done&style=none&taskId=uf7f1c65c-14e0-4750-8395-a02cb223112&width=318">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619261369471-9f4febb6-72fb-41b7-a3bb-60cfeb077c95.jpeg#clientId=u0787e3d2-71b0-4&from=drop&id=u5e819ff0&margin=%5Bobject%20Object%5D&name=2.jpg&originHeight=380&originWidth=714&originalType=binary&size=85453&status=done&style=none&taskId=ua85c3f64-ca03-48e4-bfca-25b503824f6">
 <meta property="article:published_time" content="2021-04-24T10:48:01.000Z">
-<meta property="article:modified_time" content="2021-04-24T10:49:27.592Z">
+<meta property="article:modified_time" content="2021-04-24T10:51:14.163Z">
 <meta property="article:author" content="Adam Blog">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2021/04/24/yuque/promise_async_generator%E5%8E%9F%E7%90%86/1.webp#alt=img">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/webp/21377586/1619261340785-d4ebe2d3-dbff-4710-96d6-bbc7abc32282.webp#clientId=u0787e3d2-71b0-4&from=drop&height=174&id=u478ca980&margin=%5Bobject%20Object%5D&name=1.webp&originHeight=174&originWidth=318&originalType=binary&size=6028&status=done&style=none&taskId=uf7f1c65c-14e0-4750-8395-a02cb223112&width=318">
 
 <link rel="canonical" href="http://example.com/2021/04/24/yuque/promise_async_generator%E5%8E%9F%E7%90%86/">
 
@@ -178,7 +178,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-04-24 18:48:01 / 修改时间：18:49:27" itemprop="dateCreated datePublished" datetime="2021-04-24T18:48:01+08:00">2021-04-24</time>
+              <time title="创建时间：2021-04-24 18:48:01 / 修改时间：18:51:14" itemprop="dateCreated datePublished" datetime="2021-04-24T18:48:01+08:00">2021-04-24</time>
             </span>
 
           
@@ -219,12 +219,14 @@
 <p>我们运用观察者模式简单的实现了一下<code>then</code>和<code>resolve</code>，使我们能够在 then 方法的回调里取得异步操作的返回值，但我们这个 Promise 离最终实现还有很长的距离，下面我们来一步步补充这个 Promise：</p>
 <h2 id="2-Promise-A-规范"><a href="#2-Promise-A-规范" class="headerlink" title="2. Promise A+规范"></a>2. Promise A+规范</h2><p>上面我们已经简单地实现了一个超低配版 Promise，但我们会看到很多文章和我们写的不一样，他们的 Promise 实现中还引入了各种状态控制，这是由于 ES6 的 Promise 实现需要遵循<a target="_blank" rel="noopener" href="https://promisesaplus.com/">Promise/A+规范</a>，是规范对 Promise 的状态控制做了要求。Promise/A+的规范比较长，这里只总结两条核心规则：</p>
 <blockquote>
+</blockquote>
+<blockquote>
 <ol>
 <li>Promise 本质是一个状态机，且状态只能为以下三种：<code>Pending（等待态）</code>、<code>Fulfilled（执行态）</code>、<code>Rejected（拒绝态）</code>，状态的变更是单向的，只能从 Pending -&gt; Fulfilled 或 Pending -&gt; Rejected，状态变更不可逆</li>
 <li><code>then方法</code>接收两个可选参数，分别对应状态改变时触发的回调。then 方法返回一个 promise。then 方法可以被同一个 promise 调用多次。</li>
 </ol>
 </blockquote>
-<p><img src="1.webp#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/webp/21377586/1619261340785-d4ebe2d3-dbff-4710-96d6-bbc7abc32282.webp#clientId=u0787e3d2-71b0-4&from=drop&height=174&id=u478ca980&margin=%5Bobject%20Object%5D&name=1.webp&originHeight=174&originWidth=318&originalType=binary&size=6028&status=done&style=none&taskId=uf7f1c65c-14e0-4750-8395-a02cb223112&width=318" alt="1.webp"></p>
 <p>根据规范，我们补充一下 Promise 的代码：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;Promise&#x2F;A+规范的三种状态</span><br><span class="line">const PENDING &#x3D; &#39;pending&#39;</span><br><span class="line">const FULFILLED &#x3D; &#39;fulfilled&#39;</span><br><span class="line">const REJECTED &#x3D; &#39;rejected&#39;</span><br><span class="line"></span><br><span class="line">class MyPromise &#123;</span><br><span class="line">  &#x2F;&#x2F; 构造方法接收一个回调</span><br><span class="line">  constructor(executor) &#123;</span><br><span class="line">    this._status &#x3D; PENDING     &#x2F;&#x2F; Promise状态</span><br><span class="line">    this._resolveQueue &#x3D; []    &#x2F;&#x2F; 成功队列, resolve时触发</span><br><span class="line">    this._rejectQueue &#x3D; []     &#x2F;&#x2F; 失败队列, reject时触发</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; 由于resolve&#x2F;reject是在executor内部被调用, 因此需要使用箭头函数固定this指向, 否则找不到this._resolveQueue</span><br><span class="line">    let _resolve &#x3D; (val) &#x3D;&gt; &#123;</span><br><span class="line">      if(this._status !&#x3D;&#x3D; PENDING) return   &#x2F;&#x2F; 对应规范中的&quot;状态只能由pending到fulfilled或rejected&quot;</span><br><span class="line">      this._status &#x3D; FULFILLED              &#x2F;&#x2F; 变更状态</span><br><span class="line"></span><br><span class="line">      &#x2F;&#x2F; 这里之所以使用一个队列来储存回调,是为了实现规范要求的 &quot;then 方法可以被同一个 promise 调用多次&quot;</span><br><span class="line">      &#x2F;&#x2F; 如果使用一个变量而非队列来储存回调,那么即使多次p1.then()也只会执行一次回调</span><br><span class="line">      while(this._resolveQueue.length) &#123;</span><br><span class="line">        const callback &#x3D; this._resolveQueue.shift()</span><br><span class="line">        callback(val)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F; 实现同resolve</span><br><span class="line">    let _reject &#x3D; (val) &#x3D;&gt; &#123;</span><br><span class="line">      if(this._status !&#x3D;&#x3D; PENDING) return   &#x2F;&#x2F; 对应规范中的&quot;状态只能由pending到fulfilled或rejected&quot;</span><br><span class="line">      this._status &#x3D; REJECTED               &#x2F;&#x2F; 变更状态</span><br><span class="line">      while(this._rejectQueue.length) &#123;</span><br><span class="line">        const callback &#x3D; this._rejectQueue.shift()</span><br><span class="line">        callback(val)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F; new Promise()时立即执行executor,并传入resolve和reject</span><br><span class="line">    executor(_resolve, _reject)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; then方法,接收一个成功的回调和一个失败的回调</span><br><span class="line">  then(resolveFn, rejectFn) &#123;</span><br><span class="line">    this._resolveQueue.push(resolveFn)</span><br><span class="line">    this._rejectQueue.push(rejectFn)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -418,7 +420,7 @@
 <li><p>当生成器函数运行到末尾（没有下一个 yield 或已经 return），switch 匹配不到对应代码块，就会 return 空值，这时<code>g.next()</code>返回<code>&#123;value: undefined, done: true&#125;</code></p>
 </li>
 </ol>
-<p>从中我们可以看出，<strong>Generator 实现的核心在于<code>上下文的保存</code>，函数并没有真的被挂起，每一次 yield，其实都执行了一遍传入的生成器函数，只是在这个过程中间用了一个 context 对象储存上下文，使得每次执行生成器函数的时候，都可以从上一个执行结果开始执行，看起来就像函数被挂起了一样</strong></p>
+<p>从中我们可以看出，<strong>Generator 实现的核心在于</strong><code>**上下文的保存**</code><strong>，函数并没有真的被挂起，每一次 yield，其实都执行了一遍传入的生成器函数，只是在这个过程中间用了一个 context 对象储存上下文，使得每次执行生成器函数的时候，都可以从上一个执行结果开始执行，看起来就像函数被挂起了一样</strong></p>
 <h1 id="总结-amp-致谢"><a href="#总结-amp-致谢" class="headerlink" title="总结 &amp; 致谢"></a>总结 &amp; 致谢</h1><p>有关 Promise、async/await、Generator 的原理就实现到这里了，感谢大家能够跟我一起走完全程，不知不觉，我们花了近 9 千字来讲述有关异步编程的故事，异步编程的世界环环相扣，一开始，笔者只是出于对 await 挂起机制的好奇，后来，从一个 “await 是如何实现暂停执行” 的小问题，引出了对异步编程的一系列思考和实现原理。三者的实现，其实也是前端异步编程一步步演化推进的过程。</p>
 <p>成文过程中得到很多大佬的帮助，这四篇参考文章都是我阅读了很多相关文章后精选的四篇，建议大家结合阅读，大佬们写的比我好很多，另外感谢冴羽大佬在 Generator 机制上给予的解惑~</p>
 <blockquote>
@@ -428,9 +430,11 @@
 <p>winty：<a target="_blank" rel="noopener" href="https://juejin.im/post/6844903988584775693#heading-0">async/await 原理及执行顺序分析</a></p>
 <p>冴羽：<a target="_blank" rel="noopener" href="https://juejin.im/post/6844903701908291592">ES6 系列之 Babel 将 Generator 编译成了什么样子</a></p>
 <p><strong>最后卑微求个赞 Thanks♪(･ω･)ﾉ</strong></p>
-<p><img src="2.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619261369471-9f4febb6-72fb-41b7-a3bb-60cfeb077c95.jpeg#clientId=u0787e3d2-71b0-4&from=drop&id=u5e819ff0&margin=%5Bobject%20Object%5D&name=2.jpg&originHeight=380&originWidth=714&originalType=binary&size=85453&status=done&style=none&taskId=ua85c3f64-ca03-48e4-bfca-25b503824f6" alt="2.jpg"></p>
 <blockquote>
 <p>往期文章</p>
+</blockquote>
+<blockquote>
 </blockquote>
 <blockquote>
 <ol>
@@ -533,7 +537,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-count">47</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
