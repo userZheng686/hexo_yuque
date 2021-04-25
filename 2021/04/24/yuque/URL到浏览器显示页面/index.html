@@ -27,13 +27,13 @@
 <meta property="og:site_name" content="Adam">
 <meta property="og:description" content="面试中常被问到的问题，此问题包含 web 开发中从前端到后端到运维的绝大多数知识，主要考察面试者知识的广度。本文会根据作者了解的程度增加不断更新，不足之处欢迎评论区补充。  浏览器中输入网址。 http 或 https url 的组成：详解 url 的组成  通过 DNS 解析域名的实际 IP 地址发送至 DNS 服务器并获得域名对应的 WEB 服务器的 ip 地址。 DNS 解析首先会从你的浏">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2021/04/24/yuque/URL%E5%88%B0%E6%B5%8F%E8%A7%88%E5%99%A8%E6%98%BE%E7%A4%BA%E9%A1%B5%E9%9D%A2/1.png#alt=">
-<meta property="og:image" content="http://example.com/2021/04/24/yuque/URL%E5%88%B0%E6%B5%8F%E8%A7%88%E5%99%A8%E6%98%BE%E7%A4%BA%E9%A1%B5%E9%9D%A2/2.png#alt=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619279748279-f31b3afe-7532-46ab-8566-db4421ad1171.png#clientId=u37cc9bb2-9070-4&from=drop&height=481&id=u3acfa706&margin=%5Bobject%20Object%5D&name=1.png&originHeight=1018&originWidth=1688&originalType=binary&size=1094387&status=done&style=none&taskId=u520b97c5-3c75-443e-b18f-29d22756029&width=797">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619279754931-71e1b816-1df9-4270-9cd1-4bca4ac29922.png#clientId=u37cc9bb2-9070-4&from=drop&height=199&id=u9bc63186&margin=%5Bobject%20Object%5D&name=2.png&originHeight=199&originWidth=780&originalType=binary&size=51388&status=done&style=none&taskId=u65fb4878-9097-475e-9b3c-ccd72188738&width=780">
 <meta property="article:published_time" content="2021-04-24T15:46:03.000Z">
-<meta property="article:modified_time" content="2021-04-24T15:46:54.777Z">
+<meta property="article:modified_time" content="2021-04-25T08:49:30.771Z">
 <meta property="article:author" content="Adam Blog">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2021/04/24/yuque/URL%E5%88%B0%E6%B5%8F%E8%A7%88%E5%99%A8%E6%98%BE%E7%A4%BA%E9%A1%B5%E9%9D%A2/1.png#alt=">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619279748279-f31b3afe-7532-46ab-8566-db4421ad1171.png#clientId=u37cc9bb2-9070-4&from=drop&height=481&id=u3acfa706&margin=%5Bobject%20Object%5D&name=1.png&originHeight=1018&originWidth=1688&originalType=binary&size=1094387&status=done&style=none&taskId=u520b97c5-3c75-443e-b18f-29d22756029&width=797">
 
 <link rel="canonical" href="http://example.com/2021/04/24/yuque/URL%E5%88%B0%E6%B5%8F%E8%A7%88%E5%99%A8%E6%98%BE%E7%A4%BA%E9%A1%B5%E9%9D%A2/">
 
@@ -176,10 +176,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-04-24 23:46:03 / 修改时间：23:46:54" itemprop="dateCreated datePublished" datetime="2021-04-24T23:46:03+08:00">2021-04-24</time>
+              <time title="创建时间：2021-04-24 23:46:03" itemprop="dateCreated datePublished" datetime="2021-04-24T23:46:03+08:00">2021-04-24</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-25 16:49:30" itemprop="dateModified" datetime="2021-04-25T16:49:30+08:00">2021-04-25</time>
+              </span>
 
           
 
@@ -246,7 +252,7 @@
 </li>
 </ol>
 <p>下图表示 https 加密通信的过程：</p>
-<p><img src="1.png#alt="></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619279748279-f31b3afe-7532-46ab-8566-db4421ad1171.png#clientId=u37cc9bb2-9070-4&from=drop&height=481&id=u3acfa706&margin=%5Bobject%20Object%5D&name=1.png&originHeight=1018&originWidth=1688&originalType=binary&size=1094387&status=done&style=none&taskId=u520b97c5-3c75-443e-b18f-29d22756029&width=797" alt="1.png"></p>
 <h2 id="浏览器发送请求获取页面-html"><a href="#浏览器发送请求获取页面-html" class="headerlink" title="浏览器发送请求获取页面 html"></a>浏览器发送请求获取页面 html</h2><p>浏览器向 WEB 服务器的 ip 地址发送相应的 http get 请求页面 html。</p>
 <p>通常的请求行是: 请求的方式（<code>get</code>或<code>post</code>） + 请求的资源的位置<code>（url） + HTTP/[版本号](HTTP/1.1)</code></p>
 <p>发起 http 请求的过程主要是组装 http 报文并将报文发向指定地址的过程。</p>
@@ -274,7 +280,7 @@
 <li>有了 Render Tree，浏览器已经能知道网页中有哪些节点、各个节点的 CSS 定义以及他们的从属关系。下一步进行 layout，进入布局处理阶段，即计算出每个节点在屏幕中的位置。</li>
 <li>再下一步就是绘制，即遍历 RenderTree，并使用用户界面后端层绘制每个节点。根据计算好的信息绘制整个页面。</li>
 </ol>
-<p><img src="2.png#alt="></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619279754931-71e1b816-1df9-4270-9cd1-4bca4ac29922.png#clientId=u37cc9bb2-9070-4&from=drop&height=199&id=u9bc63186&margin=%5Bobject%20Object%5D&name=2.png&originHeight=199&originWidth=780&originalType=binary&size=51388&status=done&style=none&taskId=u65fb4878-9097-475e-9b3c-ccd72188738&width=780" alt="2.png"></p>
 <p>注意：上述这个过程是逐步完成的，为了更好的用户体验，渲染引擎将会尽可能早的将内容呈现到屏幕上，并不会等到所有的 html 都解析完成之后再去构建和布局 render 树。它是解析完一部分内容就显示一部分内容，同时，可能还在通过网络下载其余内容。</p>
 <h2 id="浏览器解析执行-js-脚本"><a href="#浏览器解析执行-js-脚本" class="headerlink" title="浏览器解析执行 js 脚本"></a>浏览器解析执行 js 脚本</h2><p>这个过程中可能会有 dom 操作、ajax 发起的 http 网络请求等。</p>
 <h2 id="浏览器发起网络请求"><a href="#浏览器发起网络请求" class="headerlink" title="浏览器发起网络请求"></a>浏览器发起网络请求</h2><p>web-socket、ajax 等，这个过程通常是为了获取数据</p>
@@ -301,12 +307,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/04/24/yuque/promise_async_generator%E5%8E%9F%E7%90%86/" rel="prev" title="promise_async_generator原理">
-      <i class="fa fa-chevron-left"></i> promise_async_generator原理
+    <a href="/2021/04/24/yuque/7%E5%B1%82%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B/" rel="prev" title="7层网络模型">
+      <i class="fa fa-chevron-left"></i> 7层网络模型
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/04/24/hello-world/" rel="next" title="Hello World">
-      Hello World <i class="fa fa-chevron-right"></i>
+    <a href="/2021/04/25/yuque/HTTP/" rel="next" title="HTTP">
+      HTTP <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -380,7 +386,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-count">52</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

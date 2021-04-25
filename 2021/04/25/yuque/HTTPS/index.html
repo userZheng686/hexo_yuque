@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="引言HTTP 是不安全的，我们的页面也被运营商插入过小黄图广告（数据被篡改），对于 HTTP 来说，再简单不过，只需要设定相应的 DNS，做一个中间人攻击，再将修改后的数据返回，这一方面可能泄露用户隐私数据，同时也对我们的品牌形象产生恶劣影响。然而，当我们切换 HTTPS 时候，运营商的这些小九九就施展不开了，服务端认证不通过，浏览器不会展示相应的页面数据；运营商实施搞的这一套东东也就不能在用户不">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTPS">
+<meta property="og:url" content="http://example.com/2021/04/25/yuque/HTTPS/index.html">
+<meta property="og:site_name" content="Adam">
+<meta property="og:description" content="引言HTTP 是不安全的，我们的页面也被运营商插入过小黄图广告（数据被篡改），对于 HTTP 来说，再简单不过，只需要设定相应的 DNS，做一个中间人攻击，再将修改后的数据返回，这一方面可能泄露用户隐私数据，同时也对我们的品牌形象产生恶劣影响。然而，当我们切换 HTTPS 时候，运营商的这些小九九就施展不开了，服务端认证不通过，浏览器不会展示相应的页面数据；运营商实施搞的这一套东东也就不能在用户不">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-25T08:41:41.000Z">
+<meta property="article:modified_time" content="2021-04-25T08:49:30.491Z">
+<meta property="article:author" content="Adam Blog">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/04/25/yuque/HTTPS/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>HTTPS | Adam</title>
+  <meta name="referrer" content="no-referrer" />
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Adam</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/25/yuque/HTTPS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HTTPS
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-25 16:41:41 / 修改时间：16:49:30" itemprop="dateCreated datePublished" datetime="2021-04-25T16:41:41+08:00">2021-04-25</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>HTTP 是不安全的，我们的页面也被运营商插入过小黄图广告（数据被篡改），对于 HTTP 来说，再简单不过，只需要设定相应的 DNS，做一个中间人攻击，再将修改后的数据返回，这一方面可能泄露用户隐私数据，同时也对我们的品牌形象产生恶劣影响。<br>然而，当我们切换 HTTPS 时候，运营商的这些小九九就施展不开了，服务端认证不通过，浏览器不会展示相应的页面数据；运营商实施搞的这一套东东也就不能在用户不知情的情况下搞起来了，解决办法是去除相应的受污染的 DNS。<br>全球最大的成人网站 PornHub，YouPorn 都要全面切 HTTPS 了,我们还在犹豫什么了？</p>
+<h3 id="安全的-HTTP-的需求"><a href="#安全的-HTTP-的需求" class="headerlink" title="安全的 HTTP 的需求"></a>安全的 HTTP 的需求</h3><p>对 HTTP 的安全需求：</p>
+<ul>
+<li>加密（客户端和服务器的对话是私密的，无须担心被窃听）</li>
+<li>服务端认证（客户端知道它们是在与真正的而不是伪造的服务器通信）</li>
+<li>客户端认证（服务器知道它们是在与真正的而不是伪造的客户端通信）</li>
+<li>完整性（客户端和服务器的数据不会被修改）</li>
+<li>效率（一个运行足够快的算法，一遍低端的客户端和服务器使用）</li>
+<li>普适性（基本上所有的客户端和服务器都支持这些协议）</li>
+<li>管理的可扩展性（在任何地方的任何人都可以立即进行安全通信）</li>
+<li>适应性（能够支持当前最知名的安全方法）</li>
+<li>在社会上的可行性（满足社会的政治文化需要），要有公众受信能力</li>
+</ul>
+<p>在这里面最重要的是前面几条</p>
+<ul>
+<li>数据加密 传输内容进行混淆</li>
+<li>身份验证 通信双方验证对方的身份真实性</li>
+<li>数据完整性保护 检测传输的内容是否被篡改或伪造</li>
+</ul>
+<h3 id="安全-HTTP-的实现"><a href="#安全-HTTP-的实现" class="headerlink" title="安全 HTTP 的实现"></a>安全 HTTP 的实现</h3><h4 id="加密方式的选择"><a href="#加密方式的选择" class="headerlink" title="加密方式的选择"></a>加密方式的选择</h4><p>共享密钥加密 对称密钥加密共享密钥加密方式使用相同的密钥进行加密解密，通信双方都需要接收对方的加密密钥进行数据解密，这种方式在通信过程中必须交互共享的密钥，同样无法避免被网络监听泄漏密钥的问题；同时对于众多客户端的服务器来说还需要分配和管理密钥，对于客户端来说也需要管理密钥，增加设计和实现的复杂度，同时也降低了通信的效率；不用看都不靠谱。<br>公开密钥加密公开密钥加密方式使用一对非对称的密钥对（私钥和公钥），不公开的作为私钥，随意分发的作为公钥；公钥和私钥都能进行数据加密和解密，公钥能解密私钥加密的数据，私钥也能解密公钥加密的数据；这样只需要一套密钥就能处理服务端和众多客户端直接的通信被网络监听泄漏密钥的问题，同时没有额外的管理成本；看起来挺合适。<br>没那么简单公开密钥加密安全性高，伴随着加密方式复杂，处理速度慢的问题。如果我们的通信都是用公开密钥的方式加密，那么通信效率会很低。<br>HTTPS 采用共享密钥加密和公开密钥加密混合的加密方式，在交换密钥对环节使用公开密钥加密方式（防止被监听泄漏密钥）加密共享的密钥，在随后的通信过程中使用共享密钥的方式使用共享的密钥进行加解密。</p>
+<h4 id="认证方式实现"><a href="#认证方式实现" class="headerlink" title="认证方式实现"></a>认证方式实现</h4><p>数字证书数字签名是附加在报文上的特殊加密校验码，可以证明是作者编写了这条报文，前提是作者才会有私钥，才能算出这些校验码。如果传输的报文被篡改，则校验码不会匹配，因为校验码只有作者保存的私钥才能产生，所以前面可以保证报文的完整性。<br>数字证书认证机构（Certificate Authority CA）是客户端和服务器双方都可信赖的第三方机构。<br>服务器的运营人员向数字证书认证机构提出证书认证申请，数字证书认证机构在判明申请者的身份之后，会对已申请的公开密钥做数字签名，然后分配这个已签名的公开密钥，并将该公开密钥放入公钥证书（也叫数字证书或证书）后绑定在一起。服务器将这份有数字认证机构颁发的公钥证书发总给客户端，以进行公开密钥加密方式通信。<br>EV SSL（Extended Validation SSL Certificate）证书是基于国际标准的认证指导方针办法的证书，通过认证的 Web 网站能获得更高的认可度。持有 EV SSL 证书的 Web 网站的浏览器地址栏的背景色是绿色的，同时在地址栏的左侧显示了 SSL 证书中记录的组织名称及办法证书的认证机构的名称。<br>使用 OpenSSL，每个人都可以构建一套认证机构文件，同时可以用来给自己的证书请求进行签名，这种方式产生的证书称为自签名证书，这种证书通常是 CA 自己的证书，用户开发测试的正式，也可以像 12306 这样的，信不信由你。<br>证书信任的方式</p>
+<ul>
+<li>操作系统和浏览器内置每个操作系统和大多数浏览器都会内置一个知名证书颁发机构的名单。因此，你也会信任操作系统及浏览器提供商提供和维护的可信任机构。受信认证机构（也有不受信的，比如赛门铁克，沃通，或者像 2011 年被入侵的 DigiNotar 等）的证书一般会被操作系统或者浏览器在发行或者发布时内置。</li>
+<li>证书颁发机构 CA（ Certificate Authority，证书颁发机构）是被证书接受者（拥有者）和依赖证书的一方共同信任的第三方。</li>
+<li>手动指定证书所有浏览器和操作系统都提供了一种手工导入信任证书的机制。至于如何获得证书和验证完整性则完全由你自己来定。</li>
+</ul>
+<p>PKI（Public Key Infrastructure），即公开密钥基础设施，是国际上解决开放式互联网络信息安全需求的一套体系。PKI 支持身份认证，信息传输，存储的完整性，消息传输，存储的机密性以及操作的不可否认性。</p>
+<h4 id="数据完整性"><a href="#数据完整性" class="headerlink" title="数据完整性"></a>数据完整性</h4><p>数字签名是只有信息发送者才能产生的别人无法伪造的一段文本，这段文本是对信息发送者发送信息真实性的一个有效证明，具有不可抵赖性。<br>报文的发送方从报文文本生成一个 128 位的散列值（或称为报文摘要活哈希值），发送方使用自己的私钥对这个摘要值进行加密来形成发送方的数字签名。然后这个数字签名将作为报文的附件一起发送给报文的接收方。报文的接收方首先从接收到的原始报文中计算出 128 位的散列值，再用发送方的公钥来对报文附加的数字签名进行解密。如果两次得到的结果是一致的那么接收方可以确认该数字签名是发送方的，同时确认信息是真实的 。</p>
+<h3 id="HTTPS-数据交互过程"><a href="#HTTPS-数据交互过程" class="headerlink" title="HTTPS 数据交互过程"></a>HTTPS 数据交互过程</h3><p>HTTP 中没有加密机制，可以通过 SSL（Secure Socket Layer 安全套接层）或 TLS（Transport Layer Security 安全层传输协议）的组合使用，加密 HTTP 的通信内容。<br>HTTPS 是 HTTP Secure 或 HTTP over SSL。<br>SSL（Security Socket Layer）是最初由网景公司（NetScape）为了保障网上交易安全而开发的协议，该协议通过加密来保护客户个人资料，通过认证和完整性检查来确保交易安全。网景公司开发过 SSL3.0 之前的版本；目前主导权已转移给 IETF（Internet Engineering Task Force），IETF 以 SSL3.0 为原型，标准化并制定了 TSL1.0，TLS1.1，TLS1.2。但目前主流的还是 SSL3.0 和 TSL1.0。<br>SSL 工作在 OSI 七层模型中的表示层，TCP/IP 四层模型的应用层。<br>SSL 和 TLS 可以作为基础协议的一部分（对应用透明），也可以嵌入在特定的软件包中（比如 Web 服务器中的实现）。<br>SSL 基于 TCP，SSL 不是简单地单个协议，而是两层协议；SSL 记录协议（SSL Record Protocol）为多种高层协议（SSL 握手协议，SSL 修改密码参数协议，SSL 报警协议）提供基本的安全服务。HTTP 是为 Web 客户端/服务器交互提供传输服务的，它可以在 SSL 的顶层运行；SSL 记录协议为 SSL 链接提供两种服务，机密性：握手协议定义了一个共享密钥，用于 SSL 载荷的对称加密。 消息完整性：握手协议还定义了一个共享密钥，它用来产生一个消息认证码（Message Authentication Code，MAC）。</p>
+<h4 id="SSL-记录协议操作"><a href="#SSL-记录协议操作" class="headerlink" title="SSL 记录协议操作"></a>SSL 记录协议操作</h4><ul>
+<li>分段 将每个上层消息分解成不大于 2^14（16384）位，然后有选择的进行压缩</li>
+<li>添加 MAC 在压缩数据的基础上计算 MAC</li>
+<li>加密 消息加上 MAC 用对称加密方法加密</li>
+<li>添加 SSL 记录头 内容类型（8 位），主版本（8 位），副版本（8 位），压缩长度（16 位）</li>
+</ul>
+<h4 id="SSL-握手过程"><a href="#SSL-握手过程" class="headerlink" title="SSL 握手过程"></a>SSL 握手过程</h4><ul>
+<li>第一阶段 建立安全能力 包括协议版本 会话 Id 密码构件 压缩方法和初始随机数</li>
+<li>第二阶段 服务器发送证书 密钥交换数据和证书请求，最后发送请求-相应阶段的结束信号</li>
+<li>第三阶段 如果有证书请求客户端发送此证书 之后客户端发送密钥交换数据 也可以发送证书验证消息</li>
+<li>第四阶段 变更密码构件和结束握手协议</li>
+</ul>
+<p>SSL 协议两个重要概念，SSL 会话，SSL 连接；SSL 连接是点到点的连接，而且每个连接都是瞬态的，每一个链接都与一个会话关联。SSL 会话是一个客户端和一个服务器之间的一种关联，会话由握手协议（Handshake Protocol）创建，所有会话都定义了一组密码安全参数，这些安全参数可以在多个连接之间共享，会话可以用来避免每一个链接需要进行的代价高昂的新的安全参数协商过程。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Client                                               Server</span><br><span class="line"></span><br><span class="line">   ClientHello:HandShake       --------&gt;</span><br><span class="line">                                                   ServerHello:Handshake</span><br><span class="line">                                                  Certificate*:Handshake</span><br><span class="line">                                            ServerKeyExchange*:Handshake</span><br><span class="line">                                           CertificateRequest*:Handshake</span><br><span class="line">                                &lt;--------      ServerHelloDone:Handshake</span><br><span class="line">   Certificate*:Handshake</span><br><span class="line">   ClientKeyExchange:Handshake</span><br><span class="line">   CertificateVerify*:Handshake</span><br><span class="line">   [ChangeCipherSpec]</span><br><span class="line">   Finished:Handshake           --------&gt;</span><br><span class="line">                                                      [ChangeCipherSpec]</span><br><span class="line">                                &lt;--------             Finished:Handshake</span><br><span class="line">   Application Data             &lt;-------&gt;               Application Data</span><br></pre></td></tr></table></figure>
+
+<h3 id="客户端服务器数据交互实战"><a href="#客户端服务器数据交互实战" class="headerlink" title="客户端服务器数据交互实战"></a>客户端服务器数据交互实战</h3><h4 id="使用-openssl-命令"><a href="#使用-openssl-命令" class="headerlink" title="使用 openssl 命令"></a>使用 openssl 命令</h4><blockquote>
+<p>openssl s_client -state -connect q.qunarzz.com:443</p>
+</blockquote>
+<p>该命令可以显示 SSL 握手过程，SSL 证书链，公钥证书以及其他相关的状态和属性信息。</p>
+<h4 id="使用-Wireshark-抓取数据包"><a href="#使用-Wireshark-抓取数据包" class="headerlink" title="使用 Wireshark 抓取数据包"></a>使用 Wireshark 抓取数据包</h4><p>相关配置</p>
+<ul>
+<li><p>配置环境变量，同时保证文件路径存在</p>
+<blockquote>
+<p>SSLKEYLOG=/path/to/sslkeylog.log</p>
+</blockquote>
+</li>
+<li><p>配置 Wireshark</p>
+<blockquote>
+<p>Wireshark-&gt;Preference-&gt;Protocols-&gt;SSL-&gt;(Pre)-Master-Secret log filename=&gt;选择上面的路径</p>
+</blockquote>
+</li>
+</ul>
+<p>抓包操作</p>
+<ul>
+<li><p>在命令行中打开 Chrome 或者 Firefox，确保环境变量被读取;如果不行就用 Chrome 或者 Firefox 的开发版。</p>
+<blockquote>
+<p>open /Applications/Firefox.app<br>open /Applications/Google\ Chrome.app</p>
+</blockquote>
+</li>
+<li><p>确保$SSLKEYLOGFILE 里面有内容了，再往下进行。</p>
+</li>
+<li><p>选择对应网卡，抓包配置为 host<a href="https://link.zhihu.com/?target=http://q.qunarzz.com">http://q.qunarzz.com</a>，开始抓包</p>
+</li>
+<li><p>使用刚刚打开的浏览器访问一个对应 host<a href="https://link.zhihu.com/?target=http://q.qunarzz.com">http://q.qunarzz.com</a>下的某个资源，在抓包界面使用 ssl 过滤数据</p>
+</li>
+<li><p>在抓包界面可以看到对应的 SSL 握手信息，同时还能看到解密后的应用数据。</p>
+</li>
+</ul>
+<h4 id="内容解析（不同的网络资源可能不完全一致，比如需要客户端证书）"><a href="#内容解析（不同的网络资源可能不完全一致，比如需要客户端证书）" class="headerlink" title="内容解析（不同的网络资源可能不完全一致，比如需要客户端证书）"></a>内容解析（不同的网络资源可能不完全一致，比如需要客户端证书）</h4><p>客户端 ⇒ 服务器</p>
+<ul>
+<li>Client Hello<ul>
+<li>最高支持的协议版本 如 TLS 1.0</li>
+<li>支持的加密算法列表(Cipher Suites)</li>
+<li>支持的压缩算法列表(Compression Methods)</li>
+<li>客户端生成的随机数，稍后用于生成会话密钥</li>
+</ul>
+</li>
+</ul>
+<p>服务器 ⇒ 客户端</p>
+<ul>
+<li>Server Hello<ul>
+<li>选定的协议版本</li>
+<li>选定的加密算法</li>
+<li>选定的压缩方法</li>
+<li>服务端生成的随机数，稍后用于生成会话密钥</li>
+</ul>
+</li>
+<li>Certificate 证书内容</li>
+<li>Server Key Exchange, Server Hello Done<ul>
+<li>公钥</li>
+<li>数字签名</li>
+<li>Server Hello Done</li>
+</ul>
+</li>
+</ul>
+<p>客户端 ⇒ 服务器</p>
+<ul>
+<li>Client Key Exchange, Change Cipher Spec, Finished<ul>
+<li>公钥</li>
+<li>Change Cipher Spec</li>
+<li>Finished</li>
+</ul>
+</li>
+</ul>
+<p>客户端 ⇒ 服务器</p>
+<ul>
+<li>HTTP GET</li>
+</ul>
+<p>服务端 ⇒ 客户端</p>
+<ul>
+<li><strong>内容的数据片段信息</strong></li>
+<li>HTTP HTTP/1.1 200 OK</li>
+</ul>
+<p>服务端 ⇒ 客户端</p>
+<ul>
+<li>Encrypted Alert</li>
+<li>Alert (Level Warning, Description: Close Notify)</li>
+</ul>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ol>
+<li>《Web 性能权威指南》</li>
+<li>《RFC 2246》</li>
+<li>《图解 HTTP》</li>
+<li>《HTTP 权威指南》</li>
+<li>《HTTPS 权威指南 在服务器和 Web 应用上部署 SSL/TLS 和 PKI》</li>
+<li>《计算机网络系统方法》</li>
+<li>《计算机网络自上而下方法》</li>
+<li>《计算机安全原理与实践》</li>
+<li>《网络安全基础-应用与标准》</li>
+<li>《PKI/CA 与数字证书技术大全》</li>
+<li>《SSL 与 TLS》</li>
+<li>《OpenSSL 官方命令文档》</li>
+<li>《OpenSSL 与网络信息安全-基础、结构和指令》</li>
+<li>《OpenSSL 攻略》</li>
+<li><a href="https://link.zhihu.com/?target=http://SSL%2520-%2520The%2520Wireshark%2520Wiki">Wireshark Doc SSL</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/25/yuque/HTTP/" rel="prev" title="HTTP">
+      <i class="fa fa-chevron-left"></i> HTTP
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/25/yuque/HTTP2.0/" rel="next" title="HTTP2.0">
+      HTTP2.0 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E7%9A%84-HTTP-%E7%9A%84%E9%9C%80%E6%B1%82"><span class="nav-number">2.</span> <span class="nav-text">安全的 HTTP 的需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E5%85%A8-HTTP-%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">安全 HTTP 的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A0%E5%AF%86%E6%96%B9%E5%BC%8F%E7%9A%84%E9%80%89%E6%8B%A9"><span class="nav-number">3.1.</span> <span class="nav-text">加密方式的选择</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%A4%E8%AF%81%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.2.</span> <span class="nav-text">认证方式实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%AE%8C%E6%95%B4%E6%80%A7"><span class="nav-number">3.3.</span> <span class="nav-text">数据完整性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTPS-%E6%95%B0%E6%8D%AE%E4%BA%A4%E4%BA%92%E8%BF%87%E7%A8%8B"><span class="nav-number">4.</span> <span class="nav-text">HTTPS 数据交互过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SSL-%E8%AE%B0%E5%BD%95%E5%8D%8F%E8%AE%AE%E6%93%8D%E4%BD%9C"><span class="nav-number">4.1.</span> <span class="nav-text">SSL 记录协议操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SSL-%E6%8F%A1%E6%89%8B%E8%BF%87%E7%A8%8B"><span class="nav-number">4.2.</span> <span class="nav-text">SSL 握手过程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%95%B0%E6%8D%AE%E4%BA%A4%E4%BA%92%E5%AE%9E%E6%88%98"><span class="nav-number">5.</span> <span class="nav-text">客户端服务器数据交互实战</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-openssl-%E5%91%BD%E4%BB%A4"><span class="nav-number">5.1.</span> <span class="nav-text">使用 openssl 命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-Wireshark-%E6%8A%93%E5%8F%96%E6%95%B0%E6%8D%AE%E5%8C%85"><span class="nav-number">5.2.</span> <span class="nav-text">使用 Wireshark 抓取数据包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%85%E5%AE%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%8D%E5%90%8C%E7%9A%84%E7%BD%91%E7%BB%9C%E8%B5%84%E6%BA%90%E5%8F%AF%E8%83%BD%E4%B8%8D%E5%AE%8C%E5%85%A8%E4%B8%80%E8%87%B4%EF%BC%8C%E6%AF%94%E5%A6%82%E9%9C%80%E8%A6%81%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AF%81%E4%B9%A6%EF%BC%89"><span class="nav-number">5.3.</span> <span class="nav-text">内容解析（不同的网络资源可能不完全一致，比如需要客户端证书）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">6.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Adam Blog</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">52</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Adam Blog</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
