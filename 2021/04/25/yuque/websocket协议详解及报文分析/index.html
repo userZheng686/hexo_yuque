@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="#websocket 协议详解及报文分析 websocket 协议详解及报文分析前言相较于 HTTP 协议，HTTP 协议有一个的缺陷为：通信只能由客户端发起。在一些场景下，这种单向请求的特点，注定了如果服务器有连续的状态变化，客户端要获知就非常麻烦。我们只能使用轮询：每隔一段时候，就发出一个询问，了解服务器有没有新的信息。最典型的场景就是聊天室。 轮询的效率低，非常浪费资源（因为必须不停连接，或">
+<meta property="og:type" content="article">
+<meta property="og:title" content="websocket协议详解及报文分析">
+<meta property="og:url" content="http://example.com/2021/04/25/yuque/websocket%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3%E5%8F%8A%E6%8A%A5%E6%96%87%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="Adam">
+<meta property="og:description" content="#websocket 协议详解及报文分析 websocket 协议详解及报文分析前言相较于 HTTP 协议，HTTP 协议有一个的缺陷为：通信只能由客户端发起。在一些场景下，这种单向请求的特点，注定了如果服务器有连续的状态变化，客户端要获知就非常麻烦。我们只能使用轮询：每隔一段时候，就发出一个询问，了解服务器有没有新的信息。最典型的场景就是聊天室。 轮询的效率低，非常浪费资源（因为必须不停连接，或">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200527233222508.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xMODQ1ODc2NDI1,size_16,color_FFFFFF,t_70#alt=">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200527233246458.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xMODQ1ODc2NDI1,size_16,color_FFFFFF,t_70#alt=">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200527233303721.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xMODQ1ODc2NDI1,size_16,color_FFFFFF,t_70#alt=">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200527233326813.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xMODQ1ODc2NDI1,size_16,color_FFFFFF,t_70#alt=">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200527233345809.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xMODQ1ODc2NDI1,size_16,color_FFFFFF,t_70#alt=">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200527233405188.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xMODQ1ODc2NDI1,size_16,color_FFFFFF,t_70#alt=">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200527233424850.png#alt=">
+<meta property="article:published_time" content="2021-04-25T14:01:29.000Z">
+<meta property="article:modified_time" content="2021-04-25T17:05:35.872Z">
+<meta property="article:author" content="Adam Blog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200527233222508.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xMODQ1ODc2NDI1,size_16,color_FFFFFF,t_70#alt=">
+
+<link rel="canonical" href="http://example.com/2021/04/25/yuque/websocket%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3%E5%8F%8A%E6%8A%A5%E6%96%87%E5%88%86%E6%9E%90/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>websocket协议详解及报文分析 | Adam</title>
+  <meta name="referrer" content="no-referrer" />
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Adam</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/25/yuque/websocket%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3%E5%8F%8A%E6%8A%A5%E6%96%87%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          websocket协议详解及报文分析
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-25 22:01:29" itemprop="dateCreated datePublished" datetime="2021-04-25T22:01:29+08:00">2021-04-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-26 01:05:35" itemprop="dateModified" datetime="2021-04-26T01:05:35+08:00">2021-04-26</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>#websocket 协议详解及报文分析</p>
+<h1 id="websocket-协议详解及报文分析"><a href="#websocket-协议详解及报文分析" class="headerlink" title="websocket 协议详解及报文分析"></a>websocket 协议详解及报文分析</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>相较于 HTTP 协议，HTTP 协议有一个的缺陷为：通信只能由客户端发起。在一些场景下，这种单向请求的特点，注定了如果服务器有连续的状态变化，客户端要获知就非常麻烦。我们只能使用轮询：每隔一段时候，就发出一个询问，了解服务器有没有新的信息。最典型的场景就是聊天室。</p>
+<p>轮询的效率低，非常浪费资源（因为必须不停连接，或者 HTTP 连接始终打开）。因此，工程师们一直在思考，有没有更好的方法。WebSocket 就是这样发明的。</p>
+<h2 id="websocket-协议概述"><a href="#websocket-协议概述" class="headerlink" title="websocket 协议概述"></a>websocket 协议概述</h2><p>Webscoket 是 Web 浏览器和服务器之间的一种全双工通信协议，其中 WebSocket 协议由 IETF 定为标准，WebSocket API 由 W3C 定为标准。一旦 Web 客户端与服务器建立起连接，之后的全部数据通信都通过这个连接进行。通信过程中，可互相发送 JSON、XML、HTML 或图片等任意格式的数据。 WS（WebSocket）与 HTTP 协议相比，</p>
+<p><strong>相同点主要有：</strong></p>
+<ul>
+<li>都是基于 TCP 的应用层协议；- 都使用 Request/Response 模型进行连接的建立；- 在连接的建立过程中对错误的处理方式相同，在这个阶段 WS 可能返回和 HTTP 相同的返回码；- 都可以在网络中传输数据。</li>
+</ul>
+<p><strong>不同之处在于：</strong></p>
+<ul>
+<li>WS 使用 HTTP 来建立连接，但是定义了一系列新的 header 域，这些域在 HTTP 中并不会使用；- WS 的连接不能通过中间人来转发，它必须是一个直接连接；- WS 连接建立之后，通信双方都可以在任何时刻向另一方发送数据；- WS 连接建立之后，数据的传输使用帧来传递，不再需要 Request 消息；- WS 的数据帧有序。</li>
+</ul>
+<h2 id="websocket-通信过程及对应报文分析"><a href="#websocket-通信过程及对应报文分析" class="headerlink" title="websocket 通信过程及对应报文分析"></a>websocket 通信过程及对应报文分析</h2><p>WS 整个通信过程如下图所示： <img src="https://img-blog.csdnimg.cn/20200527233222508.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xMODQ1ODc2NDI1,size_16,color_FFFFFF,t_70#alt="> <img src="https://img-blog.csdnimg.cn/20200527233246458.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xMODQ1ODc2NDI1,size_16,color_FFFFFF,t_70#alt="></p>
+<p>websocket 是基于 TCP 的一个应用协议，与 HTTP 协议的关联之处在于 websocket 的握手数据被 HTTP 服务器当作 HTTP 包来处理，主要通过 Update request HTTP 包建立起连接，之后的通信全部使用 websocket 自己的协议。</p>
+<p><strong>请求：</strong>TCP 连接建立后，客户端发送 websocket 的握手请求，请求报文头部如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F;uin&#x3D;xxxxxxxx&amp;app&#x3D;xxxxxxxxx&amp;token&#x3D;XXXXXXXXXXXX HTTP&#x2F;1.1</span><br><span class="line">Host: server.example.cn:443</span><br><span class="line">Connection: Upgrade</span><br><span class="line">Pragma: no-cache</span><br><span class="line">Cache-Control: no-cache</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Macintosh; Intel Mac OS X 10_15_2) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;81.0.4044.138 Safari&#x2F;537.36</span><br><span class="line">Upgrade: websocket</span><br><span class="line">Sec-WebSocket-Version: 13</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q&#x3D;0.9</span><br><span class="line">Cookie: user_id&#x3D;XXXXX</span><br><span class="line">Sec-WebSocket-Key: 1&#x2F;2hTi&#x2F;+eNURiekpNI4k5Q&#x3D;&#x3D;</span><br><span class="line">Sec-WebSocket-Extensions: permessage-deflate; client_max_window_bits</span><br><span class="line">Sec-WebSocket-Protocol: binary, base64</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>第一行为为请求的方法，类型必须为 GET，协议版本号必须大于 1.1- Upgrade 字段必须包含，值为 websocket- Connection 字段必须包含，值为 Upgrade- Sec-WebSocket-Key 字段必须包含 ，记录着握手过程中必不可少的键值。- Sec-WebSocket-Protocol 字段必须包含 ，记录着使用的子协议- Origin（请求头）：Origin 用来指明请求的来源，Origin 头部主要用于保护 Websocket 服务器免受非授权的跨域脚本调用 Websocket API 的请求。也就是不想没被授权的跨域访问与服务器建立连接，服务器可以通过这个字段来判断来源的域并有选择的拒绝。</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20200527233303721.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xMODQ1ODc2NDI1,size_16,color_FFFFFF,t_70#alt="></p>
+<p><strong>响应：</strong>服务器接收到请求后，返回状态码为 101 Switching Protocols 的响应。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">HTTP&#x2F;1.1 101 Switching Protocols</span><br><span class="line">Server: WebSockify Python&#x2F;2.6.6</span><br><span class="line">Date: Wed, 27 May 2020 03:03:21 GMT</span><br><span class="line">Upgrade: websocket</span><br><span class="line">Connection: Upgrade</span><br><span class="line">Sec-WebSocket-Accept: hXXXXXXXXXXXXXXxGmM&#x3D;</span><br><span class="line">Sec-WebSocket-Protocol: binary</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/20200527233326813.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xMODQ1ODc2NDI1,size_16,color_FFFFFF,t_70#alt="></p>
+<p>Sec-WebSocket-Accept 字段是由握手请求中的 Sec-WebSocket-Key 字段生层的。</p>
+<p>握手成功后，通信不再使用 HTTP 协议，而采用 WebSocket 独立的数据帧。如下图所示，为协议帧格式：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200527233345809.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xMODQ1ODc2NDI1,size_16,color_FFFFFF,t_70#alt="></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">FIN，指明Frame是否是一个Message里最后Frame（之前说过一个Message可能又多个Frame组成）；1bit，是否为信息的最后一帧</span><br><span class="line">RSV1-3，默认是0 (必须是0)，除非有扩展定义了非零值的意义。</span><br><span class="line">Opcode，这个比较重要，有如下取值是被协议定义的</span><br><span class="line">				0x00 denotes a continuation frame</span><br><span class="line">				0x01 表示一个text frame</span><br><span class="line">				0x02 表示一个binary frame</span><br><span class="line">				0x03 ~~ 0x07 are reserved for further non-control frames,为将来的非控制消息片段保留测操作码</span><br><span class="line">				0x08 表示连接关闭</span><br><span class="line">				0x09 表示 ping (心跳检测相关)</span><br><span class="line">				0x0a 表示 pong (心跳检测相关)</span><br><span class="line">				0x0b ~~ 0x0f are reserved for further control frames,为将来的控制消息片段保留的操作码</span><br><span class="line">Mask，这个是指明“payload data”是否被计算掩码。这个和后面的Masking-key有关，如果设置为1,掩码键必须放在masking-key区域，客户端发送给服务端的所有消息，此位的值都是1；</span><br><span class="line">Payload len，数据的长度，</span><br><span class="line">Masking-key，0或者4bit，只有当MASK设置为1时才有效。，给一个Websocket中掩码的意义</span><br><span class="line">Payload data，帧真正要发送的数据，可以是任意长度，但尽管理论上帧的大小没有限制，但发送的数据不能太大，否则会导致无法高效利用网络带宽，正如上面所说Websocket提供分片。</span><br><span class="line">Extension data：扩展数据，如果客户端和服务端没有特殊的约定，那么扩展数据长度始终为0</span><br><span class="line">Application data：应用数据，</span><br></pre></td></tr></table></figure>
+
+<p>websocket 报文细节，这里由于 client 和 server 端的 ip 都是 127.0.0.1 ：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200527233405188.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xMODQ1ODc2NDI1,size_16,color_FFFFFF,t_70#alt="></p>
+<h2 id="nginx-支持-websocket-配置"><a href="#nginx-支持-websocket-配置" class="headerlink" title="nginx 支持 websocket 配置"></a>nginx 支持 websocket 配置</h2><p>由于 http 请求 涉及 反向代理 所以就涉及 nginx 配置需要支持 websocket 需要做一些特殊的配置；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 配置Nginx支持webSocket开始</span><br><span class="line">proxy_set_header Host $http_host;</span><br><span class="line">proxy_http_version 1.1;</span><br><span class="line">proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">proxy_set_header Connection &quot;upgrade&quot;;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/20200527233424850.png#alt="></p>
+<p>其他通过代码模拟 websocket 的代码可以查阅其他博客内容，这里就不赘述；</p>
+<p><a target="_blank" rel="noopener" href="https://www.tutorialspoint.com/websockets/websockets_send_receive_messages.htm">https://www.tutorialspoint.com/websockets/websockets_send_receive_messages.htm</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2017/05/websocket.html">http://www.ruanyifeng.com/blog/2017/05/websocket.html</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/25/yuque/HTTP3.0%E5%92%8CQUIC%E5%8D%8F%E8%AE%AE%E9%82%A3%E4%BA%9B%E4%BA%8B/" rel="prev" title="HTTP3.0和QUIC协议那些事">
+      <i class="fa fa-chevron-left"></i> HTTP3.0和QUIC协议那些事
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/25/yuque/TCP%20%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF%EF%BC%88%E4%B8%8A%EF%BC%89/" rel="next" title="TCP 的那些事儿（上）">
+      TCP 的那些事儿（上） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#websocket-%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3%E5%8F%8A%E6%8A%A5%E6%96%87%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">websocket 协议详解及报文分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#websocket-%E5%8D%8F%E8%AE%AE%E6%A6%82%E8%BF%B0"><span class="nav-number">1.2.</span> <span class="nav-text">websocket 协议概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#websocket-%E9%80%9A%E4%BF%A1%E8%BF%87%E7%A8%8B%E5%8F%8A%E5%AF%B9%E5%BA%94%E6%8A%A5%E6%96%87%E5%88%86%E6%9E%90"><span class="nav-number">1.3.</span> <span class="nav-text">websocket 通信过程及对应报文分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nginx-%E6%94%AF%E6%8C%81-websocket-%E9%85%8D%E7%BD%AE"><span class="nav-number">1.4.</span> <span class="nav-text">nginx 支持 websocket 配置</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Adam Blog</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">60</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Adam Blog</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

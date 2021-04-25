@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="UDP 数据报一、UDP 的概述（User Datagram Protocol，用户数据报协议）UDP 是传输层的协议，功能即为在 IP 的数据报服务之上增加了最基本的服务：复用和分用以及差错检测。UDP 提供不可靠服务，具有 TCP 所没有的优势：  UDP无连接，时间上不存在建立连接需要的时延。空间上，TCP 需要在端系统中维护连接状态，需要一定的开销。此连接装入包括接收和发送缓存，拥塞控制参">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UDP">
+<meta property="og:url" content="http://example.com/2021/04/25/yuque/UDP/index.html">
+<meta property="og:site_name" content="Adam">
+<meta property="og:description" content="UDP 数据报一、UDP 的概述（User Datagram Protocol，用户数据报协议）UDP 是传输层的协议，功能即为在 IP 的数据报服务之上增加了最基本的服务：复用和分用以及差错检测。UDP 提供不可靠服务，具有 TCP 所没有的优势：  UDP无连接，时间上不存在建立连接需要的时延。空间上，TCP 需要在端系统中维护连接状态，需要一定的开销。此连接装入包括接收和发送缓存，拥塞控制参">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpg/21377586/1619361667214-2e9fb5f8-10e5-4e4d-bcf9-a232a777c3db.jpg#clientId=uf766e91f-7da9-4&from=paste&height=434&id=uc13cee0b&margin=%5Bobject%20Object%5D&originHeight=434&originWidth=1121&originalType=url&status=done&style=none&taskId=ucab3cb07-e1f4-49d7-a7a2-56d5143d585&width=1121">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619361667396-09c2b15d-e2c0-4254-b729-d4987d18a9b3.jpeg#clientId=uf766e91f-7da9-4&from=paste&height=521&id=u0b96cd49&margin=%5Bobject%20Object%5D&originHeight=521&originWidth=720&originalType=url&status=done&style=none&taskId=u6a91d411-a507-43da-a0b9-046e4cfe127&width=720">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619361667438-0f18033d-fc51-4edd-a53a-b8a608f63d22.jpeg#clientId=uf766e91f-7da9-4&from=paste&height=454&id=u21c6ee63&margin=%5Bobject%20Object%5D&originHeight=454&originWidth=720&originalType=url&status=done&style=none&taskId=ucb722cc4-afb5-4088-81f6-28fdb315bda&width=720">
+<meta property="article:published_time" content="2021-04-25T14:40:45.000Z">
+<meta property="article:modified_time" content="2021-04-25T17:05:35.404Z">
+<meta property="article:author" content="Adam Blog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/jpg/21377586/1619361667214-2e9fb5f8-10e5-4e4d-bcf9-a232a777c3db.jpg#clientId=uf766e91f-7da9-4&from=paste&height=434&id=uc13cee0b&margin=%5Bobject%20Object%5D&originHeight=434&originWidth=1121&originalType=url&status=done&style=none&taskId=ucab3cb07-e1f4-49d7-a7a2-56d5143d585&width=1121">
+
+<link rel="canonical" href="http://example.com/2021/04/25/yuque/UDP/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>UDP | Adam</title>
+  <meta name="referrer" content="no-referrer" />
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Adam</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/25/yuque/UDP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          UDP
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-25 22:40:45" itemprop="dateCreated datePublished" datetime="2021-04-25T22:40:45+08:00">2021-04-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-26 01:05:35" itemprop="dateModified" datetime="2021-04-26T01:05:35+08:00">2021-04-26</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>UDP 数据报<strong>一、UDP 的概述</strong>（<strong>User Datagram Protocol，用户数据报协议</strong>）UDP 是<strong>传输层</strong>的协议，功能即为在 IP 的数据报服务之上增加了最基本的服务：<strong>复用</strong>和<strong>分用</strong>以及<strong>差错检测</strong>。UDP 提供<strong>不可靠</strong>服务，具有 TCP 所没有的<strong>优势</strong>：</p>
+<ul>
+<li>UDP<strong>无连接</strong>，时间上<strong>不存在建立连接需要的时延</strong>。空间上，TCP 需要在端系统中<strong>维护连接</strong>状态，需要一定的开销。此连接装入包括接收和发送缓存，拥塞控制参数和序号与确认号的参数。UCP 不维护连接状态，也不跟踪这些参数，开销小。空间和时间上都具有优势。举个例子：DNS 如果运行在 TCP 之上而不是 UDP，那么 DNS 的速度将会慢很多。HTTP 使用 TCP 而不是 UDP，是因为对于基于文本数据的 Web 网页来说，<strong>可靠性</strong>很重要。同一种专用应用服务器在支持 UDP 时，一定能支持更多的活动客户机。</li>
+<li>分组首部开销小**，TCP 首部 20 字节，UDP 首部 8 字节。</li>
+<li><strong>UDP 没有拥塞控制</strong>，应用层能够更好的控制要发送的数据和发送时间，网络中的拥塞控制也不会影响主机的发送速率。某些实时应用要求以稳定的速度发送，<strong>能容 忍一些数据的丢失，但是不能允许有较大的时延</strong>（比如实时视频，直播等）</li>
+<li>UDP<strong>提供尽最大努力的交付</strong>，不保证可靠交付。所有维护传输可靠性的工作需要用户在<strong>应用层</strong>来完成。没有 TCP 的确认机制、重传机制。如果因为网络原因没有传送到对端，UDP 也不会给应用层返回错误信息</li>
+<li>UDP 是<strong>面向报文</strong>的，对应用层交下来的报文，添加首部后直接向下交付为 IP 层，既不合并，也不拆分，保留这些报文的边界。对 IP 层交上来 UDP 用户数据报，在去除首部后就原封不动地交付给上层应用进程，报文不可分割，是 UDP 数据报处理的最小单位。正是因为这样，UDP 显得不够灵活，不能控制读写数据的次数和数量。比如我们要发送 100 个字节的报文，我们调用一次 sendto 函数就会发送 100 字节，对端也需要用 recvfrom 函数一次性接收 100 字节，不能使用循环每次获取 10 个字节，获取十次这样的做法。</li>
+<li>UDP<strong>常用一次性传输比较少量数据的网络应用</strong>，如 DNS,SNMP 等，因为对于这些应用，若是采用 TCP，为连接的创建，维护和拆除带来不小的开销。UDP 也常用于多媒体应用（如 IP 电话，实时视频会议，流媒体等）数据的可靠传输对他们而言并不重要，TCP 的拥塞控制会使他们有较大的延迟，也是不可容忍的</li>
+</ul>
+<p><strong>二、UDP 的首部格式</strong>UDP 数据报分为<strong>首部</strong>和<strong>用户数据部分</strong>，整个 UDP 数据报作为 IP 数据报的数据部分封装在 IP 数据报中，UDP 数据报文结构如图所示：<br><img src="https://cdn.nlark.com/yuque/0/2021/jpg/21377586/1619361667214-2e9fb5f8-10e5-4e4d-bcf9-a232a777c3db.jpg#clientId=uf766e91f-7da9-4&from=paste&height=434&id=uc13cee0b&margin=%5Bobject%20Object%5D&originHeight=434&originWidth=1121&originalType=url&status=done&style=none&taskId=ucab3cb07-e1f4-49d7-a7a2-56d5143d585&width=1121"><br>UDP 首部有 8 个字节，由 4 个字段构成，每个字段都是两个字节，1.<strong>源端口</strong>： 源端口号，需要对方回信时选用，不需要时全部置 0.2.<strong>目的端口</strong>：目的端口号，在终点交付报文的时候需要用到。3.<strong>长度</strong>：UDP 的数据报的长度（包括首部和数据）其最小值为 8（只有首部）4.<strong>校验和</strong>：检测 UDP 数据报在传输中是否有错，有错则丢弃。该字段是可选的，当源主机不想计算校验和，则直接令该字段全为 0.当传输层从 IP 层收到 UDP 数据报时，就根据首部中的目的端口，把 UDP 数据报通过相应的端口，上交给应用进程。如果接收方 UDP 发现收到的报文中的目的端口号不正确（不存在对应端口号的应用进程 0,），就丢弃该报文，并由 ICMP 发送“端口不可达”差错报文给对方。UDP 校验在计算校验和的时候，需要在 UDP 数据报之前增加<strong>12 字节的伪首部</strong>，伪首部并不是 UDP 真正的首部。只是在计算校验和，临时添加在 UDP 数据报的前面，得到一个临时的 UDP 数据报。校验和就是按照这个临时的 UDP 数据报计算的。伪首部既不向下传送也不向上递交，而<strong>仅仅是为了计算校验和</strong>。这样的校验和，既<strong>检查了 UDP 数据报，又对 IP 数据报的源 IP 地址和目的 IP 地址进行了检验。</strong><br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619361667396-09c2b15d-e2c0-4254-b729-d4987d18a9b3.jpeg#clientId=uf766e91f-7da9-4&from=paste&height=521&id=u0b96cd49&margin=%5Bobject%20Object%5D&originHeight=521&originWidth=720&originalType=url&status=done&style=none&taskId=u6a91d411-a507-43da-a0b9-046e4cfe127&width=720"><br>UDP 校验和的计算方法和 IP 数据报首部校验和的计算方法相似，都使用二进制反码运算求和再取反，但不同的是：IP 数据报的校验和之检验 IP 数据报和首部，但 UDP 的校验和是把首部和数据部分一起校验。发送方，首先是把<strong>全零放入校验和字段</strong>并且添加<strong>伪首部</strong>，然后把 UDP 数据报看成是由许多 16 位的子串连接起来，若 UDP 数据报的数据部分不是偶数个字节，则要在数据部分末尾增加一个全零字节（此字节不发送），接下来就按照二进制反码计算出这些 16 位字的和。将此和的二进制反码写入校验和字段。在接收方，把收到得 UDP 数据报加上伪首部（如果不为偶数个字节，还需要补上全零字节）后，按二进制反码计算出这些 16 位字的和。<strong>当无差错时其结果全为 1</strong>,。否则就表明有差错出现，接收方应该丢弃这个 UDP 数据报。<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619361667438-0f18033d-fc51-4edd-a53a-b8a608f63d22.jpeg#clientId=uf766e91f-7da9-4&from=paste&height=454&id=u21c6ee63&margin=%5Bobject%20Object%5D&originHeight=454&originWidth=720&originalType=url&status=done&style=none&taskId=ucb722cc4-afb5-4088-81f6-28fdb315bda&width=720"><br>注意：1.校验时，若 UDP 数据报部分的长度不是偶数个字节，则需要填入一个全 0 字节，但是次字节和伪首部一样，是不发送的。2.如果 UDP 校验和校验出 UDP 数据报是错误的，可以丢弃，也可以交付上层，但是要附上错误报告，告诉上层这是错误的数据报。3.通过伪首部，不仅可以检查源端口号，目的端口号和 UDP 用户数据报的数据部分，还可以检查 IP 数据报的源 IP 地址和目的地址。这种差错检验的检错能力不强，但是简单，速度快</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/25/yuque/TCP%20%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF%EF%BC%88%E4%B8%8B%EF%BC%89/" rel="prev" title="TCP 的那些事儿（下）">
+      <i class="fa fa-chevron-left"></i> TCP 的那些事儿（下）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/25/yuque/%E6%B8%B2%E6%9F%93%E5%90%88%E6%88%90%E5%B1%82/" rel="next" title="渲染合成层">
+      渲染合成层 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Adam Blog</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">60</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Adam Blog</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

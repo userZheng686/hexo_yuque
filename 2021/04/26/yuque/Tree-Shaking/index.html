@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="一. 什么是 Tree-shaking 先来看一下 Tree-shaking 原始的本意  上图形象的解释了 Tree-shaking 的本意，本文所说的前端中的 tree-shaking 可以理解为通过工具”摇”我们的 JS 文件，将其中用不到的代码”摇”掉，是一个性能优化的范畴。具体来说，在 webpack 项目中，有一个入口文件，相当于一棵树的主干，入口文件有很多依赖的模块，相当于树枝。实际">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tree-Shaking">
+<meta property="og:url" content="http://example.com/2021/04/26/yuque/Tree-Shaking/index.html">
+<meta property="og:site_name" content="Adam">
+<meta property="og:description" content="一. 什么是 Tree-shaking 先来看一下 Tree-shaking 原始的本意  上图形象的解释了 Tree-shaking 的本意，本文所说的前端中的 tree-shaking 可以理解为通过工具”摇”我们的 JS 文件，将其中用不到的代码”摇”掉，是一个性能优化的范畴。具体来说，在 webpack 项目中，有一个入口文件，相当于一棵树的主干，入口文件有很多依赖的模块，相当于树枝。实际">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/1.jpg#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/2.gif#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/3.jpg#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/4.jpg#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/5.jpg#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/6.jpg#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/7.jpg#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/8.jpg#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/9.jpg#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/10.jpg#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/11.jpg#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/12.jpg#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/13.jpg#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/14.jpg#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/15.jpg#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/16.jpg#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/17.jpg#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/18.jpg#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/19.jpg#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/20.jpg#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/21.jpg#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/22.jpg#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/23.jpg#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/24.webp#alt=img">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/25.jpg#alt=img">
+<meta property="article:published_time" content="2021-04-25T17:04:35.000Z">
+<meta property="article:modified_time" content="2021-04-25T17:05:34.716Z">
+<meta property="article:author" content="Adam Blog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/1.jpg#alt=img">
+
+<link rel="canonical" href="http://example.com/2021/04/26/yuque/Tree-Shaking/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Tree-Shaking | Adam</title>
+  <meta name="referrer" content="no-referrer" />
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Adam</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/26/yuque/Tree-Shaking/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Tree-Shaking
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-26 01:04:35 / 修改时间：01:05:34" itemprop="dateCreated datePublished" datetime="2021-04-26T01:04:35+08:00">2021-04-26</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="一-什么是-Tree-shaking"><a href="#一-什么是-Tree-shaking" class="headerlink" title="一. 什么是 Tree-shaking"></a>一. 什么是 Tree-shaking</h2><p><img src="1.jpg#alt=img"></p>
+<p>先来看一下 Tree-shaking 原始的本意</p>
+<p><img src="2.gif#alt=img"></p>
+<p>上图形象的解释了 Tree-shaking 的本意，本文所说的前端中的 tree-shaking 可以理解为通过工具”摇”我们的 JS 文件，将其中用不到的代码”摇”掉，是一个性能优化的范畴。具体来说，在 webpack 项目中，有一个入口文件，相当于一棵树的主干，入口文件有很多依赖的模块，相当于树枝。实际情况中，虽然依赖了某个模块，但其实只使用其中的某些功能。通过 tree-shaking，将没有使用的模块摇掉，这样来达到删除无用代码的目的。</p>
+<p><img src="3.jpg#alt=img"></p>
+<p>Tree-shaking 较早由 Rich_Harris 的 rollup 实现，后来，webpack2 也增加了 tree-shaking 的功能。其实在更早，google closure compiler 也做过类似的事情。三个工具的效果和使用各不相同，使用方法可以通过官网文档去了解，三者的效果对比，后文会详细介绍。</p>
+<h2 id="二-tree-shaking-的原理"><a href="#二-tree-shaking-的原理" class="headerlink" title="二. tree-shaking 的原理"></a>二. tree-shaking 的原理</h2><p><img src="4.jpg#alt=img"></p>
+<p>Tree-shaking 的本质是消除无用的 js 代码。无用代码消除在广泛存在于传统的编程语言编译器中，编译器可以判断出某些代码根本不影响输出，然后消除这些代码，这个称之为 DCE（dead code elimination）。</p>
+<p>Tree-shaking 是 DCE 的一种新的实现，Javascript 同传统的编程语言不同的是，javascript 绝大多数情况需要通过网络进行加载，然后执行，加载的文件大小越小，整体执行时间更短，所以去除无用代码以减少文件体积，对 javascript 来说更有意义。</p>
+<p>Tree-shaking 和传统的 DCE 的方法又不太一样，传统的 DCE 消灭不可能执行的代码，而 Tree-shaking 更关注宇消除没有用到的代码。下面详细介绍一下 DCE 和 Tree-shaking。</p>
+<p><strong>（1）先来看一下 DCE 消除大法</strong></p>
+<p><img src="5.jpg#alt=img"></p>
+<p>Dead Code 一般具有以下几个特征</p>
+<p>•代码不会被执行，不可到达</p>
+<p>•代码执行的结果不会被用到</p>
+<p>•代码只会影响死变量（只写不读）</p>
+<p>下面红框标示的代码就属于死码，满足以上特征</p>
+<p><img src="6.jpg#alt=img"></p>
+<p>图 4</p>
+<p>传统编译型的语言中，都是由编译器将 Dead Code 从 AST（抽象语法树）中删除，那 javascript 中是由谁做 DCE 呢？</p>
+<p>首先肯定不是浏览器做 DCE，因为当我们的代码送到浏览器，那还谈什么消除无法执行的代码来优化呢，所以肯定是送到浏览器之前的步骤进行优化。</p>
+<p>其实也不是上面提到的三个工具，rollup，webpack，cc 做的，而是著名的代码压缩优化工具 uglify，uglify 完成了 javascript 的 DCE，下面通过一个实验来验证一下。</p>
+<blockquote>
+<p>以下所有的示例代码都能在我们的 github 中找到，欢迎戳 ❤</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/lin-xi/treeshaking/tree/master/rollup-webpack">https://github.com/lin-xi/treeshaking/tree/master/rollup-webpack</a></p>
+<p><strong>分别用 rollup 和 webpack 将图 4 中的代码进行打包</strong></p>
+<p><img src="7.jpg#alt=img"></p>
+<p>图 5</p>
+<p>中间是 rollup 打包的结果，右边是 webpack 打包的结果</p>
+<p>可以发现，rollup 将无用的代码 foo 函数和 unused 函数消除了，但是仍然保留了不会执行到的代码，而 webpack 完整的保留了所有的无用代码和不会执行到的代码。</p>
+<p><strong>分别用 rollup + uglify 和 webpack + uglify 将图 4 中的代码进行打包</strong></p>
+<p><img src="8.jpg#alt=img"></p>
+<p>图 6</p>
+<p>中间是配置文件，右侧是结果</p>
+<p>可以看到右侧最终打包结果中都去除了无法执行到的代码，结果符合我们的预期。</p>
+<p><strong>(2) 再来看一下 Tree-shaking 消除大法</strong></p>
+<p>前面提到了 tree-shaking 更关注于无用模块的消除，消除那些引用了但并没有被使用的模块。</p>
+<p>先思考一个问题，为什么 tree-shaking 是最近几年流行起来了？而前端模块化概念已经有很多年历史了，其实 tree-shaking 的消除原理是依赖于 ES6 的模块特性。</p>
+<p><img src="9.jpg#alt=img"></p>
+<p>ES6 module 特点：</p>
+<ul>
+<li>只能作为模块顶层的语句出现</li>
+<li>import 的模块名只能是字符串常量</li>
+<li>import binding 是 immutable 的</li>
+</ul>
+<p>ES6 模块依赖关系是确定的，和运行时的状态无关，可以进行可靠的静态分析，这就是 tree-shaking 的基础。</p>
+<p>所谓静态分析就是不执行代码，从字面量上对代码进行分析，ES6 之前的模块化，比如我们可以动态 require 一个模块，只有执行后才知道引用的什么模块，这个就不能通过静态分析去做优化。</p>
+<p>这是 ES6 modules 在设计时的一个重要考量，也是为什么没有直接采用 CommonJS，正是基于这个基础上，才使得 tree-shaking 成为可能，这也是为什么 rollup 和 webpack 2 都要用 ES6 module syntax 才能 tree-shaking。</p>
+<p>我们还是通过例子来详细了解一下</p>
+<p>面向过程编程函数和面向对象编程是 javascript 最常用的编程模式和代码组织方式，从这两个方面来实验：</p>
+<ul>
+<li>函数消除实验</li>
+<li>类消除实验</li>
+</ul>
+<p><strong>先看下函数消除实验</strong></p>
+<p>utils 中 get 方法没有被使用到，我们期望的是 get 方法最终被消除。</p>
+<p><img src="10.jpg#alt=img"></p>
+<p>注意，uglify 目前不会跨文件去做 DCE，所以上面这种情况，uglify 是不能优化的。</p>
+<p><strong>先看看 rollup 的打包结果</strong></p>
+<p><img src="11.jpg#alt=img"></p>
+<p>完全符合预期，最终结果中没有 get 方法</p>
+<p><strong>再看看 webpack 的结果</strong></p>
+<p><img src="12.jpg#alt=img"></p>
+<p>也符合预期，最终结果中没有 get 方法</p>
+<p>可以看到 rollup 打包的结果比 webpack 更优化</p>
+<blockquote>
+<p>函数消除实验中，rollup 和 webpack 都通过，符合预期</p>
+</blockquote>
+<p><strong>再来看下类消除实验</strong></p>
+<p>增加了对 menu.js 的引用，但其实代码中并没有用到 menu 的任何方法和变量，所以我们的期望是，最终代码中 menu.js 里的内容被消除</p>
+<p><img src="13.jpg#alt=img"></p>
+<p>main.js</p>
+<p><img src="14.jpg#alt=img"></p>
+<p>menu.js</p>
+<p><strong>rollup 打包结果</strong></p>
+<p><img src="15.jpg#alt=img"></p>
+<p>包中竟然包含了 menu.js 的全部代码</p>
+<p><strong>webpack 打包结果</strong></p>
+<p><img src="16.jpg#alt=img"></p>
+<p>包中竟然也包含了 menu.js 的全部代码</p>
+<blockquote>
+<p>类消除实验中，rollup，webpack 全军覆没，都没有达到预期</p>
+</blockquote>
+<p><img src="17.jpg#alt=img"></p>
+<p>what happend？</p>
+<p>这跟我们想象的完全不一样啊？为什么呢？无用的类不能消除，这还能叫做 tree-shaking 吗？我当时一度怀疑自己的 demo 有问题，后来各种网上搜索，才明白 demo 没有错。</p>
+<p>下面摘取了 rollup 核心贡献者的的一些回答：</p>
+<p><img src="18.jpg#alt=img"></p>
+<p>图 7</p>
+<ul>
+<li>rollup 只处理函数和顶层的 import/export 变量，不能把没用到的类的方法消除掉</li>
+<li>javascript 动态语言的特性使得静态分析比较困难</li>
+<li>图 7 下部分的代码就是副作用的一个例子，如果静态分析的时候删除里 run 或者 jump，程序运行时就可能报错，那就本末倒置了，我们的目的是优化，肯定不能影响执行</li>
+</ul>
+<p>再举个例子说明下为什么不能消除 menu.js，比如下面这个场景</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">function Menu() &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Menu.prototype.show &#x3D; function() &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Array.prototype.unique &#x3D; function() &#123;</span><br><span class="line">    &#x2F;&#x2F; 将 array 中的重复元素去除</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">export default Menu;</span><br></pre></td></tr></table></figure>
+
+<p>如果删除里 menu.js，那对 Array 的扩展也会被删除，就会影响功能。那也许你会问，难道 rollup，webpack 不能区分是定义 Menu 的 proptotype 还是定义 Array 的 proptotype 吗？当然如果代码写成上面这种形式是可以区分的，如果我写成这样呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">function Menu() &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Menu.prototype.show &#x3D; function() &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var a &#x3D; &#39;Arr&#39; + &#39;ay&#39;</span><br><span class="line">var b</span><br><span class="line">if(a &#x3D;&#x3D; &#39;Array&#39;) &#123;</span><br><span class="line">    b &#x3D; Array</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    b &#x3D; Menu</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">b.prototype.unique &#x3D; function() &#123;</span><br><span class="line">    &#x2F;&#x2F; 将 array 中的重复元素去除</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">export default Menu;</span><br></pre></td></tr></table></figure>
+
+<p>这种代码，静态分析是分析不了的，就算能静态分析代码，想要正确完全的分析也比较困难。</p>
+<p>更多关于副作用的讨论，可以看这个</p>
+<p><a href="http://link.zhihu.com/?target=https://github.com/rollup/rollup/issues/349"><img src="19.jpg#alt=img"></a></p>
+<p><a href="http://link.zhihu.com/?target=https://github.com/rollup/rollup/issues/349">Tree shaking class methods · Issue #349 · rollup/rollupgithub.com</a></p>
+<p><img src="20.jpg#alt=img"></p>
+<blockquote>
+<p>tree-shaking 对函数效果较好</p>
+</blockquote>
+<p>函数的副作用相对较少，顶层函数相对来说更容易分析，加上 babel 默认都是”use strict”严格模式，减少顶层函数的动态访问的方式，也更容易分析</p>
+<p>我们开始说的三个工具，rollup 和 webpack 表现不理想，那 closure compiler 又如何呢？</p>
+<p>将示例中的代码用 cc 打包后得到的结果如下：</p>
+<p><img src="21.jpg#alt=img"></p>
+<p>天啊，这不就是我们要的结果吗？完美消除所有无用代码的结果，输出的结果非常性感</p>
+<blockquote>
+<p>closure compiler， tree-shaking 的结果完美！</p>
+</blockquote>
+<p>可是不能高兴得太早，能得到这么完美结果是需要条件的，那就是 cc 的侵入式约束规范。必须在代码里添加这样的代码，看红线框标示的</p>
+<p><img src="22.jpg#alt=img"></p>
+<p>google 定义一整套注解规范 Annotating JavaScript for the Closure Compiler，想更多了解的，可以去看下官网。</p>
+<p>侵入式这个就让人很不爽，google Closure Compiler 是 java 写的，和我们基于 node 的各种构建库不可能兼容（不过目前好像已经有 nodejs 版 Closure Compiler），Closure Compiler 使用起来也比较麻烦，所以虽然效果很赞，但比较难以应用到项目中，迁移成本较大。</p>
+<p><strong>说了这么多，总结一下：</strong></p>
+<p>三大工具的 tree-shaking 对于无用代码，无用模块的消除，都是有限的，有条件的。closure compiler 是最好的，但与我们日常的基于 node 的开发流很难兼容。</p>
+<p><img src="23.jpg#alt=img"></p>
+<p>tree-shaking 对 web 意义重大，是一个极致优化的理想世界，是前端进化的又一个终极理想。</p>
+<p>理想是美好的，但目前还处在发展阶段，还比较困难，有各个方面的，甚至有目前看来无法解</p>
+<p>决的问题，但还是应该相信新技术能带来更好的前端世界。</p>
+<p>优化是一种态度，不因小而不为，不因艰而不攻。</p>
+<blockquote>
+<p>知识有限，如果错误，请不惜指正，谢谢</p>
+</blockquote>
+<p>下一篇将继续介绍 <a target="_blank" rel="noopener" href="https://juejin.im/post/6844903544760336398">Tree-Shaking 性能优化实践 - 实践篇</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.im/post/6844903544760336398"><img src="24.webp#alt=img"></a></p>
+<blockquote>
+<p>本文中示例代码都能在我们的 github 中找到，欢迎戳 ❤</p>
+</blockquote>
+<p><a href="http://link.zhihu.com/?target=https://github.com/lin-xi/treeshaking/tree/master/rollup-webpack"><img src="25.jpg#alt=img"></a></p>
+<p><a href="http://link.zhihu.com/?target=https://github.com/lin-xi/treeshaking/tree/master/rollup-webpack">lin-xi/treeshakinggithub.com</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/26/yuque/%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E5%8C%96/" rel="prev" title="前端模块化">
+      <i class="fa fa-chevron-left"></i> 前端模块化
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/26/hello-world/" rel="next" title="Hello World">
+      Hello World <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80-%E4%BB%80%E4%B9%88%E6%98%AF-Tree-shaking"><span class="nav-number">1.</span> <span class="nav-text">一. 什么是 Tree-shaking</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C-tree-shaking-%E7%9A%84%E5%8E%9F%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">二. tree-shaking 的原理</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Adam Blog</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">60</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Adam Blog</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
