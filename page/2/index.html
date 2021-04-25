@@ -146,6 +146,105 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/23/yuque/%E7%99%BD%E5%B1%8F%E6%97%B6%E9%97%B4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/23/yuque/%E7%99%BD%E5%B1%8F%E6%97%B6%E9%97%B4/" class="post-title-link" itemprop="url">白屏时间</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-23 12:22:29" itemprop="dateCreated datePublished" datetime="2021-04-23T12:22:29+08:00">2021-04-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-25 17:04:57" itemprop="dateModified" datetime="2021-04-25T17:04:57+08:00">2021-04-25</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>该篇文章会为您分享在前端性能优化中非常重要的一环-白屏时间，将从白屏时间的概念、重要性以及白屏的过程一一进行阐述，同时提供性能优化的策略与实践。</p>
+<h2 id="一、概念"><a href="#一、概念" class="headerlink" title="一、概念"></a>一、概念</h2><p>白屏时间：即用户点击一个链接或打开浏览器输入 URL 地址后，从屏幕空白到显示第一个画面的时间。<br>白屏时间的长短将直接影响用户对该网站的第一印象。</p>
+<h2 id="二、白屏时间的重要性"><a href="#二、白屏时间的重要性" class="headerlink" title="二、白屏时间的重要性"></a>二、白屏时间的重要性</h2><p>当用户点开一个链接或者是直接在浏览器中输入 URL 开始进行访问时，就开始等待页面的展示。页面渲染的时间越短，用户等待的时间就越短，用户感知到页面的速度就越快。这样可以极大的提升用户的体验，减少用户的跳出，提升页面的留存率。<br>打开一个页面就像你的女票召唤你一样，你出现的越迅速，女票肯定会愈加欣喜！反之，你千呼万唤始出来，那么你的女票很可能又要抛弃你了(为什么要对你说又呢? …)</p>
+<h2 id="三、白屏是一个怎样的过程呢？"><a href="#三、白屏是一个怎样的过程呢？" class="headerlink" title="三、白屏是一个怎样的过程呢？"></a>三、白屏是一个怎样的过程呢？</h2><p>让我们一起来揭秘：从打开一个页面，到页面的画面展示经历了怎样的过程！</p>
+<h3 id="1-DNS-Lookup"><a href="#1-DNS-Lookup" class="headerlink" title="1. DNS Lookup"></a>1. DNS Lookup</h3><p>DNS Lookup 即浏览器从 DNS 服务器中进行域名查询。<br>浏览器会先对页面进行<a target="_blank" rel="noopener" href="https://cloud.tencent.com/product/cns?from=10680">域名解析</a>，获取到服务器的 IP 地址后，进而和服务器进行通信。<br>Tips: 通常在整个加载页面的过程中，浏览器会多次进行 DNS Lookup，包括页面本身的域名查询以及在解析 HTML 页面时加载的 JS、CSS、Image、Video 等资源产生的域名查询。</p>
+<h3 id="2-建立-TCP-请求连接"><a href="#2-建立-TCP-请求连接" class="headerlink" title="2. 建立 TCP 请求连接"></a>2. 建立 TCP 请求连接</h3><p>浏览器和服务端 TCP 请求建立的过程，是基于 TCP/IP，该协议由网络层的 IP 和传输层的 TCP 组成。IP 是每一台互联网设备在互联网中的唯一地址。<br>TCP 通过三次握手建立连接，并提供可靠的数据传输服务。</p>
+<h3 id="3-服务端请求处理响应"><a href="#3-服务端请求处理响应" class="headerlink" title="3. 服务端请求处理响应"></a>3. 服务端请求处理响应</h3><p>在 TCP 连接建立后，Web 服务器接受请求，开始进行处理，同时浏览器端开始等待服务器的处理响应。<br>Web 服务器根据请求类型的不同，进行相应的处理。静态资源如图片、CSS 文件、静态 HTML 直接进行响应；如其他注册的请求转发给相应的应用服务器，进行如数据处理、缓存中取数据，将数据按照约定好的格式响应给浏览器。<br>在大型应用中，通常为分布式服务架构，应用服务器的处理有可能经过很多个系统的中间件，最终获取到需要的数据</p>
+<h3 id="4-客户端下载、解析、渲染显示页面"><a href="#4-客户端下载、解析、渲染显示页面" class="headerlink" title="4. 客户端下载、解析、渲染显示页面"></a>4. 客户端下载、解析、渲染显示页面</h3><p>在服务器返回数据后，客户端浏览器接收数据，进行 HTML 下载、解析、渲染显示。</p>
+<ul>
+<li>a. 如果是 Gzip 包，则先解压为 HTML</li>
+<li>b. 解析 HTML 的头部代码，下载头部代码中的样式资源文件或脚本资源文件</li>
+<li>c. 解析 HTML 代码和样式文件代码，构建 HTML 的 DOM 树以及与 CSS 相关的 CSSOM 树</li>
+<li>d. 通过遍历 DOM 树和 CSSOM 树，浏览器依次计算每个节点的大小、坐标、颜色等样式，构造渲染树</li>
+<li>e. 根据渲染树完成绘制过程</li>
+</ul>
+<p>浏览器下载 HTML 后，首先解析头部代码，进行样式表下载，然后继续向下解析 HTML 代码，构建 DOM 树，同时进行样式下载。当 DOM 树构建完成后，立即开始构造 CSSOM 树。理想情况下，样式表下载速度够快，DOM 树和 CSSOM 树进入一个并行的过程，当两棵树构建完毕，构建渲染树，然后进行绘制。<br>Tips:浏览器安全解析策略对解析 HTML 造成的影响：</p>
+<ul>
+<li>当解析 HTML 时遇到内联 JS 代码，会阻塞 DOM 树的构建</li>
+<li>特别悲惨的情况： 当 CSS 样式文件没有下载完成时，浏览器解析 HTML 遇到了内联 JS 代码，此时！！！根据浏览器的安全解析策略，浏览器暂停 JS 脚本执行，暂停 HTML 解析。直到 CSS 文件下载完成，完成 CSSOM 树构建，重新恢复原来的解析。<br>一定要合理放置 JS 代码！！！</li>
+</ul>
+<h2 id="四、白屏-性能优化"><a href="#四、白屏-性能优化" class="headerlink" title="四、白屏-性能优化"></a>四、白屏-性能优化</h2><p>至此，我们已经了解了从浏览器在打开一个链接开始，到屏幕展示的过程-白屏时间的历程，那这对每个环节中发生的事情，我们可以有针对性的进行相关的优化。</p>
+<h3 id="1-DNS-解析优化"><a href="#1-DNS-解析优化" class="headerlink" title="1. DNS 解析优化"></a>1. DNS 解析优化</h3><p>针对 DNS Lookup 环节，我们可以针对性的进行 DNS 解析优化。</p>
+<ul>
+<li>DNS 缓存优化</li>
+<li>DNS 预加载策略</li>
+<li>稳定可靠的 DNS 服务器</li>
+</ul>
+<h3 id="2-TCP-网络链路优化"><a href="#2-TCP-网络链路优化" class="headerlink" title="2. TCP 网络链路优化"></a>2. TCP 网络链路优化</h3><p>针对网络链路的优化，好像除了花钱没有什么更好的方式！</p>
+<h3 id="3-服务端处理优化"><a href="#3-服务端处理优化" class="headerlink" title="3. 服务端处理优化"></a>3. 服务端处理优化</h3><p>服务端的处理优化，是一个非常庞大的话题，会涉及到如<a target="_blank" rel="noopener" href="https://cloud.tencent.com/product/crs?from=10680">Redis</a>缓存、数据库存储优化或是系统内的各种中间件以及 Gzip 压缩等…</p>
+<h3 id="4-浏览器下载、解析、渲染页面优化"><a href="#4-浏览器下载、解析、渲染页面优化" class="headerlink" title="4. 浏览器下载、解析、渲染页面优化"></a>4. 浏览器下载、解析、渲染页面优化</h3><p>根据浏览器对页面的下载、解析、渲染过程，可以考虑一下的优化处理：</p>
+<ul>
+<li>尽可能的精简 HTML 的代码和结构</li>
+<li>尽可能的优化 CSS 文件和结构</li>
+<li>一定要合理的放置 JS 代码，尽量不要使用内联的 JS 代码</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/23/yuque/%E9%87%8D%E6%8E%92%E5%92%8C%E9%87%8D%E7%BB%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -177,7 +276,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-25 16:49:31" itemprop="dateModified" datetime="2021-04-25T16:49:31+08:00">2021-04-25</time>
+                <time title="修改时间：2021-04-25 17:04:57" itemprop="dateModified" datetime="2021-04-25T17:04:57+08:00">2021-04-25</time>
               </span>
 
           
@@ -435,7 +534,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-25 16:49:31" itemprop="dateModified" datetime="2021-04-25T16:49:31+08:00">2021-04-25</time>
+                <time title="修改时间：2021-04-25 17:04:57" itemprop="dateModified" datetime="2021-04-25T17:04:57+08:00">2021-04-25</time>
               </span>
 
           
@@ -500,7 +599,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-25 16:49:31" itemprop="dateModified" datetime="2021-04-25T16:49:31+08:00">2021-04-25</time>
+                <time title="修改时间：2021-04-25 17:04:57" itemprop="dateModified" datetime="2021-04-25T17:04:57+08:00">2021-04-25</time>
               </span>
 
           
@@ -666,7 +765,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-25 16:49:31" itemprop="dateModified" datetime="2021-04-25T16:49:31+08:00">2021-04-25</time>
+                <time title="修改时间：2021-04-25 17:04:57" itemprop="dateModified" datetime="2021-04-25T17:04:57+08:00">2021-04-25</time>
               </span>
 
           
@@ -756,7 +855,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-25 16:49:31" itemprop="dateModified" datetime="2021-04-25T16:49:31+08:00">2021-04-25</time>
+                <time title="修改时间：2021-04-25 17:04:57" itemprop="dateModified" datetime="2021-04-25T17:04:57+08:00">2021-04-25</time>
               </span>
 
           
@@ -867,7 +966,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-25 16:49:31" itemprop="dateModified" datetime="2021-04-25T16:49:31+08:00">2021-04-25</time>
+                <time title="修改时间：2021-04-25 17:04:57" itemprop="dateModified" datetime="2021-04-25T17:04:57+08:00">2021-04-25</time>
               </span>
 
           
@@ -994,7 +1093,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-25 16:49:32" itemprop="dateModified" datetime="2021-04-25T16:49:32+08:00">2021-04-25</time>
+                <time title="修改时间：2021-04-25 17:04:57" itemprop="dateModified" datetime="2021-04-25T17:04:57+08:00">2021-04-25</time>
               </span>
 
           
@@ -1160,7 +1259,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-25 16:49:32" itemprop="dateModified" datetime="2021-04-25T16:49:32+08:00">2021-04-25</time>
+                <time title="修改时间：2021-04-25 17:04:57" itemprop="dateModified" datetime="2021-04-25T17:04:57+08:00">2021-04-25</time>
               </span>
 
           
@@ -1339,7 +1438,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-25 16:49:32" itemprop="dateModified" datetime="2021-04-25T16:49:32+08:00">2021-04-25</time>
+                <time title="修改时间：2021-04-25 17:04:58" itemprop="dateModified" datetime="2021-04-25T17:04:58+08:00">2021-04-25</time>
               </span>
 
           
@@ -1592,136 +1691,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/22/yuque/%E5%9C%A3%E6%9D%AF%E5%B8%83%E5%B1%80%E5%92%8C%E5%8F%8C%E9%A3%9E%E7%BF%BC%E5%B8%83%E5%B1%80/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Adam Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Adam">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/22/yuque/%E5%9C%A3%E6%9D%AF%E5%B8%83%E5%B1%80%E5%92%8C%E5%8F%8C%E9%A3%9E%E7%BF%BC%E5%B8%83%E5%B1%80/" class="post-title-link" itemprop="url">圣杯布局和双飞翼布局</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-22 14:55:16" itemprop="dateCreated datePublished" datetime="2021-04-22T14:55:16+08:00">2021-04-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-25 16:49:33" itemprop="dateModified" datetime="2021-04-25T16:49:33+08:00">2021-04-25</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近我朋友在群里发了一张图，说为什么 main 的宽度 100%了，sub 还是可以覆盖它呢？看来是时候带他回忆一波经典的圣杯布局和双飞翼布局了。正好最近看到好多面试题都有提到。 /笑哭</p>
-<p>群内链接如下图：</p>
-<p><img src="1.png#alt=img"></p>
-<h3 id="字面意思"><a href="#字面意思" class="headerlink" title="字面意思"></a>字面意思</h3><p>圣呗布局和双飞翼布局从字面意思来看是这样的：</p>
-<blockquote>
-<p>一个像圣杯或者像展翅的禽类这样的布局</p>
-</blockquote>
-<p><strong>通俗的来说就是左右两栏固定宽度，中间部分自适应的三栏布局。</strong></p>
-<h3 id="两者本质"><a href="#两者本质" class="headerlink" title="两者本质"></a>两者本质</h3><p><img src="2.png#alt=img"></p>
-<h3 id="圣杯布局"><a href="#圣杯布局" class="headerlink" title="圣杯布局"></a>圣杯布局</h3><ol>
-<li>首先把 left、middle、right 都放出来</li>
-<li>给它们三个设置上 float: left, 脱离文档流；</li>
-<li>一定记得给 container 设置上 overflow: hidden; 可以形成 BFC 撑开文档</li>
-<li>left、right 设置上各自的宽度</li>
-<li>middle 设置 width: 100%;</li>
-</ol>
-<p><strong>接下来比较重要了：</strong></p>
-<ol start="6">
-<li>给 left、middle、right 设置 position: relative;</li>
-<li>left 设置 left: -leftWidth, right 设置 right: -rightWidth;</li>
-<li>container 设置 padding: 0, rightWidth, 0, leftWidth;</li>
-</ol>
-<p>–</p>
-<p>我注意到圣杯布局的 left、middle、right 都有 position: relative;</p>
-<p>设:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">.left width:200px</span><br><span class="line">.right width:220px</span><br></pre></td></tr></table></figure>
-
-<p>那么下面的这些属性为什么要存在？</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.container上面的paddind</span><br><span class="line">.left 的left: -200px;</span><br><span class="line">.right 的right: -220px;</span><br></pre></td></tr></table></figure>
-
-<p><strong>因为不这样设置 会遮挡 middle 的内容</strong></p>
-<p>可以自己尝试一下下</p>
-<p>–</p>
-<p>圣杯布局示例代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang&#x3D;&quot;zh&quot;&gt;</span><br><span class="line"></span><br><span class="line">&lt;head&gt;</span><br><span class="line">  &lt;meta charset&#x3D;&quot;UTF-8&quot;&gt;</span><br><span class="line">  &lt;meta name&#x3D;&quot;viewport&quot; content&#x3D;&quot;width&#x3D;device-width, initial-scale&#x3D;1.0&quot;&gt;</span><br><span class="line">  &lt;meta http-equiv&#x3D;&quot;X-UA-Compatible&quot; content&#x3D;&quot;ie&#x3D;edge&quot;&gt;</span><br><span class="line">  &lt;title&gt;圣杯布局&lt;&#x2F;title&gt;</span><br><span class="line">  &lt;style&gt;</span><br><span class="line">    * &#123;</span><br><span class="line">      margin: 0;</span><br><span class="line">      padding: 0;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .header,</span><br><span class="line">    .footer &#123;</span><br><span class="line">      height: 100px;</span><br><span class="line">      line-height: 100px;</span><br><span class="line">      background-color: green;</span><br><span class="line">      text-align: center;</span><br><span class="line">      font-size: 30px;</span><br><span class="line">      font-weight: bolder;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .footer &#123;</span><br><span class="line">      background-color: goldenrod;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .container &#123;</span><br><span class="line">      padding: 0 220px 0 200px;</span><br><span class="line">      overflow: hidden;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .left,</span><br><span class="line">    .middle,</span><br><span class="line">    .right &#123;</span><br><span class="line">      position: relative;</span><br><span class="line">      float: left;</span><br><span class="line">      min-height: 130px;</span><br><span class="line">      word-break: break-all;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .left &#123;</span><br><span class="line">      margin-left: -100%;</span><br><span class="line">      left: -200px;</span><br><span class="line">      width: 200px;</span><br><span class="line">      background-color: red;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .right &#123;</span><br><span class="line">      margin-left: -220px;</span><br><span class="line">      right: -220px;</span><br><span class="line">      width: 220px;</span><br><span class="line">      background-color: green;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .middle &#123;</span><br><span class="line">      width: 100%;</span><br><span class="line">      background-color: blue;</span><br><span class="line">    &#125;</span><br><span class="line">  &lt;&#x2F;style&gt;</span><br><span class="line">&lt;&#x2F;head&gt;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;</span><br><span class="line">  &lt;div class&#x3D;&quot;header&quot;&gt;header&lt;&#x2F;div&gt;</span><br><span class="line">  &lt;div class&#x3D;&quot;container&quot;&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;middle&quot;&gt;</span><br><span class="line">      &lt;h4&gt;middle&lt;&#x2F;h4&gt;</span><br><span class="line">      &lt;p&gt;</span><br><span class="line">        middlemiddlemiddlemiddlemiddlemiddlemiddlemiddle</span><br><span class="line">        middlemiddlemiddlemiddlemiddlemiddlemiddlemiddle</span><br><span class="line">        middlemiddlemiddlemiddlemiddlemiddlemiddlemiddle</span><br><span class="line">        middlemiddlemiddlemiddlemiddlemiddlemiddlemiddle</span><br><span class="line">        middlemiddlemiddlemiddlemiddlemiddlemiddlemiddle</span><br><span class="line">        middlemiddlemiddlemiddlemiddle</span><br><span class="line">      &lt;&#x2F;p&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;left&quot;&gt;</span><br><span class="line">      &lt;h4&gt;left&lt;&#x2F;h4&gt;</span><br><span class="line">      &lt;p&gt;</span><br><span class="line">        leftleftleftleftleftleftleftleftleftleftleftleft</span><br><span class="line">        leftleftleftleftleftleftleftleftleftleftleftleft</span><br><span class="line">        leftleftleftleftleftleftleftleftleftleftleftleft</span><br><span class="line">      &lt;&#x2F;p&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;right&quot;&gt;</span><br><span class="line">      &lt;h4&gt;right&lt;&#x2F;h4&gt;</span><br><span class="line">      &lt;p&gt;</span><br><span class="line">        rightrightrightrightrightrightrightrightrightright</span><br><span class="line">        rightrightrightrightrightrightrightrightrightright</span><br><span class="line">        rightrightrightrightrightrightright</span><br><span class="line">      &lt;&#x2F;p&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">  &lt;&#x2F;div&gt;</span><br><span class="line">  &lt;div class&#x3D;&quot;footer&quot;&gt;footer&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;html&gt;</span><br></pre></td></tr></table></figure>
-
-<p>–</p>
-<h3 id="双飞翼布局"><a href="#双飞翼布局" class="headerlink" title="双飞翼布局"></a>双飞翼布局</h3><p>双飞翼布局和圣杯布局很类似，不过是在 middle 的 div 里又插入一个 div，通过调整内部 div 的 margin 值，实现中间栏自适应，内容写到内部 div 中。</p>
-<p>这样可以先做好主体部分，然后再将附属部分放到合适的位置！</p>
-<ol>
-<li>首先把 left、middle、right 都放出来, middle 中增加 inner</li>
-<li>给它们三个设置上 float: left, 脱离文档流；</li>
-<li>一定记得给 container 设置上 overflow: hidden; 可以形成 BFC 撑开文档</li>
-<li>left、right 设置上各自的宽度</li>
-<li>middle 设置 width: 100%;</li>
-</ol>
-<p><strong>接下来与圣杯布局不一样的地方：</strong></p>
-<ol start="6">
-<li>left 设置 margin-left: -100%, right 设置 right: -rightWidth;</li>
-<li>container 设置 padding: 0, rightWidth, 0, leftWidth;</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang&#x3D;&quot;zh&quot;&gt;</span><br><span class="line"></span><br><span class="line">&lt;head&gt;</span><br><span class="line">  &lt;meta charset&#x3D;&quot;UTF-8&quot;&gt;</span><br><span class="line">  &lt;meta name&#x3D;&quot;viewport&quot; content&#x3D;&quot;width&#x3D;device-width, initial-scale&#x3D;1.0&quot;&gt;</span><br><span class="line">  &lt;meta http-equiv&#x3D;&quot;X-UA-Compatible&quot; content&#x3D;&quot;ie&#x3D;edge&quot;&gt;</span><br><span class="line">  &lt;title&gt;双飞翼布局&lt;&#x2F;title&gt;</span><br><span class="line">  &lt;style&gt;</span><br><span class="line">    * &#123;</span><br><span class="line">      margin: 0;</span><br><span class="line">      padding: 0;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .header,</span><br><span class="line">    .footer &#123;</span><br><span class="line">      height: 100px;</span><br><span class="line">      line-height: 100px;</span><br><span class="line">      background-color: green;</span><br><span class="line">      text-align: center;</span><br><span class="line">      font-size: 30px;</span><br><span class="line">      font-weight: bolder;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .footer &#123;</span><br><span class="line">      background-color: goldenrod;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .container &#123;</span><br><span class="line">      overflow: hidden;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .left,</span><br><span class="line">    .middle,</span><br><span class="line">    .right &#123;</span><br><span class="line">      float: left;</span><br><span class="line">      min-height: 130px;</span><br><span class="line">      word-break: break-all;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .left &#123;</span><br><span class="line">      margin-left: -100%;</span><br><span class="line">      width: 200px;</span><br><span class="line">      background-color: red;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .right &#123;</span><br><span class="line">      margin-left: -220px;</span><br><span class="line">      width: 220px;</span><br><span class="line">      background-color: green;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .middle &#123;</span><br><span class="line">      width: 100%;</span><br><span class="line">      height: 100%;</span><br><span class="line">      background-color: blue;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .inner &#123;</span><br><span class="line">      margin: 0 220px 0 200px;</span><br><span class="line">      min-height: 130px;</span><br><span class="line">      background: blue;</span><br><span class="line">      word-break: break-all;</span><br><span class="line">    &#125;</span><br><span class="line">  &lt;&#x2F;style&gt;</span><br><span class="line">&lt;&#x2F;head&gt;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;</span><br><span class="line">  &lt;div class&#x3D;&quot;header&quot;&gt;header&lt;&#x2F;div&gt;</span><br><span class="line">  &lt;div class&#x3D;&quot;container&quot;&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;middle&quot;&gt;</span><br><span class="line">      &lt;div class&#x3D;&quot;inner&quot;&gt;</span><br><span class="line">        &lt;h4&gt;middle&lt;&#x2F;h4&gt;</span><br><span class="line">        &lt;p&gt;</span><br><span class="line">          middlemiddlemiddlemiddlemiddlemiddlemiddlemiddle</span><br><span class="line">          middlemiddlemiddlemiddlemiddlemiddlemiddlemiddle</span><br><span class="line">          middlemiddlemiddlemiddlemiddlemiddlemiddlemiddle</span><br><span class="line">          middlemiddlemiddlemiddlemiddlemiddlemiddlemiddle</span><br><span class="line">          middlemiddlemiddlemiddlemiddlemiddlemiddlemiddle</span><br><span class="line">          middlemiddlemiddlemiddlemiddle</span><br><span class="line">        &lt;&#x2F;p&gt;</span><br><span class="line">      &lt;&#x2F;div&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;left&quot;&gt;</span><br><span class="line">      &lt;h4&gt;left&lt;&#x2F;h4&gt;</span><br><span class="line">      &lt;p&gt;</span><br><span class="line">        leftleftleftleftleftleftleftleftleftleftleftleft</span><br><span class="line">        leftleftleftleftleftleftleftleftleftleftleftleft</span><br><span class="line">        leftleftleftleftleftleftleftleftleftleftleftleft</span><br><span class="line">      &lt;&#x2F;p&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;right&quot;&gt;</span><br><span class="line">      &lt;h4&gt;right&lt;&#x2F;h4&gt;</span><br><span class="line">      &lt;p&gt;</span><br><span class="line">        rightrightrightrightrightrightrightrightrightright</span><br><span class="line">        rightrightrightrightrightrightrightrightrightright</span><br><span class="line">        rightrightrightrightrightrightright</span><br><span class="line">      &lt;&#x2F;p&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">  &lt;&#x2F;div&gt;</span><br><span class="line">  &lt;div class&#x3D;&quot;footer&quot;&gt;footer&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;html&gt;</span><br></pre></td></tr></table></figure>
-
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>圣杯布局在 DOM 结构上显得更加直观和自然；</p>
-<p>双飞翼布局省去了很多 css，而且由于不用使用定位，可以获得比圣杯布局更小最小宽度；</p>
-<p>说到这里需要注意一下 由于双飞翼布局会一直随着浏览器可视区域宽度减小从而不断挤压中间部分宽度。</p>
-<p>所以需要设置给页面一个 min-width &gt; LeftWidth + RightWidth；</p>
-<p>–</p>
-<p>还有一件事就是他们在单独部分内容扩充的时候，童鞋们可能发现了 底部会参差不齐。</p>
-<p>在我的老师那里知道了最简单的解决办法 / 笑哭</p>
-<blockquote>
-<p>给 left、middle、right 设置上 padding-bottom: 9999px; margin-bottom: -9999px;</p>
-</blockquote>
-<p>就让他变得无限高，但是又给他送回去了。真的是让我脑洞大开！！！</p>
-<h3 id="demo-地址"><a href="#demo-地址" class="headerlink" title="demo 地址"></a>demo 地址</h3><p><a target="_blank" rel="noopener" href="https://github.com/FontEndArt/blog-demo/blob/master/%E5%9C%A3%E6%9D%AF%E5%B8%83%E5%B1%80%E5%92%8C%E5%8F%8C%E9%A3%9E%E7%BF%BC%E5%B8%83%E5%B1%80/%E5%9C%A3%E6%9D%AF%E5%B8%83%E5%B1%80.html">圣杯布局</a></p>
-<p><a target="_blank" rel="noopener" href="https://github.com/FontEndArt/blog-demo/blob/master/%E5%9C%A3%E6%9D%AF%E5%B8%83%E5%B1%80%E5%92%8C%E5%8F%8C%E9%A3%9E%E7%BF%BC%E5%B8%83%E5%B1%80/%E5%8F%8C%E9%A3%9E%E7%BF%BC%E5%B8%83%E5%B1%80.html">双飞翼布局</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1791,7 +1760,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">52</span>
+          <span class="site-state-item-count">53</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
