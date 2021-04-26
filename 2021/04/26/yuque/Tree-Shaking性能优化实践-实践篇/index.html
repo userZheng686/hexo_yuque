@@ -28,26 +28,26 @@
 <meta property="og:description" content="上一篇文章 Tree-Shaking 性能优化实践 - 原理篇 介绍了 tree-shaking 的原理，本文主要介绍 tree-shaking 的实践  三. tree-shaking 实践 webpack2 发布，宣布支持 tree-shaking，webpack 3 发布，支持作用域提升，生成的 bundle 文件更小。 再没有升级 webpack 之前，增幻想我们的性能又要大幅提升了，对升">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417176669-626362ab-6164-4bb3-b700-463db3ee8027.jpeg#clientId=ue71f5aac-b372-4&from=drop&height=120&id=u706055df&margin=%5Bobject%20Object%5D&name=1.jpg&originHeight=120&originWidth=180&originalType=binary&size=6581&status=done&style=none&taskId=uec8d1f6e-41b1-4021-8111-765498ed4c7&width=180">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/2.jpg#id=rtIfv&originalType=binary&status=done&style=none">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/3.jpg#id=PTNjw&originalType=binary&status=done&style=none">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/4.jpg#id=sQ46O&originalType=binary&status=done&style=none">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/5.jpg#id=UNIJx&originalType=binary&status=done&style=none">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/6.jpg#id=kYGcm&originalType=binary&status=done&style=none">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/7.jpg#id=WTaR8&originalType=binary&status=done&style=none">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/8.jpg#id=RamBq&originalType=binary&status=done&style=none">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/9.jpg#id=DBjwE&originalType=binary&status=done&style=none">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/10.jpg#id=qJv3w&originalType=binary&status=done&style=none">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/11.jpg#id=qAetG&originalType=binary&status=done&style=none">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/12.jpg#id=eEwPF&originalType=binary&status=done&style=none">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/13.jpg#id=sJf4r&originalType=binary&status=done&style=none">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/14.jpg#id=rRUSz&originalType=binary&status=done&style=none">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/15.jpg#id=yOwv5&originalType=binary&status=done&style=none">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/16.jpg#id=KZHR3&originalType=binary&status=done&style=none">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/17.jpg#id=Dy7lf&originalType=binary&status=done&style=none">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/18.jpg#id=d9um1&originalType=binary&status=done&style=none">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/19.jpg#id=qBUgO&originalType=binary&status=done&style=none">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417185298-aebd7e76-9d26-404e-8510-758287b50fb9.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=u5729f233&margin=%5Bobject%20Object%5D&name=2.jpg&originHeight=405&originWidth=720&originalType=binary&size=6650&status=done&style=none&taskId=u06c1c936-fc57-4b44-a3e1-96901b03f42">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417191922-3d9e77c7-2db8-4669-ab41-cf0322d484ef.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=u4d97b1fb&margin=%5Bobject%20Object%5D&name=3.jpg&originHeight=405&originWidth=720&originalType=binary&size=11332&status=done&style=none&taskId=u9d5ca2ab-b4c9-489e-8b48-37dd15af1b0">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417203100-cbcd535b-d7af-49ff-900c-c4b7827caa01.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=ue93e7c8a&margin=%5Bobject%20Object%5D&name=4.jpg&originHeight=376&originWidth=720&originalType=binary&size=21516&status=done&style=none&taskId=u0abbe6ec-1ad4-4b1d-870a-50dd2fbb7be">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417213027-2a680ba0-7647-447f-a9d6-4c963ef6ad09.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=uea1764cc&margin=%5Bobject%20Object%5D&name=5.jpg&originHeight=198&originWidth=720&originalType=binary&size=10817&status=done&style=none&taskId=u95bc3c68-97a5-4c25-8190-d9499856cc0">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417217960-614afe7b-13a3-40f0-a7ca-2e2ca2dc3126.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=ueef65da2&margin=%5Bobject%20Object%5D&name=6.jpg&originHeight=120&originWidth=120&originalType=binary&size=4686&status=done&style=none&taskId=u9463d119-35ae-49e5-8df3-582361fd628">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417223638-fa9c6c05-7a28-424f-bb5b-8cf4f83a21ed.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=ub1729c08&margin=%5Bobject%20Object%5D&name=7.jpg&originHeight=405&originWidth=720&originalType=binary&size=12869&status=done&style=none&taskId=u743db0cb-9d20-4bfa-8079-ac5c78ddbd5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417230775-fcf865d2-f123-4214-adc6-8914952dfb5d.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=u45ca0143&margin=%5Bobject%20Object%5D&name=8.jpg&originHeight=405&originWidth=720&originalType=binary&size=9224&status=done&style=none&taskId=ud6b209ce-caac-4800-980e-5a61e12d7ec">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417236617-b3f1bf5c-e32d-4c56-b932-71b640794f3e.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=u816fab64&margin=%5Bobject%20Object%5D&name=9.jpg&originHeight=120&originWidth=120&originalType=binary&size=4686&status=done&style=none&taskId=ub99c9de7-84c5-4a61-b523-140015afd27">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417244857-2cc0e501-2546-4a96-83e9-07236d806d89.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=uc818a839&margin=%5Bobject%20Object%5D&name=10.jpg&originHeight=394&originWidth=720&originalType=binary&size=16294&status=done&style=none&taskId=ua622f1ee-12ee-48b4-9122-14c9b3aba66">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417249458-955d4c96-c638-47e5-a97a-b7092d5f18dc.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=u9c2e7c64&margin=%5Bobject%20Object%5D&name=11.jpg&originHeight=405&originWidth=720&originalType=binary&size=17641&status=done&style=none&taskId=u184075c6-13de-4115-ae5b-f3ee4d2fce4">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417258077-ca5886f8-045c-4b99-89da-b063e43149bf.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=u456c9f5e&margin=%5Bobject%20Object%5D&name=12.jpg&originHeight=219&originWidth=720&originalType=binary&size=11908&status=done&style=none&taskId=u0422f285-8f06-45f7-826c-a8a4256f1f5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417264814-7e9330da-796e-4ff8-8f4c-5b598ac4e667.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=ua801459f&margin=%5Bobject%20Object%5D&name=13.jpg&originHeight=405&originWidth=720&originalType=binary&size=18473&status=done&style=none&taskId=u56e06f26-6d1b-4d5d-909e-00c99647abe">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417270065-ff9e3f12-cb26-48d7-b81c-7ac3f51eb0da.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=u4893c42d&margin=%5Bobject%20Object%5D&name=14.jpg&originHeight=192&originWidth=720&originalType=binary&size=9906&status=done&style=none&taskId=ud7ac520f-f577-4128-80b8-8d82d0b2ea3">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417275241-489bbef7-42df-46b3-bac9-580cf920a8ab.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=u6bea9d0b&margin=%5Bobject%20Object%5D&name=15.jpg&originHeight=331&originWidth=720&originalType=binary&size=21512&status=done&style=none&taskId=uf770f890-910a-41c2-b268-98db8a669d7">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417280783-55fb56f0-e13e-4424-b662-b11bfe12a00e.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=u9ecfab79&margin=%5Bobject%20Object%5D&name=16.jpg&originHeight=405&originWidth=720&originalType=binary&size=27747&status=done&style=none&taskId=u81f9d6e0-0583-4bca-90ed-a793591757b">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417285132-f56688f8-be56-4545-bba3-2687b8398459.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=u5e535843&margin=%5Bobject%20Object%5D&name=17.jpg&originHeight=405&originWidth=720&originalType=binary&size=25678&status=done&style=none&taskId=ud6da4518-ff37-4958-982e-7abf2ff05fc">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417289834-408cd2e7-ef19-496a-9125-5ac4ad04656a.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=uad419791&margin=%5Bobject%20Object%5D&name=18.jpg&originHeight=405&originWidth=720&originalType=binary&size=24291&status=done&style=none&taskId=u3f99a4c5-7841-4d8d-b8dc-74be296417f">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417305159-1c75e841-c2cd-42d8-a345-ec8541f4dbba.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=u91704679&margin=%5Bobject%20Object%5D&name=19.jpg&originHeight=120&originWidth=120&originalType=binary&size=4686&status=done&style=none&taskId=u5836fcec-3272-40dc-9088-0ee4d96214a">
 <meta property="article:published_time" content="2021-04-26T06:05:39.000Z">
-<meta property="article:modified_time" content="2021-04-26T06:06:34.761Z">
+<meta property="article:modified_time" content="2021-04-26T12:03:50.360Z">
 <meta property="article:author" content="Adam Blog">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417176669-626362ab-6164-4bb3-b700-463db3ee8027.jpeg#clientId=ue71f5aac-b372-4&from=drop&height=120&id=u706055df&margin=%5Bobject%20Object%5D&name=1.jpg&originHeight=120&originWidth=180&originalType=binary&size=6581&status=done&style=none&taskId=uec8d1f6e-41b1-4021-8111-765498ed4c7&width=180">
@@ -195,7 +195,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-04-26 14:05:39 / 修改时间：14:06:34" itemprop="dateCreated datePublished" datetime="2021-04-26T14:05:39+08:00">2021-04-26</time>
+              <time title="创建时间：2021-04-26 14:05:39 / 修改时间：20:03:50" itemprop="dateCreated datePublished" datetime="2021-04-26T14:05:39+08:00">2021-04-26</time>
             </span>
 
           
@@ -211,32 +211,32 @@
       
         <p>上一篇文章 <a target="_blank" rel="noopener" href="https://juejin.im/post/6844903544756109319">Tree-Shaking 性能优化实践 - 原理篇</a> 介绍了 tree-shaking 的原理，本文主要介绍 tree-shaking 的实践</p>
 <p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417176669-626362ab-6164-4bb3-b700-463db3ee8027.jpeg#clientId=ue71f5aac-b372-4&from=drop&height=120&id=u706055df&margin=%5Bobject%20Object%5D&name=1.jpg&originHeight=120&originWidth=180&originalType=binary&size=6581&status=done&style=none&taskId=uec8d1f6e-41b1-4021-8111-765498ed4c7&width=180" alt="1.jpg"></p>
-<h2 id="三-tree-shaking-实践"><a href="#三-tree-shaking-实践" class="headerlink" title="三. tree-shaking 实践"></a>三. tree-shaking 实践</h2><p><img src="2.jpg#id=rtIfv&originalType=binary&status=done&style=none"></p>
+<h2 id="三-tree-shaking-实践"><a href="#三-tree-shaking-实践" class="headerlink" title="三. tree-shaking 实践"></a>三. tree-shaking 实践</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417185298-aebd7e76-9d26-404e-8510-758287b50fb9.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=u5729f233&margin=%5Bobject%20Object%5D&name=2.jpg&originHeight=405&originWidth=720&originalType=binary&size=6650&status=done&style=none&taskId=u06c1c936-fc57-4b44-a3e1-96901b03f42" alt="2.jpg"></p>
 <p>webpack2 发布，宣布支持 tree-shaking，webpack 3 发布，支持作用域提升，生成的 bundle 文件更小。 再没有升级 webpack 之前，增幻想我们的性能又要大幅提升了，对升级充满了期待。实际上事实是这样的</p>
-<p><img src="3.jpg#id=PTNjw&originalType=binary&status=done&style=none"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417191922-3d9e77c7-2db8-4669-ab41-cf0322d484ef.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=u4d97b1fb&margin=%5Bobject%20Object%5D&name=3.jpg&originHeight=405&originWidth=720&originalType=binary&size=11332&status=done&style=none&taskId=u9d5ca2ab-b4c9-489e-8b48-37dd15af1b0" alt="3.jpg"></p>
 <p>升级完之后，bundle 文件大小并没有大幅减少，当时有较大的心理落差，然后去研究了为什么效果不理想，原因见 <a target="_blank" rel="noopener" href="https://juejin.im/post/6844903544756109319">Tree-Shaking 性能优化实践 - 原理篇</a> 。</p>
 <p>优化还是要继续的，虽然工具自带的 tree-shaking 不能去除太多无用代码，在去除无用代码这一方面也还是有可以做的事情。我们从三个方面做里一些优化。</p>
 <h2 id="（1）对组件库引用的优化"><a href="#（1）对组件库引用的优化" class="headerlink" title="（1）对组件库引用的优化"></a>（1）对组件库引用的优化</h2><p>先来看一个问题</p>
-<p><img src="4.jpg#id=sQ46O&originalType=binary&status=done&style=none"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417203100-cbcd535b-d7af-49ff-900c-c4b7827caa01.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=ue93e7c8a&margin=%5Bobject%20Object%5D&name=4.jpg&originHeight=376&originWidth=720&originalType=binary&size=21516&status=done&style=none&taskId=u0abbe6ec-1ad4-4b1d-870a-50dd2fbb7be" alt="4.jpg"></p>
 <p>当我们使用组件库的时候，import {Button} from ‘element-ui’，相对于 Vue.use(elementUI)，已经是具有性能意识，是比较推荐的做法，但如果我们写成右边的形式，具体到文件的引用，打包之后的区别是非常大的，以 antd 为例，右边形式 bundle 体积减少约 80%。</p>
 <p>这个引用也属于有副作用，webpack 不能把其他组件进行 tree-shaking。既然工具本身是做不了，那我们可以做工具把左边代码自动改成右边代码这种形式。这个工具 antd 库本身也是提供的。我在 antd 的工具基础上做了少量的修改，不用任何配置，原生支持我们自己的组件库， <a href="http://link.zhihu.com/?target=https://w-ui.github.io/%23/doc">wui</a> 和 <a href="http://link.zhihu.com/?target=https://wmfe.github.io/xcui/%23/home">xcui</a> 以及一些其他常用的库</p>
 <p><strong>babel-plugin-import-fix ，缩小引用范围</strong></p>
-<p><img src="5.jpg#id=UNIJx&originalType=binary&status=done&style=none"></p>
-<p><img src="6.jpg#id=kYGcm&originalType=binary&status=done&style=none"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417213027-2a680ba0-7647-447f-a9d6-4c963ef6ad09.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=uea1764cc&margin=%5Bobject%20Object%5D&name=5.jpg&originHeight=198&originWidth=720&originalType=binary&size=10817&status=done&style=none&taskId=u95bc3c68-97a5-4c25-8190-d9499856cc0" alt="5.jpg"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417217960-614afe7b-13a3-40f0-a7ca-2e2ca2dc3126.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=ueef65da2&margin=%5Bobject%20Object%5D&name=6.jpg&originHeight=120&originWidth=120&originalType=binary&size=4686&status=done&style=none&taskId=u9463d119-35ae-49e5-8df3-582361fd628" alt="6.jpg"></p>
 <p><a href="http://link.zhihu.com/?target=https://github.com/lin-xi/babel-plugin-import-fix">lin-xi/babel-plugin-import-fix</a></p>
 <p>下面介绍一下原理</p>
-<p><img src="7.jpg#id=WTaR8&originalType=binary&status=done&style=none"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417223638-fa9c6c05-7a28-424f-bb5b-8cf4f83a21ed.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=ub1729c08&margin=%5Bobject%20Object%5D&name=7.jpg&originHeight=405&originWidth=720&originalType=binary&size=12869&status=done&style=none&taskId=u743db0cb-9d20-4bfa-8079-ac5c78ddbd5" alt="7.jpg"></p>
 <p>这是一个 babel 的插件，babel 通过核心 babylon 将 ES6 代码转换成 AST 抽象语法树，然后插件遍历语法树找出类似 import {Button} from ‘element-ui’这样的语句，进行转换，最后重新生成代码。</p>
 <p>babel-plugin-import-fix 默认支持 antd，element，meterial-UI，wui，xcui 和 d3，只需要再.babelrc 中配置插件本身就可以。</p>
 <p>.babelrc</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;presets&quot;: [</span><br><span class="line">    [&quot;es2015&quot;, &#123; &quot;modules&quot;: false &#125;], &quot;react&quot;</span><br><span class="line">  ],</span><br><span class="line">  &quot;plugins&quot;: [&quot;import-fix&quot;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><img src="8.jpg#id=RamBq&originalType=binary&status=done&style=none"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417230775-fcf865d2-f123-4214-adc6-8914952dfb5d.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=u45ca0143&margin=%5Bobject%20Object%5D&name=8.jpg&originHeight=405&originWidth=720&originalType=binary&size=9224&status=done&style=none&taskId=ud6b209ce-caac-4800-980e-5a61e12d7ec" alt="8.jpg"></p>
 <p>其实是想把所有常用的库都默认支持，但很多常用的库却不支持缩小引用范围。因为没有独立输出各个子模块，不能把引用修改为对单个子模块的引用。</p>
 <h2 id="（2）CSS-Tree-shaking"><a href="#（2）CSS-Tree-shaking" class="headerlink" title="（2）CSS Tree-shaking"></a>（2）CSS Tree-shaking</h2><p>我们前面所说的 tree-shaking 都是针对 js 文件，通过静态分析，尽可能消除无用的代码，那对于 css 我们能做 tree-shaking 吗？</p>
 <p>随着 CSS3，LESS，SASS 等各种 css 预处理语言的普及，css 文件在整个工程中占比是不可忽视的。随着大项目功能的不停迭代，导致 css 中可能就存在着无用的代码。我实现了一个 webpack 插件来解决这个问题，找出 css 代码无用的代码。</p>
 <p><a href="http://link.zhihu.com/?target=https://github.com/lin-xi/webpack-css-treeshaking-plugin"><strong>webpack-css-treeshaking-plugin</strong></a><strong>，对 css 进行 tree-shaking</strong></p>
-<p><img src="9.jpg#id=DBjwE&originalType=binary&status=done&style=none"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417236617-b3f1bf5c-e32d-4c56-b932-71b640794f3e.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=u816fab64&margin=%5Bobject%20Object%5D&name=9.jpg&originHeight=120&originWidth=120&originalType=binary&size=4686&status=done&style=none&taskId=ub99c9de7-84c5-4a61-b523-140015afd27" alt="9.jpg"></p>
 <p>[webpack-css-treeshaking-plugin</p>
 <p>](<a href="http://link.zhihu.com/?target=https://github.com/lin-xi/webpack-css-treeshaking-plugin">http://link.zhihu.com/?target=https%3A//github.com/lin-xi/webpack-css-treeshaking-plugin</a>)</p>
 <p>下面介绍一下原理</p>
@@ -244,9 +244,9 @@
 <p><strong>首先面临的问题是，如何优雅的遍历所有的选择器呢？难道要用正则表达式很苦逼的去匹配分割吗？</strong></p>
 <p>babel 是 js 世界的福星，其实 css 世界也有利器，那就是 postCss。</p>
 <p>PostCSS 提供了一个解析器，它能够将 CSS 解析成 AST 抽象语法树。然后我们能写各种插件，对抽象语法树做处理，最终生成新的 css 文件，以达到对 css 进行精确修改的目的。</p>
-<p><img src="10.jpg#id=qJv3w&originalType=binary&status=done&style=none"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417244857-2cc0e501-2546-4a96-83e9-07236d806d89.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=uc818a839&margin=%5Bobject%20Object%5D&name=10.jpg&originHeight=394&originWidth=720&originalType=binary&size=16294&status=done&style=none&taskId=ua622f1ee-12ee-48b4-9122-14c9b3aba66" alt="10.jpg"></p>
 <p>整体又是一个 webpack 的插件，架构图如下：</p>
-<p><img src="11.jpg#id=qAetG&originalType=binary&status=done&style=none"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417249458-955d4c96-c638-47e5-a97a-b7092d5f18dc.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=u9c2e7c64&margin=%5Bobject%20Object%5D&name=11.jpg&originHeight=405&originWidth=720&originalType=binary&size=17641&status=done&style=none&taskId=u184075c6-13de-4115-ae5b-f3ee4d2fce4" alt="11.jpg"></p>
 <p>主要流程：</p>
 <ul>
 <li>插件监听 webapck 编译完成事件，webpack 编译完成之后，从 compilation 中找出所有的 css 文件和 js 文件</li>
@@ -270,7 +270,7 @@
 <p>判断 css 是否再 js 中出现过，是使用正则匹配。</p>
 <p>其实，后续还可以继续优化，比如对 tag 类的选择器，可以配置是否再 html，jsx，template 中出现过，如果出现过，没有出现过也可以认为是无用代码。</p>
 <p>当然，插件能正常工作还是的有一些前提和约束。我们可以在代码中动态改变 css，比如再 react 和 vue 中，可以这么写</p>
-<p><img src="12.jpg#id=eEwPF&originalType=binary&status=done&style=none"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417258077-ca5886f8-045c-4b99-89da-b063e43149bf.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=u456c9f5e&margin=%5Bobject%20Object%5D&name=12.jpg&originHeight=219&originWidth=720&originalType=binary&size=11908&status=done&style=none&taskId=u0422f285-8f06-45f7-826c-a8a4256f1f5" alt="12.jpg"></p>
 <p>这样是比较推荐的方式，选择器作为字符或变量名出现在代码中，下面这样动态生成选择器的情况就会导致匹配失败</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">render()&#123;</span><br><span class="line">  this.stateClass &#x3D; &#39;state-&#39; + this.state &#x3D;&#x3D; 2 ? &#39;open&#39; : &#39;close&#39;</span><br><span class="line">  return &lt;div class&#x3D;&#123;this.stateClass&#125;&gt;&lt;&#x2F;div&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -281,15 +281,15 @@
 <h2 id="（3）webpack-bundle-文件去重"><a href="#（3）webpack-bundle-文件去重" class="headerlink" title="（3）webpack bundle 文件去重"></a>（3）webpack bundle 文件去重</h2><p>如果 webpack 打包后的 bundle 文件中存在着相同的模块，也属于无用代码的一种。也应该被去除掉</p>
 <p>首先我们需要一个能对 bundle 文件定性分析的工具，能发现问题，能看出优化效果。</p>
 <p>webpack-bundle-analyzer 这个插件完全能满足我们的需求，他能以图形化的方式展示 bundle 中所有的模块的构成的各构成的大小。</p>
-<p><img src="13.jpg#id=sJf4r&originalType=binary&status=done&style=none"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417264814-7e9330da-796e-4ff8-8f4c-5b598ac4e667.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=ua801459f&margin=%5Bobject%20Object%5D&name=13.jpg&originHeight=405&originWidth=720&originalType=binary&size=18473&status=done&style=none&taskId=u56e06f26-6d1b-4d5d-909e-00c99647abe" alt="13.jpg"></p>
 <p>其次，需求对通用模块进行提取，CommonsChunkPlugin 是最被人熟知的用于提供通用模块的插件。早期的时候，我并不完全了解他的功能，并没有发挥最大的功效。</p>
 <p>下面介绍 CommonsChunkPlugin 的正确用法</p>
 <p><strong>自动提取所有的 node_moudles 或者引用次数两次以上的模块</strong></p>
-<p><img src="14.jpg#id=rRUSz&originalType=binary&status=done&style=none"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417270065-ff9e3f12-cb26-48d7-b81c-7ac3f51eb0da.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=u4893c42d&margin=%5Bobject%20Object%5D&name=14.jpg&originHeight=192&originWidth=720&originalType=binary&size=9906&status=done&style=none&taskId=ud7ac520f-f577-4128-80b8-8d82d0b2ea3" alt="14.jpg"></p>
 <p>minChunks 可以接受一个数值或者函数，如果是函数，可自定义打包规则</p>
 <p>但使用上面记载的配置之后，并不能高枕无忧。因为这个配置只能提取所有 entry 打包后的文件中的通用模块。而现实是，有了提高性能，我们会按需加载，通过 webpack 提供的 import（…）方法，这种按需加载的文件并不会存在于 entry 之中，所以按需加载的异步模块中的通用模块并没有提取。</p>
 <p><strong>如何提取按需加载的异步模块里的通用模块呢？</strong></p>
-<p><img src="15.jpg#id=yOwv5&originalType=binary&status=done&style=none"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417275241-489bbef7-42df-46b3-bac9-580cf920a8ab.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=u6bea9d0b&margin=%5Bobject%20Object%5D&name=15.jpg&originHeight=331&originWidth=720&originalType=binary&size=21512&status=done&style=none&taskId=uf770f890-910a-41c2-b268-98db8a669d7" alt="15.jpg"></p>
 <p>配置另一个 CommonsChunkPlugin，添加 async 属性，async 可以接受布尔值或字符串。当时字符串时，默认是输出文件的名称。</p>
 <p>names 是所有异步模块的名称</p>
 <p>这里还涉及一个给异步模块命名的知识点。我是这样做的：</p>
@@ -297,11 +297,11 @@
 
 <p>没错，在 import 里添加注释。/_ webpackChunkName: “EditPage” _/ ，虽然看着不舒服，但是管用。</p>
 <p>贴一个项目的优化效果对比图</p>
-<p><img src="16.jpg#id=KZHR3&originalType=binary&status=done&style=none"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417280783-55fb56f0-e13e-4424-b662-b11bfe12a00e.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=u9ecfab79&margin=%5Bobject%20Object%5D&name=16.jpg&originHeight=405&originWidth=720&originalType=binary&size=27747&status=done&style=none&taskId=u81f9d6e0-0583-4bca-90ed-a793591757b" alt="16.jpg"></p>
 <p>优化效果还是比较明显。</p>
-<p><img src="17.jpg#id=Dy7lf&originalType=binary&status=done&style=none"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417285132-f56688f8-be56-4545-bba3-2687b8398459.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=u5e535843&margin=%5Bobject%20Object%5D&name=17.jpg&originHeight=405&originWidth=720&originalType=binary&size=25678&status=done&style=none&taskId=ud6da4518-ff37-4958-982e-7abf2ff05fc" alt="17.jpg"></p>
 <p>优化前 bundle</p>
-<p><img src="18.jpg#id=d9um1&originalType=binary&status=done&style=none"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417289834-408cd2e7-ef19-496a-9125-5ac4ad04656a.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=uad419791&margin=%5Bobject%20Object%5D&name=18.jpg&originHeight=405&originWidth=720&originalType=binary&size=24291&status=done&style=none&taskId=u3f99a4c5-7841-4d8d-b8dc-74be296417f" alt="18.jpg"></p>
 <p>优化后 bundle</p>
 <p><strong>最后思考一个问题：</strong></p>
 <p><strong>不同 entry 模块或按需加载的异步模块需不需要提取通用模块？</strong></p>
@@ -309,7 +309,7 @@
 <p>百度外卖的移动端应用场景是这样的，我们所有的移动端页面都做了离线化的处理。离线之后，加载本地的 js 文件，与网络无关，基本上可以忽略文件大小，所以更关注整个离线包的大小。离线包越小，耗费用户的流量就越小，用户体验更好，所以离线化的场景是非常适合最小粒提取通用模块的，即将所有 entry 模块和异步加载模块的引用大于 2 的模块都提取，这样能获得最小的输出文件，最小的离线包。</p>
 <p>1 月 20 日，我将在掘金分享《百度外卖前端离线化实践》，有兴趣的可以关注一下。</p>
 <p>文本提到的插件都是开源的，链接汇总，欢迎交流，欢迎戳 ❤</p>
-<p><img src="19.jpg#id=qBUgO&originalType=binary&status=done&style=none"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417305159-1c75e841-c2cd-42d8-a345-ec8541f4dbba.jpeg#clientId=ue71f5aac-b372-4&from=drop&id=u91704679&margin=%5Bobject%20Object%5D&name=19.jpg&originHeight=120&originWidth=120&originalType=binary&size=4686&status=done&style=none&taskId=u5836fcec-3272-40dc-9088-0ee4d96214a" alt="19.jpg"></p>
 <p><a href="http://link.zhihu.com/?target=https://github.com/lin-xi/babel-plugin-import-fix">lin-xi/babel-plugin-import-fix</a></p>
 <p><a href="http://link.zhihu.com/?target=https://github.com/lin-xi/webpack-css-treeshaking-plugin">lin-xi/webpack-css-treeshaking-plugin</a></p>
 
