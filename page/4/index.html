@@ -146,6 +146,286 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/22/yuque/grid/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/22/yuque/grid/" class="post-title-link" itemprop="url">grid</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-22 14:40:31" itemprop="dateCreated datePublished" datetime="2021-04-22T14:40:31+08:00">2021-04-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-26 14:06:38" itemprop="dateModified" datetime="2021-04-26T14:06:38+08:00">2021-04-26</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="Grid-布局是什么？"><a href="#Grid-布局是什么？" class="headerlink" title="Grid 布局是什么？"></a>Grid 布局是什么？</h2><p><code>Grid</code> 布局即网格布局，是一种新的 <code>CSS</code> 布局模型，比较擅长将一个页面划分为几个主要区域，以及定义这些区域的大小、位置、层次等关系。号称是最强大的的 <code>CSS</code> 布局方案，是目前唯一一种 <code>CSS</code> 二维布局。利用 <code>Grid</code> 布局，我们可以轻松实现类似下图布局，<a target="_blank" rel="noopener" href="https://codepen.io/gpingfeng/pen/qBbveKB?editors=1100">演示地址</a></p>
+<p><img src="1.png#alt=img"></p>
+<h2 id="Grid-布局和-flex-布局"><a href="#Grid-布局和-flex-布局" class="headerlink" title="Grid 布局和 flex 布局"></a>Grid 布局和 flex 布局</h2><p>讲到布局，我们就会想到 <code>flex</code> 布局，甚至有人认为竟然有 <code>flex</code> 布局了，似乎没有必要去了解 <code>Grid</code> 布局。但 <code>flex</code> 布局和 <code>Grid</code> 布局有实质的区别，那就是 <strong><code>flex</code> 布局是一维布局，<code>Grid</code> 布局是二维布局</strong>。<code>flex</code> 布局一次只能处理一个维度上的元素布局，一行或者一列。<code>Grid</code> 布局是将容器划分成了“行”和“列”，产生了一个个的网格，我们可以将网格元素放在与这些行和列相关的位置上，从而达到我们布局的目的。</p>
+<p><strong><code>Grid</code> 布局远比 <code>flex</code> 布局强大！</strong></p>
+<p>flex 布局示例:</p>
+<p><img src="2.png#alt=img"></p>
+<p>Grid 布局示例：</p>
+<p><img src="3.png#alt=img"></p>
+<h2 id="Grid-的一些基础概念"><a href="#Grid-的一些基础概念" class="headerlink" title="Grid 的一些基础概念"></a>Grid 的一些基础概念</h2><p>我们使用 Grid 实现一个小例子，演示 Grid 的一些基础概念，<a target="_blank" rel="noopener" href="https://codepen.io/gpingfeng/pen/QWyoexm?editors=1100">演示地址</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class&#x3D;&quot;wrapper&quot;&gt;</span><br><span class="line">  &lt;div class&#x3D;&quot;one item&quot;&gt;One&lt;&#x2F;div&gt;</span><br><span class="line">  &lt;div class&#x3D;&quot;two item&quot;&gt;Two&lt;&#x2F;div&gt;</span><br><span class="line">  &lt;div class&#x3D;&quot;three item&quot;&gt;Three&lt;&#x2F;div&gt;</span><br><span class="line">  &lt;div class&#x3D;&quot;four item&quot;&gt;Four&lt;&#x2F;div&gt;</span><br><span class="line">  &lt;div class&#x3D;&quot;five item&quot;&gt;Five&lt;&#x2F;div&gt;</span><br><span class="line">  &lt;div class&#x3D;&quot;six item&quot;&gt;Six&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">.wrapper &#123;</span><br><span class="line">  margin: 60px;</span><br><span class="line">  &#x2F;* 声明一个容器 *&#x2F;</span><br><span class="line">  display: grid;</span><br><span class="line">  &#x2F;*  声明列的宽度  *&#x2F;</span><br><span class="line">  grid-template-columns: repeat(3, 200px);</span><br><span class="line">  &#x2F;*  声明行间距和列间距  *&#x2F;</span><br><span class="line">  grid-gap: 20px;</span><br><span class="line">  &#x2F;*  声明行的高度  *&#x2F;</span><br><span class="line">  grid-template-rows: 100px 200px;</span><br><span class="line">&#125;</span><br><span class="line">.one &#123;</span><br><span class="line">  background: #19CAAD;</span><br><span class="line">&#125;</span><br><span class="line">.two &#123;</span><br><span class="line">  background: #8CC7B5;</span><br><span class="line">&#125;</span><br><span class="line">.three &#123;</span><br><span class="line">  background: #D1BA74;</span><br><span class="line">&#125;</span><br><span class="line">.four &#123;</span><br><span class="line">  background: #BEE7E9;</span><br><span class="line">&#125;</span><br><span class="line">.five &#123;</span><br><span class="line">  background: #E6CEAC;</span><br><span class="line">&#125;</span><br><span class="line">.six &#123;</span><br><span class="line">  background: #ECAD9E;</span><br><span class="line">&#125;</span><br><span class="line">.item &#123;</span><br><span class="line">  text-align: center;</span><br><span class="line">  font-size: 200%;</span><br><span class="line">  color: #fff;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="4.png#alt=img"></p>
+<p>容器和项目：我们通过在元素上声明 <code>display：grid</code> 或 <code>display：inline-grid</code> 来创建一个网格容器。一旦我们这样做，这个元素的所有直系子元素将成为网格项目。比如上面 <code>.wrapper</code> 所在的元素为一个网格容器，其直系子元素将成为网格项目。</p>
+<p>网格轨道：<code>grid-template-columns</code> 和 <code>grid-template-rows</code> 属性来定义网格中的行和列。容器内部的水平区域称为行，垂直区域称为列。上图中 <code>One</code>、<code>Two</code>、<code>Three</code> 组成了一行，<code>One</code>、<code>Four</code> 则是一列</p>
+<p><img src="5.png#alt=img"></p>
+<p>网格单元：一个网格单元是在一个网格元素中最小的单位， 从概念上来讲其实它和表格的一个单元格很像。上图中 <code>One</code>、<code>Two</code>、<code>Three</code>、<code>Four</code>…都是一个个的网格单元</p>
+<p>网格线：划分网格的线，称为”网格线”。应该注意的是，当我们定义网格时，我们定义的是网格轨道，而不是网格线。Grid 会为我们创建编号的网格线来让我们来定位每一个网格元素。m 列有 m + 1 根垂直的网格线，n 行有 n + 1 跟水平网格线。比如上图示例中就有 4 根垂直网格线。一般而言，是从左到右，从上到下，1，2，3 进行编号排序。当然也可以从右到左，从下到上，按照 -1，-2，-3…顺序进行编号排序</p>
+<p><img src="6.png#alt=img"></p>
+<h2 id="容器属性介绍"><a href="#容器属性介绍" class="headerlink" title="容器属性介绍"></a>容器属性介绍</h2><p><code>Grid</code> 布局相关的属性以及值众多，需要记忆的不少，建议可以跟 <code>demo</code> 一起结合起来，边敲代码边理解，再利用一些空闲时间记忆一下。笔者会在介绍每个属性的时候，做个小 <code>demo</code> 演示，建议大家可以自己修改看看效果加深记忆</p>
+<p><code>Grid</code> 布局属性可以分为两大类，一类是容器属性，一类是项目属性。我们先来看容器属性</p>
+<h3 id="display-属性"><a href="#display-属性" class="headerlink" title="display 属性"></a>display 属性</h3><p><a target="_blank" rel="noopener" href="https://codepen.io/gpingfeng/pen/wvMZwqY">display 属性演示</a></p>
+<p>我们通过在元素上声明 <code>display：grid</code> 或 <code>display：inline-grid</code> 来创建一个网格容器。声明 <code>display：grid</code> 则该容器是一个块级元素，设置成 <code>display: inline-grid</code> 则容器元素为行内元素</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.wrapper &#123;</span><br><span class="line">  display: grid;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="7.png#alt=img"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.wrapper-1 &#123;</span><br><span class="line">  display: inline-grid;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="8.png#alt=img"></p>
+<h3 id="grid-template-columns-属性和-grid-template-rows-属性"><a href="#grid-template-columns-属性和-grid-template-rows-属性" class="headerlink" title="grid-template-columns 属性和 grid-template-rows 属性"></a>grid-template-columns 属性和 grid-template-rows 属性</h3><p><a target="_blank" rel="noopener" href="https://codepen.io/gpingfeng/pen/BajEBYq?editors=1100">grid-template-columns 和 grid-template-rows 属性演示地址</a></p>
+<p><code>grid-template-columns</code> 属性设置列宽，<code>grid-template-rows</code> 属性设置行高，这两个属性在 <code>Grid</code> 布局中尤为重要，它们的值是有多种多样的，而且它们的设置是比较相似的，下面针对 <code>grid-template-columns</code> 属性进行讲解</p>
+<p><strong>固定的列宽和行高</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">.wrapper &#123;</span><br><span class="line">  display: grid;</span><br><span class="line">  &#x2F;*  声明了三列，宽度分别为 200px 100px 200px *&#x2F;</span><br><span class="line">  grid-template-columns: 200px 100px 200px;</span><br><span class="line">  grid-gap: 5px;</span><br><span class="line">  &#x2F;*  声明了两行，行高分别为 50px 50px  *&#x2F;</span><br><span class="line">  grid-template-rows: 50px 50px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上表示固定列宽为 200px 100px 200px，行高为 50px 50px</p>
+<p><img src="9.png#alt=img"></p>
+<p><strong>repeat() 函数</strong>：可以简化重复的值。该函数接受两个参数，第一个参数是重复的次数，第二个参数是所要重复的值。比如上面行高都是一样的，我们可以这么去实现，实际效果是一模一样的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.wrapper-1 &#123;</span><br><span class="line">  display: grid;</span><br><span class="line">  grid-template-columns: 200px 100px 200px;</span><br><span class="line">  grid-gap: 5px;</span><br><span class="line">  &#x2F;*  2行，而且行高都为 50px  *&#x2F;</span><br><span class="line">  grid-template-rows: repeat(2, 50px);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>auto-fill 关键字</strong>：表示自动填充，让一行（或者一列）中尽可能的容纳更多的单元格。<code>grid-template-columns: repeat(auto-fill, 200px)</code> 表示列宽是 200 px，但列的数量是不固定的，只要浏览器能够容纳得下，就可以放置元素，代码以及效果如下图所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">.wrapper-2 &#123;</span><br><span class="line">  display: grid;</span><br><span class="line">  grid-template-columns: repeat(auto-fill, 200px);</span><br><span class="line">  grid-gap: 5px;</span><br><span class="line">  grid-auto-rows: 50px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="10.gif#alt=img"></p>
+<p><strong>fr 关键字</strong>：<code>Grid</code> 布局还引入了一个另外的长度单位来帮助我们创建灵活的网格轨道。<code>fr</code> 单位代表网格容器中可用空间的一等份。<code>grid-template-columns: 200px 1fr 2fr</code> 表示第一个列宽设置为 200px，后面剩余的宽度分为两部分，宽度分别为剩余宽度的 1/3 和 2/3。代码以及效果如下图所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">.wrapper-3 &#123;</span><br><span class="line">  display: grid;</span><br><span class="line">  grid-template-columns: 200px 1fr 2fr;</span><br><span class="line">  grid-gap: 5px;</span><br><span class="line">  grid-auto-rows: 50px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="11.gif#alt=img"></p>
+<p><strong>minmax() 函数</strong>：我们有时候想给网格元素一个最小和最大的尺寸，<code>minmax()</code> 函数产生一个长度范围，表示长度就在这个范围之中都可以应用到网格项目中。它接受两个参数，分别为最小值和最大值。<code>grid-template-columns: 1fr 1fr minmax(300px, 2fr)</code> 的意思是，第三个列宽最少也是要 300px，但是最大不能大于第一第二列宽的两倍。代码以及效果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">.wrapper-4 &#123;</span><br><span class="line">  display: grid;</span><br><span class="line">  grid-template-columns: 1fr 1fr minmax(300px, 2fr);</span><br><span class="line">  grid-gap: 5px;</span><br><span class="line">  grid-auto-rows: 50px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="12.gif#alt=img"></p>
+<p><strong>auto 关键字</strong>：由浏览器决定长度。通过 <code>auto</code> 关键字，我们可以轻易实现三列或者两列布局。<code>grid-template-columns: 100px auto 100px</code> 表示第一第三列为 100px，中间由浏览器决定长度，代码以及效果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">.wrapper-5 &#123;</span><br><span class="line">  display: grid;</span><br><span class="line">  grid-template-columns: 100px auto 100px;</span><br><span class="line">  grid-gap: 5px;</span><br><span class="line">  grid-auto-rows: 50px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="13.gif#alt=img"></p>
+<h3 id="grid-row-gap-属性、grid-column-gap-属性以及-grid-gap-属性"><a href="#grid-row-gap-属性、grid-column-gap-属性以及-grid-gap-属性" class="headerlink" title="grid-row-gap 属性、grid-column-gap 属性以及 grid-gap 属性"></a>grid-row-gap 属性、grid-column-gap 属性以及 grid-gap 属性</h3><p><a target="_blank" rel="noopener" href="https://codepen.io/gpingfeng/pen/jOWRNeg">grid-row-gap 属性、grid-column-gap 属性以及 grid-gap 属性演示地址</a></p>
+<p><code>grid-row-gap</code> 属性、<code>grid-column-gap</code> 属性分别设置行间距和列间距。<code>grid-gap</code> 属性是两者的简写形式。</p>
+<p><code>grid-row-gap: 10px</code> 表示行间距是 10px，<code>grid-column-gap: 20px</code> 表示列间距是 20px。<code>grid-gap: 10px 20px</code> 实现的效果是一样的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">.wrapper &#123;</span><br><span class="line">  display: grid;</span><br><span class="line">  grid-template-columns: 200px 100px 100px;</span><br><span class="line">  grid-gap: 10px 20px;</span><br><span class="line">  grid-auto-rows: 50px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.wrapper-1 &#123;</span><br><span class="line">  display: grid;</span><br><span class="line">  grid-template-columns: 200px 100px 100px;</span><br><span class="line">  grid-auto-rows: 50px;</span><br><span class="line">  grid-row-gap: 10px;</span><br><span class="line">  grid-column-gap: 20px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上两种写法效果是一样的。</p>
+<p><img src="14.png#alt=img"></p>
+<h3 id="grid-template-areas-属性"><a href="#grid-template-areas-属性" class="headerlink" title="grid-template-areas 属性"></a>grid-template-areas 属性</h3><p><a target="_blank" rel="noopener" href="https://codepen.io/gpingfeng/pen/RwrObEJ?editors=1100">grid-area 以及 grid-template-areas 演示地址</a></p>
+<p><code>grid-template-areas</code> 属性用于定义区域，一个区域由一个或者多个单元格组成</p>
+<p>一般这个属性跟网格元素的 <code>grid-area</code> 一起使用，我们在这里一起介绍。 <code>grid-area</code> 属性指定项目放在哪一个区域</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">.wrapper &#123;</span><br><span class="line">  display: grid;</span><br><span class="line">  grid-gap: 10px;</span><br><span class="line">  grid-template-columns: 120px  120px  120px;</span><br><span class="line">  grid-template-areas:</span><br><span class="line">    &quot;. header  header&quot;</span><br><span class="line">    &quot;sidebar content content&quot;;</span><br><span class="line">  background-color: #fff;</span><br><span class="line">  color: #444;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码表示划分出 6 个单元格，其中值得注意的是 <code>.</code> 符号代表空的单元格，也就是没有用到该单元格。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">.sidebar &#123;</span><br><span class="line">  grid-area: sidebar;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.content &#123;</span><br><span class="line">  grid-area: content;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.header &#123;</span><br><span class="line">  grid-area: header;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上代码表示将类 <code>.sidebar</code> <code>.content</code> <code>.header</code>所在的元素放在上面 <code>grid-template-areas</code> 中定义的 <code>sidebar</code> <code>content</code> <code>header</code> 区域中</p>
+<p><img src="15.png#alt=img"></p>
+<h3 id="grid-auto-flow-属性"><a href="#grid-auto-flow-属性" class="headerlink" title="grid-auto-flow 属性"></a>grid-auto-flow 属性</h3><p><a target="_blank" rel="noopener" href="https://codepen.io/gpingfeng/pen/MWKRWKj?editors=1100">grid-auto-flow 属性演示地址</a></p>
+<p><code>grid-auto-flow</code> 属性控制着自动布局算法怎样运作，精确指定在网格中被自动布局的元素怎样排列。默认的放置顺序是”先行后列”，即先填满第一行，再开始放入第二行，即下图英文数字的顺序 <code>one</code>,<code>two</code>,<code>three</code>…。这个顺序由 <code>grid-auto-flow</code> 属性决定，默认值是 <code>row</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.wrapper &#123;</span><br><span class="line">  display: grid;</span><br><span class="line">  grid-template-columns: 100px 200px 100px;</span><br><span class="line">  grid-auto-flow: row;</span><br><span class="line">  grid-gap: 5px;</span><br><span class="line">  grid-auto-rows: 50px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="16.png#alt=img"></p>
+<p>细心的同学可能发现了一个问题，就是第五个项目和第六个项目之间有个空白（如下图所示），这个是由于第六块的长度大于了空白处的长度，被挤到了下一行导致的。在实际应用中，我们可能想让下面长度合适的填满这个空白，这个时候可以设置 <code>grid-auto-flow: row dense</code>，表示尽可能填满表格。代码以及效果如下所示：</p>
+<p><img src="17.png#alt=img"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.wrapper-2 &#123;</span><br><span class="line">  display: grid;</span><br><span class="line">  grid-template-columns: 100px 200px 100px;</span><br><span class="line">  grid-auto-flow: row dense;</span><br><span class="line">  grid-gap: 5px;</span><br><span class="line">  grid-auto-rows: 50px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="18.png#alt=img"></p>
+<p>可以设置 <code>grid-auto-flow: column</code>，表示先列后行，代码以及效果如下图所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.wrapper-1 &#123;</span><br><span class="line">  display: grid;</span><br><span class="line">  grid-auto-columns: 100px;</span><br><span class="line">  grid-auto-flow: column;</span><br><span class="line">  grid-gap: 5px;</span><br><span class="line">  grid-template-rows:  50px 50px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="19.png#alt=img"></p>
+<h3 id="justify-items-属性、align-items-属性以及-place-items-属性"><a href="#justify-items-属性、align-items-属性以及-place-items-属性" class="headerlink" title="justify-items 属性、align-items 属性以及 place-items 属性"></a>justify-items 属性、align-items 属性以及 place-items 属性</h3><p><a target="_blank" rel="noopener" href="https://codepen.io/gpingfeng/pen/zYrXYrz?editors=1100">justify-items 属性、align-items 属性演示地址</a></p>
+<p><code>justify-items</code> 属性设置单元格内容的水平位置（左中右），<code>align-items</code> 属性设置单元格的垂直位置（上中下）</p>
+<p>下面以 justify-items 属性为例进行讲解，align-items 属性同理，只是方向为垂直方向。它们都有如下属性：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.container &#123;</span><br><span class="line">  justify-items: start | end | center | stretch;</span><br><span class="line">  align-items: start | end | center | stretch;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其代码实现以及效果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">.wrapper, .wrapper-1, .wrapper-2, .wrapper-3 &#123;</span><br><span class="line">  display: grid;</span><br><span class="line">  grid-template-columns: 100px 200px 100px;</span><br><span class="line">  grid-gap: 5px;</span><br><span class="line">  grid-auto-rows: 50px;</span><br><span class="line">  justify-items: start;</span><br><span class="line">&#125;</span><br><span class="line">.wrapper-1 &#123;</span><br><span class="line">  justify-items: end;</span><br><span class="line">&#125;</span><br><span class="line">.wrapper-2 &#123;</span><br><span class="line">  justify-items: center;</span><br><span class="line">&#125;</span><br><span class="line">.wrapper-3 &#123;</span><br><span class="line">  justify-items: stretch;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>start：对齐单元格的起始边缘</li>
+</ul>
+<p><img src="20.png#alt=img"></p>
+<ul>
+<li>end：对齐单元格的结束边缘</li>
+</ul>
+<p><img src="21.png#alt=img"></p>
+<ul>
+<li>center：单元格内部居中</li>
+</ul>
+<p><img src="22.png#alt=img"></p>
+<ul>
+<li>stretch：拉伸，占满单元格的整个宽度（默认值）</li>
+</ul>
+<p><img src="23.png#alt=img"></p>
+<h3 id="justify-content-属性、align-content-属性以及-place-content-属性"><a href="#justify-content-属性、align-content-属性以及-place-content-属性" class="headerlink" title="justify-content 属性、align-content 属性以及 place-content 属性"></a>justify-content 属性、align-content 属性以及 place-content 属性</h3><p><a target="_blank" rel="noopener" href="https://codepen.io/gpingfeng/pen/qBbwBZx?editors=1100">justify-content 属性、align-content 属性演示地址</a></p>
+<p><code>justify-content</code> 属性是整个内容区域在容器里面的水平位置（左中右），<code>align-content</code> 属性是整个内容区域的垂直位置（上中下）。它们都有如下的属性值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.container &#123;</span><br><span class="line">  justify-content: start | end | center | stretch | space-around | space-between | space-evenly;</span><br><span class="line">  align-content: start | end | center | stretch | space-around | space-between | space-evenly;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面以 <code>justify-content</code> 属性为例进行讲解，<code>align-content</code> 属性同理，只是方向为垂直方向</p>
+<ul>
+<li>start - 对齐容器的起始边框</li>
+<li>end - 对齐容器的结束边框</li>
+<li>center - 容器内部居中</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">.wrapper, .wrapper-1, .wrapper-2, .wrapper-3, .wrapper-4, .wrapper-5, .wrapper-6 &#123;</span><br><span class="line">  display: grid;</span><br><span class="line">  grid-template-columns: 100px 200px 100px;</span><br><span class="line">  grid-gap: 5px;</span><br><span class="line">  grid-auto-rows: 50px;</span><br><span class="line">  justify-content: start;</span><br><span class="line">&#125;</span><br><span class="line">.wrapper-1 &#123;</span><br><span class="line">  justify-content: end;</span><br><span class="line">&#125;</span><br><span class="line">.wrapper-2 &#123;</span><br><span class="line">  justify-content: center;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="24.png#alt=img"></p>
+<ul>
+<li>space-around - 每个项目两侧的间隔相等。所以，项目之间的间隔比项目与容器边框的间隔大一倍</li>
+<li>space-between - 项目与项目的间隔相等，项目与容器边框之间没有间隔</li>
+<li>space-evenly - 项目与项目的间隔相等，项目与容器边框之间也是同样长度的间隔</li>
+<li>stretch - 项目大小没有指定时，拉伸占据整个网格容器</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">.wrapper-3 &#123;</span><br><span class="line">  justify-content: space-around;</span><br><span class="line">&#125;</span><br><span class="line">.wrapper-4 &#123;</span><br><span class="line">  justify-content: space-between;</span><br><span class="line">&#125;</span><br><span class="line">.wrapper-5 &#123;</span><br><span class="line">  justify-content: space-evenly;</span><br><span class="line">&#125;</span><br><span class="line">.wrapper-6 &#123;</span><br><span class="line">  justify-content: stretch;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="25.png#alt=img"></p>
+<h3 id="grid-auto-columns-属性和-grid-auto-rows-属性"><a href="#grid-auto-columns-属性和-grid-auto-rows-属性" class="headerlink" title="grid-auto-columns 属性和 grid-auto-rows 属性"></a>grid-auto-columns 属性和 grid-auto-rows 属性</h3><p><a target="_blank" rel="noopener" href="https://codepen.io/gpingfeng/pen/zYrXvYZ?editors=1100">grid-auto-columns 属性和 grid-auto-rows 属性演示地址</a></p>
+<p>在讲 <code>grid-auto-columns</code> 属性和 <code>grid-auto-rows</code> 属性之前，先来看看隐式和显式网格的概念</p>
+<p><strong>隐式和显式网格</strong>：显式网格包含了你在 <code>grid-template-columns</code> 和 <code>grid-template-rows</code> 属性中定义的行和列。如果你在网格定义之外又放了一些东西，或者因为内容的数量而需要的更多网格轨道的时候，网格将会在隐式网格中创建行和列</p>
+<p>假如有多余的网格（也就是上面提到的隐式网格），那么它的行高和列宽可以根据 <code>grid-auto-columns</code> 属性和 <code>grid-auto-rows</code> 属性设置。它们的写法和<code>grid-template-columns</code> 和 <code>grid-template-rows</code> 完全相同。如果不指定这两个属性，浏览器完全根据单元格内容的大小，决定新增网格的列宽和行高</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">.wrapper &#123;</span><br><span class="line">  display: grid;</span><br><span class="line">  grid-template-columns: 200px 100px;</span><br><span class="line">&#x2F;*  只设置了两行，但实际的数量会超出两行，超出的行高会以 grid-auto-rows 算 *&#x2F;</span><br><span class="line">  grid-template-rows: 100px 100px;</span><br><span class="line">  grid-gap: 10px 20px;</span><br><span class="line">  grid-auto-rows: 50px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>grid-template-columns</code> 属性和 <code>grid-template-rows</code> 属性只是指定了两行两列，但实际有九个元素，就会产生隐式网格。通过 <code>grid-auto-rows</code> 可以指定隐式网格的行高为 50px</p>
+<p><img src="26.png#alt=img"></p>
+<h2 id="项目属性介绍"><a href="#项目属性介绍" class="headerlink" title="项目属性介绍"></a>项目属性介绍</h2><h3 id="grid-column-start-属性、grid-column-end-属性、grid-row-start-属性以及-grid-row-end-属性"><a href="#grid-column-start-属性、grid-column-end-属性、grid-row-start-属性以及-grid-row-end-属性" class="headerlink" title="grid-column-start 属性、grid-column-end 属性、grid-row-start 属性以及 grid-row-end 属性"></a>grid-column-start 属性、grid-column-end 属性、grid-row-start 属性以及 grid-row-end 属性</h3><p><a target="_blank" rel="noopener" href="https://codepen.io/gpingfeng/pen/PoZgopr">演示地址</a></p>
+<p>可以指定网格项目所在的四个边框，分别定位在哪根网格线，从而指定项目的位置</p>
+<ul>
+<li>grid-column-start 属性：左边框所在的垂直网格线</li>
+<li>grid-column-end 属性：右边框所在的垂直网格线</li>
+<li>grid-row-start 属性：上边框所在的水平网格线</li>
+<li>grid-row-end 属性：下边框所在的水平网格线</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">.wrapper &#123;</span><br><span class="line">  display: grid;</span><br><span class="line">  grid-template-columns: repeat(3, 1fr);</span><br><span class="line">  grid-gap: 20px;</span><br><span class="line">  grid-auto-rows: minmax(100px, auto);</span><br><span class="line">&#125;</span><br><span class="line">.one &#123;</span><br><span class="line">  grid-column-start: 1;</span><br><span class="line">  grid-column-end: 2;</span><br><span class="line">  background: #19CAAD;</span><br><span class="line">&#125;</span><br><span class="line">.two &#123;</span><br><span class="line">  grid-column-start: 2;</span><br><span class="line">  grid-column-end: 4;</span><br><span class="line">  grid-row-start: 1;</span><br><span class="line">  grid-row-end: 2;</span><br><span class="line">  &#x2F;*   如果有重叠，就使用 z-index *&#x2F;</span><br><span class="line">  z-index: 1;</span><br><span class="line">  background: #8CC7B5;</span><br><span class="line">&#125;</span><br><span class="line">.three &#123;</span><br><span class="line">  grid-column-start: 3;</span><br><span class="line">  grid-column-end: 4;</span><br><span class="line">  grid-row-start: 1;</span><br><span class="line">  grid-row-end: 4;</span><br><span class="line">  background: #D1BA74;</span><br><span class="line">&#125;</span><br><span class="line">.four &#123;</span><br><span class="line">  grid-column-start: 1;</span><br><span class="line">  grid-column-end: 2;</span><br><span class="line">  grid-row-start: 2;</span><br><span class="line">  grid-row-end: 5;</span><br><span class="line">  background: #BEE7E9;</span><br><span class="line">&#125;</span><br><span class="line">.five &#123;</span><br><span class="line">  grid-column-start: 2;</span><br><span class="line">  grid-column-end: 2;</span><br><span class="line">  grid-row-start: 2;</span><br><span class="line">  grid-row-end: 5;</span><br><span class="line">  background: #E6CEAC;</span><br><span class="line">&#125;</span><br><span class="line">.six &#123;</span><br><span class="line">  grid-column: 3;</span><br><span class="line">  grid-row: 4;</span><br><span class="line">  background: #ECAD9E;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中，类 <code>.two</code> 所在的网格项目，垂直网格线是从 2 到 4，水平网格线是从 1 到 2。其中它跟 <code>.three</code> （垂直网格线是从 3 到 4，水平网格线是从 1 到 4） 是有冲突的。可以设置 <code>z-index</code> 去决定它们的层级关系</p>
+<p><img src="27.png#alt=img"></p>
+<h3 id="grid-area-属性"><a href="#grid-area-属性" class="headerlink" title="grid-area 属性"></a>grid-area 属性</h3><p><code>grid-area</code> 属性指定项目放在哪一个区域，在上面介绍 <code>grid-template-areas</code> 的时候有提到过，这里不再具体展开，具体的使用可以参考演示地址：</p>
+<p><a target="_blank" rel="noopener" href="https://codepen.io/gpingfeng/pen/RwrObEJ">grid-area 以及 grid-template-areas 属性演示地址</a></p>
+<h3 id="justify-self-属性、align-self-属性以及-place-self-属性"><a href="#justify-self-属性、align-self-属性以及-place-self-属性" class="headerlink" title="justify-self 属性、align-self 属性以及 place-self 属性"></a>justify-self 属性、align-self 属性以及 place-self 属性</h3><p><a target="_blank" rel="noopener" href="https://codepen.io/gpingfeng/pen/ZEQZEJK?editors=1100">justify-self 属性/ align-self 属性/ place-self 属性演示地址</a></p>
+<p><code>justify-self</code> 属性设置单元格内容的水平位置（左中右），跟 <code>justify-items</code> 属性的用法完全一致，但只作用于单个项目</p>
+<p><code>align-self</code> 属性设置单元格内容的垂直位置（上中下），跟 align-items 属性的用法完全一致，也是只作用于单个项目</p>
+<p>两者很相像，这里只拿 <code>justify-self</code> 属性演示，<code>align-self</code> 属性同理，只是作用于垂直方向。<code>place-self</code> 是设置 <code>align-self</code> 和 <code>justify-self</code> 的简写形式，这里也不重复介绍。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.item &#123;</span><br><span class="line">  justify-self: start | end | center | stretch;</span><br><span class="line">  align-self: start | end | center | stretch;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">.item &#123;</span><br><span class="line">  justify-self: start;</span><br><span class="line">&#125;</span><br><span class="line">.item-1 &#123;</span><br><span class="line">  justify-self: end;</span><br><span class="line">&#125;</span><br><span class="line">.item-2 &#123;</span><br><span class="line">  justify-self: center;</span><br><span class="line">&#125;</span><br><span class="line">.item-3 &#123;</span><br><span class="line">  justify-self: stretch;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>start：对齐单元格的起始边缘</li>
+</ul>
+<p><img src="28.png#alt=img"></p>
+<ul>
+<li>end：对齐单元格的结束边缘</li>
+</ul>
+<p><img src="29.png#alt=img"></p>
+<ul>
+<li>center：单元格内部居中</li>
+</ul>
+<p><img src="30.png#alt=img"></p>
+<ul>
+<li>stretch：拉伸，占满单元格的整个宽度（默认值）</li>
+</ul>
+<p><img src="31.png#alt=img"></p>
+<h2 id="Grid-实战——实现响应式布局"><a href="#Grid-实战——实现响应式布局" class="headerlink" title="Grid 实战——实现响应式布局"></a>Grid 实战——实现响应式布局</h2><p>经过上面的介绍，相信大家都可以看出，Grid 是非常强大的。一些常见的 CSS 布局，如居中，两列布局，三列布局等等是很容易实现的。我们接下来看看 Grid 布局是如何实现响应式布局的</p>
+<h3 id="fr-实现等分响应式"><a href="#fr-实现等分响应式" class="headerlink" title="fr 实现等分响应式"></a>fr 实现等分响应式</h3><p><a target="_blank" rel="noopener" href="https://codepen.io/gpingfeng/pen/wvMZKpB?editors=1100">fr 实现等分响应式</a></p>
+<p><code>fr</code> 等分单位，可以将容器的可用空间分成想要的多个等分空间。利用这个特性，我们能够轻易实现一个等分响应式。<code>grid-template-columns: 1fr 1fr 1fr</code> 表示容器分为三等分</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.wrapper &#123;</span><br><span class="line">  margin: 50px;</span><br><span class="line">  display: grid;</span><br><span class="line">  grid-template-columns: 1fr 1fr 1fr;</span><br><span class="line">  grid-gap: 10px 20px;</span><br><span class="line">  grid-auto-rows: 50px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="32.gif#alt=img"></p>
+<h3 id="repeat-auto-fit——固定列宽，改变列数量"><a href="#repeat-auto-fit——固定列宽，改变列数量" class="headerlink" title="repeat + auto-fit——固定列宽，改变列数量"></a>repeat + auto-fit——固定列宽，改变列数量</h3><p>等分布局并不只有 <code>Grid</code> 布局才有，像 <code>flex</code> 布局也能轻松实现，接下来看看更高级的响应式</p>
+<p>上面例子的始终都是三列的，但是需求往往希望我们的网格能够固定列宽，并根据容器的宽度来改变列的数量。这个时候，我们可以用到上面提到 <code>repeat()</code> 函数以及 <code>auto-fit</code> 关键字。<code>grid-template-columns: repeat(auto-fit, 200px)</code> 表示固定列宽为 200px，数量是自适应的，只要容纳得下，就会往上排列，代码以及效果实现如下：</p>
+<p><a target="_blank" rel="noopener" href="https://codepen.io/gpingfeng/pen/eYJopVE?editors=1100">演示地址</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.wrapper &#123;</span><br><span class="line">  margin: 50px;</span><br><span class="line">  display: grid;</span><br><span class="line">  grid-template-columns: repeat(auto-fit, 200px);</span><br><span class="line">  grid-gap: 10px 20px;</span><br><span class="line">  grid-auto-rows: 50px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="33.gif#alt=img"></p>
+<h3 id="repeat-auto-fit-minmax-去掉右侧空白"><a href="#repeat-auto-fit-minmax-去掉右侧空白" class="headerlink" title="repeat+auto-fit+minmax 去掉右侧空白"></a>repeat+auto-fit+minmax 去掉右侧空白</h3><p>上面看到的效果中，右侧通常会留下空白，这是我们不希望看到的。如果列的宽度也能在某个范围内自适应就好了。<code>minmax()</code> 函数就帮助我们做到了这点。将 <code>grid-template-columns: repeat(auto-fit, 200px)</code> 改成 <code>grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))</code> 表示列宽至少 200px，如果还有空余则一起等分。代码以及效果如下所示：</p>
+<p><a target="_blank" rel="noopener" href="https://codepen.io/gpingfeng/pen/dyGLYdQ">演示地址</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.wrapper &#123;</span><br><span class="line">  margin: 50px;</span><br><span class="line">  display: grid;</span><br><span class="line">  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));</span><br><span class="line">  grid-gap: 10px 20px;</span><br><span class="line">  grid-auto-rows: 50px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="34.gif#alt=img"></p>
+<h3 id="repeat-auto-fit-minmax-span-dense-解决空缺问题"><a href="#repeat-auto-fit-minmax-span-dense-解决空缺问题" class="headerlink" title="repeat+auto-fit+minmax-span-dense 解决空缺问题"></a>repeat+auto-fit+minmax-span-dense 解决空缺问题</h3><p>似乎一切进行得很顺利，但是某天 UI 来说，每个网格元素的长度可能不相同，这也简单，通过 <code>span</code> 关键字进行设置网格项目的跨度，<code>grid-column-start: span 3</code>，表示这个网格项目跨度为 3。具体的代码与效果如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.item-3 &#123;</span><br><span class="line">  grid-column-start: span 3;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://codepen.io/gpingfeng/pen/BajEoxy?editors=1100">演示地址</a></p>
+<p><img src="35.gif#alt=img"></p>
+<p>不对，怎么右侧又有空白了？原来是有一些长度太长了，放不下，这个时候就到我们的 <code>dense</code> 关键字出场了。<code>grid-auto-flow: row dense</code> 表示尽可能填充，而不留空白，代码以及效果如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">.wrapper, .wrapper-1 &#123;</span><br><span class="line">  margin: 50px;</span><br><span class="line">  display: grid;</span><br><span class="line">  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));</span><br><span class="line">  grid-gap: 10px 20px;</span><br><span class="line">  grid-auto-rows: 50px;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.wrapper-1 &#123;</span><br><span class="line">  grid-auto-flow: row dense;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="36.gif#alt=img"></p>
+<h2 id="Grid-布局兼容性"><a href="#Grid-布局兼容性" class="headerlink" title="Grid 布局兼容性"></a>Grid 布局兼容性</h2><p>最后，聊聊 <code>Grid</code> 布局兼容性问题，在 <a target="_blank" rel="noopener" href="https://caniuse.com/#search=grid">caniuse</a> 中，我们可以看到的结果如下，总体兼容性还不错，但在 IE 10 以下不支持。个人建议在公司的内部系统运用起来是没有问题的，但 TOC 的话，可能目前还是不太合适</p>
+<p><img src="37.png#alt=img"></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://gridbyexample.com/examples/">常见的 Grid 布局用例</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2019/03/grid-layout-tutorial.html">CSS Grid 网格布局教程</a></p>
+<p><a target="_blank" rel="noopener" href="https://drafts.csswg.org/css-grid/#intro">Grid 布局草案</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.html.cn/archives/8706">一行 CSS 代码实现响应式布局 – 使用 Grid 实现的响应式布局</a></p>
+<p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_Grid_Layout/Basic_Concepts_of_Grid_Layout">MDN</a></p>
+<p>但愿能够给大家带来一点启发，也欢迎大家关注我的公众号，期待和大家一起交流成长</p>
+<p><img src="38.png#alt=img"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/22/yuque/flex/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -177,7 +457,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 01:05:38" itemprop="dateModified" datetime="2021-04-26T01:05:38+08:00">2021-04-26</time>
+                <time title="修改时间：2021-04-26 14:06:38" itemprop="dateModified" datetime="2021-04-26T14:06:38+08:00">2021-04-26</time>
               </span>
 
           
@@ -560,7 +840,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 01:05:38" itemprop="dateModified" datetime="2021-04-26T01:05:38+08:00">2021-04-26</time>
+                <time title="修改时间：2021-04-26 14:06:38" itemprop="dateModified" datetime="2021-04-26T14:06:38+08:00">2021-04-26</time>
               </span>
 
           
@@ -664,7 +944,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 01:05:38" itemprop="dateModified" datetime="2021-04-26T01:05:38+08:00">2021-04-26</time>
+                <time title="修改时间：2021-04-26 14:06:38" itemprop="dateModified" datetime="2021-04-26T14:06:38+08:00">2021-04-26</time>
               </span>
 
           
@@ -809,7 +1089,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 01:05:38" itemprop="dateModified" datetime="2021-04-26T01:05:38+08:00">2021-04-26</time>
+                <time title="修改时间：2021-04-26 14:06:38" itemprop="dateModified" datetime="2021-04-26T14:06:38+08:00">2021-04-26</time>
               </span>
 
           
@@ -875,7 +1155,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 01:05:38" itemprop="dateModified" datetime="2021-04-26T01:05:38+08:00">2021-04-26</time>
+                <time title="修改时间：2021-04-26 14:06:39" itemprop="dateModified" datetime="2021-04-26T14:06:39+08:00">2021-04-26</time>
               </span>
 
           
@@ -1031,7 +1311,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 01:05:39" itemprop="dateModified" datetime="2021-04-26T01:05:39+08:00">2021-04-26</time>
+                <time title="修改时间：2021-04-26 14:06:39" itemprop="dateModified" datetime="2021-04-26T14:06:39+08:00">2021-04-26</time>
               </span>
 
           
@@ -1163,7 +1443,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 01:05:39" itemprop="dateModified" datetime="2021-04-26T01:05:39+08:00">2021-04-26</time>
+                <time title="修改时间：2021-04-26 14:06:39" itemprop="dateModified" datetime="2021-04-26T14:06:39+08:00">2021-04-26</time>
               </span>
 
           
@@ -1350,7 +1630,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 01:05:39" itemprop="dateModified" datetime="2021-04-26T01:05:39+08:00">2021-04-26</time>
+                <time title="修改时间：2021-04-26 14:06:39" itemprop="dateModified" datetime="2021-04-26T14:06:39+08:00">2021-04-26</time>
               </span>
 
           
@@ -1445,7 +1725,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 01:05:39" itemprop="dateModified" datetime="2021-04-26T01:05:39+08:00">2021-04-26</time>
+                <time title="修改时间：2021-04-26 14:06:39" itemprop="dateModified" datetime="2021-04-26T14:06:39+08:00">2021-04-26</time>
               </span>
 
           
@@ -1551,233 +1831,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/19/yuque/%E8%B7%A8%E9%A1%B5%E9%9D%A2%E9%80%9A%E4%BF%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Adam Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Adam">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/19/yuque/%E8%B7%A8%E9%A1%B5%E9%9D%A2%E9%80%9A%E4%BF%A1/" class="post-title-link" itemprop="url">跨页面通信</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-19 20:50:53" itemprop="dateCreated datePublished" datetime="2021-04-19T20:50:53+08:00">2021-04-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 01:05:39" itemprop="dateModified" datetime="2021-04-26T01:05:39+08:00">2021-04-26</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>在浏览器中，我们可以同时打开多个 Tab 页，每个 Tab 页可以粗略理解为一个“独立”的运行环境，即使是全局对象也不会在多个 Tab 间共享。然而有些时候，我们希望能在这些“独立”的 Tab 页面之间同步页面的数据、信息或状态。</p>
-<p>正如下面这个例子：我在列表页点击“收藏”后，对应的详情页按钮会自动更新为“已收藏”状态；类似的，在详情页点击“收藏”后，列表页中按钮也会更新。</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/gif/21377586/1618909289351-36a24fd7-e6f6-41d8-9682-c09e9b6c384c.gif#clientId=u61de38f8-254c-4&from=paste&height=438&id=u88553d57&margin=%5Bobject%20Object%5D&originHeight=876&originWidth=1364&originalType=url&status=done&style=none&taskId=u3edd39f2-51e8-4eb9-9e3b-cac496758d4&width=682"></p>
-<p>这就是我们所说的前端跨页面通信。</p>
-<p>你知道哪些跨页面通信的方式呢？如果不清楚，下面我就带大家来看看七种跨页面通信的方式。</p>
-<p>–</p>
-<h2 id="一、同源页面间的跨页面通信"><a href="#一、同源页面间的跨页面通信" class="headerlink" title="一、同源页面间的跨页面通信"></a>一、同源页面间的跨页面通信</h2><blockquote>
-<p>以下各种方式的 <a target="_blank" rel="noopener" href="https://alienzhou.github.io/cross-tab-communication/">在线 Demo 可以戳这里 &gt;&gt;</a></p>
-</blockquote>
-<p>浏览器的<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Same-origin_policy">同源策略</a>在下述的一些跨页面通信方法中依然存在限制。因此，我们先来看看，在满足同源策略的情况下，都有哪些技术可以用来实现跨页面通信。</p>
-<h3 id="1-BroadCast-Channel"><a href="#1-BroadCast-Channel" class="headerlink" title="1. BroadCast Channel"></a>1. BroadCast Channel</h3><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/BroadcastChannel">BroadCast Channel</a> 可以帮我们创建一个用于广播的通信频道。当所有页面都监听同一频道的消息时，其中某一个页面通过它发送的消息就会被其他所有页面收到。它的 API 和用法都非常简单。</p>
-<p>下面的方式就可以创建一个标识为<code>AlienZHOU</code>的频道：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const bc &#x3D; new BroadcastChannel(&#39;AlienZHOU&#39;);</span><br></pre></td></tr></table></figure>
-
-<p>各个页面可以通过<code>onmessage</code>来监听被广播的消息：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">bc.onmessage &#x3D; function (e) &#123;</span><br><span class="line">    const data &#x3D; e.data;</span><br><span class="line">    const text &#x3D; &#39;[receive] &#39; + data.msg + &#39; —— tab &#39; + data.from;</span><br><span class="line">    console.log(&#39;[BroadcastChannel] receive message:&#39;, text);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>要发送消息时只需要调用实例上的<code>postMessage</code>方法即可：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bc.postMessage(mydata);</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>Broadcast Channel 的具体的使用方式可以看这篇<a target="_blank" rel="noopener" href="https://juejin.im/post/6844903811228663815">《【3 分钟速览】前端广播式通信：Broadcast Channel》</a>。</p>
-</blockquote>
-<h3 id="2-Service-Worker"><a href="#2-Service-Worker" class="headerlink" title="2. Service Worker"></a>2. Service Worker</h3><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Service_Worker_API">Service Worker</a> 是一个可以长期运行在后台的 Worker，能够实现与页面的双向通信。多页面共享间的 Service Worker 可以共享，将 Service Worker 作为消息的处理中心（中央站）即可实现广播效果。</p>
-<blockquote>
-<p>Service Worker 也是 PWA 中的核心技术之一，由于本文重点不在 PWA ，因此如果想进一步了解 Service Worker，可以阅读我之前的文章<a target="_blank" rel="noopener" href="https://juejin.im/post/6844903588691443725">【PWA 学习与实践】(3) 让你的 WebApp 离线可用</a>。</p>
-</blockquote>
-<p>首先，需要在页面注册 Service Worker：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* 页面逻辑 *&#x2F;</span><br><span class="line">navigator.serviceWorker.register(&#39;..&#x2F;util.sw.js&#39;).then(function () &#123;</span><br><span class="line">    console.log(&#39;Service Worker 注册成功&#39;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>其中<code>../util.sw.js</code>是对应的 Service Worker 脚本。Service Worker 本身并不自动具备“广播通信”的功能，需要我们添加些代码，将其改造成消息中转站：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* ..&#x2F;util.sw.js Service Worker 逻辑 *&#x2F;</span><br><span class="line">self.addEventListener(&#39;message&#39;, function (e) &#123;</span><br><span class="line">    console.log(&#39;service worker receive message&#39;, e.data);</span><br><span class="line">    e.waitUntil(</span><br><span class="line">        self.clients.matchAll().then(function (clients) &#123;</span><br><span class="line">            if (!clients || clients.length &#x3D;&#x3D;&#x3D; 0) &#123;</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line">            clients.forEach(function (client) &#123;</span><br><span class="line">                client.postMessage(e.data);</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;)</span><br><span class="line">    );</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>我们在 Service Worker 中监听了<code>message</code>事件，获取页面（从 Service Worker 的角度叫 client）发送的信息。然后通过<code>self.clients.matchAll()</code>获取当前注册了该 Service Worker 的所有页面，通过调用每个 client（即页面）的<code>postMessage</code>方法，向页面发送消息。这样就把从一处（某个 Tab 页面）收到的消息通知给了其他页面。</p>
-<p>处理完 Service Worker，我们需要在页面监听 Service Worker 发送来的消息：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* 页面逻辑 *&#x2F;</span><br><span class="line">navigator.serviceWorker.addEventListener(&#39;message&#39;, function (e) &#123;</span><br><span class="line">    const data &#x3D; e.data;</span><br><span class="line">    const text &#x3D; &#39;[receive] &#39; + data.msg + &#39; —— tab &#39; + data.from;</span><br><span class="line">    console.log(&#39;[Service Worker] receive message:&#39;, text);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>最后，当需要同步消息时，可以调用 Service Worker 的<code>postMessage</code>方法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* 页面逻辑 *&#x2F;</span><br><span class="line">navigator.serviceWorker.controller.postMessage(mydata);</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-LocalStorage"><a href="#3-LocalStorage" class="headerlink" title="3. LocalStorage"></a>3. LocalStorage</h3><p>LocalStorage 作为前端最常用的本地存储，大家应该已经非常熟悉了；但<code>StorageEvent</code>这个与它相关的事件有些同学可能会比较陌生。</p>
-<p>当 LocalStorage 变化时，会触发<code>storage</code>事件。利用这个特性，我们可以在发送消息时，把消息写入到某个 LocalStorage 中；然后在各个页面内，通过监听<code>storage</code>事件即可收到通知。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">window.addEventListener(&#39;storage&#39;, function (e) &#123;</span><br><span class="line">    if (e.key &#x3D;&#x3D;&#x3D; &#39;ctc-msg&#39;) &#123;</span><br><span class="line">        const data &#x3D; JSON.parse(e.newValue);</span><br><span class="line">        const text &#x3D; &#39;[receive] &#39; + data.msg + &#39; —— tab &#39; + data.from;</span><br><span class="line">        console.log(&#39;[Storage I] receive message:&#39;, text);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>在各个页面添加如上的代码，即可监听到 LocalStorage 的变化。当某个页面需要发送消息时，只需要使用我们熟悉的<code>setItem</code>方法即可：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mydata.st &#x3D; +(new Date);</span><br><span class="line">window.localStorage.setItem(&#39;ctc-msg&#39;, JSON.stringify(mydata));</span><br></pre></td></tr></table></figure>
-
-<p>注意，这里有一个细节：我们在 mydata 上添加了一个取当前毫秒时间戳的<code>.st</code>属性。这是因为，<code>storage</code>事件只有在值真正改变时才会触发。举个例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">window.localStorage.setItem(&#39;test&#39;, &#39;123&#39;);</span><br><span class="line">window.localStorage.setItem(&#39;test&#39;, &#39;123&#39;);</span><br></pre></td></tr></table></figure>
-
-<p>由于第二次的值<code>&#39;123&#39;</code>与第一次的值相同，所以以上的代码只会在第一次<code>setItem</code>时触发<code>storage</code>事件。因此我们通过设置<code>st</code>来保证每次调用时一定会触发<code>storage</code>事件。</p>
-<h3 id="小憩一下"><a href="#小憩一下" class="headerlink" title="小憩一下"></a>小憩一下</h3><p>上面我们看到了三种实现跨页面通信的方式，不论是建立广播频道的 Broadcast Channel，还是使用 Service Worker 的消息中转站，抑或是些 tricky 的<code>storage</code>事件，其都是“广播模式”：一个页面将消息通知给一个“中央站”，再由“中央站”通知给各个页面。</p>
-<blockquote>
-<p>在上面的例子中，这个“中央站”可以是一个 BroadCast Channel 实例、一个 Service Worker 或是 LocalStorage。</p>
-</blockquote>
-<p>下面我们会看到另外两种跨页面通信方式，我把它称为“共享存储+轮询模式”。</p>
-<p>–</p>
-<h3 id="4-Shared-Worker"><a href="#4-Shared-Worker" class="headerlink" title="4. Shared Worker"></a>4. Shared Worker</h3><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/SharedWorker">Shared Worker</a> 是 Worker 家族的另一个成员。普通的 Worker 之间是独立运行、数据互不相通；而多个 Tab 注册的 Shared Worker 则可以实现数据共享。</p>
-<p>Shared Worker 在实现跨页面通信时的问题在于，它无法主动通知所有页面，因此，我们会使用轮询的方式，来拉取最新的数据。思路如下：</p>
-<p>让 Shared Worker 支持两种消息。一种是 post，Shared Worker 收到后会将该数据保存下来；另一种是 get，Shared Worker 收到该消息后会将保存的数据通过<code>postMessage</code>传给注册它的页面。也就是让页面通过 get 来主动获取（同步）最新消息。具体实现如下：</p>
-<p>首先，我们会在页面中启动一个 Shared Worker，启动方式非常简单：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 构造函数的第二个参数是 Shared Worker 名称，也可以留空</span><br><span class="line">const sharedWorker &#x3D; new SharedWorker(&#39;..&#x2F;util.shared.js&#39;, &#39;ctc&#39;);</span><br></pre></td></tr></table></figure>
-
-<p>然后，在该 Shared Worker 中支持 get 与 post 形式的消息：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* ..&#x2F;util.shared.js: Shared Worker 代码 *&#x2F;</span><br><span class="line">let data &#x3D; null;</span><br><span class="line">self.addEventListener(&#39;connect&#39;, function (e) &#123;</span><br><span class="line">    const port &#x3D; e.ports[0];</span><br><span class="line">    port.addEventListener(&#39;message&#39;, function (event) &#123;</span><br><span class="line">        &#x2F;&#x2F; get 指令则返回存储的消息数据</span><br><span class="line">        if (event.data.get) &#123;</span><br><span class="line">            data &amp;&amp; port.postMessage(data);</span><br><span class="line">        &#125;</span><br><span class="line">        &#x2F;&#x2F; 非 get 指令则存储该消息数据</span><br><span class="line">        else &#123;</span><br><span class="line">            data &#x3D; event.data;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    port.start();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>之后，页面定时发送 get 指令的消息给 Shared Worker，轮询最新的消息数据，并在页面监听返回信息：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 定时轮询，发送 get 指令的消息</span><br><span class="line">setInterval(function () &#123;</span><br><span class="line">    sharedWorker.port.postMessage(&#123;get: true&#125;);</span><br><span class="line">&#125;, 1000);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 监听 get 消息的返回数据</span><br><span class="line">sharedWorker.port.addEventListener(&#39;message&#39;, (e) &#x3D;&gt; &#123;</span><br><span class="line">    const data &#x3D; e.data;</span><br><span class="line">    const text &#x3D; &#39;[receive] &#39; + data.msg + &#39; —— tab &#39; + data.from;</span><br><span class="line">    console.log(&#39;[Shared Worker] receive message:&#39;, text);</span><br><span class="line">&#125;, false);</span><br><span class="line">sharedWorker.port.start();</span><br></pre></td></tr></table></figure>
-
-<p>最后，当要跨页面通信时，只需给 Shared Worker <code>postMessage</code>即可：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sharedWorker.port.postMessage(mydata);</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>注意，如果使用<code>addEventListener</code>来添加 Shared Worker 的消息监听，需要显式调用<code>MessagePort.start</code>方法，即上文中的<code>sharedWorker.port.start()</code>；如果使用<code>onmessage</code>绑定监听则不需要。</p>
-</blockquote>
-<h3 id="5-IndexedDB"><a href="#5-IndexedDB" class="headerlink" title="5. IndexedDB"></a>5. IndexedDB</h3><p>除了可以利用 Shared Worker 来共享存储数据，还可以使用其他一些“全局性”（支持跨页面）的存储方案。例如 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API">IndexedDB</a> 或 cookie。</p>
-<blockquote>
-<p>鉴于大家对 cookie 已经很熟悉，加之作为“互联网最早期的存储方案之一”，cookie 已经在实际应用中承受了远多于其设计之初的责任，我们下面会使用 IndexedDB 来实现。</p>
-</blockquote>
-<p>其思路很简单：与 Shared Worker 方案类似，消息发送方将消息存至 IndexedDB 中；接收方（例如所有页面）则通过轮询去获取最新的信息。在这之前，我们先简单封装几个 IndexedDB 的工具方法。</p>
-<ul>
-<li>打开数据库连接：</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">function openStore() &#123;</span><br><span class="line">    const storeName &#x3D; &#39;ctc_aleinzhou&#39;;</span><br><span class="line">    return new Promise(function (resolve, reject) &#123;</span><br><span class="line">        if (!(&#39;indexedDB&#39; in window)) &#123;</span><br><span class="line">            return reject(&#39;don\&#39;t support indexedDB&#39;);</span><br><span class="line">        &#125;</span><br><span class="line">        const request &#x3D; indexedDB.open(&#39;CTC_DB&#39;, 1);</span><br><span class="line">        request.onerror &#x3D; reject;</span><br><span class="line">        request.onsuccess &#x3D;  e &#x3D;&gt; resolve(e.target.result);</span><br><span class="line">        request.onupgradeneeded &#x3D; function (e) &#123;</span><br><span class="line">            const db &#x3D; e.srcElement.result;</span><br><span class="line">            if (e.oldVersion &#x3D;&#x3D;&#x3D; 0 &amp;&amp; !db.objectStoreNames.contains(storeName)) &#123;</span><br><span class="line">                const store &#x3D; db.createObjectStore(storeName, &#123;keyPath: &#39;tag&#39;&#125;);</span><br><span class="line">                store.createIndex(storeName + &#39;Index&#39;, &#39;tag&#39;, &#123;unique: false&#125;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>存储数据</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function saveData(db, data) &#123;</span><br><span class="line">    return new Promise(function (resolve, reject) &#123;</span><br><span class="line">        const STORE_NAME &#x3D; &#39;ctc_aleinzhou&#39;;</span><br><span class="line">        const tx &#x3D; db.transaction(STORE_NAME, &#39;readwrite&#39;);</span><br><span class="line">        const store &#x3D; tx.objectStore(STORE_NAME);</span><br><span class="line">        const request &#x3D; store.put(&#123;tag: &#39;ctc_data&#39;, data&#125;);</span><br><span class="line">        request.onsuccess &#x3D; () &#x3D;&gt; resolve(db);</span><br><span class="line">        request.onerror &#x3D; reject;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>查询/读取数据</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">function query(db) &#123;</span><br><span class="line">    const STORE_NAME &#x3D; &#39;ctc_aleinzhou&#39;;</span><br><span class="line">    return new Promise(function (resolve, reject) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            const tx &#x3D; db.transaction(STORE_NAME, &#39;readonly&#39;);</span><br><span class="line">            const store &#x3D; tx.objectStore(STORE_NAME);</span><br><span class="line">            const dbRequest &#x3D; store.get(&#39;ctc_data&#39;);</span><br><span class="line">            dbRequest.onsuccess &#x3D; e &#x3D;&gt; resolve(e.target.result);</span><br><span class="line">            dbRequest.onerror &#x3D; reject;</span><br><span class="line">        &#125;</span><br><span class="line">        catch (err) &#123;</span><br><span class="line">            reject(err);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>剩下的工作就非常简单了。首先打开数据连接，并初始化数据：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openStore().then(db &#x3D;&gt; saveData(db, null))</span><br></pre></td></tr></table></figure>
-
-<p>对于消息读取，可以在连接与初始化后轮询：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">openStore().then(db &#x3D;&gt; saveData(db, null)).then(function (db) &#123;</span><br><span class="line">    setInterval(function () &#123;</span><br><span class="line">        query(db).then(function (res) &#123;</span><br><span class="line">            if (!res || !res.data) &#123;</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line">            const data &#x3D; res.data;</span><br><span class="line">            const text &#x3D; &#39;[receive] &#39; + data.msg + &#39; —— tab &#39; + data.from;</span><br><span class="line">            console.log(&#39;[Storage I] receive message:&#39;, text);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;, 1000);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>最后，要发送消息时，只需向 IndexedDB 存储数据即可：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">openStore().then(db &#x3D;&gt; saveData(db, null)).then(function (db) &#123;</span><br><span class="line">    &#x2F;&#x2F; …… 省略上面的轮询代码</span><br><span class="line">    &#x2F;&#x2F; 触发 saveData 的方法可以放在用户操作的事件监听内</span><br><span class="line">    saveData(db, mydata);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<h3 id="小憩一下-1"><a href="#小憩一下-1" class="headerlink" title="小憩一下"></a>小憩一下</h3><p>在“广播模式”外，我们又了解了“共享存储+长轮询”这种模式。也许你会认为长轮询没有监听模式优雅，但实际上，有些时候使用“共享存储”的形式时，不一定要搭配长轮询。</p>
-<p>例如，在多 Tab 场景下，我们可能会离开 Tab A 到另一个 Tab B 中操作；过了一会我们从 Tab B 切换回 Tab A 时，希望将之前在 Tab B 中的操作的信息同步回来。这时候，其实只用在 Tab A 中监听<code>visibilitychange</code>这样的事件，来做一次信息同步即可。</p>
-<p>下面，我会再介绍一种通信方式，我把它称为“口口相传”模式。</p>
-<p>–</p>
-<h3 id="6-window-open-window-opener"><a href="#6-window-open-window-opener" class="headerlink" title="6. window.open + window.opener"></a>6. window.open + window.opener</h3><p>当我们使用<code>window.open</code>打开页面时，方法会返回一个被打开页面<code>window</code>的引用。而在未显示指定<code>noopener</code>时，被打开的页面可以通过<code>window.opener</code>获取到打开它的页面的引用 —— 通过这种方式我们就将这些页面建立起了联系（一种树形结构）。</p>
-<p>首先，我们把<code>window.open</code>打开的页面的<code>window</code>对象收集起来：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">let childWins &#x3D; [];</span><br><span class="line">document.getElementById(&#39;btn&#39;).addEventListener(&#39;click&#39;, function () &#123;</span><br><span class="line">    const win &#x3D; window.open(&#39;.&#x2F;some&#x2F;sample&#39;);</span><br><span class="line">    childWins.push(win);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>然后，当我们需要发送消息的时候，作为消息的发起方，一个页面需要同时通知它打开的页面与打开它的页面：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 过滤掉已经关闭的窗口</span><br><span class="line">childWins &#x3D; childWins.filter(w &#x3D;&gt; !w.closed);</span><br><span class="line">if (childWins.length &gt; 0) &#123;</span><br><span class="line">    mydata.fromOpenner &#x3D; false;</span><br><span class="line">    childWins.forEach(w &#x3D;&gt; w.postMessage(mydata));</span><br><span class="line">&#125;</span><br><span class="line">if (window.opener &amp;&amp; !window.opener.closed) &#123;</span><br><span class="line">    mydata.fromOpenner &#x3D; true;</span><br><span class="line">    window.opener.postMessage(mydata);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>注意，我这里先用<code>.closed</code>属性过滤掉已经被关闭的 Tab 窗口。这样，作为消息发送方的任务就完成了。下面看看，作为消息接收方，它需要做什么。</p>
-<p>此时，一个收到消息的页面就不能那么自私了，除了展示收到的消息，它还需要将消息再传递给它所“知道的人”（打开与被它打开的页面）:</p>
-<blockquote>
-<p>需要注意的是，我这里通过判断消息来源，避免将消息回传给发送方，防止消息在两者间死循环的传递。（该方案会有些其他小问题，实际中可以进一步优化）</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">window.addEventListener(&#39;message&#39;, function (e) &#123;</span><br><span class="line">    const data &#x3D; e.data;</span><br><span class="line">    const text &#x3D; &#39;[receive] &#39; + data.msg + &#39; —— tab &#39; + data.from;</span><br><span class="line">    console.log(&#39;[Cross-document Messaging] receive message:&#39;, text);</span><br><span class="line">    &#x2F;&#x2F; 避免消息回传</span><br><span class="line">    if (window.opener &amp;&amp; !window.opener.closed &amp;&amp; data.fromOpenner) &#123;</span><br><span class="line">        window.opener.postMessage(data);</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F; 过滤掉已经关闭的窗口</span><br><span class="line">    childWins &#x3D; childWins.filter(w &#x3D;&gt; !w.closed);</span><br><span class="line">    &#x2F;&#x2F; 避免消息回传</span><br><span class="line">    if (childWins &amp;&amp; !data.fromOpenner) &#123;</span><br><span class="line">        childWins.forEach(w &#x3D;&gt; w.postMessage(data));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>这样，每个节点（页面）都肩负起了传递消息的责任，也就是我说的“口口相传”，而消息就在这个树状结构中流转了起来。</p>
-<h3 id="小憩一下-2"><a href="#小憩一下-2" class="headerlink" title="小憩一下"></a>小憩一下</h3><p>显然，“口口相传”的模式存在一个问题：如果页面不是通过在另一个页面内的<code>window.open</code>打开的（例如直接在地址栏输入，或从其他网站链接过来），这个联系就被打破了。</p>
-<p>除了上面这六个常见方法，其实还有一种（第七种）做法是通过 WebSocket 这类的“服务器推”技术来进行同步。这好比将我们的“中央站”从前端移到了后端。</p>
-<p>关于 WebSocket 与其他“服务器推”技术，不了解的同学可以阅读这篇<a target="_blank" rel="noopener" href="https://juejin.im/post/6844903618043183111">《各类“服务器推”技术原理与实例（Polling/COMET/SSE/WebSocket）》</a></p>
-<p>此外，我还针对以上各种方式写了一个 <a target="_blank" rel="noopener" href="https://alienzhou.github.io/cross-tab-communication/">在线演示的 Demo &gt;&gt;</a></p>
-<p><img src="2.gif#id=Meuzf&originalType=binary&status=done&style=none"></p>
-<h2 id="二、非同源页面之间的通信"><a href="#二、非同源页面之间的通信" class="headerlink" title="二、非同源页面之间的通信"></a>二、非同源页面之间的通信</h2><p>上面我们介绍了七种前端跨页面通信的方法，但它们大都受到同源策略的限制。然而有时候，我们有两个不同域名的产品线，也希望它们下面的所有页面之间能无障碍地通信。那该怎么办呢？</p>
-<p>要实现该功能，可以使用一个用户不可见的 iframe 作为“桥”。由于 iframe 与父页面间可以通过指定<code>origin</code>来忽略同源限制，因此可以在每个页面中嵌入一个 iframe （例如：<code>http://sample.com/bridge.html</code>），而这些 iframe 由于使用的是一个 url，因此属于同源页面，其通信方式可以复用上面第一部分提到的各种方式。</p>
-<p>页面与 iframe 通信非常简单，首先需要在页面中监听 iframe 发来的消息，做相应的业务处理：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* 业务页面代码 *&#x2F;</span><br><span class="line">window.addEventListener(&#39;message&#39;, function (e) &#123;</span><br><span class="line">    &#x2F;&#x2F; …… do something</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>然后，当页面要与其他的同源或非同源页面通信时，会先给 iframe 发送消息：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* 业务页面代码 *&#x2F;</span><br><span class="line">window.frames[0].window.postMessage(mydata, &#39;*&#39;);</span><br></pre></td></tr></table></figure>
-
-<p>其中为了简便此处将<code>postMessage</code>的第二个参数设为了<code>&#39;*&#39;</code>，你也可以设为 iframe 的 URL。iframe 收到消息后，会使用某种跨页面消息通信技术在所有 iframe 间同步消息，例如下面使用的 Broadcast Channel：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* iframe 内代码 *&#x2F;</span><br><span class="line">const bc &#x3D; new BroadcastChannel(&#39;AlienZHOU&#39;);</span><br><span class="line">&#x2F;&#x2F; 收到来自页面的消息后，在 iframe 间进行广播</span><br><span class="line">window.addEventListener(&#39;message&#39;, function (e) &#123;</span><br><span class="line">    bc.postMessage(e.data);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>其他 iframe 收到通知后，则会将该消息同步给所属的页面：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* iframe 内代码 *&#x2F;</span><br><span class="line">&#x2F;&#x2F; 对于收到的（iframe）广播消息，通知给所属的业务页面</span><br><span class="line">bc.onmessage &#x3D; function (e) &#123;</span><br><span class="line">    window.parent.postMessage(e.data, &#39;*&#39;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>下图就是使用 iframe 作为“桥”的非同源页面间通信模式图。</p>
-<p><img src="3.png#id=K3AvO&originalType=binary&status=done&style=none"></p>
-<p>其中“同源跨域通信方案”可以使用文章第一部分提到的某种技术。</p>
-<p>–</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>今天和大家分享了一下跨页面通信的各种方式。</p>
-<p>对于同源页面，常见的方式包括：</p>
-<ul>
-<li>广播模式：Broadcast Channe / Service Worker / LocalStorage + StorageEvent</li>
-<li>共享存储模式：Shared Worker / IndexedDB / cookie</li>
-<li>口口相传模式：window.open + window.opener</li>
-<li>基于服务端：Websocket / Comet / SSE 等</li>
-</ul>
-<p>而对于非同源页面，则可以通过嵌入同源 iframe 作为“桥”，将非同源页面通信转换为同源页面通信。</p>
-<blockquote>
-<p>对文章感兴趣的同学欢迎关注 <a target="_blank" rel="noopener" href="https://github.com/alienzhou/blog">我的博客 &gt;&gt; https://github.com/alienzhou/blog</a></p>
-</blockquote>
-<p>本文在分享的同时，也是为了抛转引玉。如果你有什么其他想法，欢迎一起讨论，提出你的见解和想法~</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1843,7 +1900,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">60</span>
+          <span class="site-state-item-count">61</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

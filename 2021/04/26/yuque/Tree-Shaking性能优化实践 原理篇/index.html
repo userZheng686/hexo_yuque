@@ -22,43 +22,43 @@
 
   <meta name="description" content="一. 什么是 Tree-shaking 先来看一下 Tree-shaking 原始的本意  上图形象的解释了 Tree-shaking 的本意，本文所说的前端中的 tree-shaking 可以理解为通过工具”摇”我们的 JS 文件，将其中用不到的代码”摇”掉，是一个性能优化的范畴。具体来说，在 webpack 项目中，有一个入口文件，相当于一棵树的主干，入口文件有很多依赖的模块，相当于树枝。实际">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Tree-Shaking">
-<meta property="og:url" content="http://example.com/2021/04/26/yuque/Tree-Shaking/index.html">
+<meta property="og:title" content="Tree-Shaking性能优化实践 原理篇">
+<meta property="og:url" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5%20%E5%8E%9F%E7%90%86%E7%AF%87/index.html">
 <meta property="og:site_name" content="Adam">
 <meta property="og:description" content="一. 什么是 Tree-shaking 先来看一下 Tree-shaking 原始的本意  上图形象的解释了 Tree-shaking 的本意，本文所说的前端中的 tree-shaking 可以理解为通过工具”摇”我们的 JS 文件，将其中用不到的代码”摇”掉，是一个性能优化的范畴。具体来说，在 webpack 项目中，有一个入口文件，相当于一棵树的主干，入口文件有很多依赖的模块，相当于树枝。实际">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/1.jpg#alt=img">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/2.gif#alt=img">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/3.jpg#alt=img">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/4.jpg#alt=img">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/5.jpg#alt=img">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/6.jpg#alt=img">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/7.jpg#alt=img">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/8.jpg#alt=img">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/9.jpg#alt=img">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/10.jpg#alt=img">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/11.jpg#alt=img">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/12.jpg#alt=img">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/13.jpg#alt=img">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/14.jpg#alt=img">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/15.jpg#alt=img">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/16.jpg#alt=img">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/17.jpg#alt=img">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/18.jpg#alt=img">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/19.jpg#alt=img">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/20.jpg#alt=img">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/21.jpg#alt=img">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/22.jpg#alt=img">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/23.jpg#alt=img">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/24.webp#alt=img">
-<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/25.jpg#alt=img">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415487699-2976267a-70a5-4dc4-8642-c5c9722d10cd.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=uaa735294&margin=%5Bobject%20Object%5D&name=1.jpg&originHeight=405&originWidth=720&originalType=binary&size=6737&status=done&style=none&taskId=ub91413ec-e2c7-4325-a62e-122f16394cf">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/gif/21377586/1619415501641-bbf5f45d-3a0c-4811-9919-761bbc00e701.gif#clientId=u022f3b9a-a5ad-4&from=drop&id=ubfb99f78&margin=%5Bobject%20Object%5D&name=2.gif&originHeight=341&originWidth=606&originalType=binary&size=3761493&status=done&style=none&taskId=u70618439-fddd-42cc-bf2f-a38d6a58d38">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415504181-f5f2cce4-ceef-4702-9da5-c6a11f90d8e3.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=uc32a1b51&margin=%5Bobject%20Object%5D&name=3.jpg&originHeight=405&originWidth=720&originalType=binary&size=12958&status=done&style=none&taskId=u2e02d442-f1cc-487d-b7f4-a35c40e2d7c">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415508232-a021a71e-e50c-448d-b9f3-f1a442fb8592.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u47b707e4&margin=%5Bobject%20Object%5D&name=4.jpg&originHeight=405&originWidth=720&originalType=binary&size=6384&status=done&style=none&taskId=u1f413566-615e-45aa-bfe6-19178616240">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415512124-bdf2b8d6-a44d-48c5-b4cd-7e832d3b6c66.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u5c04aa5e&margin=%5Bobject%20Object%5D&name=5.jpg&originHeight=405&originWidth=720&originalType=binary&size=13053&status=done&style=none&taskId=u994cfb70-3fbb-4acd-a721-79e4fca1cec">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415515648-7a8ef020-4e11-4040-9745-5729523c8cdc.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u0baad115&margin=%5Bobject%20Object%5D&name=6.jpg&originHeight=405&originWidth=720&originalType=binary&size=16079&status=done&style=none&taskId=udfcd44cf-a7e4-40bf-a2ec-bab6467e90d">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415520261-c9810972-e615-475e-b2da-6b2320929fb6.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u204a249f&margin=%5Bobject%20Object%5D&name=7.jpg&originHeight=438&originWidth=720&originalType=binary&size=23130&status=done&style=none&taskId=u5c0f07c6-ff5e-4124-8ef9-1776c7af118">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415524659-a3f45414-4a9a-43b4-a539-4fb74268e2a8.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=ub23d203b&margin=%5Bobject%20Object%5D&name=8.jpg&originHeight=463&originWidth=720&originalType=binary&size=40456&status=done&style=none&taskId=uff6d2484-b35d-4c91-9ad8-f9888347565">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415529275-6678a338-f495-4b4b-aec0-34f7fd52fc7d.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u2646efa9&margin=%5Bobject%20Object%5D&name=9.jpg&originHeight=405&originWidth=720&originalType=binary&size=19655&status=done&style=none&taskId=u1d25af48-af5f-4cd8-b795-d3887492aac">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415534000-a1a9637c-2995-4449-89d8-514b596f70db.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u49a3465b&margin=%5Bobject%20Object%5D&name=10.jpg&originHeight=646&originWidth=720&originalType=binary&size=16134&status=done&style=none&taskId=u79851800-4d14-4761-8c88-28e86aba6c4">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415537651-2f568864-b6ec-4658-a01e-7a65eb402363.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=uca06a248&margin=%5Bobject%20Object%5D&name=11.jpg&originHeight=343&originWidth=720&originalType=binary&size=18232&status=done&style=none&taskId=ud208b28f-157f-4401-802e-2ba8c4ad76f">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415541004-8eb43d30-08e8-4365-a7a4-6b75d1760a0f.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u87646e1e&margin=%5Bobject%20Object%5D&name=12.jpg&originHeight=962&originWidth=720&originalType=binary&size=67249&status=done&style=none&taskId=u0d35bad0-09c2-4a6f-9274-92606112252">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415546773-c2ab6200-6b6a-4822-b98b-6beb2edb14fd.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u1e2d25c7&margin=%5Bobject%20Object%5D&name=13.jpg&originHeight=446&originWidth=720&originalType=binary&size=14514&status=done&style=none&taskId=u00b6a7f8-c295-4a64-b196-ee3fba81903">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415551742-449c1ac0-dec7-4dcb-8099-180d2b28b5a5.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u5de75d50&margin=%5Bobject%20Object%5D&name=14.jpg&originHeight=507&originWidth=720&originalType=binary&size=17925&status=done&style=none&taskId=u15268bf2-b626-45f8-b48a-f07a7451cda">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415555773-5ac8b3e7-6822-4d17-9cf6-c399e4c11d8a.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=ucd7802ee&margin=%5Bobject%20Object%5D&name=15.jpg&originHeight=499&originWidth=720&originalType=binary&size=48979&status=done&style=none&taskId=u5d04d8e1-7bde-4e29-91d4-258ec3596f2">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415560732-7edb865f-1721-4fa8-b382-a7e560c849de.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u70238c69&margin=%5Bobject%20Object%5D&name=16.jpg&originHeight=831&originWidth=720&originalType=binary&size=84376&status=done&style=none&taskId=u9c8d019c-d5f4-4cd1-9543-8c562d70068">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415568229-847f4002-321b-4113-8a11-20dcb8b89efa.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u6424d3bf&margin=%5Bobject%20Object%5D&name=17.jpg&originHeight=534&originWidth=521&originalType=binary&size=18147&status=done&style=none&taskId=u1b710400-a506-4982-afda-5d2a62011ff">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415572931-7c587419-fc3a-4b62-993c-22e2f267c188.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u4870e358&margin=%5Bobject%20Object%5D&name=18.jpg&originHeight=482&originWidth=720&originalType=binary&size=30357&status=done&style=none&taskId=u826a695b-c38e-433b-a27e-b714d1e71ba">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415584766-5e4c8d34-b5e3-4055-9ceb-d3cdf65cdc0c.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u8859213e&margin=%5Bobject%20Object%5D&name=19.jpg&originHeight=120&originWidth=120&originalType=binary&size=6543&status=done&style=none&taskId=uaf2b39e5-32bc-4452-8a7c-509e86bde83">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415594094-0ad21064-9164-4717-8e7b-a3fac32c32fc.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u880b8ec5&margin=%5Bobject%20Object%5D&name=20.jpg&originHeight=405&originWidth=720&originalType=binary&size=15712&status=done&style=none&taskId=u70554999-8e4f-48bc-96da-ada236ab9b5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415606997-0930df34-d241-4fe3-896d-064756351b99.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u919ddbe8&margin=%5Bobject%20Object%5D&name=21.jpg&originHeight=405&originWidth=720&originalType=binary&size=17714&status=done&style=none&taskId=u7bdca274-c8e7-4dae-beb6-412b706c473">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415613494-0a044226-4eee-4ec9-9588-3135701029ba.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=ue1d60932&margin=%5Bobject%20Object%5D&name=22.jpg&originHeight=261&originWidth=720&originalType=binary&size=19369&status=done&style=none&taskId=u9847ceb1-7e7a-41a3-ab4e-b5bba4893dd">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415618300-5633fb7e-a976-41d6-aa8a-2bf6594aaf2c.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=uc3f28788&margin=%5Bobject%20Object%5D&name=23.jpg&originHeight=405&originWidth=720&originalType=binary&size=6175&status=done&style=none&taskId=u2a5dacca-7a51-4245-a236-beef0048988">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/webp/21377586/1619415622789-70d6d885-0b51-4a90-beab-dac792588f41.webp#clientId=u022f3b9a-a5ad-4&from=drop&id=ud6bae893&margin=%5Bobject%20Object%5D&name=24.webp&originHeight=120&originWidth=180&originalType=binary&size=3120&status=done&style=none&taskId=u157a1607-0193-4ba3-a16c-ebf3c82baf4">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415628594-b9024704-66a8-422f-bf1b-d2ce8af8060a.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u9b1ca6b3&margin=%5Bobject%20Object%5D&name=25.jpg&originHeight=120&originWidth=120&originalType=binary&size=4686&status=done&style=none&taskId=u8270d645-c494-4431-a0d7-c42824bb91f">
 <meta property="article:published_time" content="2021-04-25T17:04:35.000Z">
-<meta property="article:modified_time" content="2021-04-25T17:05:34.716Z">
+<meta property="article:modified_time" content="2021-04-26T06:06:34.913Z">
 <meta property="article:author" content="Adam Blog">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking/1.jpg#alt=img">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415487699-2976267a-70a5-4dc4-8642-c5c9722d10cd.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=uaa735294&margin=%5Bobject%20Object%5D&name=1.jpg&originHeight=405&originWidth=720&originalType=binary&size=6737&status=done&style=none&taskId=ub91413ec-e2c7-4325-a62e-122f16394cf">
 
-<link rel="canonical" href="http://example.com/2021/04/26/yuque/Tree-Shaking/">
+<link rel="canonical" href="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5%20%E5%8E%9F%E7%90%86%E7%AF%87/">
 
 
 <script id="page-configurations">
@@ -71,7 +71,7 @@
   };
 </script>
 
-  <title>Tree-Shaking | Adam</title>
+  <title>Tree-Shaking性能优化实践 原理篇 | Adam</title>
   <meta name="referrer" content="no-referrer" />
   
 
@@ -177,7 +177,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/26/yuque/Tree-Shaking/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5%20%E5%8E%9F%E7%90%86%E7%AF%87/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -190,7 +190,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Tree-Shaking
+          Tree-Shaking性能优化实践 原理篇
         </h1>
 
         <div class="post-meta">
@@ -201,7 +201,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-04-26 01:04:35 / 修改时间：01:05:34" itemprop="dateCreated datePublished" datetime="2021-04-26T01:04:35+08:00">2021-04-26</time>
+              <time title="创建时间：2021-04-26 01:04:35 / 修改时间：14:06:34" itemprop="dateCreated datePublished" datetime="2021-04-26T01:04:35+08:00">2021-04-26</time>
             </span>
 
           
@@ -215,24 +215,24 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="一-什么是-Tree-shaking"><a href="#一-什么是-Tree-shaking" class="headerlink" title="一. 什么是 Tree-shaking"></a>一. 什么是 Tree-shaking</h2><p><img src="1.jpg#alt=img"></p>
+        <h2 id="一-什么是-Tree-shaking"><a href="#一-什么是-Tree-shaking" class="headerlink" title="一. 什么是 Tree-shaking"></a>一. 什么是 Tree-shaking</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415487699-2976267a-70a5-4dc4-8642-c5c9722d10cd.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=uaa735294&margin=%5Bobject%20Object%5D&name=1.jpg&originHeight=405&originWidth=720&originalType=binary&size=6737&status=done&style=none&taskId=ub91413ec-e2c7-4325-a62e-122f16394cf" alt="1.jpg"></p>
 <p>先来看一下 Tree-shaking 原始的本意</p>
-<p><img src="2.gif#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/gif/21377586/1619415501641-bbf5f45d-3a0c-4811-9919-761bbc00e701.gif#clientId=u022f3b9a-a5ad-4&from=drop&id=ubfb99f78&margin=%5Bobject%20Object%5D&name=2.gif&originHeight=341&originWidth=606&originalType=binary&size=3761493&status=done&style=none&taskId=u70618439-fddd-42cc-bf2f-a38d6a58d38" alt="2.gif"></p>
 <p>上图形象的解释了 Tree-shaking 的本意，本文所说的前端中的 tree-shaking 可以理解为通过工具”摇”我们的 JS 文件，将其中用不到的代码”摇”掉，是一个性能优化的范畴。具体来说，在 webpack 项目中，有一个入口文件，相当于一棵树的主干，入口文件有很多依赖的模块，相当于树枝。实际情况中，虽然依赖了某个模块，但其实只使用其中的某些功能。通过 tree-shaking，将没有使用的模块摇掉，这样来达到删除无用代码的目的。</p>
-<p><img src="3.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415504181-f5f2cce4-ceef-4702-9da5-c6a11f90d8e3.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=uc32a1b51&margin=%5Bobject%20Object%5D&name=3.jpg&originHeight=405&originWidth=720&originalType=binary&size=12958&status=done&style=none&taskId=u2e02d442-f1cc-487d-b7f4-a35c40e2d7c" alt="3.jpg"></p>
 <p>Tree-shaking 较早由 Rich_Harris 的 rollup 实现，后来，webpack2 也增加了 tree-shaking 的功能。其实在更早，google closure compiler 也做过类似的事情。三个工具的效果和使用各不相同，使用方法可以通过官网文档去了解，三者的效果对比，后文会详细介绍。</p>
-<h2 id="二-tree-shaking-的原理"><a href="#二-tree-shaking-的原理" class="headerlink" title="二. tree-shaking 的原理"></a>二. tree-shaking 的原理</h2><p><img src="4.jpg#alt=img"></p>
+<h2 id="二-tree-shaking-的原理"><a href="#二-tree-shaking-的原理" class="headerlink" title="二. tree-shaking 的原理"></a>二. tree-shaking 的原理</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415508232-a021a71e-e50c-448d-b9f3-f1a442fb8592.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u47b707e4&margin=%5Bobject%20Object%5D&name=4.jpg&originHeight=405&originWidth=720&originalType=binary&size=6384&status=done&style=none&taskId=u1f413566-615e-45aa-bfe6-19178616240" alt="4.jpg"></p>
 <p>Tree-shaking 的本质是消除无用的 js 代码。无用代码消除在广泛存在于传统的编程语言编译器中，编译器可以判断出某些代码根本不影响输出，然后消除这些代码，这个称之为 DCE（dead code elimination）。</p>
 <p>Tree-shaking 是 DCE 的一种新的实现，Javascript 同传统的编程语言不同的是，javascript 绝大多数情况需要通过网络进行加载，然后执行，加载的文件大小越小，整体执行时间更短，所以去除无用代码以减少文件体积，对 javascript 来说更有意义。</p>
 <p>Tree-shaking 和传统的 DCE 的方法又不太一样，传统的 DCE 消灭不可能执行的代码，而 Tree-shaking 更关注宇消除没有用到的代码。下面详细介绍一下 DCE 和 Tree-shaking。</p>
 <p><strong>（1）先来看一下 DCE 消除大法</strong></p>
-<p><img src="5.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415512124-bdf2b8d6-a44d-48c5-b4cd-7e832d3b6c66.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u5c04aa5e&margin=%5Bobject%20Object%5D&name=5.jpg&originHeight=405&originWidth=720&originalType=binary&size=13053&status=done&style=none&taskId=u994cfb70-3fbb-4acd-a721-79e4fca1cec" alt="5.jpg"></p>
 <p>Dead Code 一般具有以下几个特征</p>
 <p>•代码不会被执行，不可到达</p>
 <p>•代码执行的结果不会被用到</p>
 <p>•代码只会影响死变量（只写不读）</p>
 <p>下面红框标示的代码就属于死码，满足以上特征</p>
-<p><img src="6.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415515648-7a8ef020-4e11-4040-9745-5729523c8cdc.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u0baad115&margin=%5Bobject%20Object%5D&name=6.jpg&originHeight=405&originWidth=720&originalType=binary&size=16079&status=done&style=none&taskId=udfcd44cf-a7e4-40bf-a2ec-bab6467e90d" alt="6.jpg"></p>
 <p>图 4</p>
 <p>传统编译型的语言中，都是由编译器将 Dead Code 从 AST（抽象语法树）中删除，那 javascript 中是由谁做 DCE 呢？</p>
 <p>首先肯定不是浏览器做 DCE，因为当我们的代码送到浏览器，那还谈什么消除无法执行的代码来优化呢，所以肯定是送到浏览器之前的步骤进行优化。</p>
@@ -242,19 +242,19 @@
 </blockquote>
 <p><a target="_blank" rel="noopener" href="https://github.com/lin-xi/treeshaking/tree/master/rollup-webpack">https://github.com/lin-xi/treeshaking/tree/master/rollup-webpack</a></p>
 <p><strong>分别用 rollup 和 webpack 将图 4 中的代码进行打包</strong></p>
-<p><img src="7.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415520261-c9810972-e615-475e-b2da-6b2320929fb6.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u204a249f&margin=%5Bobject%20Object%5D&name=7.jpg&originHeight=438&originWidth=720&originalType=binary&size=23130&status=done&style=none&taskId=u5c0f07c6-ff5e-4124-8ef9-1776c7af118" alt="7.jpg"></p>
 <p>图 5</p>
 <p>中间是 rollup 打包的结果，右边是 webpack 打包的结果</p>
 <p>可以发现，rollup 将无用的代码 foo 函数和 unused 函数消除了，但是仍然保留了不会执行到的代码，而 webpack 完整的保留了所有的无用代码和不会执行到的代码。</p>
 <p><strong>分别用 rollup + uglify 和 webpack + uglify 将图 4 中的代码进行打包</strong></p>
-<p><img src="8.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415524659-a3f45414-4a9a-43b4-a539-4fb74268e2a8.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=ub23d203b&margin=%5Bobject%20Object%5D&name=8.jpg&originHeight=463&originWidth=720&originalType=binary&size=40456&status=done&style=none&taskId=uff6d2484-b35d-4c91-9ad8-f9888347565" alt="8.jpg"></p>
 <p>图 6</p>
 <p>中间是配置文件，右侧是结果</p>
 <p>可以看到右侧最终打包结果中都去除了无法执行到的代码，结果符合我们的预期。</p>
 <p><strong>(2) 再来看一下 Tree-shaking 消除大法</strong></p>
 <p>前面提到了 tree-shaking 更关注于无用模块的消除，消除那些引用了但并没有被使用的模块。</p>
 <p>先思考一个问题，为什么 tree-shaking 是最近几年流行起来了？而前端模块化概念已经有很多年历史了，其实 tree-shaking 的消除原理是依赖于 ES6 的模块特性。</p>
-<p><img src="9.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415529275-6678a338-f495-4b4b-aec0-34f7fd52fc7d.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u2646efa9&margin=%5Bobject%20Object%5D&name=9.jpg&originHeight=405&originWidth=720&originalType=binary&size=19655&status=done&style=none&taskId=u1d25af48-af5f-4cd8-b795-d3887492aac" alt="9.jpg"></p>
 <p>ES6 module 特点：</p>
 <ul>
 <li>只能作为模块顶层的语句出现</li>
@@ -272,13 +272,13 @@
 </ul>
 <p><strong>先看下函数消除实验</strong></p>
 <p>utils 中 get 方法没有被使用到，我们期望的是 get 方法最终被消除。</p>
-<p><img src="10.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415534000-a1a9637c-2995-4449-89d8-514b596f70db.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u49a3465b&margin=%5Bobject%20Object%5D&name=10.jpg&originHeight=646&originWidth=720&originalType=binary&size=16134&status=done&style=none&taskId=u79851800-4d14-4761-8c88-28e86aba6c4" alt="10.jpg"></p>
 <p>注意，uglify 目前不会跨文件去做 DCE，所以上面这种情况，uglify 是不能优化的。</p>
 <p><strong>先看看 rollup 的打包结果</strong></p>
-<p><img src="11.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415537651-2f568864-b6ec-4658-a01e-7a65eb402363.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=uca06a248&margin=%5Bobject%20Object%5D&name=11.jpg&originHeight=343&originWidth=720&originalType=binary&size=18232&status=done&style=none&taskId=ud208b28f-157f-4401-802e-2ba8c4ad76f" alt="11.jpg"></p>
 <p>完全符合预期，最终结果中没有 get 方法</p>
 <p><strong>再看看 webpack 的结果</strong></p>
-<p><img src="12.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415541004-8eb43d30-08e8-4365-a7a4-6b75d1760a0f.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u87646e1e&margin=%5Bobject%20Object%5D&name=12.jpg&originHeight=962&originWidth=720&originalType=binary&size=67249&status=done&style=none&taskId=u0d35bad0-09c2-4a6f-9274-92606112252" alt="12.jpg"></p>
 <p>也符合预期，最终结果中没有 get 方法</p>
 <p>可以看到 rollup 打包的结果比 webpack 更优化</p>
 <blockquote>
@@ -286,24 +286,24 @@
 </blockquote>
 <p><strong>再来看下类消除实验</strong></p>
 <p>增加了对 menu.js 的引用，但其实代码中并没有用到 menu 的任何方法和变量，所以我们的期望是，最终代码中 menu.js 里的内容被消除</p>
-<p><img src="13.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415546773-c2ab6200-6b6a-4822-b98b-6beb2edb14fd.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u1e2d25c7&margin=%5Bobject%20Object%5D&name=13.jpg&originHeight=446&originWidth=720&originalType=binary&size=14514&status=done&style=none&taskId=u00b6a7f8-c295-4a64-b196-ee3fba81903" alt="13.jpg"></p>
 <p>main.js</p>
-<p><img src="14.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415551742-449c1ac0-dec7-4dcb-8099-180d2b28b5a5.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u5de75d50&margin=%5Bobject%20Object%5D&name=14.jpg&originHeight=507&originWidth=720&originalType=binary&size=17925&status=done&style=none&taskId=u15268bf2-b626-45f8-b48a-f07a7451cda" alt="14.jpg"></p>
 <p>menu.js</p>
 <p><strong>rollup 打包结果</strong></p>
-<p><img src="15.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415555773-5ac8b3e7-6822-4d17-9cf6-c399e4c11d8a.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=ucd7802ee&margin=%5Bobject%20Object%5D&name=15.jpg&originHeight=499&originWidth=720&originalType=binary&size=48979&status=done&style=none&taskId=u5d04d8e1-7bde-4e29-91d4-258ec3596f2" alt="15.jpg"></p>
 <p>包中竟然包含了 menu.js 的全部代码</p>
 <p><strong>webpack 打包结果</strong></p>
-<p><img src="16.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415560732-7edb865f-1721-4fa8-b382-a7e560c849de.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u70238c69&margin=%5Bobject%20Object%5D&name=16.jpg&originHeight=831&originWidth=720&originalType=binary&size=84376&status=done&style=none&taskId=u9c8d019c-d5f4-4cd1-9543-8c562d70068" alt="16.jpg"></p>
 <p>包中竟然也包含了 menu.js 的全部代码</p>
 <blockquote>
 <p>类消除实验中，rollup，webpack 全军覆没，都没有达到预期</p>
 </blockquote>
-<p><img src="17.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415568229-847f4002-321b-4113-8a11-20dcb8b89efa.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u6424d3bf&margin=%5Bobject%20Object%5D&name=17.jpg&originHeight=534&originWidth=521&originalType=binary&size=18147&status=done&style=none&taskId=u1b710400-a506-4982-afda-5d2a62011ff" alt="17.jpg"></p>
 <p>what happend？</p>
 <p>这跟我们想象的完全不一样啊？为什么呢？无用的类不能消除，这还能叫做 tree-shaking 吗？我当时一度怀疑自己的 demo 有问题，后来各种网上搜索，才明白 demo 没有错。</p>
 <p>下面摘取了 rollup 核心贡献者的的一些回答：</p>
-<p><img src="18.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415572931-7c587419-fc3a-4b62-993c-22e2f267c188.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u4870e358&margin=%5Bobject%20Object%5D&name=18.jpg&originHeight=482&originWidth=720&originalType=binary&size=30357&status=done&style=none&taskId=u826a695b-c38e-433b-a27e-b714d1e71ba" alt="18.jpg"></p>
 <p>图 7</p>
 <ul>
 <li>rollup 只处理函数和顶层的 import/export 变量，不能把没用到的类的方法消除掉</li>
@@ -318,27 +318,27 @@
 
 <p>这种代码，静态分析是分析不了的，就算能静态分析代码，想要正确完全的分析也比较困难。</p>
 <p>更多关于副作用的讨论，可以看这个</p>
-<p><a href="http://link.zhihu.com/?target=https://github.com/rollup/rollup/issues/349"><img src="19.jpg#alt=img"></a></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415584766-5e4c8d34-b5e3-4055-9ceb-d3cdf65cdc0c.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u8859213e&margin=%5Bobject%20Object%5D&name=19.jpg&originHeight=120&originWidth=120&originalType=binary&size=6543&status=done&style=none&taskId=uaf2b39e5-32bc-4452-8a7c-509e86bde83" alt="19.jpg"></p>
 <p><a href="http://link.zhihu.com/?target=https://github.com/rollup/rollup/issues/349">Tree shaking class methods · Issue #349 · rollup/rollupgithub.com</a></p>
-<p><img src="20.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415594094-0ad21064-9164-4717-8e7b-a3fac32c32fc.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u880b8ec5&margin=%5Bobject%20Object%5D&name=20.jpg&originHeight=405&originWidth=720&originalType=binary&size=15712&status=done&style=none&taskId=u70554999-8e4f-48bc-96da-ada236ab9b5" alt="20.jpg"></p>
 <blockquote>
 <p>tree-shaking 对函数效果较好</p>
 </blockquote>
 <p>函数的副作用相对较少，顶层函数相对来说更容易分析，加上 babel 默认都是”use strict”严格模式，减少顶层函数的动态访问的方式，也更容易分析</p>
 <p>我们开始说的三个工具，rollup 和 webpack 表现不理想，那 closure compiler 又如何呢？</p>
 <p>将示例中的代码用 cc 打包后得到的结果如下：</p>
-<p><img src="21.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415606997-0930df34-d241-4fe3-896d-064756351b99.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u919ddbe8&margin=%5Bobject%20Object%5D&name=21.jpg&originHeight=405&originWidth=720&originalType=binary&size=17714&status=done&style=none&taskId=u7bdca274-c8e7-4dae-beb6-412b706c473" alt="21.jpg"></p>
 <p>天啊，这不就是我们要的结果吗？完美消除所有无用代码的结果，输出的结果非常性感</p>
 <blockquote>
 <p>closure compiler， tree-shaking 的结果完美！</p>
 </blockquote>
 <p>可是不能高兴得太早，能得到这么完美结果是需要条件的，那就是 cc 的侵入式约束规范。必须在代码里添加这样的代码，看红线框标示的</p>
-<p><img src="22.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415613494-0a044226-4eee-4ec9-9588-3135701029ba.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=ue1d60932&margin=%5Bobject%20Object%5D&name=22.jpg&originHeight=261&originWidth=720&originalType=binary&size=19369&status=done&style=none&taskId=u9847ceb1-7e7a-41a3-ab4e-b5bba4893dd" alt="22.jpg"></p>
 <p>google 定义一整套注解规范 Annotating JavaScript for the Closure Compiler，想更多了解的，可以去看下官网。</p>
 <p>侵入式这个就让人很不爽，google Closure Compiler 是 java 写的，和我们基于 node 的各种构建库不可能兼容（不过目前好像已经有 nodejs 版 Closure Compiler），Closure Compiler 使用起来也比较麻烦，所以虽然效果很赞，但比较难以应用到项目中，迁移成本较大。</p>
 <p><strong>说了这么多，总结一下：</strong></p>
 <p>三大工具的 tree-shaking 对于无用代码，无用模块的消除，都是有限的，有条件的。closure compiler 是最好的，但与我们日常的基于 node 的开发流很难兼容。</p>
-<p><img src="23.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415618300-5633fb7e-a976-41d6-aa8a-2bf6594aaf2c.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=uc3f28788&margin=%5Bobject%20Object%5D&name=23.jpg&originHeight=405&originWidth=720&originalType=binary&size=6175&status=done&style=none&taskId=u2a5dacca-7a51-4245-a236-beef0048988" alt="23.jpg"></p>
 <p>tree-shaking 对 web 意义重大，是一个极致优化的理想世界，是前端进化的又一个终极理想。</p>
 <p>理想是美好的，但目前还处在发展阶段，还比较困难，有各个方面的，甚至有目前看来无法解</p>
 <p>决的问题，但还是应该相信新技术能带来更好的前端世界。</p>
@@ -347,11 +347,11 @@
 <p>知识有限，如果错误，请不惜指正，谢谢</p>
 </blockquote>
 <p>下一篇将继续介绍 <a target="_blank" rel="noopener" href="https://juejin.im/post/6844903544760336398">Tree-Shaking 性能优化实践 - 实践篇</a></p>
-<p><a target="_blank" rel="noopener" href="https://juejin.im/post/6844903544760336398"><img src="24.webp#alt=img"></a></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/webp/21377586/1619415622789-70d6d885-0b51-4a90-beab-dac792588f41.webp#clientId=u022f3b9a-a5ad-4&from=drop&id=ud6bae893&margin=%5Bobject%20Object%5D&name=24.webp&originHeight=120&originWidth=180&originalType=binary&size=3120&status=done&style=none&taskId=u157a1607-0193-4ba3-a16c-ebf3c82baf4" alt="24.webp"></p>
 <blockquote>
 <p>本文中示例代码都能在我们的 github 中找到，欢迎戳 ❤</p>
 </blockquote>
-<p><a href="http://link.zhihu.com/?target=https://github.com/lin-xi/treeshaking/tree/master/rollup-webpack"><img src="25.jpg#alt=img"></a></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415628594-b9024704-66a8-422f-bf1b-d2ce8af8060a.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u9b1ca6b3&margin=%5Bobject%20Object%5D&name=25.jpg&originHeight=120&originWidth=120&originalType=binary&size=4686&status=done&style=none&taskId=u8270d645-c494-4431-a0d7-c42824bb91f" alt="25.jpg"></p>
 <p><a href="http://link.zhihu.com/?target=https://github.com/lin-xi/treeshaking/tree/master/rollup-webpack">lin-xi/treeshakinggithub.com</a></p>
 
     </div>
@@ -372,8 +372,8 @@
       <i class="fa fa-chevron-left"></i> 前端模块化
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/04/26/hello-world/" rel="next" title="Hello World">
-      Hello World <i class="fa fa-chevron-right"></i>
+    <a href="/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/" rel="next" title="Tree-Shaking性能优化实践-实践篇">
+      Tree-Shaking性能优化实践-实践篇 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -447,7 +447,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">60</span>
+          <span class="site-state-item-count">61</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

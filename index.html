@@ -170,7 +170,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-04-26 01:04:54" itemprop="dateCreated datePublished" datetime="2021-04-26T01:04:54+08:00">2021-04-26</time>
+              <time title="创建时间：2021-04-26 14:05:57" itemprop="dateCreated datePublished" datetime="2021-04-26T14:05:57+08:00">2021-04-26</time>
             </span>
 
           
@@ -216,7 +216,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/26/yuque/Tree-Shaking/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -230,7 +230,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/04/26/yuque/Tree-Shaking/" class="post-title-link" itemprop="url">Tree-Shaking</a>
+            <a href="/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/" class="post-title-link" itemprop="url">Tree-Shaking性能优化实践-实践篇</a>
         </h2>
 
         <div class="post-meta">
@@ -241,7 +241,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-04-26 01:04:35 / 修改时间：01:05:34" itemprop="dateCreated datePublished" datetime="2021-04-26T01:04:35+08:00">2021-04-26</time>
+              <time title="创建时间：2021-04-26 14:05:39 / 修改时间：14:06:34" itemprop="dateCreated datePublished" datetime="2021-04-26T14:05:39+08:00">2021-04-26</time>
             </span>
 
           
@@ -255,24 +255,185 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="一-什么是-Tree-shaking"><a href="#一-什么是-Tree-shaking" class="headerlink" title="一. 什么是 Tree-shaking"></a>一. 什么是 Tree-shaking</h2><p><img src="1.jpg#alt=img"></p>
+          <p>上一篇文章 <a target="_blank" rel="noopener" href="https://juejin.im/post/6844903544756109319">Tree-Shaking 性能优化实践 - 原理篇</a> 介绍了 tree-shaking 的原理，本文主要介绍 tree-shaking 的实践</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417176669-626362ab-6164-4bb3-b700-463db3ee8027.jpeg#clientId=ue71f5aac-b372-4&from=drop&height=120&id=u706055df&margin=%5Bobject%20Object%5D&name=1.jpg&originHeight=120&originWidth=180&originalType=binary&size=6581&status=done&style=none&taskId=uec8d1f6e-41b1-4021-8111-765498ed4c7&width=180" alt="1.jpg"></p>
+<h2 id="三-tree-shaking-实践"><a href="#三-tree-shaking-实践" class="headerlink" title="三. tree-shaking 实践"></a>三. tree-shaking 实践</h2><p><img src="2.jpg#id=rtIfv&originalType=binary&status=done&style=none"></p>
+<p>webpack2 发布，宣布支持 tree-shaking，webpack 3 发布，支持作用域提升，生成的 bundle 文件更小。 再没有升级 webpack 之前，增幻想我们的性能又要大幅提升了，对升级充满了期待。实际上事实是这样的</p>
+<p><img src="3.jpg#id=PTNjw&originalType=binary&status=done&style=none"></p>
+<p>升级完之后，bundle 文件大小并没有大幅减少，当时有较大的心理落差，然后去研究了为什么效果不理想，原因见 <a target="_blank" rel="noopener" href="https://juejin.im/post/6844903544756109319">Tree-Shaking 性能优化实践 - 原理篇</a> 。</p>
+<p>优化还是要继续的，虽然工具自带的 tree-shaking 不能去除太多无用代码，在去除无用代码这一方面也还是有可以做的事情。我们从三个方面做里一些优化。</p>
+<h2 id="（1）对组件库引用的优化"><a href="#（1）对组件库引用的优化" class="headerlink" title="（1）对组件库引用的优化"></a>（1）对组件库引用的优化</h2><p>先来看一个问题</p>
+<p><img src="4.jpg#id=sQ46O&originalType=binary&status=done&style=none"></p>
+<p>当我们使用组件库的时候，import {Button} from ‘element-ui’，相对于 Vue.use(elementUI)，已经是具有性能意识，是比较推荐的做法，但如果我们写成右边的形式，具体到文件的引用，打包之后的区别是非常大的，以 antd 为例，右边形式 bundle 体积减少约 80%。</p>
+<p>这个引用也属于有副作用，webpack 不能把其他组件进行 tree-shaking。既然工具本身是做不了，那我们可以做工具把左边代码自动改成右边代码这种形式。这个工具 antd 库本身也是提供的。我在 antd 的工具基础上做了少量的修改，不用任何配置，原生支持我们自己的组件库， <a href="http://link.zhihu.com/?target=https://w-ui.github.io/%23/doc">wui</a> 和 <a href="http://link.zhihu.com/?target=https://wmfe.github.io/xcui/%23/home">xcui</a> 以及一些其他常用的库</p>
+<p><strong>babel-plugin-import-fix ，缩小引用范围</strong></p>
+<p><img src="5.jpg#id=UNIJx&originalType=binary&status=done&style=none"></p>
+<p><img src="6.jpg#id=kYGcm&originalType=binary&status=done&style=none"></p>
+<p><a href="http://link.zhihu.com/?target=https://github.com/lin-xi/babel-plugin-import-fix">lin-xi/babel-plugin-import-fix</a></p>
+<p>下面介绍一下原理</p>
+<p><img src="7.jpg#id=WTaR8&originalType=binary&status=done&style=none"></p>
+<p>这是一个 babel 的插件，babel 通过核心 babylon 将 ES6 代码转换成 AST 抽象语法树，然后插件遍历语法树找出类似 import {Button} from ‘element-ui’这样的语句，进行转换，最后重新生成代码。</p>
+<p>babel-plugin-import-fix 默认支持 antd，element，meterial-UI，wui，xcui 和 d3，只需要再.babelrc 中配置插件本身就可以。</p>
+<p>.babelrc</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;presets&quot;: [</span><br><span class="line">    [&quot;es2015&quot;, &#123; &quot;modules&quot;: false &#125;], &quot;react&quot;</span><br><span class="line">  ],</span><br><span class="line">  &quot;plugins&quot;: [&quot;import-fix&quot;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="8.jpg#id=RamBq&originalType=binary&status=done&style=none"></p>
+<p>其实是想把所有常用的库都默认支持，但很多常用的库却不支持缩小引用范围。因为没有独立输出各个子模块，不能把引用修改为对单个子模块的引用。</p>
+<h2 id="（2）CSS-Tree-shaking"><a href="#（2）CSS-Tree-shaking" class="headerlink" title="（2）CSS Tree-shaking"></a>（2）CSS Tree-shaking</h2><p>我们前面所说的 tree-shaking 都是针对 js 文件，通过静态分析，尽可能消除无用的代码，那对于 css 我们能做 tree-shaking 吗？</p>
+<p>随着 CSS3，LESS，SASS 等各种 css 预处理语言的普及，css 文件在整个工程中占比是不可忽视的。随着大项目功能的不停迭代，导致 css 中可能就存在着无用的代码。我实现了一个 webpack 插件来解决这个问题，找出 css 代码无用的代码。</p>
+<p><a href="http://link.zhihu.com/?target=https://github.com/lin-xi/webpack-css-treeshaking-plugin"><strong>webpack-css-treeshaking-plugin</strong></a><strong>，对 css 进行 tree-shaking</strong></p>
+<p><img src="9.jpg#id=DBjwE&originalType=binary&status=done&style=none"></p>
+<p>[webpack-css-treeshaking-plugin</p>
+<p>](<a href="http://link.zhihu.com/?target=https://github.com/lin-xi/webpack-css-treeshaking-plugin">http://link.zhihu.com/?target=https%3A//github.com/lin-xi/webpack-css-treeshaking-plugin</a>)</p>
+<p>下面介绍一下原理</p>
+<p>整体思路是这样的，遍历所有的 css 文件中的 selector 选择器，然后去所有 js 代码中匹配，如果选择器没有在代码出现过，则认为该选择器是无用代码。</p>
+<p><strong>首先面临的问题是，如何优雅的遍历所有的选择器呢？难道要用正则表达式很苦逼的去匹配分割吗？</strong></p>
+<p>babel 是 js 世界的福星，其实 css 世界也有利器，那就是 postCss。</p>
+<p>PostCSS 提供了一个解析器，它能够将 CSS 解析成 AST 抽象语法树。然后我们能写各种插件，对抽象语法树做处理，最终生成新的 css 文件，以达到对 css 进行精确修改的目的。</p>
+<p><img src="10.jpg#id=qJv3w&originalType=binary&status=done&style=none"></p>
+<p>整体又是一个 webpack 的插件，架构图如下：</p>
+<p><img src="11.jpg#id=qAetG&originalType=binary&status=done&style=none"></p>
+<p>主要流程：</p>
+<ul>
+<li>插件监听 webapck 编译完成事件，webpack 编译完成之后，从 compilation 中找出所有的 css 文件和 js 文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">apply (compiler) &#123;</span><br><span class="line">    compiler.plugin(&#39;after-emit&#39;, (compilation, callback) &#x3D;&gt; &#123;</span><br><span class="line"></span><br><span class="line">      let styleFiles &#x3D; Object.keys(compilation.assets).filter(asset &#x3D;&gt; &#123;</span><br><span class="line">        return &#x2F;\.css$&#x2F;.test(asset)</span><br><span class="line">      &#125;)</span><br><span class="line"></span><br><span class="line">      let jsFiles &#x3D; Object.keys(compilation.assets).filter(asset &#x3D;&gt; &#123;</span><br><span class="line">        return &#x2F;\.(js|jsx)$&#x2F;.test(asset)</span><br><span class="line">      &#125;)</span><br><span class="line"></span><br><span class="line">     ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>将所有的 css 文件送至 postCss 处理，找出无用代码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">let tasks &#x3D; []</span><br><span class="line"> styleFiles.forEach((filename) &#x3D;&gt; &#123;</span><br><span class="line">     const source &#x3D; compilation.assets[filename].source()</span><br><span class="line">     let listOpts &#x3D; &#123;</span><br><span class="line">       include: &#39;&#39;,</span><br><span class="line">       source: jsContents,  &#x2F;&#x2F;传入全部js文件</span><br><span class="line">       opts: this.options   &#x2F;&#x2F;插件配置选项</span><br><span class="line">     &#125;</span><br><span class="line">     tasks.push(postcss(treeShakingPlugin(listOpts)).process(source).then(result &#x3D;&gt; &#123;</span><br><span class="line">       let css &#x3D; result.toString()  &#x2F;&#x2F; postCss处理后的css AST</span><br><span class="line">       &#x2F;&#x2F;替换webpack的编译产物compilation</span><br><span class="line">       compilation.assets[filename] &#x3D; &#123;</span><br><span class="line">         source: () &#x3D;&gt; css,</span><br><span class="line">         size: () &#x3D;&gt; css.length</span><br><span class="line">       &#125;</span><br><span class="line">       return result</span><br><span class="line">     &#125;))</span><br><span class="line"> &#125;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>postCss 遍历，匹配，删除过程</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">module.exports &#x3D; postcss.plugin(&#39;list-selectors&#39;, function (options) &#123;</span><br><span class="line">   &#x2F;&#x2F; 从根节点开始遍历</span><br><span class="line">   cssRoot.walkRules(function (rule) &#123;</span><br><span class="line">     &#x2F;&#x2F; Ignore keyframes, which can log e.g. 10%, 20% as selectors</span><br><span class="line">     if (rule.parent.type &#x3D;&#x3D;&#x3D; &#39;atrule&#39; &amp;&amp; &#x2F;keyframes&#x2F;.test(rule.parent.name)) return</span><br><span class="line"></span><br><span class="line">     &#x2F;&#x2F; 对每一个规则进行处理</span><br><span class="line">     checkRule(rule).then(result &#x3D;&gt; &#123;</span><br><span class="line">       if (result.selectors.length &#x3D;&#x3D;&#x3D; 0) &#123;</span><br><span class="line">         &#x2F;&#x2F; 选择器全部被删除</span><br><span class="line">         let log &#x3D; &#39; ✂️ [&#39; + rule.selector + &#39;] shaked, [1]&#39;</span><br><span class="line">         console.log(log)</span><br><span class="line">         if (config.remove) &#123;</span><br><span class="line">           rule.remove()</span><br><span class="line">         &#125;</span><br><span class="line">       &#125; else &#123;</span><br><span class="line">         &#x2F;&#x2F; 选择器被部分删除</span><br><span class="line">         let shaked &#x3D; rule.selectors.filter(item &#x3D;&gt; &#123;</span><br><span class="line">           return result.selectors.indexOf(item) &#x3D;&#x3D;&#x3D; -1</span><br><span class="line">         &#125;)</span><br><span class="line">         if (shaked &amp;&amp; shaked.length &gt; 0) &#123;</span><br><span class="line">           let log &#x3D; &#39; ✂️ [&#39; + shaked.join(&#39; &#39;) + &#39;] shaked, [2]&#39;</span><br><span class="line">           console.log(log)</span><br><span class="line">         &#125;</span><br><span class="line">         if (config.remove) &#123;</span><br><span class="line">           &#x2F;&#x2F; 修改AST抽象语法树</span><br><span class="line">           rule.selectors &#x3D; result.selectors</span><br><span class="line">         &#125;</span><br><span class="line">       &#125;</span><br><span class="line">     &#125;)</span><br><span class="line">   &#125;)</span><br></pre></td></tr></table></figure>
+
+<p>checkRule 处理每一个规则核心代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">let checkRule &#x3D; (rule) &#x3D;&gt; &#123;</span><br><span class="line">      return new Promise(resolve &#x3D;&gt; &#123;</span><br><span class="line">        ...</span><br><span class="line">        let secs &#x3D; rule.selectors.filter(function (selector) &#123;</span><br><span class="line">          let result &#x3D; true</span><br><span class="line">          let processor &#x3D; parser(function (selectors) &#123;</span><br><span class="line">            for (let i &#x3D; 0, len &#x3D; selectors.nodes.length; i &lt; len; i++) &#123;</span><br><span class="line">              let node &#x3D; selectors.nodes[i]</span><br><span class="line">              if (_.includes([&#39;comment&#39;, &#39;combinator&#39;, &#39;pseudo&#39;], node.type)) continue</span><br><span class="line">              for (let j &#x3D; 0, len2 &#x3D; node.nodes.length; j &lt; len2; j++) &#123;</span><br><span class="line">                let n &#x3D; node.nodes[j]</span><br><span class="line">                if (!notCache[n.value]) &#123;</span><br><span class="line">                  switch (n.type) &#123;</span><br><span class="line">                    case &#39;tag&#39;:</span><br><span class="line">                      &#x2F;&#x2F; nothing</span><br><span class="line">                      break</span><br><span class="line">                    case &#39;id&#39;:</span><br><span class="line">                    case &#39;class&#39;:</span><br><span class="line">                      if (!classInJs(n.value)) &#123;</span><br><span class="line">                        &#x2F;&#x2F; 调用classInJs判断是否在JS中出现过</span><br><span class="line">                        notCache[n.value] &#x3D; true</span><br><span class="line">                        result &#x3D; false</span><br><span class="line">                        break</span><br><span class="line">                      &#125;</span><br><span class="line">                      break</span><br><span class="line">                    default:</span><br><span class="line">                      &#x2F;&#x2F; nothing</span><br><span class="line">                      break</span><br><span class="line">                  &#125;</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                  result &#x3D; false</span><br><span class="line">                  break</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;)</span><br><span class="line">          ...</span><br><span class="line">        &#125;)</span><br><span class="line">        ...</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到其实我只处理里 id 选择器和 class 选择器，id 和 class 相对来说副作用小，引起样式异常的可能性相对较小。</p>
+<p>判断 css 是否再 js 中出现过，是使用正则匹配。</p>
+<p>其实，后续还可以继续优化，比如对 tag 类的选择器，可以配置是否再 html，jsx，template 中出现过，如果出现过，没有出现过也可以认为是无用代码。</p>
+<p>当然，插件能正常工作还是的有一些前提和约束。我们可以在代码中动态改变 css，比如再 react 和 vue 中，可以这么写</p>
+<p><img src="12.jpg#id=eEwPF&originalType=binary&status=done&style=none"></p>
+<p>这样是比较推荐的方式，选择器作为字符或变量名出现在代码中，下面这样动态生成选择器的情况就会导致匹配失败</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">render()&#123;</span><br><span class="line">  this.stateClass &#x3D; &#39;state-&#39; + this.state &#x3D;&#x3D; 2 ? &#39;open&#39; : &#39;close&#39;</span><br><span class="line">  return &lt;div class&#x3D;&#123;this.stateClass&#125;&gt;&lt;&#x2F;div&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中这样情况很容易避免</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">render()&#123;</span><br><span class="line">  this.stateClass &#x3D; this.state &#x3D;&#x3D; 2 ? &#39;state-open&#39; : &#39;state-close&#39;</span><br><span class="line">  return &lt;div class&#x3D;&#123;this.stateClass&#125;&gt;&lt;&#x2F;div&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>所以有一个好的编码规范的约束，插件能更好的工作。</p>
+<h2 id="（3）webpack-bundle-文件去重"><a href="#（3）webpack-bundle-文件去重" class="headerlink" title="（3）webpack bundle 文件去重"></a>（3）webpack bundle 文件去重</h2><p>如果 webpack 打包后的 bundle 文件中存在着相同的模块，也属于无用代码的一种。也应该被去除掉</p>
+<p>首先我们需要一个能对 bundle 文件定性分析的工具，能发现问题，能看出优化效果。</p>
+<p>webpack-bundle-analyzer 这个插件完全能满足我们的需求，他能以图形化的方式展示 bundle 中所有的模块的构成的各构成的大小。</p>
+<p><img src="13.jpg#id=sJf4r&originalType=binary&status=done&style=none"></p>
+<p>其次，需求对通用模块进行提取，CommonsChunkPlugin 是最被人熟知的用于提供通用模块的插件。早期的时候，我并不完全了解他的功能，并没有发挥最大的功效。</p>
+<p>下面介绍 CommonsChunkPlugin 的正确用法</p>
+<p><strong>自动提取所有的 node_moudles 或者引用次数两次以上的模块</strong></p>
+<p><img src="14.jpg#id=rRUSz&originalType=binary&status=done&style=none"></p>
+<p>minChunks 可以接受一个数值或者函数，如果是函数，可自定义打包规则</p>
+<p>但使用上面记载的配置之后，并不能高枕无忧。因为这个配置只能提取所有 entry 打包后的文件中的通用模块。而现实是，有了提高性能，我们会按需加载，通过 webpack 提供的 import（…）方法，这种按需加载的文件并不会存在于 entry 之中，所以按需加载的异步模块中的通用模块并没有提取。</p>
+<p><strong>如何提取按需加载的异步模块里的通用模块呢？</strong></p>
+<p><img src="15.jpg#id=yOwv5&originalType=binary&status=done&style=none"></p>
+<p>配置另一个 CommonsChunkPlugin，添加 async 属性，async 可以接受布尔值或字符串。当时字符串时，默认是输出文件的名称。</p>
+<p>names 是所有异步模块的名称</p>
+<p>这里还涉及一个给异步模块命名的知识点。我是这样做的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">const Edit &#x3D; resolve &#x3D;&gt; &#123; import( &#x2F;* webpackChunkName: &quot;EditPage&quot; *&#x2F; &#39;.&#x2F;pages&#x2F;Edit&#x2F;Edit&#39;).then((mod) &#x3D;&gt; &#123; resolve(mod.default); &#125;) &#125;;</span><br><span class="line">const PublishPage &#x3D; resolve &#x3D;&gt; &#123; import( &#x2F;* webpackChunkName: &quot;Publish&quot; *&#x2F; &#39;.&#x2F;pages&#x2F;Publish&#x2F;Publish&#39;).then((mod) &#x3D;&gt; &#123; resolve(mod); &#125;) &#125;;</span><br><span class="line">const Models &#x3D; resolve &#x3D;&gt; &#123; import( &#x2F;* webpackChunkName: &quot;Models&quot; *&#x2F; &#39;.&#x2F;pages&#x2F;Models&#x2F;Models&#39;).then((mod) &#x3D;&gt; &#123; resolve(mod.default); &#125;) &#125;;</span><br><span class="line">const MediaUpload &#x3D; resolve &#x3D;&gt; &#123; import( &#x2F;* webpackChunkName: &quot;MediaUpload&quot; *&#x2F; &#39;.&#x2F;pages&#x2F;Media&#x2F;MediaUpload&#39;).then((mod) &#x3D;&gt; &#123; resolve(mod); &#125;) &#125;;</span><br><span class="line">const RealTime &#x3D; resolve &#x3D;&gt; &#123; import( &#x2F;* webpackChunkName: &quot;RealTime&quot; *&#x2F; &#39;.&#x2F;pages&#x2F;RealTime&#x2F;RealTime&#39;).then((mod) &#x3D;&gt; &#123; resolve(mod.default); &#125;) &#125;;</span><br></pre></td></tr></table></figure>
+
+<p>没错，在 import 里添加注释。/_ webpackChunkName: “EditPage” _/ ，虽然看着不舒服，但是管用。</p>
+<p>贴一个项目的优化效果对比图</p>
+<p><img src="16.jpg#id=KZHR3&originalType=binary&status=done&style=none"></p>
+<p>优化效果还是比较明显。</p>
+<p><img src="17.jpg#id=Dy7lf&originalType=binary&status=done&style=none"></p>
+<p>优化前 bundle</p>
+<p><img src="18.jpg#id=d9um1&originalType=binary&status=done&style=none"></p>
+<p>优化后 bundle</p>
+<p><strong>最后思考一个问题：</strong></p>
+<p><strong>不同 entry 模块或按需加载的异步模块需不需要提取通用模块？</strong></p>
+<p>这个需要看场景了，比如模块都是在线加载的，如果通用模块提取粒度过小，会导致首页首屏需要的文件变多，很多可能是首屏用不到的，导致首屏过慢，二级或三级页面加载会大幅提升。所以这个就需要根据业务场景做权衡，控制通用模块提取的粒度。</p>
+<p>百度外卖的移动端应用场景是这样的，我们所有的移动端页面都做了离线化的处理。离线之后，加载本地的 js 文件，与网络无关，基本上可以忽略文件大小，所以更关注整个离线包的大小。离线包越小，耗费用户的流量就越小，用户体验更好，所以离线化的场景是非常适合最小粒提取通用模块的，即将所有 entry 模块和异步加载模块的引用大于 2 的模块都提取，这样能获得最小的输出文件，最小的离线包。</p>
+<p>1 月 20 日，我将在掘金分享《百度外卖前端离线化实践》，有兴趣的可以关注一下。</p>
+<p>文本提到的插件都是开源的，链接汇总，欢迎交流，欢迎戳 ❤</p>
+<p><img src="19.jpg#id=qBUgO&originalType=binary&status=done&style=none"></p>
+<p><a href="http://link.zhihu.com/?target=https://github.com/lin-xi/babel-plugin-import-fix">lin-xi/babel-plugin-import-fix</a></p>
+<p><a href="http://link.zhihu.com/?target=https://github.com/lin-xi/webpack-css-treeshaking-plugin">lin-xi/webpack-css-treeshaking-plugin</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5%20%E5%8E%9F%E7%90%86%E7%AF%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5%20%E5%8E%9F%E7%90%86%E7%AF%87/" class="post-title-link" itemprop="url">Tree-Shaking性能优化实践 原理篇</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-26 01:04:35 / 修改时间：14:06:34" itemprop="dateCreated datePublished" datetime="2021-04-26T01:04:35+08:00">2021-04-26</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="一-什么是-Tree-shaking"><a href="#一-什么是-Tree-shaking" class="headerlink" title="一. 什么是 Tree-shaking"></a>一. 什么是 Tree-shaking</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415487699-2976267a-70a5-4dc4-8642-c5c9722d10cd.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=uaa735294&margin=%5Bobject%20Object%5D&name=1.jpg&originHeight=405&originWidth=720&originalType=binary&size=6737&status=done&style=none&taskId=ub91413ec-e2c7-4325-a62e-122f16394cf" alt="1.jpg"></p>
 <p>先来看一下 Tree-shaking 原始的本意</p>
-<p><img src="2.gif#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/gif/21377586/1619415501641-bbf5f45d-3a0c-4811-9919-761bbc00e701.gif#clientId=u022f3b9a-a5ad-4&from=drop&id=ubfb99f78&margin=%5Bobject%20Object%5D&name=2.gif&originHeight=341&originWidth=606&originalType=binary&size=3761493&status=done&style=none&taskId=u70618439-fddd-42cc-bf2f-a38d6a58d38" alt="2.gif"></p>
 <p>上图形象的解释了 Tree-shaking 的本意，本文所说的前端中的 tree-shaking 可以理解为通过工具”摇”我们的 JS 文件，将其中用不到的代码”摇”掉，是一个性能优化的范畴。具体来说，在 webpack 项目中，有一个入口文件，相当于一棵树的主干，入口文件有很多依赖的模块，相当于树枝。实际情况中，虽然依赖了某个模块，但其实只使用其中的某些功能。通过 tree-shaking，将没有使用的模块摇掉，这样来达到删除无用代码的目的。</p>
-<p><img src="3.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415504181-f5f2cce4-ceef-4702-9da5-c6a11f90d8e3.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=uc32a1b51&margin=%5Bobject%20Object%5D&name=3.jpg&originHeight=405&originWidth=720&originalType=binary&size=12958&status=done&style=none&taskId=u2e02d442-f1cc-487d-b7f4-a35c40e2d7c" alt="3.jpg"></p>
 <p>Tree-shaking 较早由 Rich_Harris 的 rollup 实现，后来，webpack2 也增加了 tree-shaking 的功能。其实在更早，google closure compiler 也做过类似的事情。三个工具的效果和使用各不相同，使用方法可以通过官网文档去了解，三者的效果对比，后文会详细介绍。</p>
-<h2 id="二-tree-shaking-的原理"><a href="#二-tree-shaking-的原理" class="headerlink" title="二. tree-shaking 的原理"></a>二. tree-shaking 的原理</h2><p><img src="4.jpg#alt=img"></p>
+<h2 id="二-tree-shaking-的原理"><a href="#二-tree-shaking-的原理" class="headerlink" title="二. tree-shaking 的原理"></a>二. tree-shaking 的原理</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415508232-a021a71e-e50c-448d-b9f3-f1a442fb8592.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u47b707e4&margin=%5Bobject%20Object%5D&name=4.jpg&originHeight=405&originWidth=720&originalType=binary&size=6384&status=done&style=none&taskId=u1f413566-615e-45aa-bfe6-19178616240" alt="4.jpg"></p>
 <p>Tree-shaking 的本质是消除无用的 js 代码。无用代码消除在广泛存在于传统的编程语言编译器中，编译器可以判断出某些代码根本不影响输出，然后消除这些代码，这个称之为 DCE（dead code elimination）。</p>
 <p>Tree-shaking 是 DCE 的一种新的实现，Javascript 同传统的编程语言不同的是，javascript 绝大多数情况需要通过网络进行加载，然后执行，加载的文件大小越小，整体执行时间更短，所以去除无用代码以减少文件体积，对 javascript 来说更有意义。</p>
 <p>Tree-shaking 和传统的 DCE 的方法又不太一样，传统的 DCE 消灭不可能执行的代码，而 Tree-shaking 更关注宇消除没有用到的代码。下面详细介绍一下 DCE 和 Tree-shaking。</p>
 <p><strong>（1）先来看一下 DCE 消除大法</strong></p>
-<p><img src="5.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415512124-bdf2b8d6-a44d-48c5-b4cd-7e832d3b6c66.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u5c04aa5e&margin=%5Bobject%20Object%5D&name=5.jpg&originHeight=405&originWidth=720&originalType=binary&size=13053&status=done&style=none&taskId=u994cfb70-3fbb-4acd-a721-79e4fca1cec" alt="5.jpg"></p>
 <p>Dead Code 一般具有以下几个特征</p>
 <p>•代码不会被执行，不可到达</p>
 <p>•代码执行的结果不会被用到</p>
 <p>•代码只会影响死变量（只写不读）</p>
 <p>下面红框标示的代码就属于死码，满足以上特征</p>
-<p><img src="6.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415515648-7a8ef020-4e11-4040-9745-5729523c8cdc.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u0baad115&margin=%5Bobject%20Object%5D&name=6.jpg&originHeight=405&originWidth=720&originalType=binary&size=16079&status=done&style=none&taskId=udfcd44cf-a7e4-40bf-a2ec-bab6467e90d" alt="6.jpg"></p>
 <p>图 4</p>
 <p>传统编译型的语言中，都是由编译器将 Dead Code 从 AST（抽象语法树）中删除，那 javascript 中是由谁做 DCE 呢？</p>
 <p>首先肯定不是浏览器做 DCE，因为当我们的代码送到浏览器，那还谈什么消除无法执行的代码来优化呢，所以肯定是送到浏览器之前的步骤进行优化。</p>
@@ -282,19 +443,19 @@
 </blockquote>
 <p><a target="_blank" rel="noopener" href="https://github.com/lin-xi/treeshaking/tree/master/rollup-webpack">https://github.com/lin-xi/treeshaking/tree/master/rollup-webpack</a></p>
 <p><strong>分别用 rollup 和 webpack 将图 4 中的代码进行打包</strong></p>
-<p><img src="7.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415520261-c9810972-e615-475e-b2da-6b2320929fb6.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u204a249f&margin=%5Bobject%20Object%5D&name=7.jpg&originHeight=438&originWidth=720&originalType=binary&size=23130&status=done&style=none&taskId=u5c0f07c6-ff5e-4124-8ef9-1776c7af118" alt="7.jpg"></p>
 <p>图 5</p>
 <p>中间是 rollup 打包的结果，右边是 webpack 打包的结果</p>
 <p>可以发现，rollup 将无用的代码 foo 函数和 unused 函数消除了，但是仍然保留了不会执行到的代码，而 webpack 完整的保留了所有的无用代码和不会执行到的代码。</p>
 <p><strong>分别用 rollup + uglify 和 webpack + uglify 将图 4 中的代码进行打包</strong></p>
-<p><img src="8.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415524659-a3f45414-4a9a-43b4-a539-4fb74268e2a8.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=ub23d203b&margin=%5Bobject%20Object%5D&name=8.jpg&originHeight=463&originWidth=720&originalType=binary&size=40456&status=done&style=none&taskId=uff6d2484-b35d-4c91-9ad8-f9888347565" alt="8.jpg"></p>
 <p>图 6</p>
 <p>中间是配置文件，右侧是结果</p>
 <p>可以看到右侧最终打包结果中都去除了无法执行到的代码，结果符合我们的预期。</p>
 <p><strong>(2) 再来看一下 Tree-shaking 消除大法</strong></p>
 <p>前面提到了 tree-shaking 更关注于无用模块的消除，消除那些引用了但并没有被使用的模块。</p>
 <p>先思考一个问题，为什么 tree-shaking 是最近几年流行起来了？而前端模块化概念已经有很多年历史了，其实 tree-shaking 的消除原理是依赖于 ES6 的模块特性。</p>
-<p><img src="9.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415529275-6678a338-f495-4b4b-aec0-34f7fd52fc7d.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u2646efa9&margin=%5Bobject%20Object%5D&name=9.jpg&originHeight=405&originWidth=720&originalType=binary&size=19655&status=done&style=none&taskId=u1d25af48-af5f-4cd8-b795-d3887492aac" alt="9.jpg"></p>
 <p>ES6 module 特点：</p>
 <ul>
 <li>只能作为模块顶层的语句出现</li>
@@ -312,13 +473,13 @@
 </ul>
 <p><strong>先看下函数消除实验</strong></p>
 <p>utils 中 get 方法没有被使用到，我们期望的是 get 方法最终被消除。</p>
-<p><img src="10.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415534000-a1a9637c-2995-4449-89d8-514b596f70db.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u49a3465b&margin=%5Bobject%20Object%5D&name=10.jpg&originHeight=646&originWidth=720&originalType=binary&size=16134&status=done&style=none&taskId=u79851800-4d14-4761-8c88-28e86aba6c4" alt="10.jpg"></p>
 <p>注意，uglify 目前不会跨文件去做 DCE，所以上面这种情况，uglify 是不能优化的。</p>
 <p><strong>先看看 rollup 的打包结果</strong></p>
-<p><img src="11.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415537651-2f568864-b6ec-4658-a01e-7a65eb402363.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=uca06a248&margin=%5Bobject%20Object%5D&name=11.jpg&originHeight=343&originWidth=720&originalType=binary&size=18232&status=done&style=none&taskId=ud208b28f-157f-4401-802e-2ba8c4ad76f" alt="11.jpg"></p>
 <p>完全符合预期，最终结果中没有 get 方法</p>
 <p><strong>再看看 webpack 的结果</strong></p>
-<p><img src="12.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415541004-8eb43d30-08e8-4365-a7a4-6b75d1760a0f.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u87646e1e&margin=%5Bobject%20Object%5D&name=12.jpg&originHeight=962&originWidth=720&originalType=binary&size=67249&status=done&style=none&taskId=u0d35bad0-09c2-4a6f-9274-92606112252" alt="12.jpg"></p>
 <p>也符合预期，最终结果中没有 get 方法</p>
 <p>可以看到 rollup 打包的结果比 webpack 更优化</p>
 <blockquote>
@@ -326,24 +487,24 @@
 </blockquote>
 <p><strong>再来看下类消除实验</strong></p>
 <p>增加了对 menu.js 的引用，但其实代码中并没有用到 menu 的任何方法和变量，所以我们的期望是，最终代码中 menu.js 里的内容被消除</p>
-<p><img src="13.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415546773-c2ab6200-6b6a-4822-b98b-6beb2edb14fd.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u1e2d25c7&margin=%5Bobject%20Object%5D&name=13.jpg&originHeight=446&originWidth=720&originalType=binary&size=14514&status=done&style=none&taskId=u00b6a7f8-c295-4a64-b196-ee3fba81903" alt="13.jpg"></p>
 <p>main.js</p>
-<p><img src="14.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415551742-449c1ac0-dec7-4dcb-8099-180d2b28b5a5.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u5de75d50&margin=%5Bobject%20Object%5D&name=14.jpg&originHeight=507&originWidth=720&originalType=binary&size=17925&status=done&style=none&taskId=u15268bf2-b626-45f8-b48a-f07a7451cda" alt="14.jpg"></p>
 <p>menu.js</p>
 <p><strong>rollup 打包结果</strong></p>
-<p><img src="15.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415555773-5ac8b3e7-6822-4d17-9cf6-c399e4c11d8a.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=ucd7802ee&margin=%5Bobject%20Object%5D&name=15.jpg&originHeight=499&originWidth=720&originalType=binary&size=48979&status=done&style=none&taskId=u5d04d8e1-7bde-4e29-91d4-258ec3596f2" alt="15.jpg"></p>
 <p>包中竟然包含了 menu.js 的全部代码</p>
 <p><strong>webpack 打包结果</strong></p>
-<p><img src="16.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415560732-7edb865f-1721-4fa8-b382-a7e560c849de.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u70238c69&margin=%5Bobject%20Object%5D&name=16.jpg&originHeight=831&originWidth=720&originalType=binary&size=84376&status=done&style=none&taskId=u9c8d019c-d5f4-4cd1-9543-8c562d70068" alt="16.jpg"></p>
 <p>包中竟然也包含了 menu.js 的全部代码</p>
 <blockquote>
 <p>类消除实验中，rollup，webpack 全军覆没，都没有达到预期</p>
 </blockquote>
-<p><img src="17.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415568229-847f4002-321b-4113-8a11-20dcb8b89efa.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u6424d3bf&margin=%5Bobject%20Object%5D&name=17.jpg&originHeight=534&originWidth=521&originalType=binary&size=18147&status=done&style=none&taskId=u1b710400-a506-4982-afda-5d2a62011ff" alt="17.jpg"></p>
 <p>what happend？</p>
 <p>这跟我们想象的完全不一样啊？为什么呢？无用的类不能消除，这还能叫做 tree-shaking 吗？我当时一度怀疑自己的 demo 有问题，后来各种网上搜索，才明白 demo 没有错。</p>
 <p>下面摘取了 rollup 核心贡献者的的一些回答：</p>
-<p><img src="18.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415572931-7c587419-fc3a-4b62-993c-22e2f267c188.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u4870e358&margin=%5Bobject%20Object%5D&name=18.jpg&originHeight=482&originWidth=720&originalType=binary&size=30357&status=done&style=none&taskId=u826a695b-c38e-433b-a27e-b714d1e71ba" alt="18.jpg"></p>
 <p>图 7</p>
 <ul>
 <li>rollup 只处理函数和顶层的 import/export 变量，不能把没用到的类的方法消除掉</li>
@@ -358,27 +519,27 @@
 
 <p>这种代码，静态分析是分析不了的，就算能静态分析代码，想要正确完全的分析也比较困难。</p>
 <p>更多关于副作用的讨论，可以看这个</p>
-<p><a href="http://link.zhihu.com/?target=https://github.com/rollup/rollup/issues/349"><img src="19.jpg#alt=img"></a></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415584766-5e4c8d34-b5e3-4055-9ceb-d3cdf65cdc0c.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u8859213e&margin=%5Bobject%20Object%5D&name=19.jpg&originHeight=120&originWidth=120&originalType=binary&size=6543&status=done&style=none&taskId=uaf2b39e5-32bc-4452-8a7c-509e86bde83" alt="19.jpg"></p>
 <p><a href="http://link.zhihu.com/?target=https://github.com/rollup/rollup/issues/349">Tree shaking class methods · Issue #349 · rollup/rollupgithub.com</a></p>
-<p><img src="20.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415594094-0ad21064-9164-4717-8e7b-a3fac32c32fc.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u880b8ec5&margin=%5Bobject%20Object%5D&name=20.jpg&originHeight=405&originWidth=720&originalType=binary&size=15712&status=done&style=none&taskId=u70554999-8e4f-48bc-96da-ada236ab9b5" alt="20.jpg"></p>
 <blockquote>
 <p>tree-shaking 对函数效果较好</p>
 </blockquote>
 <p>函数的副作用相对较少，顶层函数相对来说更容易分析，加上 babel 默认都是”use strict”严格模式，减少顶层函数的动态访问的方式，也更容易分析</p>
 <p>我们开始说的三个工具，rollup 和 webpack 表现不理想，那 closure compiler 又如何呢？</p>
 <p>将示例中的代码用 cc 打包后得到的结果如下：</p>
-<p><img src="21.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415606997-0930df34-d241-4fe3-896d-064756351b99.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u919ddbe8&margin=%5Bobject%20Object%5D&name=21.jpg&originHeight=405&originWidth=720&originalType=binary&size=17714&status=done&style=none&taskId=u7bdca274-c8e7-4dae-beb6-412b706c473" alt="21.jpg"></p>
 <p>天啊，这不就是我们要的结果吗？完美消除所有无用代码的结果，输出的结果非常性感</p>
 <blockquote>
 <p>closure compiler， tree-shaking 的结果完美！</p>
 </blockquote>
 <p>可是不能高兴得太早，能得到这么完美结果是需要条件的，那就是 cc 的侵入式约束规范。必须在代码里添加这样的代码，看红线框标示的</p>
-<p><img src="22.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415613494-0a044226-4eee-4ec9-9588-3135701029ba.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=ue1d60932&margin=%5Bobject%20Object%5D&name=22.jpg&originHeight=261&originWidth=720&originalType=binary&size=19369&status=done&style=none&taskId=u9847ceb1-7e7a-41a3-ab4e-b5bba4893dd" alt="22.jpg"></p>
 <p>google 定义一整套注解规范 Annotating JavaScript for the Closure Compiler，想更多了解的，可以去看下官网。</p>
 <p>侵入式这个就让人很不爽，google Closure Compiler 是 java 写的，和我们基于 node 的各种构建库不可能兼容（不过目前好像已经有 nodejs 版 Closure Compiler），Closure Compiler 使用起来也比较麻烦，所以虽然效果很赞，但比较难以应用到项目中，迁移成本较大。</p>
 <p><strong>说了这么多，总结一下：</strong></p>
 <p>三大工具的 tree-shaking 对于无用代码，无用模块的消除，都是有限的，有条件的。closure compiler 是最好的，但与我们日常的基于 node 的开发流很难兼容。</p>
-<p><img src="23.jpg#alt=img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415618300-5633fb7e-a976-41d6-aa8a-2bf6594aaf2c.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=uc3f28788&margin=%5Bobject%20Object%5D&name=23.jpg&originHeight=405&originWidth=720&originalType=binary&size=6175&status=done&style=none&taskId=u2a5dacca-7a51-4245-a236-beef0048988" alt="23.jpg"></p>
 <p>tree-shaking 对 web 意义重大，是一个极致优化的理想世界，是前端进化的又一个终极理想。</p>
 <p>理想是美好的，但目前还处在发展阶段，还比较困难，有各个方面的，甚至有目前看来无法解</p>
 <p>决的问题，但还是应该相信新技术能带来更好的前端世界。</p>
@@ -387,11 +548,11 @@
 <p>知识有限，如果错误，请不惜指正，谢谢</p>
 </blockquote>
 <p>下一篇将继续介绍 <a target="_blank" rel="noopener" href="https://juejin.im/post/6844903544760336398">Tree-Shaking 性能优化实践 - 实践篇</a></p>
-<p><a target="_blank" rel="noopener" href="https://juejin.im/post/6844903544760336398"><img src="24.webp#alt=img"></a></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/webp/21377586/1619415622789-70d6d885-0b51-4a90-beab-dac792588f41.webp#clientId=u022f3b9a-a5ad-4&from=drop&id=ud6bae893&margin=%5Bobject%20Object%5D&name=24.webp&originHeight=120&originWidth=180&originalType=binary&size=3120&status=done&style=none&taskId=u157a1607-0193-4ba3-a16c-ebf3c82baf4" alt="24.webp"></p>
 <blockquote>
 <p>本文中示例代码都能在我们的 github 中找到，欢迎戳 ❤</p>
 </blockquote>
-<p><a href="http://link.zhihu.com/?target=https://github.com/lin-xi/treeshaking/tree/master/rollup-webpack"><img src="25.jpg#alt=img"></a></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619415628594-b9024704-66a8-422f-bf1b-d2ce8af8060a.jpeg#clientId=u022f3b9a-a5ad-4&from=drop&id=u9b1ca6b3&margin=%5Bobject%20Object%5D&name=25.jpg&originHeight=120&originWidth=120&originalType=binary&size=4686&status=done&style=none&taskId=u8270d645-c494-4431-a0d7-c42824bb91f" alt="25.jpg"></p>
 <p><a href="http://link.zhihu.com/?target=https://github.com/lin-xi/treeshaking/tree/master/rollup-webpack">lin-xi/treeshakinggithub.com</a></p>
 
       
@@ -437,7 +598,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-04-26 00:26:40 / 修改时间：01:05:35" itemprop="dateCreated datePublished" datetime="2021-04-26T00:26:40+08:00">2021-04-26</time>
+              <time title="创建时间：2021-04-26 00:26:40 / 修改时间：14:06:35" itemprop="dateCreated datePublished" datetime="2021-04-26T00:26:40+08:00">2021-04-26</time>
             </span>
 
           
@@ -736,7 +897,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 01:05:35" itemprop="dateModified" datetime="2021-04-26T01:05:35+08:00">2021-04-26</time>
+                <time title="修改时间：2021-04-26 14:06:35" itemprop="dateModified" datetime="2021-04-26T14:06:35+08:00">2021-04-26</time>
               </span>
 
           
@@ -872,7 +1033,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 01:05:35" itemprop="dateModified" datetime="2021-04-26T01:05:35+08:00">2021-04-26</time>
+                <time title="修改时间：2021-04-26 14:06:35" itemprop="dateModified" datetime="2021-04-26T14:06:35+08:00">2021-04-26</time>
               </span>
 
           
@@ -946,7 +1107,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 01:05:35" itemprop="dateModified" datetime="2021-04-26T01:05:35+08:00">2021-04-26</time>
+                <time title="修改时间：2021-04-26 14:06:35" itemprop="dateModified" datetime="2021-04-26T14:06:35+08:00">2021-04-26</time>
               </span>
 
           
@@ -1129,7 +1290,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 01:05:35" itemprop="dateModified" datetime="2021-04-26T01:05:35+08:00">2021-04-26</time>
+                <time title="修改时间：2021-04-26 14:06:35" itemprop="dateModified" datetime="2021-04-26T14:06:35+08:00">2021-04-26</time>
               </span>
 
           
@@ -1259,7 +1420,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 01:05:35" itemprop="dateModified" datetime="2021-04-26T01:05:35+08:00">2021-04-26</time>
+                <time title="修改时间：2021-04-26 14:06:36" itemprop="dateModified" datetime="2021-04-26T14:06:36+08:00">2021-04-26</time>
               </span>
 
           
@@ -1362,7 +1523,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 01:05:36" itemprop="dateModified" datetime="2021-04-26T01:05:36+08:00">2021-04-26</time>
+                <time title="修改时间：2021-04-26 14:06:36" itemprop="dateModified" datetime="2021-04-26T14:06:36+08:00">2021-04-26</time>
               </span>
 
           
@@ -1621,225 +1782,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/25/yuque/HTTP2.0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Adam Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Adam">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/25/yuque/HTTP2.0/" class="post-title-link" itemprop="url">HTTP2.0</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-25 16:48:35" itemprop="dateCreated datePublished" datetime="2021-04-25T16:48:35+08:00">2021-04-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 01:05:36" itemprop="dateModified" datetime="2021-04-26T01:05:36+08:00">2021-04-26</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619340543736-a33f0c98-6dbb-4088-95a8-8d42c25df28e.jpeg#clientId=u148c49a8-157a-4&from=drop&id=u449ec38d&margin=%5Bobject%20Object%5D&name=1.jpg&originHeight=145&originWidth=798&originalType=binary&size=16049&status=done&style=none&taskId=uf8ec65be-f7fd-44db-af5d-1208b45fafb" alt="1.jpg"></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/gif/21377586/1619340548956-54a67302-7ca7-4ed6-b03e-22497facf880.gif#clientId=u148c49a8-157a-4&from=drop&id=u1cfa2027&margin=%5Bobject%20Object%5D&name=2.gif&originHeight=281&originWidth=1200&originalType=binary&size=2075450&status=done&style=none&taskId=u963af8b6-9efa-4aab-9114-635366bd545" alt="2.gif"></p>
-<p>本文字数：<strong>3825 字</strong></p>
-<p>预计阅读时间：<strong>20 分钟</strong></p>
-<p><strong>导读</strong></p>
-<p>http2.0 是一种安全高效的下一代 http 传输协议。安全是因为 http2.0 建立在 https 协议的基础上，高效是因为它是通过二进制分帧来进行数据传输。正因为这些特性，http2.0 协议也在被越来越多的网站支持。据统计，截止至 2018 年 8 月，已经有 27.9%的网站支持 http2.0。</p>
-<p>本文将从<strong>概述、原理、实战及检测</strong>等方面来详细介绍 http2.0，希望能够加深你的理解。</p>
-<p><strong>什么是 http2.0 协议？</strong></p>
-<p>在 http2.0 官网 ① 的描述是：</p>
-<p>http/2 is a replacement for how http is expressed “on the wire.” It is not a ground-up rewrite of the protocol; http methods, status codes and semantics are the same, and it should be possible to use the same APIs as http/1.x (possibly with some small additions) to represent the protocol.</p>
-<p>The focus of the protocol is on performance; specifically, end-user perceived latency, network and server resource usage. One major goal is to allow the use of a single connection from browsers to a Web site.</p>
-<p>The basis of the work was SPDY, but http/2 has evolved to take the community’s input into account, incorporating several improvements in the process.</p>
-<p>中文总结一下就是：</p>
-<p><strong>● 对 1.x 协议语意的完全兼容</strong></p>
-<p>2.0 协议是在 1.x 基础上的升级而不是重写，1.x 协议的方法，状态及 api 在 2.0 协议里是一样的。</p>
-<p><strong>● 性能的大幅提升</strong></p>
-<p>2.0 协议重点是对终端用户的感知延迟、网络及服务器资源的使用等性能的优化。</p>
-<p><strong>http2.0 优化内容</strong></p>
-<p><strong>01</strong></p>
-<p><strong>二进制分帧（Binary Format）- http2.0 的基石</strong></p>
-<p>http2.0 之所以能够突破 http1.X 标准的性能限制，改进传输性能，实现低延迟和高吞吐量，就是因为其新增了二进制分帧层。</p>
-<p>帧(frame)包含部分：类型 Type, 长度 Length, 标记 Flags, 流标识 Stream 和 frame payload 有效载荷。</p>
-<p>消息(message)：一个完整的请求或者响应，比如请求、响应等，由一个或多个 Frame 组成。</p>
-<p>流是连接中的一个虚拟信道，可以承载双向消息传输。每个流有唯一整数标识符。为了防止两端流 ID 冲突，客户端发起的流具有奇数 ID，服务器端发起的流具有偶数 ID。</p>
-<p>流标识是描述二进制 frame 的格式，使得每个 frame 能够基于 http2 发送，与流标识联系的是一个流，每个流是一个逻辑联系，一个独立的双向的 frame 存在于客户端和服务器端之间的 http2 连接中。一个 http2 连接上可包含多个并发打开的流，这个并发流的数量能够由客户端设置。</p>
-<p>在二进制分帧层上，http2.0 会将所有传输信息分割为更小的消息和帧，并对它们采用二进制格式的编码将其封装，新增的二进制分帧层同时也能够保证 http 的各种动词，方法，首部都不受影响，兼容上一代 http 标准。其中，http1.X 中的首部信息 header 封装到 Headers 帧中，而 request body 将被封装到 Data 帧中。</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619340552914-6d85f416-ef90-425c-aadf-5b8012ea6a0e.jpeg#clientId=u148c49a8-157a-4&from=drop&height=328&id=ud9ea1c6a&margin=%5Bobject%20Object%5D&name=3.jpg&originHeight=328&originWidth=624&originalType=binary&size=27637&status=done&style=none&taskId=u5db12245-ba46-48b9-9407-0903347de64&width=624" alt="3.jpg"></p>
-<p><strong>02</strong></p>
-<p><strong>多路复用 (Multiplexing) / 连接共享</strong></p>
-<p>在 http1.1 中，浏览器客户端在同一时间，针对同一域名下的请求有一定数量的限制，超过限制数目的请求会被阻塞。这也是为何一些站点会有多个静态资源 CDN 域名的原因之一。</p>
-<p>而 http2.0 中的多路复用优化了这一性能。多路复用允许同时通过单一的 http/2 连接发起多重的请求-响应消息。有了新的分帧机制后，http/2 不再依赖多个 TCP 连接去实现多流并行了。每个数据流都拆分成很多互不依赖的帧，而这些帧可以交错（乱序发送），还可以分优先级，最后再在另一端把它们重新组合起来。</p>
-<p>http 2.0 连接都是持久化的，而且客户端与服务器之间也只需要一个连接（每个域名一个连接）即可。http2 连接可以承载数十或数百个流的复用，多路复用意味着来自很多流的数据包能够混合在一起通过同样连接传输。当到达终点时，再根据不同帧首部的流标识符重新连接将不同的数据流进行组装。</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619340559408-1ecd3083-c71e-4701-a7eb-5b198b78904c.png#clientId=u148c49a8-157a-4&from=drop&id=uc5a8e1c5&margin=%5Bobject%20Object%5D&name=4.png&originHeight=224&originWidth=830&originalType=binary&size=81541&status=done&style=none&taskId=ufc08a7ca-a9e9-4475-b4c4-8186fe89a0a" alt="4.png"></p>
-<p>上图展示了一个连接上的多个传输数据流：客户端向服务端传输数据帧 stream5，同时服务端向客户端乱序发送 stream1 和 stream3。这次连接上有三个响应请求乱序并行交换。</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619340563946-a4561bc4-3067-4483-9864-3db695ec5a1f.jpeg#clientId=u148c49a8-157a-4&from=drop&height=618&id=uf7621412&margin=%5Bobject%20Object%5D&name=5.jpg&originHeight=618&originWidth=625&originalType=binary&size=35776&status=done&style=none&taskId=u4632ef5b-fe20-4abb-a08a-81893d10b95&width=625" alt="5.jpg"></p>
-<p>上图就是 http1.X 和 http2.0 在传输数据时的区别。以货物运输为例再现 http1.1 与 http2.0 的场景：</p>
-<p>http1.1 过程：货轮 1 从 A 地到 B 地去取货物，取到货物后，从 B 地返回，然后货轮 2 在 A 返回并卸下货物后才开始再从 A 地出发取货返回，如此有序往返。</p>
-<p>http2.0 过程：货轮 1、2、3、4、5 从 A 地无序全部出发，取货后返回，然后根据货轮号牌卸载对应货物。</p>
-<p>显然，第二种方式运输货物多，河道的利用率高。</p>
-<p>03</p>
-<p><strong>头部压缩（Header Compression）</strong></p>
-<p>http1.x 的头带有大量信息，而且每次都要重复发送。http/2 使用 encoder 来减少需要传输的 header 大小，通讯双方各自缓存一份头部字段表，既避免了重复 header 的传输，又减小了需要传输的大小。</p>
-<p>对于相同的数据，不再通过每次请求和响应发送，通信期间几乎不会改变通用键-值对(用户代理、可接受的媒体类型，等等)只需发送一次。</p>
-<p>事实上,如果请求中不包含首部(例如对同一资源的轮询请求)，那么，首部开销就是零字节，此时所有首部都自动使用之前请求发送的首部。</p>
-<p>如果首部发生了变化，则只需将变化的部分加入到 header 帧中，改变的部分会加入到头部字段表中，首部表在 http 2.0 的连接存续期内始终存在，由客户端和服务器共同渐进地更新。</p>
-<p>需要注意的是，http 2.0 关注的是首部压缩，而我们常用的 gzip 等是报文内容（body）的压缩，二者不仅不冲突，且能够一起达到更好的压缩效果。</p>
-<p>http/2 使用的是专门为首部压缩而设计的 HPACK② 算法。</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619340576632-76592f6e-2635-4ef2-bdeb-bbf31c06beb7.jpeg#clientId=u148c49a8-157a-4&from=drop&height=318&id=uda892c3a&margin=%5Bobject%20Object%5D&name=6.jpg&originHeight=318&originWidth=627&originalType=binary&size=34790&status=done&style=none&taskId=u919f26c9-7da5-450e-8bc4-400b98d0fc0&width=627" alt="6.jpg"></p>
-<p>从上图可以看到 http1.X 不支持首部压缩，而 http2.0 的压缩算法效果最好，发送和接受的数据量都是最少的。</p>
-<p><strong>04</strong></p>
-<p><strong>压缩原理</strong></p>
-<p>用 header 字段表里的索引代替实际的 header。</p>
-<p>http/2 的 HPACK 算法使用一份索引表来定义常用的 http Header，把常用的 http Header 存放在表里，请求的时候便只需要发送在表里的索引位置即可。</p>
-<p>例如 :method=GET 使用索引值 2 表示，:path=/index.html 使用索引值 5 表示，如下图：</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619340594084-7273a70e-647d-4b4e-b4ae-5524a9083cea.png#clientId=u148c49a8-157a-4&from=drop&height=488&id=ub851fcd8&margin=%5Bobject%20Object%5D&name=7.png&originHeight=488&originWidth=479&originalType=binary&size=25243&status=done&style=none&taskId=u6fa0f53f-f5c2-4e6d-8fde-d9eae036267&width=479" alt="7.png"></p>
-<p>完整的列表参考：HPACK Static Table③ 。</p>
-<p>只要给服务端发送一个 Frame，该 Frame 的 Payload 部分存储 0x8285，Frame 的 Type 设置为 Header 类型，便可表示这个 Frame 属于 http Header，请求的内容是：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1GET &#x2F;index.html</span><br></pre></td></tr></table></figure>
-
-<p>为什么是 0x8285，而不是 0x0205？这是因为高位设置为 1 表示这个字节是一个完全索引值（key 和 value 都在索引中）。</p>
-<p>类似的，通过高位的标志位可以区分出这个字节是属于一个完全索引值，还是仅索引了 key，还是 key 和 value 都没有索引(参见：HTTP/2 首部压缩的 OkHttp3 实现 ④)。</p>
-<p>因为索引表的大小的是有限的，它仅保存了一些常用的 http Header，同时每次请求还可以在表的末尾动态追加新的 http Header 缓存，动态部分称之为 Dynamic Table。Static Table 和 Dynamic Table 在一起组合成了索引表：</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619340602194-476ded49-c784-46c1-b5aa-5311ef73667e.png#clientId=u148c49a8-157a-4&from=drop&id=u3c0d1396&margin=%5Bobject%20Object%5D&name=8.png&originHeight=222&originWidth=768&originalType=binary&size=32088&status=done&style=none&taskId=u982cf32a-aab1-4bfc-a608-e6db4ef4116" alt="8.png"></p>
-<p>HPACK 不仅仅通过索引键值对来降低数据量，同时还会将字符串进行霍夫曼编码来压缩字符串大小。</p>
-<p>以常用的 User-Agent 为例，它在静态表中的索引值是 58，它的值是不存在表中的，因为它的值是多变的。第一次请求的时候它的 key 用 58 表示，表示这是一个 User-Agent ，它的值部分会进行霍夫曼编码（如果编码后的字符串变更长了，则不采用霍夫曼编码）。</p>
-<p>服务端收到请求后，会将这个 User-Agent 添加到 Dynamic Table 缓存起来，分配一个新的索引值。客户端下一次请求时，假设上次请求 User-Agent 的在表中的索引位置是 62， 此时只需要发送 0xBE（同样的，高位置 1），便可以代表：User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.146 Safari/537.36。</p>
-<p>其过程如下图所示：</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619340620286-e641085e-f964-41dd-bc5b-e481eff873c5.png#clientId=u148c49a8-157a-4&from=drop&height=259&id=u2bad4692&margin=%5Bobject%20Object%5D&name=9.png&originHeight=259&originWidth=792&originalType=binary&size=78576&status=done&style=none&taskId=ufc5c19f5-828f-441e-a4e5-43847fea366&width=792" alt="9.png"></p>
-<p>最终，相同的 Header 只需要发送索引值，新的 Header 会重新加入 Dynamic Table。</p>
-<p><strong>05</strong></p>
-<p><strong>请求优先级（Request Priorities）</strong></p>
-<p>把 http 消息分为很多独立帧之后，就可以通过优化这些帧的交错和传输顺序进一步优化性能。每个流都可以带有一个 31 比特的优先值：0 表示最高优先级；2 的 31 次方-1 表示最低优先级。</p>
-<p>服务器可以根据流的优先级，控制资源分配（CPU、内存、带宽），而在响应数据准备好之后，优先将最高优先级的帧发送给客户端。高优先级的流都应该优先发送，但又不会绝对的。绝对地准守，可能又会引入首队阻塞的问题：高优先级的请求慢导致阻塞其他资源交付。</p>
-<p>分配处理资源和客户端与服务器间的带宽，不同优先级的混合也是必须的。客户端会指定哪个流是最重要的，有一些依赖参数，这样一个流可以依赖另外一个流。优先级别可以在运行时动态改变，当用户滚动页面时，可以告诉浏览器哪个图像是最重要的，你也可以在一组流中进行优先筛选，能够突然抓住重点流。</p>
-<p>● 优先级最高：主要的 html</p>
-<p>● 优先级高：CSS 文件</p>
-<p>● 优先级中：js 文件</p>
-<p>● 优先级低：图片</p>
-<p><strong>06</strong></p>
-<p><strong>服务端推送（Server Push）</strong></p>
-<p>服务器可以对一个客户端请求发送多个响应，服务器向客户端推送资源无需客户端明确地请求。并且，服务端推送能把客户端所需要的资源伴随着 index.html 一起发送到客户端，省去了客户端重复请求的步骤。</p>
-<p>正因为没有发起请求，建立连接等操作，所以静态资源通过服务端推送的方式可以极大地提升速度。Server Push 让 http1.x 时代使用内嵌资源的优化手段变得没有意义；如果一个请求是由你的主页发起的，服务器很可能会响应主页内容、logo 以及样式表，因为它知道客户端会用到这些东西，这相当于在一个 HTML 文档内集合了所有的资源。</p>
-<p>不过与之相比，服务器推送还有一个很大的优势：可以缓存！也让在遵循同源的情况下，不同页面之间可以共享缓存资源成为可能。</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619340635870-3a618bdd-7c58-4bb4-8181-0753af6a5ba4.png#clientId=u148c49a8-157a-4&from=drop&height=210&id=u8ae706c2&margin=%5Bobject%20Object%5D&name=10.png&originHeight=210&originWidth=494&originalType=binary&size=79425&status=done&style=none&taskId=uebee46ce-df66-4b12-a96d-cef0d181957&width=494" alt="10.png"></p>
-<p>注意两点：</p>
-<p>1、推送遵循同源策略；</p>
-<p>2、这种服务端的推送是基于客户端的请求响应来确定的。</p>
-<p>当服务端需要主动推送某个资源时，便会发送一个 Frame Type 为 PUSH_PROMISE 的 Frame，里面带了 PUSH 需要新建的 Stream ID。意思是告诉客户端：接下来我要用这个 ID 向你发送东西，客户端准备好接着。客户端解析 Frame 时，发现它是一个 PUSH_PROMISE 类型，便会准备接收服务端要推送的流。</p>
-<p><strong>http2.0 性能瓶颈</strong></p>
-<p>启用 http2.0 后会给性能带来很大的提升，但同时也会带来新的性能瓶颈。因为现在所有的压力集中在底层一个 TCP 连接之上，TCP 很可能就是下一个性能瓶颈，比如 TCP 分组的队首阻塞问题，单个 TCP packet 丢失导致整个连接阻塞，无法逃避，此时所有消息都会受到影响。未来，服务器端针对 http 2.0 下的 TCP 配置优化至关重要。</p>
-<p><strong>01</strong></p>
-<p><strong>如何升级 http2.0 协议</strong></p>
-<p>nginx 服务器升级 http2.0 协议需要满足如下条件：</p>
-<p>1、nginx 版本高于 1.9.5；</p>
-<p>2、–with-http_ssl_module 跟 –with-http_v2_module</p>
-<p>–with-http_ssl_module 模块是因为 http2.0 协议是一种 https 协议。</p>
-<p><strong>02</strong></p>
-<p><strong>查看你的 nginx 配置</strong></p>
-<p><code>nginx -V</code></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619340645097-a0c876d8-0a96-479b-a34b-aa41bb60d041.png#clientId=u148c49a8-157a-4&from=drop&id=u3466751d&margin=%5Bobject%20Object%5D&name=11.png&originHeight=152&originWidth=1080&originalType=binary&size=76381&status=done&style=none&taskId=u7fe82bb9-f187-4e1c-89c9-fb83ddf4235" alt="11.png"></p>
-<p>这个是已经添加了对应模块。没有这两个模块的需要手动编译安装。</p>
-<p><strong>03</strong></p>
-<p><strong>找到 nginx 文件目录</strong></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619340651193-7aa65a17-275e-4e6f-b4e8-50742b5a2e5b.jpeg#clientId=u148c49a8-157a-4&from=drop&height=299&id=u45311b71&margin=%5Bobject%20Object%5D&name=12.jpg&originHeight=380&originWidth=1080&originalType=binary&size=41158&status=done&style=none&taskId=udd394e18-2eb9-44bb-91d6-9b11cdf3eca&width=849" alt="12.jpg"></p>
-<p><strong>04</strong></p>
-<p><strong>编译安装 nginx 文件</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1.&#x2F;configure --prefix&#x3D;&#x2F;usr&#x2F;local&#x2F;nginx  --with-http_stub_status_module  --with-http_ssl_module  --with-http_v2_module</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619340659111-a0b4decb-6a0e-423b-b3d6-8f25b86fedc2.jpeg#clientId=u148c49a8-157a-4&from=drop&id=u7c1a3838&margin=%5Bobject%20Object%5D&name=13.jpg&originHeight=354&originWidth=1080&originalType=binary&size=37571&status=done&style=none&taskId=u435617e3-248c-47f3-a67d-dceb948fc21" alt="13.jpg"></p>
-<p>然后执行如下命令，进行编译安装。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1make2make install</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619340666832-f7a52a22-fc6e-4d92-aa9f-7970338d3ffb.jpeg#clientId=u148c49a8-157a-4&from=drop&id=ubd20aad5&margin=%5Bobject%20Object%5D&name=14.jpg&originHeight=240&originWidth=1080&originalType=binary&size=27416&status=done&style=none&taskId=u8b29a217-21a1-490f-8815-0ff2e825a7e" alt="14.jpg"></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619340672605-191b5f93-e594-459e-82d3-5b3ba09005fc.png#clientId=u148c49a8-157a-4&from=drop&id=u90f5039a&margin=%5Bobject%20Object%5D&name=15.png&originHeight=245&originWidth=906&originalType=binary&size=11897&status=done&style=none&taskId=ud9481316-7173-41ce-adcb-cf16257d872" alt="15.png"></p>
-<p><strong>05</strong></p>
-<p><strong>更改 nginx 配置</strong></p>
-<p>安装结束后将 nginx.config 文件中 443 端口添加 http2；</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619340677468-59acc9ca-e4fc-48bb-8a56-cd87a8c6e895.png#clientId=u148c49a8-157a-4&from=drop&id=u97b5ae08&margin=%5Bobject%20Object%5D&name=16.png&originHeight=83&originWidth=1060&originalType=binary&size=16284&status=done&style=none&taskId=u9f3eb4a7-ef20-46f9-a826-28e0559d8db" alt="16.png"></p>
-<p><strong>06</strong></p>
-<p><strong>启动 nginx</strong></p>
-<p>最后一步，重启 nginx nginx restart（注意不要直接   nginx -s reload ）。这时候你的站点就升级为了 http2.0 协议了。</p>
-<p><strong>检测</strong></p>
-<p>升级完成后，怎么确定自己的站点是 http2.0 协议呢？一般有如下几种方法：</p>
-<p><strong>●chrome devtool</strong></p>
-<p>打开 chrome 调试工具，在 network 勾选 protocol 项，h2 代表的是 http2.0 协议，可以看到笔者的网站已经都升级好了；</p>
-<p><strong>● 网站</strong></p>
-<p>SSL lab⑤ 一个 SSL 服务器检测的网站，对网站进行安全评级，并将检测结果自动生成一个详细的评价报告；</p>
-<p><strong>● 插件</strong></p>
-<p>http/2 and SPDY indicator 这是一款检测 http2.0 和 SPDY 协议（Google 开发的基于 TCP 的会话层协议）的插件。</p>
-<p>参考资料：</p>
-<p>[1].<a target="_blank" rel="noopener" href="https://http2.github.io/">https://http2.github.io/</a></p>
-<p>[2].<a target="_blank" rel="noopener" href="http://http2.github.io/http2-spec/compression.html">http://http2.github.io/http2-spec/compression.html</a></p>
-<p>[3].<a target="_blank" rel="noopener" href="http://http2.github.io/http2-spec/compression.html#rfc.section.A">http://http2.github.io/http2-spec/compression.html#rfc.section.A</a></p>
-<p>[4].<a target="_blank" rel="noopener" href="https://neyoufan.github.io/2017/01/06/android/OkHttp3%E4%B8%AD%E7%9A%84HTTP2%E9%A6%96%E9%83%A8%E5%8E%8B%E7%BC%A9/">https://neyoufan.github.io/2017/01/06/android/OkHttp3中的HTTP2首部压缩/</a></p>
-<p>[5].<a target="_blank" rel="noopener" href="https://www.ssllabs.com/ssltest/analyze.html">https://www.ssllabs.com/ssltest/analyze.html</a></p>
-<p><strong>也许你还想看</strong></p>
-<p><strong>（▼ 点击文章标题或封面查看）</strong></p>
-<p><a target="_blank" rel="noopener" href="http://mp.weixin.qq.com/s?__biz=MzU3NTY3MTQzMg==%E2%88%A3=2247483791&idx=1&sn=f6fd2d66e35e93a27e5918b4ee4c5358&chksm=fd1edc68ca69557ef2d79b7b6bf4ea89de6affa6919c1c85e70d888464e007f9b8683f4e949a&scene=21#wechat_redirect">搜狐新闻推荐算法  |  呈现给你的，都是你所关心的</a></p>
-<p>2018-08-30</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619340684287-15958bdc-6ca2-4afe-a819-fe13b1f645b5.jpeg#clientId=u148c49a8-157a-4&from=drop&id=u46cdb403&margin=%5Bobject%20Object%5D&name=17.jpg&originHeight=606&originWidth=1080&originalType=binary&size=87862&status=done&style=none&taskId=ub83e9869-c2af-4963-b51e-e76f9279b1f" alt="17.jpg"></p>
-<p><a target="_blank" rel="noopener" href="http://mp.weixin.qq.com/s?__biz=MzU3NTY3MTQzMg==%E2%88%A3=2247484862&idx=1&sn=9e1723862ce80488dabc4d3535464cae&chksm=fd1ed859ca69514f02c055a5c8d636f8af2eddd6e7deb0d496d36bb1e5fd404aef90e435b50c&scene=21#wechat_redirect">新闻推荐系统的 CTR 预估模型</a></p>
-<p>2019-04-18</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619340689130-b51ed7a9-cea1-417c-bdcd-477568886629.jpeg#clientId=u148c49a8-157a-4&from=drop&id=udef0eb41&margin=%5Bobject%20Object%5D&name=18.jpg&originHeight=459&originWidth=817&originalType=binary&size=36981&status=done&style=none&taskId=u72fc9fb7-90ea-4401-8c50-ffa753221b4" alt="18.jpg"></p>
-<p><a target="_blank" rel="noopener" href="http://mp.weixin.qq.com/s?__biz=MzU3NTY3MTQzMg==%E2%88%A3=2247483690&idx=1&sn=7187cad324ad14821bf88fa8be4eebf0&chksm=fd1edccdca6955db28c8ce1f24c92367f06cbf81793b2125fa0d76c4692d4a7096f013ca695f&scene=21#wechat_redirect">互联网架构演进之路</a></p>
-<p>2018-08-16</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619340693785-dfcc5ff2-345f-4222-ba51-9693b7c94ae7.jpeg#clientId=u148c49a8-157a-4&from=drop&id=u397d1b60&margin=%5Bobject%20Object%5D&name=19.jpg&originHeight=606&originWidth=1080&originalType=binary&size=103864&status=done&style=none&taskId=ue67c9e99-6e7b-42b1-a029-9cc99883457" alt="19.jpg"></p>
-<p>加入<strong>搜狐技术作者天团</strong></p>
-<p><strong>千元稿费等你来！</strong></p>
-<p>戳这里！☛</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619340698782-bc08850e-0b94-4196-932a-55386a90067d.jpeg#clientId=u148c49a8-157a-4&from=drop&id=u87eacb17&margin=%5Bobject%20Object%5D&name=20.jpg&originHeight=1698&originWidth=1080&originalType=binary&size=40520&status=done&style=none&taskId=u1262e6fd-a181-4ed2-9a3f-7162a2ef6e4" alt="20.jpg"></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/gif/21377586/1619340708379-ccc64cbf-5988-4df4-84c6-55480795171d.gif#clientId=u148c49a8-157a-4&from=drop&id=u314e39f6&margin=%5Bobject%20Object%5D&name=21.gif&originHeight=318&originWidth=640&originalType=binary&size=2278314&status=done&style=none&taskId=u17beafd1-bded-4021-a835-6a15fe50744" alt="21.gif"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1905,7 +1851,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">60</span>
+          <span class="site-state-item-count">61</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

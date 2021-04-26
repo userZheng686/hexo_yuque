@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="上一篇文章 Tree-Shaking 性能优化实践 - 原理篇 介绍了 tree-shaking 的原理，本文主要介绍 tree-shaking 的实践  三. tree-shaking 实践 webpack2 发布，宣布支持 tree-shaking，webpack 3 发布，支持作用域提升，生成的 bundle 文件更小。 再没有升级 webpack 之前，增幻想我们的性能又要大幅提升了，对升">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tree-Shaking性能优化实践-实践篇">
+<meta property="og:url" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/index.html">
+<meta property="og:site_name" content="Adam">
+<meta property="og:description" content="上一篇文章 Tree-Shaking 性能优化实践 - 原理篇 介绍了 tree-shaking 的原理，本文主要介绍 tree-shaking 的实践  三. tree-shaking 实践 webpack2 发布，宣布支持 tree-shaking，webpack 3 发布，支持作用域提升，生成的 bundle 文件更小。 再没有升级 webpack 之前，增幻想我们的性能又要大幅提升了，对升">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417176669-626362ab-6164-4bb3-b700-463db3ee8027.jpeg#clientId=ue71f5aac-b372-4&from=drop&height=120&id=u706055df&margin=%5Bobject%20Object%5D&name=1.jpg&originHeight=120&originWidth=180&originalType=binary&size=6581&status=done&style=none&taskId=uec8d1f6e-41b1-4021-8111-765498ed4c7&width=180">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/2.jpg#id=rtIfv&originalType=binary&status=done&style=none">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/3.jpg#id=PTNjw&originalType=binary&status=done&style=none">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/4.jpg#id=sQ46O&originalType=binary&status=done&style=none">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/5.jpg#id=UNIJx&originalType=binary&status=done&style=none">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/6.jpg#id=kYGcm&originalType=binary&status=done&style=none">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/7.jpg#id=WTaR8&originalType=binary&status=done&style=none">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/8.jpg#id=RamBq&originalType=binary&status=done&style=none">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/9.jpg#id=DBjwE&originalType=binary&status=done&style=none">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/10.jpg#id=qJv3w&originalType=binary&status=done&style=none">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/11.jpg#id=qAetG&originalType=binary&status=done&style=none">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/12.jpg#id=eEwPF&originalType=binary&status=done&style=none">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/13.jpg#id=sJf4r&originalType=binary&status=done&style=none">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/14.jpg#id=rRUSz&originalType=binary&status=done&style=none">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/15.jpg#id=yOwv5&originalType=binary&status=done&style=none">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/16.jpg#id=KZHR3&originalType=binary&status=done&style=none">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/17.jpg#id=Dy7lf&originalType=binary&status=done&style=none">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/18.jpg#id=d9um1&originalType=binary&status=done&style=none">
+<meta property="og:image" content="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/19.jpg#id=qBUgO&originalType=binary&status=done&style=none">
+<meta property="article:published_time" content="2021-04-26T06:05:39.000Z">
+<meta property="article:modified_time" content="2021-04-26T06:06:34.761Z">
+<meta property="article:author" content="Adam Blog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417176669-626362ab-6164-4bb3-b700-463db3ee8027.jpeg#clientId=ue71f5aac-b372-4&from=drop&height=120&id=u706055df&margin=%5Bobject%20Object%5D&name=1.jpg&originHeight=120&originWidth=180&originalType=binary&size=6581&status=done&style=none&taskId=uec8d1f6e-41b1-4021-8111-765498ed4c7&width=180">
+
+<link rel="canonical" href="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Tree-Shaking性能优化实践-实践篇 | Adam</title>
+  <meta name="referrer" content="no-referrer" />
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Adam</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Tree-Shaking性能优化实践-实践篇
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-26 14:05:39 / 修改时间：14:06:34" itemprop="dateCreated datePublished" datetime="2021-04-26T14:05:39+08:00">2021-04-26</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>上一篇文章 <a target="_blank" rel="noopener" href="https://juejin.im/post/6844903544756109319">Tree-Shaking 性能优化实践 - 原理篇</a> 介绍了 tree-shaking 的原理，本文主要介绍 tree-shaking 的实践</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619417176669-626362ab-6164-4bb3-b700-463db3ee8027.jpeg#clientId=ue71f5aac-b372-4&from=drop&height=120&id=u706055df&margin=%5Bobject%20Object%5D&name=1.jpg&originHeight=120&originWidth=180&originalType=binary&size=6581&status=done&style=none&taskId=uec8d1f6e-41b1-4021-8111-765498ed4c7&width=180" alt="1.jpg"></p>
+<h2 id="三-tree-shaking-实践"><a href="#三-tree-shaking-实践" class="headerlink" title="三. tree-shaking 实践"></a>三. tree-shaking 实践</h2><p><img src="2.jpg#id=rtIfv&originalType=binary&status=done&style=none"></p>
+<p>webpack2 发布，宣布支持 tree-shaking，webpack 3 发布，支持作用域提升，生成的 bundle 文件更小。 再没有升级 webpack 之前，增幻想我们的性能又要大幅提升了，对升级充满了期待。实际上事实是这样的</p>
+<p><img src="3.jpg#id=PTNjw&originalType=binary&status=done&style=none"></p>
+<p>升级完之后，bundle 文件大小并没有大幅减少，当时有较大的心理落差，然后去研究了为什么效果不理想，原因见 <a target="_blank" rel="noopener" href="https://juejin.im/post/6844903544756109319">Tree-Shaking 性能优化实践 - 原理篇</a> 。</p>
+<p>优化还是要继续的，虽然工具自带的 tree-shaking 不能去除太多无用代码，在去除无用代码这一方面也还是有可以做的事情。我们从三个方面做里一些优化。</p>
+<h2 id="（1）对组件库引用的优化"><a href="#（1）对组件库引用的优化" class="headerlink" title="（1）对组件库引用的优化"></a>（1）对组件库引用的优化</h2><p>先来看一个问题</p>
+<p><img src="4.jpg#id=sQ46O&originalType=binary&status=done&style=none"></p>
+<p>当我们使用组件库的时候，import {Button} from ‘element-ui’，相对于 Vue.use(elementUI)，已经是具有性能意识，是比较推荐的做法，但如果我们写成右边的形式，具体到文件的引用，打包之后的区别是非常大的，以 antd 为例，右边形式 bundle 体积减少约 80%。</p>
+<p>这个引用也属于有副作用，webpack 不能把其他组件进行 tree-shaking。既然工具本身是做不了，那我们可以做工具把左边代码自动改成右边代码这种形式。这个工具 antd 库本身也是提供的。我在 antd 的工具基础上做了少量的修改，不用任何配置，原生支持我们自己的组件库， <a href="http://link.zhihu.com/?target=https://w-ui.github.io/%23/doc">wui</a> 和 <a href="http://link.zhihu.com/?target=https://wmfe.github.io/xcui/%23/home">xcui</a> 以及一些其他常用的库</p>
+<p><strong>babel-plugin-import-fix ，缩小引用范围</strong></p>
+<p><img src="5.jpg#id=UNIJx&originalType=binary&status=done&style=none"></p>
+<p><img src="6.jpg#id=kYGcm&originalType=binary&status=done&style=none"></p>
+<p><a href="http://link.zhihu.com/?target=https://github.com/lin-xi/babel-plugin-import-fix">lin-xi/babel-plugin-import-fix</a></p>
+<p>下面介绍一下原理</p>
+<p><img src="7.jpg#id=WTaR8&originalType=binary&status=done&style=none"></p>
+<p>这是一个 babel 的插件，babel 通过核心 babylon 将 ES6 代码转换成 AST 抽象语法树，然后插件遍历语法树找出类似 import {Button} from ‘element-ui’这样的语句，进行转换，最后重新生成代码。</p>
+<p>babel-plugin-import-fix 默认支持 antd，element，meterial-UI，wui，xcui 和 d3，只需要再.babelrc 中配置插件本身就可以。</p>
+<p>.babelrc</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;presets&quot;: [</span><br><span class="line">    [&quot;es2015&quot;, &#123; &quot;modules&quot;: false &#125;], &quot;react&quot;</span><br><span class="line">  ],</span><br><span class="line">  &quot;plugins&quot;: [&quot;import-fix&quot;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="8.jpg#id=RamBq&originalType=binary&status=done&style=none"></p>
+<p>其实是想把所有常用的库都默认支持，但很多常用的库却不支持缩小引用范围。因为没有独立输出各个子模块，不能把引用修改为对单个子模块的引用。</p>
+<h2 id="（2）CSS-Tree-shaking"><a href="#（2）CSS-Tree-shaking" class="headerlink" title="（2）CSS Tree-shaking"></a>（2）CSS Tree-shaking</h2><p>我们前面所说的 tree-shaking 都是针对 js 文件，通过静态分析，尽可能消除无用的代码，那对于 css 我们能做 tree-shaking 吗？</p>
+<p>随着 CSS3，LESS，SASS 等各种 css 预处理语言的普及，css 文件在整个工程中占比是不可忽视的。随着大项目功能的不停迭代，导致 css 中可能就存在着无用的代码。我实现了一个 webpack 插件来解决这个问题，找出 css 代码无用的代码。</p>
+<p><a href="http://link.zhihu.com/?target=https://github.com/lin-xi/webpack-css-treeshaking-plugin"><strong>webpack-css-treeshaking-plugin</strong></a><strong>，对 css 进行 tree-shaking</strong></p>
+<p><img src="9.jpg#id=DBjwE&originalType=binary&status=done&style=none"></p>
+<p>[webpack-css-treeshaking-plugin</p>
+<p>](<a href="http://link.zhihu.com/?target=https://github.com/lin-xi/webpack-css-treeshaking-plugin">http://link.zhihu.com/?target=https%3A//github.com/lin-xi/webpack-css-treeshaking-plugin</a>)</p>
+<p>下面介绍一下原理</p>
+<p>整体思路是这样的，遍历所有的 css 文件中的 selector 选择器，然后去所有 js 代码中匹配，如果选择器没有在代码出现过，则认为该选择器是无用代码。</p>
+<p><strong>首先面临的问题是，如何优雅的遍历所有的选择器呢？难道要用正则表达式很苦逼的去匹配分割吗？</strong></p>
+<p>babel 是 js 世界的福星，其实 css 世界也有利器，那就是 postCss。</p>
+<p>PostCSS 提供了一个解析器，它能够将 CSS 解析成 AST 抽象语法树。然后我们能写各种插件，对抽象语法树做处理，最终生成新的 css 文件，以达到对 css 进行精确修改的目的。</p>
+<p><img src="10.jpg#id=qJv3w&originalType=binary&status=done&style=none"></p>
+<p>整体又是一个 webpack 的插件，架构图如下：</p>
+<p><img src="11.jpg#id=qAetG&originalType=binary&status=done&style=none"></p>
+<p>主要流程：</p>
+<ul>
+<li>插件监听 webapck 编译完成事件，webpack 编译完成之后，从 compilation 中找出所有的 css 文件和 js 文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">apply (compiler) &#123;</span><br><span class="line">    compiler.plugin(&#39;after-emit&#39;, (compilation, callback) &#x3D;&gt; &#123;</span><br><span class="line"></span><br><span class="line">      let styleFiles &#x3D; Object.keys(compilation.assets).filter(asset &#x3D;&gt; &#123;</span><br><span class="line">        return &#x2F;\.css$&#x2F;.test(asset)</span><br><span class="line">      &#125;)</span><br><span class="line"></span><br><span class="line">      let jsFiles &#x3D; Object.keys(compilation.assets).filter(asset &#x3D;&gt; &#123;</span><br><span class="line">        return &#x2F;\.(js|jsx)$&#x2F;.test(asset)</span><br><span class="line">      &#125;)</span><br><span class="line"></span><br><span class="line">     ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>将所有的 css 文件送至 postCss 处理，找出无用代码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">let tasks &#x3D; []</span><br><span class="line"> styleFiles.forEach((filename) &#x3D;&gt; &#123;</span><br><span class="line">     const source &#x3D; compilation.assets[filename].source()</span><br><span class="line">     let listOpts &#x3D; &#123;</span><br><span class="line">       include: &#39;&#39;,</span><br><span class="line">       source: jsContents,  &#x2F;&#x2F;传入全部js文件</span><br><span class="line">       opts: this.options   &#x2F;&#x2F;插件配置选项</span><br><span class="line">     &#125;</span><br><span class="line">     tasks.push(postcss(treeShakingPlugin(listOpts)).process(source).then(result &#x3D;&gt; &#123;</span><br><span class="line">       let css &#x3D; result.toString()  &#x2F;&#x2F; postCss处理后的css AST</span><br><span class="line">       &#x2F;&#x2F;替换webpack的编译产物compilation</span><br><span class="line">       compilation.assets[filename] &#x3D; &#123;</span><br><span class="line">         source: () &#x3D;&gt; css,</span><br><span class="line">         size: () &#x3D;&gt; css.length</span><br><span class="line">       &#125;</span><br><span class="line">       return result</span><br><span class="line">     &#125;))</span><br><span class="line"> &#125;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>postCss 遍历，匹配，删除过程</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">module.exports &#x3D; postcss.plugin(&#39;list-selectors&#39;, function (options) &#123;</span><br><span class="line">   &#x2F;&#x2F; 从根节点开始遍历</span><br><span class="line">   cssRoot.walkRules(function (rule) &#123;</span><br><span class="line">     &#x2F;&#x2F; Ignore keyframes, which can log e.g. 10%, 20% as selectors</span><br><span class="line">     if (rule.parent.type &#x3D;&#x3D;&#x3D; &#39;atrule&#39; &amp;&amp; &#x2F;keyframes&#x2F;.test(rule.parent.name)) return</span><br><span class="line"></span><br><span class="line">     &#x2F;&#x2F; 对每一个规则进行处理</span><br><span class="line">     checkRule(rule).then(result &#x3D;&gt; &#123;</span><br><span class="line">       if (result.selectors.length &#x3D;&#x3D;&#x3D; 0) &#123;</span><br><span class="line">         &#x2F;&#x2F; 选择器全部被删除</span><br><span class="line">         let log &#x3D; &#39; ✂️ [&#39; + rule.selector + &#39;] shaked, [1]&#39;</span><br><span class="line">         console.log(log)</span><br><span class="line">         if (config.remove) &#123;</span><br><span class="line">           rule.remove()</span><br><span class="line">         &#125;</span><br><span class="line">       &#125; else &#123;</span><br><span class="line">         &#x2F;&#x2F; 选择器被部分删除</span><br><span class="line">         let shaked &#x3D; rule.selectors.filter(item &#x3D;&gt; &#123;</span><br><span class="line">           return result.selectors.indexOf(item) &#x3D;&#x3D;&#x3D; -1</span><br><span class="line">         &#125;)</span><br><span class="line">         if (shaked &amp;&amp; shaked.length &gt; 0) &#123;</span><br><span class="line">           let log &#x3D; &#39; ✂️ [&#39; + shaked.join(&#39; &#39;) + &#39;] shaked, [2]&#39;</span><br><span class="line">           console.log(log)</span><br><span class="line">         &#125;</span><br><span class="line">         if (config.remove) &#123;</span><br><span class="line">           &#x2F;&#x2F; 修改AST抽象语法树</span><br><span class="line">           rule.selectors &#x3D; result.selectors</span><br><span class="line">         &#125;</span><br><span class="line">       &#125;</span><br><span class="line">     &#125;)</span><br><span class="line">   &#125;)</span><br></pre></td></tr></table></figure>
+
+<p>checkRule 处理每一个规则核心代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">let checkRule &#x3D; (rule) &#x3D;&gt; &#123;</span><br><span class="line">      return new Promise(resolve &#x3D;&gt; &#123;</span><br><span class="line">        ...</span><br><span class="line">        let secs &#x3D; rule.selectors.filter(function (selector) &#123;</span><br><span class="line">          let result &#x3D; true</span><br><span class="line">          let processor &#x3D; parser(function (selectors) &#123;</span><br><span class="line">            for (let i &#x3D; 0, len &#x3D; selectors.nodes.length; i &lt; len; i++) &#123;</span><br><span class="line">              let node &#x3D; selectors.nodes[i]</span><br><span class="line">              if (_.includes([&#39;comment&#39;, &#39;combinator&#39;, &#39;pseudo&#39;], node.type)) continue</span><br><span class="line">              for (let j &#x3D; 0, len2 &#x3D; node.nodes.length; j &lt; len2; j++) &#123;</span><br><span class="line">                let n &#x3D; node.nodes[j]</span><br><span class="line">                if (!notCache[n.value]) &#123;</span><br><span class="line">                  switch (n.type) &#123;</span><br><span class="line">                    case &#39;tag&#39;:</span><br><span class="line">                      &#x2F;&#x2F; nothing</span><br><span class="line">                      break</span><br><span class="line">                    case &#39;id&#39;:</span><br><span class="line">                    case &#39;class&#39;:</span><br><span class="line">                      if (!classInJs(n.value)) &#123;</span><br><span class="line">                        &#x2F;&#x2F; 调用classInJs判断是否在JS中出现过</span><br><span class="line">                        notCache[n.value] &#x3D; true</span><br><span class="line">                        result &#x3D; false</span><br><span class="line">                        break</span><br><span class="line">                      &#125;</span><br><span class="line">                      break</span><br><span class="line">                    default:</span><br><span class="line">                      &#x2F;&#x2F; nothing</span><br><span class="line">                      break</span><br><span class="line">                  &#125;</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                  result &#x3D; false</span><br><span class="line">                  break</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;)</span><br><span class="line">          ...</span><br><span class="line">        &#125;)</span><br><span class="line">        ...</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到其实我只处理里 id 选择器和 class 选择器，id 和 class 相对来说副作用小，引起样式异常的可能性相对较小。</p>
+<p>判断 css 是否再 js 中出现过，是使用正则匹配。</p>
+<p>其实，后续还可以继续优化，比如对 tag 类的选择器，可以配置是否再 html，jsx，template 中出现过，如果出现过，没有出现过也可以认为是无用代码。</p>
+<p>当然，插件能正常工作还是的有一些前提和约束。我们可以在代码中动态改变 css，比如再 react 和 vue 中，可以这么写</p>
+<p><img src="12.jpg#id=eEwPF&originalType=binary&status=done&style=none"></p>
+<p>这样是比较推荐的方式，选择器作为字符或变量名出现在代码中，下面这样动态生成选择器的情况就会导致匹配失败</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">render()&#123;</span><br><span class="line">  this.stateClass &#x3D; &#39;state-&#39; + this.state &#x3D;&#x3D; 2 ? &#39;open&#39; : &#39;close&#39;</span><br><span class="line">  return &lt;div class&#x3D;&#123;this.stateClass&#125;&gt;&lt;&#x2F;div&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中这样情况很容易避免</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">render()&#123;</span><br><span class="line">  this.stateClass &#x3D; this.state &#x3D;&#x3D; 2 ? &#39;state-open&#39; : &#39;state-close&#39;</span><br><span class="line">  return &lt;div class&#x3D;&#123;this.stateClass&#125;&gt;&lt;&#x2F;div&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>所以有一个好的编码规范的约束，插件能更好的工作。</p>
+<h2 id="（3）webpack-bundle-文件去重"><a href="#（3）webpack-bundle-文件去重" class="headerlink" title="（3）webpack bundle 文件去重"></a>（3）webpack bundle 文件去重</h2><p>如果 webpack 打包后的 bundle 文件中存在着相同的模块，也属于无用代码的一种。也应该被去除掉</p>
+<p>首先我们需要一个能对 bundle 文件定性分析的工具，能发现问题，能看出优化效果。</p>
+<p>webpack-bundle-analyzer 这个插件完全能满足我们的需求，他能以图形化的方式展示 bundle 中所有的模块的构成的各构成的大小。</p>
+<p><img src="13.jpg#id=sJf4r&originalType=binary&status=done&style=none"></p>
+<p>其次，需求对通用模块进行提取，CommonsChunkPlugin 是最被人熟知的用于提供通用模块的插件。早期的时候，我并不完全了解他的功能，并没有发挥最大的功效。</p>
+<p>下面介绍 CommonsChunkPlugin 的正确用法</p>
+<p><strong>自动提取所有的 node_moudles 或者引用次数两次以上的模块</strong></p>
+<p><img src="14.jpg#id=rRUSz&originalType=binary&status=done&style=none"></p>
+<p>minChunks 可以接受一个数值或者函数，如果是函数，可自定义打包规则</p>
+<p>但使用上面记载的配置之后，并不能高枕无忧。因为这个配置只能提取所有 entry 打包后的文件中的通用模块。而现实是，有了提高性能，我们会按需加载，通过 webpack 提供的 import（…）方法，这种按需加载的文件并不会存在于 entry 之中，所以按需加载的异步模块中的通用模块并没有提取。</p>
+<p><strong>如何提取按需加载的异步模块里的通用模块呢？</strong></p>
+<p><img src="15.jpg#id=yOwv5&originalType=binary&status=done&style=none"></p>
+<p>配置另一个 CommonsChunkPlugin，添加 async 属性，async 可以接受布尔值或字符串。当时字符串时，默认是输出文件的名称。</p>
+<p>names 是所有异步模块的名称</p>
+<p>这里还涉及一个给异步模块命名的知识点。我是这样做的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">const Edit &#x3D; resolve &#x3D;&gt; &#123; import( &#x2F;* webpackChunkName: &quot;EditPage&quot; *&#x2F; &#39;.&#x2F;pages&#x2F;Edit&#x2F;Edit&#39;).then((mod) &#x3D;&gt; &#123; resolve(mod.default); &#125;) &#125;;</span><br><span class="line">const PublishPage &#x3D; resolve &#x3D;&gt; &#123; import( &#x2F;* webpackChunkName: &quot;Publish&quot; *&#x2F; &#39;.&#x2F;pages&#x2F;Publish&#x2F;Publish&#39;).then((mod) &#x3D;&gt; &#123; resolve(mod); &#125;) &#125;;</span><br><span class="line">const Models &#x3D; resolve &#x3D;&gt; &#123; import( &#x2F;* webpackChunkName: &quot;Models&quot; *&#x2F; &#39;.&#x2F;pages&#x2F;Models&#x2F;Models&#39;).then((mod) &#x3D;&gt; &#123; resolve(mod.default); &#125;) &#125;;</span><br><span class="line">const MediaUpload &#x3D; resolve &#x3D;&gt; &#123; import( &#x2F;* webpackChunkName: &quot;MediaUpload&quot; *&#x2F; &#39;.&#x2F;pages&#x2F;Media&#x2F;MediaUpload&#39;).then((mod) &#x3D;&gt; &#123; resolve(mod); &#125;) &#125;;</span><br><span class="line">const RealTime &#x3D; resolve &#x3D;&gt; &#123; import( &#x2F;* webpackChunkName: &quot;RealTime&quot; *&#x2F; &#39;.&#x2F;pages&#x2F;RealTime&#x2F;RealTime&#39;).then((mod) &#x3D;&gt; &#123; resolve(mod.default); &#125;) &#125;;</span><br></pre></td></tr></table></figure>
+
+<p>没错，在 import 里添加注释。/_ webpackChunkName: “EditPage” _/ ，虽然看着不舒服，但是管用。</p>
+<p>贴一个项目的优化效果对比图</p>
+<p><img src="16.jpg#id=KZHR3&originalType=binary&status=done&style=none"></p>
+<p>优化效果还是比较明显。</p>
+<p><img src="17.jpg#id=Dy7lf&originalType=binary&status=done&style=none"></p>
+<p>优化前 bundle</p>
+<p><img src="18.jpg#id=d9um1&originalType=binary&status=done&style=none"></p>
+<p>优化后 bundle</p>
+<p><strong>最后思考一个问题：</strong></p>
+<p><strong>不同 entry 模块或按需加载的异步模块需不需要提取通用模块？</strong></p>
+<p>这个需要看场景了，比如模块都是在线加载的，如果通用模块提取粒度过小，会导致首页首屏需要的文件变多，很多可能是首屏用不到的，导致首屏过慢，二级或三级页面加载会大幅提升。所以这个就需要根据业务场景做权衡，控制通用模块提取的粒度。</p>
+<p>百度外卖的移动端应用场景是这样的，我们所有的移动端页面都做了离线化的处理。离线之后，加载本地的 js 文件，与网络无关，基本上可以忽略文件大小，所以更关注整个离线包的大小。离线包越小，耗费用户的流量就越小，用户体验更好，所以离线化的场景是非常适合最小粒提取通用模块的，即将所有 entry 模块和异步加载模块的引用大于 2 的模块都提取，这样能获得最小的输出文件，最小的离线包。</p>
+<p>1 月 20 日，我将在掘金分享《百度外卖前端离线化实践》，有兴趣的可以关注一下。</p>
+<p>文本提到的插件都是开源的，链接汇总，欢迎交流，欢迎戳 ❤</p>
+<p><img src="19.jpg#id=qBUgO&originalType=binary&status=done&style=none"></p>
+<p><a href="http://link.zhihu.com/?target=https://github.com/lin-xi/babel-plugin-import-fix">lin-xi/babel-plugin-import-fix</a></p>
+<p><a href="http://link.zhihu.com/?target=https://github.com/lin-xi/webpack-css-treeshaking-plugin">lin-xi/webpack-css-treeshaking-plugin</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5%20%E5%8E%9F%E7%90%86%E7%AF%87/" rel="prev" title="Tree-Shaking性能优化实践 原理篇">
+      <i class="fa fa-chevron-left"></i> Tree-Shaking性能优化实践 原理篇
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/26/hello-world/" rel="next" title="Hello World">
+      Hello World <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89-tree-shaking-%E5%AE%9E%E8%B7%B5"><span class="nav-number">1.</span> <span class="nav-text">三. tree-shaking 实践</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EF%BC%881%EF%BC%89%E5%AF%B9%E7%BB%84%E4%BB%B6%E5%BA%93%E5%BC%95%E7%94%A8%E7%9A%84%E4%BC%98%E5%8C%96"><span class="nav-number">2.</span> <span class="nav-text">（1）对组件库引用的优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EF%BC%882%EF%BC%89CSS-Tree-shaking"><span class="nav-number">3.</span> <span class="nav-text">（2）CSS Tree-shaking</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EF%BC%883%EF%BC%89webpack-bundle-%E6%96%87%E4%BB%B6%E5%8E%BB%E9%87%8D"><span class="nav-number">4.</span> <span class="nav-text">（3）webpack bundle 文件去重</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Adam Blog</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">61</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Adam Blog</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
