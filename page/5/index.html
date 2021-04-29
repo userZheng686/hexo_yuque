@@ -146,6 +146,429 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/" class="post-title-link" itemprop="url">浏览器的缓存机制</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-20 16:55:56" itemprop="dateCreated datePublished" datetime="2021-04-20T16:55:56+08:00">2021-04-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-29 18:36:18" itemprop="dateModified" datetime="2021-04-29T18:36:18+08:00">2021-04-29</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>前言</p>
+<p>如果你还在找工作面试，可以适当的了解下。今日早读文章由@葉河英投稿分享。</p>
+<blockquote>
+<p>@叶河英，腾讯前端工程师，主要研发系统和电商平台项目</p>
+</blockquote>
+<p>正文从这开始～</p>
+<h4 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h4><p>浏览器的缓存机制也就是我们说的 HTTP 缓存机制，其机制是根据 HTTP 报文的缓存标识进行的，所以在分析浏览器缓存机制之前，我们先使用图文简单介绍一下 HTTP 报文，HTTP 报文分为两种：</p>
+<p>HTTP 请求(Request)报文，报文格式为：请求行 – HTTP 头(通用信息头，请求头，实体头) – 请求报文主体(只有 POST 才有报文主体)，如下图</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618909364030-c8cff531-5544-4da3-bf7e-da5d57992f32.png#clientId=u53602b42-01cb-4&from=drop&id=ud465be9b&margin=%5Bobject%20Object%5D&name=1.png&originHeight=310&originWidth=655&originalType=binary&size=13457&status=done&style=none&taskId=u9fece462-bcbd-42ab-9ccb-10d9a500565" alt="1.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618909375119-6588e63f-94e6-4079-9010-6a015d4569d4.png#clientId=u53602b42-01cb-4&from=drop&id=u8303ff41&margin=%5Bobject%20Object%5D&name=2.png&originHeight=39&originWidth=573&originalType=binary&size=1549&status=done&style=none&taskId=u9a3fd632-1bfd-4b7a-9cc2-26588d166e7" alt="2.png"></p>
+<p>HTTP 响应(Response)报文，报文格式为：状态行 – HTTP 头(通用信息头，响应头，实体头) – 响应报文主体，如下图</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618909394217-5348b231-6d40-4eef-9b13-bb0a2817bf4c.png#clientId=u53602b42-01cb-4&from=drop&id=u908dec8e&margin=%5Bobject%20Object%5D&name=3.png&originHeight=195&originWidth=612&originalType=binary&size=5976&status=done&style=none&taskId=u7bb57a1f-fee2-4b37-81c6-c0502b2b3e6" alt="3.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618909401912-091f4013-5c7e-4245-9c05-74772d95b2d0.png#clientId=u53602b42-01cb-4&from=drop&id=u0a30d1df&margin=%5Bobject%20Object%5D&name=4.png&originHeight=40&originWidth=645&originalType=binary&size=2358&status=done&style=none&taskId=u8aff25cd-937d-4851-ab5b-c68810724ee" alt="4.png"></p>
+<p>注：通用信息头指的是请求和响应报文都支持的头域，分别为 Cache-Control、Connection、Date、Pragma、Transfer-Encoding、Upgrade、Via；实体头则是实体信息的实体头域，分别为 Allow、Content-Base、Content-Encoding、Content-Language、Content-Length、Content-Location、Content-MD5、Content-Range、Content-Type、Etag、Expires、Last-Modified、extension-header。这里只是为了方便理解，将通用信息头，响应头/请求头，实体头都归为了 HTTP 头。</p>
+<p>以上的概念在这里我们不做多讲解，只简单介绍，有兴趣的童鞋可以自行研究。</p>
+<h4 id="缓存过程分析"><a href="#缓存过程分析" class="headerlink" title="缓存过程分析"></a>缓存过程分析</h4><p>浏览器与服务器通信的方式为应答模式，即是：浏览器发起 HTTP 请求 – 服务器响应该请求。那么浏览器第一次向服务器发起该请求后拿到请求结果，会根据响应报文中 HTTP 头的缓存标识，决定是否缓存结果，是则将请求结果和缓存标识存入浏览器缓存中，简单的过程如下图：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618909407138-208b28ce-49a8-44a3-aab2-366363ee3fae.png#clientId=u53602b42-01cb-4&from=drop&id=u035c612d&margin=%5Bobject%20Object%5D&name=5.png&originHeight=570&originWidth=761&originalType=binary&size=16659&status=done&style=none&taskId=uc48962a4-ec47-4c69-b231-c35256295d1" alt="5.png"></p>
+<p>由上图我们可以知道：</p>
+<ul>
+<li>浏览器每次发起请求，都会先在浏览器缓存中查找该请求的结果以及缓存标识</li>
+<li>浏览器每次拿到返回的请求结果都会将该结果和缓存标识存入浏览器缓存中</li>
+</ul>
+<p>以上两点结论就是浏览器缓存机制的关键，他确保了每个请求的缓存存入与读取，只要我们再理解浏览器缓存的使用规则，那么所有的问题就迎刃而解了，本文也将围绕着这点进行详细分析。为了方便大家理解，这里我们根据是否需要向服务器重新发起 HTTP 请求将缓存过程分为两个部分，分别是强制缓存和协商缓存。</p>
+<h5 id="强制缓存"><a href="#强制缓存" class="headerlink" title="强制缓存"></a>强制缓存</h5><p>强制缓存就是向浏览器缓存查找该请求结果，并根据该结果的缓存规则来决定是否使用该缓存结果的过程，强制缓存的情况主要有三种(暂不分析协商缓存过程)，如下：</p>
+<p>不存在该缓存结果和缓存标识，强制缓存失效，则直接向服务器发起请求（跟第一次发起请求一致），如下图：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618909414109-3f01acec-1556-4ec6-91b0-caf2816224e1.png#clientId=u53602b42-01cb-4&from=drop&id=ue0dccda0&margin=%5Bobject%20Object%5D&name=6.png&originHeight=384&originWidth=649&originalType=binary&size=11991&status=done&style=none&taskId=uebb43bfb-823e-4ef2-b54b-991fbc02f40" alt="6.png"></p>
+<p>存在该缓存结果和缓存标识，但该结果已失效，强制缓存失效，则使用协商缓存(暂不分析)，如下图</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618909418916-992c3ec9-9d8a-48e3-83dc-62b66f061d91.png#clientId=u53602b42-01cb-4&from=drop&id=u5a2278a1&margin=%5Bobject%20Object%5D&name=7.png&originHeight=407&originWidth=687&originalType=binary&size=13254&status=done&style=none&taskId=u25e5ac14-47c7-419d-b186-471a2fc7914" alt="7.png"></p>
+<p>存在该缓存结果和缓存标识，且该结果尚未失效，强制缓存生效，直接返回该结果，如下图</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618909423684-3acd7bed-0e25-440a-bc2d-a60f8ede828c.png#clientId=u53602b42-01cb-4&from=drop&id=uc74df12d&margin=%5Bobject%20Object%5D&name=8.png&originHeight=340&originWidth=662&originalType=binary&size=10040&status=done&style=none&taskId=u0811a669-a8f4-42a4-a6d3-6acabc9ee68" alt="8.png"></p>
+<blockquote>
+<p>那么强制缓存的缓存规则是什么？</p>
+</blockquote>
+<p>当浏览器向服务器发起请求时，服务器会将缓存规则放入 HTTP 响应报文的 HTTP 头中和请求结果一起返回给浏览器，控制强制缓存的字段分别是 Expires 和 Cache-Control，其中 Cache-Control 优先级比 Expires 高。</p>
+<h5 id="Expires"><a href="#Expires" class="headerlink" title="Expires"></a>Expires</h5><p>Expires 是 HTTP/1.0 控制网页缓存的字段，其值为服务器返回该请求结果缓存的到期时间，即再次发起该请求时，如果客户端的时间小于 Expires 的值时，直接使用缓存结果。</p>
+<blockquote>
+<p>Expires 是 HTTP/1.0 的字段，但是现在浏览器默认使用的是 HTTP/1.1，那么在 HTTP/1.1 中网页缓存还是否由 Expires 控制？</p>
+</blockquote>
+<p>到了 HTTP/1.1，Expire 已经被 Cache-Control 替代，原因在于 Expires 控制缓存的原理是使用客户端的时间与服务端返回的时间做对比，那么如果客户端与服务端的时间因为某些原因（例如时区不同；客户端和服务端有一方的时间不准确）发生误差，那么强制缓存则会直接失效，这样的话强制缓存的存在则毫无意义，那么 Cache-Control 又是如何控制的呢？</p>
+<h5 id="Cache-Control"><a href="#Cache-Control" class="headerlink" title="Cache-Control"></a>Cache-Control</h5><p>在 HTTP/1.1 中，Cache-Control 是最重要的规则，主要用于控制网页缓存，主要取值为：</p>
+<ul>
+<li>public：所有内容都将被缓存（客户端和代理服务器都可缓存）</li>
+<li>private：所有内容只有客户端可以缓存，Cache-Control 的默认取值</li>
+<li>no-cache：客户端缓存内容，但是是否使用缓存则需要经过协商缓存来验证决定</li>
+<li>no-store：所有内容都不会被缓存，即不使用强制缓存，也不使用协商缓存</li>
+<li>max-age=xxx (xxx is numeric)：缓存内容将在 xxx 秒后失效</li>
+</ul>
+<p>接下来，我们直接看一个例子，如下：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618909431941-7b4db55e-257e-4cbf-861c-30e331ca44b0.png#clientId=u53602b42-01cb-4&from=drop&id=u1d24ca0b&margin=%5Bobject%20Object%5D&name=9.png&originHeight=291&originWidth=640&originalType=binary&size=8204&status=done&style=none&taskId=u347557bb-125a-476a-b0fb-355d7a9e64c" alt="9.png"></p>
+<p>由上面的例子我们可以知道：</p>
+<ul>
+<li>HTTP 响应报文中 expires 的时间值，是一个绝对值</li>
+<li>HTTP 响应报文中 Cache-Control 为 max-age=600，是相对值</li>
+</ul>
+<p>由于 Cache-Control 的优先级比 expires，那么直接根据 Cache-Control 的值进行缓存，意思就是说在 600 秒内再次发起该请求，则会直接使用缓存结果，强制缓存生效。</p>
+<p>注：在无法确定客户端的时间是否与服务端的时间同步的情况下，Cache-Control 相比于 expires 是更好的选择，所以同时存在时，只有 Cache-Control 生效。</p>
+<p>了解强制缓存的过程后，我们拓展性的思考一下：</p>
+<blockquote>
+<p>浏览器的缓存存放在哪里，如何在浏览器中判断强制缓存是否生效？</p>
+</blockquote>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1618909444541-37766b84-b8ca-4d4d-82a3-f0926c29e9e5.jpeg#clientId=u53602b42-01cb-4&from=drop&id=u31f8cdd9&margin=%5Bobject%20Object%5D&name=10.jpg&originHeight=442&originWidth=1007&originalType=binary&size=76458&status=done&style=none&taskId=uf25bc11a-a753-4954-b316-76577cda7f5" alt="10.jpg"></p>
+<p>这里我们以博客的请求为例，状态码为灰色的请求则代表使用了强制缓存，请求对应的 Size 值则代表该缓存存放的位置，分别为 from memory cache 和 from disk cache。</p>
+<blockquote>
+<p>那么 from memory cache 和 from disk cache 又分别代表的是什么呢？什么时候会使用 from disk cache，什么时候会使用 from memory cache 呢？</p>
+</blockquote>
+<p>from memory cache 代表使用内存中的缓存，from disk cache 则代表使用的是硬盘中的缓存，浏览器读取缓存的顺序为 memory –&gt; disk。</p>
+<p>虽然我已经直接把结论说出来了，但是相信有不少人对此不能理解，那么接下来我们一起详细分析一下缓存读取问题，这里仍让以我的博客为例进行分析：</p>
+<p>访问<a target="_blank" rel="noopener" href="https://heyingye.github.io/">https://heyingye.github.io/</a> –&gt; 200 –&gt; 关闭博客的标签页 –&gt; 重新打开<a target="_blank" rel="noopener" href="https://heyingye.github.io/">https://heyingye.github.io/</a> –&gt; 200(from disk cache) –&gt; 刷新 –&gt; 200(from memory cache)</p>
+<p>过程如下：</p>
+<ul>
+<li>访问<a target="_blank" rel="noopener" href="https://heyingye.github.io/">https://heyingye.github.io/</a></li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1618909453737-5c92fe5d-57a2-47e3-8f7a-d7703e1b05b2.jpeg#clientId=u53602b42-01cb-4&from=drop&id=u3a481f5c&margin=%5Bobject%20Object%5D&name=11.jpg&originHeight=433&originWidth=1003&originalType=binary&size=66491&status=done&style=none&taskId=u1d4885b4-8020-4360-b7ed-360d72af6be" alt="11.jpg"></p>
+<ul>
+<li>关闭博客的标签页</li>
+<li>重新打开<a target="_blank" rel="noopener" href="https://heyingye.github.io/">https://heyingye.github.io/</a></li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1618909461520-fc33c10c-3ae8-430f-9f1d-a1b1f11b54e2.jpeg#clientId=u53602b42-01cb-4&from=drop&id=ud3495d8e&margin=%5Bobject%20Object%5D&name=12.jpg&originHeight=435&originWidth=1001&originalType=binary&size=71412&status=done&style=none&taskId=u0deff8e6-e6bb-4617-93df-d27d5c37beb" alt="12.jpg"></p>
+<ul>
+<li>刷新</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1618909467649-4afe727b-eaed-4cbd-bf15-af316a774b76.jpeg#clientId=u53602b42-01cb-4&from=drop&id=u5a8e0175&margin=%5Bobject%20Object%5D&name=13.jpg&originHeight=434&originWidth=1005&originalType=binary&size=70933&status=done&style=none&taskId=uf81e5bf4-2477-4a9a-85db-ad8548037fb" alt="13.jpg"></p>
+<p>from disk memory</p>
+<blockquote>
+<p>看到这里可能有人小伙伴问了，最后一个步骤刷新的时候，不是同时存在着 from disk cache 和 from memory cache 吗？</p>
+</blockquote>
+<p>对于这个问题，我们需要了解内存缓存(from memory cache)和硬盘缓存(from disk cache)，如下:</p>
+<ul>
+<li>内存缓存(from memory cache)：内存缓存具有两个特点，分别是快速读取和时效性：</li>
+<li>快速读取：内存缓存会将编译解析后的文件，直接存入该进程的内存中，占据该进程一定的内存资源，以方便下次运行使用时的快速读取。</li>
+<li>时效性：一旦该进程关闭，则该进程的内存则会清空。</li>
+<li>硬盘缓存(from disk cache)：硬盘缓存则是直接将缓存写入硬盘文件中，读取缓存需要对该缓存存放的硬盘文件进行 I/O 操作，然后重新解析该缓存内容，读取复杂，速度比内存缓存慢。</li>
+</ul>
+<p>在浏览器中，浏览器会在 js 和图片等文件解析执行后直接存入内存缓存中，那么当刷新页面时只需直接从内存缓存中读取(from memory cache)；而 css 文件则会存入硬盘文件中，所以每次渲染页面都需要从硬盘读取缓存(from disk cache)。</p>
+<h4 id="协商缓存"><a href="#协商缓存" class="headerlink" title="协商缓存"></a>协商缓存</h4><p>协商缓存就是强制缓存失效后，浏览器携带缓存标识向服务器发起请求，由服务器根据缓存标识决定是否使用缓存的过程，主要有以下两种情况：</p>
+<p>协商缓存生效，返回 304，如下</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618909481004-5098b177-c503-4c04-bdd1-80658c7f4233.png#clientId=u53602b42-01cb-4&from=drop&id=u6a6af472&margin=%5Bobject%20Object%5D&name=14.png&originHeight=547&originWidth=719&originalType=binary&size=16854&status=done&style=none&taskId=u82424bcc-e93e-4ab3-b583-4f8d95b4096" alt="14.png"></p>
+<p>304</p>
+<p>协商缓存失效，返回 200 和请求结果结果，如下</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618909487675-481d0e4a-1013-4e36-bc58-b98c54e937dc.png#clientId=u53602b42-01cb-4&from=drop&id=uc3638e07&margin=%5Bobject%20Object%5D&name=15.png&originHeight=568&originWidth=768&originalType=binary&size=18237&status=done&style=none&taskId=ud0e880f1-6523-4537-855b-e0de5393c49" alt="15.png"></p>
+<p>200</p>
+<p>同样，协商缓存的标识也是在响应报文的 HTTP 头中和请求结果一起返回给浏览器的，控制协商缓存的字段分别有：Last-Modified / If-Modified-Since 和 Etag / If-None-Match，其中 Etag / If-None-Match 的优先级比 Last-Modified / If-Modified-Since 高。</p>
+<h5 id="Last-Modified-If-Modified-Since"><a href="#Last-Modified-If-Modified-Since" class="headerlink" title="Last-Modified / If-Modified-Since"></a>Last-Modified / If-Modified-Since</h5><p>Last-Modified 是服务器响应请求时，返回该资源文件在服务器最后被修改的时间，如下。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618909518468-d9767114-c566-4d87-ac4c-3f8a772ee273.png#clientId=u53602b42-01cb-4&from=drop&id=u5a620baf&margin=%5Bobject%20Object%5D&name=16.png&originHeight=271&originWidth=596&originalType=binary&size=8718&status=done&style=none&taskId=udd18d51d-0fb0-40a4-8699-4b00652be10" alt="16.png"></p>
+<p>last-modify</p>
+<p>If-Modified-Since 则是客户端再次发起该请求时，携带上次请求返回的 Last-Modified 值，通过此字段值告诉服务器该资源上次请求返回的最后被修改时间。服务器收到该请求，发现请求头含有 If-Modified-Since 字段，则会根据 If-Modified-Since 的字段值与该资源在服务器的最后被修改时间做对比，若服务器的资源最后被修改时间大于 If-Modified-Since 的字段值，则重新返回资源，状态码为 200；否则则返回 304，代表资源无更新，可继续使用缓存文件，如下。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618909522276-e005aeec-0185-411c-b05b-bcace3c105cb.png#clientId=u53602b42-01cb-4&from=drop&id=u65f8977d&margin=%5Bobject%20Object%5D&name=17.png&originHeight=347&originWidth=667&originalType=binary&size=50895&status=done&style=none&taskId=u3f615144-bdb0-45cd-a263-1e8826f8fb1" alt="17.png"></p>
+<p>If-Modified-Since</p>
+<h5 id="Etag-If-None-Match"><a href="#Etag-If-None-Match" class="headerlink" title="Etag / If-None-Match"></a>Etag / If-None-Match</h5><p>Etag 是服务器响应请求时，返回当前资源文件的一个唯一标识(由服务器生成)，如下。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618909526528-da4d4142-98de-4047-90e1-77f41b335064.png#clientId=u53602b42-01cb-4&from=drop&id=u86ad4f36&margin=%5Bobject%20Object%5D&name=18.png&originHeight=351&originWidth=666&originalType=binary&size=12113&status=done&style=none&taskId=u8f1e2b61-d780-420b-bc51-35f06eed604" alt="18.png"></p>
+<p>Etag</p>
+<p>If-None-Match 是客户端再次发起该请求时，携带上次请求返回的唯一标识 Etag 值，通过此字段值告诉服务器该资源上次请求返回的唯一标识值。服务器收到该请求后，发现该请求头中含有 If-None-Match，则会根据 If-None-Match 的字段值与该资源在服务器的 Etag 值做对比，一致则返回 304，代表资源无更新，继续使用缓存文件；不一致则重新返回资源文件，状态码为 200，如下。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1618909531126-4fbd8b28-a3f5-4217-8de4-14f5dd84311f.jpeg#clientId=u53602b42-01cb-4&from=drop&id=ub8797af1&margin=%5Bobject%20Object%5D&name=19.jpg&originHeight=400&originWidth=659&originalType=binary&size=62393&status=done&style=none&taskId=u3cf969f5-5489-4259-ab38-f2e37484a10" alt="19.jpg"></p>
+<p>Etag-match</p>
+<p>注：Etag / If-None-Match 优先级高于 Last-Modified / If-Modified-Since，同时存在则只有 Etag / If-None-Match 生效。</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>强制缓存优先于协商缓存进行，若强制缓存(Expires 和 Cache-Control)生效则直接使用缓存，若不生效则进行协商缓存(Last-Modified / If-Modified-Since 和 Etag / If-None-Match)，协商缓存由服务器决定是否使用缓存，若协商缓存失效，那么代表该请求的缓存失效，重新获取请求结果，再存入浏览器缓存中；生效则返回 304，继续使用缓存，主要过程如下：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1618909536635-103002ef-97c3-4eb2-9276-7f91caf23037.jpeg#clientId=u53602b42-01cb-4&from=drop&id=ud97110b6&margin=%5Bobject%20Object%5D&name=20.jpg&originHeight=640&originWidth=946&originalType=binary&size=83767&status=done&style=none&taskId=u359d7b2b-9f0b-4092-9197-55f48ce9397" alt="20.jpg"></p>
+<p>all</p>
+<p>最后，为你推荐</p>
+<p><a target="_blank" rel="noopener" href="http://mp.weixin.qq.com/s?__biz=MjM5MTA1MjAxMQ==%E2%88%A3=2651226347&idx=1&sn=6dbccc54406f0b075671884b738b1e88&chksm=bd49596f8a3ed079f79cda4b90ac3cb3b1dbdb5bfb8aade962a16a323563bf26a0c75b0a5d7b&scene=21#wechat_redirect">【第 903 期】浏览器缓存机制剖析</a></p>
+<p><a target="_blank" rel="noopener" href="http://mp.weixin.qq.com/s?__biz=MjM5MTA1MjAxMQ==%E2%88%A3=2651226262&idx=1&sn=2128db200b88479face67ed8e095757c&chksm=bd4959128a3ed0041b43a5683c75c4b88c7d35fac909a59c14b4e9fc11e8d408680b171d2706&scene=21#wechat_redirect">【第 887 期】浏览器的缓存机制小结</a></p>
+<p>关于本文作者：@叶河英原文：<a target="_blank" rel="noopener" href="https://heyingye.github.io/2018/04/16/%E5%BD%BB%E5%BA%95%E7%90%86%E8%A7%A3%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/">https://heyingye.github.io/2018/04/16/彻底理解浏览器的缓存机制/</a></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1618909540539-69285875-8807-455c-96cd-d20224e2cded.jpeg#clientId=u53602b42-01cb-4&from=drop&id=u5c8e6c73&margin=%5Bobject%20Object%5D&name=21.jpg&originHeight=300&originWidth=720&originalType=binary&size=27893&status=done&style=none&taskId=u170283ba-6951-46a7-9a48-c7441c5b14f" alt="21.jpg"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/20/yuque/DOM%E6%A0%91%EF%BC%9AJavaScript%E6%98%AF%E5%A6%82%E4%BD%95%E5%BD%B1%E5%93%8DDOM%E6%A0%91%E6%9E%84%E5%BB%BA%E7%9A%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/20/yuque/DOM%E6%A0%91%EF%BC%9AJavaScript%E6%98%AF%E5%A6%82%E4%BD%95%E5%BD%B1%E5%93%8DDOM%E6%A0%91%E6%9E%84%E5%BB%BA%E7%9A%84/" class="post-title-link" itemprop="url">DOM树：JavaScript是如何影响DOM树构建的</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-20 16:33:13" itemprop="dateCreated datePublished" datetime="2021-04-20T16:33:13+08:00">2021-04-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-29 18:36:18" itemprop="dateModified" datetime="2021-04-29T18:36:18+08:00">2021-04-29</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在上一篇文章中，我们通过开发者工具中的网络面板，介绍了网络请求过程的几种性能指标以及对页面加载的影响。<br>而在渲染流水线中，后面的步骤都直接或者间接地依赖于 DOM 结构，所以本文我们就继续沿着网络数据流路径来介绍 DOM 树是怎么生成的。然后再基于 DOM 树的解析流程介绍两块内容：第一个是在解析过程中遇到 JavaScript 脚本，DOM 解析器是如何处理的？第二个是 DOM 解析器是如何处理跨站点资源的？</p>
+<h2 id="什么是-DOM"><a href="#什么是-DOM" class="headerlink" title="什么是 DOM"></a>什么是 DOM</h2><p>从网络传给渲染引擎的 HTML 文件字节流是无法直接被渲染引擎理解的，所以要将其转化为渲染引擎能够理解的内部结构，这个结构就是 DOM。DOM 提供了对 HTML 文档结构化的表述。在渲染引擎中，DOM 有三个层面的作用</p>
+<ul>
+<li>从页面的视角来看，DOM 是生成页面的基础数据结构。</li>
+<li>从 JavaScript 脚本视角来看，DOM 提供给 JavaScript 脚本操作的接口，通过这套接口，JavaScript 可以对 DOM 结构进行访问，从而改变文档的结构、样式和内容。</li>
+<li>从安全视角来看，DOM 是一道安全防护线，一些不安全的内容在 DOM 解析阶段就被拒之门外了。</li>
+</ul>
+<p>简言之，DOM 是表述 HTML 的内部数据结构，它会将 Web 页面和 JavaScript 脚本连接起来，并过滤一些不安全的内容。</p>
+<h2 id="DOM-树如何生成"><a href="#DOM-树如何生成" class="headerlink" title="DOM 树如何生成"></a>DOM 树如何生成</h2><p>在渲染引擎内部，有一个叫 HTML 解析器（HTMLParser）的模块，它的职责就是负责将 HTML 字节流转换为 DOM 结构。所以这里我们需要先要搞清楚 HTML 解析器是怎么工作的。<br>在开始介绍 HTML 解析器之前，我要先解释一个大家在留言区问到过好多次的问题：HTML 解析器是等整个 HTML 文档加载完成之后开始解析的，还是随着 HTML 文档边加载边解析的？<br>在这里我统一解答下，HTML 解析器并不是等整个文档加载完成之后再解析的，而是网络进程加载了多少数据，HTML 解析器便解析多少数据。<br>那详细的流程是怎样的呢？网络进程接收到响应头之后，会根据响应头中的 content-type 字段来判断文件的类型，比如 content-type 的值是“text/html”，那么浏览器就会判断这是一个 HTML 类型的文件，然后为该请求选择或者创建一个渲染进程。渲染进程准备好之后，网络进程和渲染进程之间会建立一个共享数据的管道，网络进程接收到数据后就往这个管道里面放，而渲染进程则从管道的另外一端不断地读取数据，并同时将读取的数据“喂”给 HTML 解析器。你可以把这个管道想象成一个“水管”，网络进程接收到的字节流像水一样倒进这个“水管”，而“水管”的另外一端是渲染进程的 HTML 解析器，它会动态接收字节流，并将其解析为 DOM。<br>解答完这个问题之后，接下来我们就可以来详细聊聊 DOM 的具体生成流程了。<br>前面我们说过代码从网络传输过来是字节流的形式，那么后续字节流是如何转换为 DOM 的呢？你可以参考下图：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618907620967-b8143652-679c-4432-b117-4149f9c03189.png#clientId=u027bf477-f5c2-4&from=paste&height=445&id=udcd704bf&margin=%5Bobject%20Object%5D&originHeight=890&originWidth=1538&originalType=url&status=done&style=none&taskId=uef5c2f39-fdf9-4340-b44b-d9acbba244a&width=769"><br>从图中你可以看出，字节流转换为 DOM 需要三个阶段。<br><strong>第一个阶段，通过分词器将字节流转换为 Token。</strong><br>前面《14 | 编译器和解释器：V8 是如何执行一段 JavaScript 代码的？》文章中我们介绍过，V8 编译 JavaScript 过程中的第一步是做词法分析，将 JavaScript 先分解为一个个 Token。解析 HTML 也是一样的，需要通过分词器先将字节流转换为一个个 Token，分为 Tag Token 和文本 Token。上述 HTML 代码通过词法分析生成的 Token 如下所示：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618907620871-8e241e04-500a-45df-86a9-72fff363f59c.png#clientId=u027bf477-f5c2-4&from=paste&height=170&id=uc7c36f28&margin=%5Bobject%20Object%5D&originHeight=340&originWidth=1442&originalType=url&status=done&style=none&taskId=u5ef0a256-7036-4a52-b96d-b3ff64d0870&width=721"><br>由图可以看出，Tag Token 又分 StartTag 和 EndTag，比如<br>就是 StartTag ，就是 EndTag，分别对于图中的蓝色和红色块，文本 Token 对应的绿色块。<br><strong>至于后续的第二个和第三个阶段是同步进行的，需要将 Token 解析为 DOM 节点，并将 DOM 节点添加到 DOM 树中</strong>。<br>HTML 解析器维护了一个 Token 栈结构，该 Token 栈主要用来计算节点之间的父子关系，在第一个阶段中生成的 Token 会被按照顺序压到这个栈中。具体的处理规则如下所示：</p>
+<ul>
+<li>如果压入到栈中的是 StartTag Token，HTML 解析器会为该 Token 创建一个 DOM 节点，然后将该节点加入到 DOM 树中，它的父节点就是栈中相邻的那个元素生成的节点。</li>
+<li>如果分词器解析出来是文本 Token，那么会生成一个文本节点，然后将该节点加入到 DOM 树中，文本 Token 是不需要压入到栈中，它的父节点就是当前栈顶 Token 所对应的 DOM 节点。</li>
+<li>如果分词器解析出来的是 EndTag 标签，比如是 EndTag div，HTML 解析器会查看 Token 栈顶的元素是否是 StarTag div，如果是，就将 StartTag div 从栈中弹出，表示该 div 元素解析完成。</li>
+</ul>
+<p>通过分词器产生的新 Token 就这样不停地压栈和出栈，整个解析过程就这样一直持续下去，直到分词器将所有字节流分词完成。<br>为了更加直观地理解整个过程，下面我们结合一段 HTML 代码（如下），来一步步分析 DOM 树的生成过程。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>1<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>test<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这段代码以字节流的形式传给了 HTML 解析器，经过分词器处理，解析出来的第一个 Token 是 StartTag html，解析出来的 Token 会被压入到栈中，并同时创建一个 html 的 DOM 节点，将其加入到 DOM 树中。<br>这里需要补充说明下，HTML 解析器开始工作时，会默认创建了一个根为 document 的空 DOM 结构，同时会将一个 StartTag document 的 Token 压入栈底。然后经过分词器解析出来的第一个 StartTag html Token 会被压入到栈中，并创建一个 html 的 DOM 节点，添加到 document 上，如下图所示<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618907620730-3376aae6-6b79-420c-b91f-59ac0ceec5f8.png#clientId=u027bf477-f5c2-4&from=paste&height=477&id=u650a49a1&margin=%5Bobject%20Object%5D&originHeight=954&originWidth=1276&originalType=url&status=done&style=none&taskId=uccd797b6-dfc1-485a-a49c-7c4aa8811fd&width=638"><br>然后按照同样的流程解析出来 StartTag body 和 StartTag div，其 Token 栈和 DOM 的状态如下图所示：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618907620943-5cdf02d1-0b58-4d0e-858b-984d50560b4e.png#clientId=u027bf477-f5c2-4&from=paste&height=493&id=u850f324e&margin=%5Bobject%20Object%5D&originHeight=986&originWidth=1330&originalType=url&status=done&style=none&taskId=u2fa6a027-ed6a-47b9-b816-54f1e480161&width=665"><br>接下来解析出来的是第一个 div 的文本 Token，渲染引擎会为该 Token 创建一个文本节点，并将该 Token 添加到 DOM 中，它的父节点就是当前 Token 栈顶元素对应的节点，如下图所示：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618907621143-83c2f156-8ccb-4491-88c2-139a5e24ee02.png#clientId=u027bf477-f5c2-4&from=paste&height=495&id=ub3ac6980&margin=%5Bobject%20Object%5D&originHeight=990&originWidth=1394&originalType=url&status=done&style=none&taskId=uecf854da-3caa-4848-a00c-30ba463407f&width=697"><br>再接下来，分词器解析出来第一个 EndTag div，这时候 HTML 解析器会去判断当前栈顶的元素是否是 StartTag div，如果是则从栈顶弹出 StartTag div，如下图所示<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618907622828-9627ca32-6a8c-4955-ad18-298a0c5eb57c.png#clientId=u027bf477-f5c2-4&from=paste&height=469&id=u73f2c2c5&margin=%5Bobject%20Object%5D&originHeight=938&originWidth=1454&originalType=url&status=done&style=none&taskId=u71722cbf-d102-4d7d-ae93-17175541e3a&width=727"><br>按照同样的规则，一路解析，最终结果如下图所示：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618907622662-17a79816-326c-4a4e-8c3b-537a7902b0be.png#clientId=u027bf477-f5c2-4&from=paste&height=503&id=u884e607b&margin=%5Bobject%20Object%5D&originHeight=1006&originWidth=1432&originalType=url&status=done&style=none&taskId=uab8d4e2e-6f8c-4542-9a72-eeb834e0b5b&width=716"><br>通过上面的介绍，相信你已经清楚 DOM 是怎么生成的了。不过在实际生产环境中，HTML 源文件中既包含 CSS 和 JavaScript，又包含图片、音频、视频等文件，所以处理过程远比上面这个示范 Demo 复杂。不过理解了这个简单的 Demo 生成过程，我们就可以往下分析更加复杂的场景了。</p>
+<h2 id="JavaScript-是如何影响-DOM-生成的"><a href="#JavaScript-是如何影响-DOM-生成的" class="headerlink" title="JavaScript 是如何影响 DOM 生成的"></a>JavaScript 是如何影响 DOM 生成的</h2><p>我们再来看看稍微复杂点的 HTML 文件，如下所示：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>1<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">      <span class="keyword">let</span> div1 = <span class="built_in">document</span>.getElementsByTagName(<span class="string">&quot;div&quot;</span>)[<span class="number">0</span>];</span></span><br><span class="line"><span class="javascript">      div1.innerText = <span class="string">&quot;time.geekbang&quot;</span>;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>test<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>我在两段 div 中间插入了一段 JavaScript 脚本，这段脚本的解析过程就有点不一样了。script 标签之前，所有的解析流程还是和之前介绍的一样，但是解析到 script 标签时，渲染引擎判断这是一段脚本，此时 HTML 解析器就会暂停 DOM 的解析，因为接下来的 JavaScript 可能要修改当前已经生成的 DOM 结构。<br>通过前面 DOM 生成流程分析，我们已经知道当解析到 script 脚本标签时，其 DOM 树结构如下所示：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618907623068-deff6c00-7d7c-40e6-8241-940fa34ba03c.png#clientId=u027bf477-f5c2-4&from=paste&height=744&id=u4a604cad&margin=%5Bobject%20Object%5D&originHeight=1487&originWidth=1142&originalType=url&status=done&style=none&taskId=u9b76a274-f449-4b95-80cf-9d1deb55ba0&width=571"><br>这时候 HTML 解析器暂停工作，JavaScript 引擎介入，并执行 script 标签中的这段脚本，因为这段 JavaScript 脚本修改了 DOM 中第一个 div 中的内容，所以执行这段脚本之后，div 节点内容已经修改为 time.geekbang 了。脚本执行完成之后，HTML 解析器恢复解析过程，继续解析后续的内容，直至生成最终的 DOM。<br>以上过程应该还是比较好理解的，不过除了在页面中直接内嵌 JavaScript 脚本之外，我们还通常需要在页面中引入 JavaScript 文件，这个解析过程就稍微复杂了些，如下面代码：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//foo.js let div1 = document.getElementsByTagName(&#x27;div&#x27;)[0] div1.innerText =</span><br><span class="line">&#x27;time.geekbang&#x27;</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>1<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span> <span class="attr">src</span>=<span class="string">&quot;foo.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>test<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这段代码的功能还是和前面那段代码是一样的，不过这里我把内嵌 JavaScript 脚本修改成了通过 JavaScript 文件加载。其整个执行流程还是一样的，执行到 JavaScript 标签时，暂停整个 DOM 的解析，执行 JavaScript 代码，不过这里执行 JavaScript 时，需要先下载这段 JavaScript 代码。这里需要重点关注下载环境，因为 JavaScript 文件的下载过程会阻塞 DOM 解析，而通常下载又是非常耗时的，会受到网络环境、JavaScript 文件大小等因素的影响。<br>不过 Chrome 浏览器做了很多优化，其中一个主要的优化是预解析操作。当渲染引擎收到字节流之后，会开启一个预解析线程，用来分析 HTML 文件中包含的 JavaScript、CSS 等相关文件，解析到相关文件之后，预解析线程会提前下载这些文件。<br>再回到 DOM 解析上，我们知道引入 JavaScript 线程会阻塞 DOM，不过也有一些相关的策略来规避，比如使用 CDN 来加速 JavaScript 文件的加载，压缩 JavaScript 文件的体积。另外，如果 JavaScript 文件中没有操作 DOM 相关代码，就可以将该 JavaScript 脚本设置为异步加载，通过 async 或 defer 来标记代码，使用方式如下所示：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">async</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span> <span class="attr">src</span>=<span class="string">&quot;foo.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">defer</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span> <span class="attr">src</span>=<span class="string">&quot;foo.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>async 和 defer 虽然都是异步的，不过还有一些差异，使用 async 标志的脚本文件一旦加载完成，会立即执行；而使用了 defer 标记的脚本文件，需要在 DOMContentLoaded 事件之前执行。<br>现在我们知道了 JavaScript 是如何阻塞 DOM 解析的了，那接下来我们再来结合文中代码看看另外一种情况：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">src</span>=<span class="string">&#x27;theme.css&#x27;</span>&gt;</span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>1<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">let</span> div1 = <span class="built_in">document</span>.getElementsByTagName(<span class="string">&#x27;div&#x27;</span>)[<span class="number">0</span>]</span></span><br><span class="line"><span class="javascript">            div1.innerText = <span class="string">&#x27;time.geekbang&#x27;</span> <span class="comment">// 需要 DOM</span></span></span><br><span class="line"><span class="javascript">            div1.style.color = <span class="string">&#x27;red&#x27;</span>  <span class="comment">// 需要 CSSOM</span></span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>test<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>该示例中，JavaScript 代码出现了 div1.style.color = ‘red’ 的语句，它是用来操纵 CSSOM 的，所以在执行 JavaScript 之前，需要先解析 JavaScript 语句之上所有的 CSS 样式。所以如果代码里引用了外部的 CSS 文件，那么在执行 JavaScript 之前，还需要等待外部的 CSS 文件下载完成，并解析生成 CSSOM 对象之后，才能执行 JavaScript 脚本。<br>而 JavaScript 引擎在解析 JavaScript 之前，是不知道 JavaScript 是否操纵了 CSSOM 的，所以渲染引擎在遇到 JavaScript 脚本时，不管该脚本是否操纵了 CSSOM，都会执行 CSS 文件下载，解析操作，再执行 JavaScript 脚本。<br>所以说 JavaScript 脚本是依赖样式表的，这又多了一个阻塞过程。至于如何优化，我们在下篇文章中再来深入探讨。<br>通过上面的分析，我们知道了 JavaScript 会阻塞 DOM 生成，而样式文件又会阻塞 JavaScript 的执行，所以在实际的工程中需要重点关注 JavaScript 文件和样式表文件，使用不当会影响到页面性能的</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/20/yuque/%E5%89%8D%E7%AB%AF%E8%B7%AF%E7%94%B1%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F%EF%BC%9Ahash%E6%A8%A1%E5%BC%8F%E5%92%8C%20history%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/20/yuque/%E5%89%8D%E7%AB%AF%E8%B7%AF%E7%94%B1%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F%EF%BC%9Ahash%E6%A8%A1%E5%BC%8F%E5%92%8C%20history%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">前端路由的两种模式：hash模式和 history模式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-20 12:51:15" itemprop="dateCreated datePublished" datetime="2021-04-20T12:51:15+08:00">2021-04-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-29 18:36:18" itemprop="dateModified" datetime="2021-04-29T18:36:18+08:00">2021-04-29</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>为什么要使用路由<br>现在的网络应用程序越来越多的使用 AJAX 异步请求完成页面的无缝刷新，导致浏览器的 URL 不会发生任何变化而完成了请求，从而破换了用户浏览体验。同时本次浏览的页面内容在用户下次使用 URL 访问时将无法重新呈现，使用路由可以很好地解决这个问题。</p>
+<p>单页面应用利用了 JavaScript 动态变换网页内容，避免了页面重载；路由则提供了浏览器地址变化，网页内容也跟随变化，两者结合起来则为我们提供了体验良好的单页面 web 应用。</p>
+<h2 id="前端路由实现方式"><a href="#前端路由实现方式" class="headerlink" title="前端路由实现方式"></a>前端路由实现方式</h2><p>路由需要实现三个功能：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">当浏览器地址变化时，切换页面；</span><br><span class="line">点击浏览器【后退】、【前进】按钮，网页内容跟随变化；</span><br><span class="line">刷新浏览器，网页加载当前路由对应内容；</span><br></pre></td></tr></table></figure>
+
+<p>在单页面 web 网页中, 单纯的浏览器地址改变, 网页不会重载，如单纯的 hash 网址改变网页不会变化，因此我们的路由主要是通过监听事件，并利用 js 实现动态改变网页内容，有两种实现方式：</p>
+<ul>
+<li>hash 模式：监听浏览器地址 hash 值变化，执行相应的 js 切换网页；</li>
+<li>history 模式：利用 history API 实现 url 地址改变，网页内容改变；</li>
+</ul>
+<p>它们的区别最明显的就是 hash 会在浏览器地址后面增加#号，而 history 可以自定义地址。</p>
+<h2 id="hash-模式"><a href="#hash-模式" class="headerlink" title="hash 模式"></a>hash 模式</h2><p>使用 window.location.hash 属性及窗口的 onhashchange 事件，可以实现监听浏览器地址 hash 值变化，执行相应的 js 切换网页。下面具体介绍几个使用过程中必须理解的要点：</p>
+<ul>
+<li>hash 指的是地址中#号以及后面的字符，也称为散列值。hash 也称作锚点，本身是用来做页面跳转定位的。如<a target="_blank" rel="noopener" href="http://localhost/index.html#abc">http://localhost/index.html#abc</a>，这里的#abc 就是 hash；</li>
+<li>散列值是不会随请求发送到服务器端的，所以改变 hash，不会重新加载页面；</li>
+<li>监听 window 的 hashchange 事件，当散列值改变时，可以通过 location.hash 来获取和设置 hash 值；</li>
+<li>location.hash 值的变化会直接反应到浏览器地址栏；</li>
+</ul>
+<h2 id="触发-hashchange-事件的几种情况："><a href="#触发-hashchange-事件的几种情况：" class="headerlink" title="触发 hashchange 事件的几种情况："></a>触发 hashchange 事件的几种情况：</h2><ul>
+<li>浏览器地址栏散列值的变化（包括浏览器的前进、后退）会触发 window.location.hash 值的变化，从而触发 onhashchange 事件；</li>
+<li>当浏览器地址栏中 URL 包含哈希如 <a target="_blank" rel="noopener" href="http://www.baidu.com/#home">http://www.baidu.com/#home</a>，这时按下输入，浏览器发送<a target="_blank" rel="noopener" href="http://www.baidu.com/">http://www.baidu.com/</a>请求至服务器，请求完毕之后设置散列值为#home，进而触发 onhashchange 事件；</li>
+<li>当只改变浏览器地址栏 URL 的哈希部分，这时按下回车，浏览器不会发送任何请求至服务器，这时发生的只是设置散列值新修改的哈希值，并触发 onhashchange 事件；</li>
+<li>html 中<a>标签的属性 href 可以设置为页面的元素 ID 如 #top，当点击该链接时页面跳转至该 id 元素所在区域，同时浏览器自动设置 window.location.hash 属性，地址栏中的哈希值也会发生改变，并触发 onhashchange 事件；</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置 url 的 hash，会在当前url后加上&#x27;#abc&#x27;</span></span><br><span class="line"><span class="built_in">window</span>.location.hash = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line"><span class="keyword">let</span> hash = <span class="built_in">window</span>.location.hash; <span class="comment">//&#x27;#abc&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">&quot;hashchange&quot;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">//监听hash变化，点击浏览器的前进后退会触发</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="history-模式"><a href="#history-模式" class="headerlink" title="history 模式"></a>history 模式</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><ul>
+<li>window.history 属性指向 History 对象，它表示当前窗口的浏览历史。当发生改变时，只会改变页面的路径，不会刷新页面。</li>
+<li>History 对象保存了当前窗口访问过的所有页面网址。通过 history.length 可以得出当前窗口一共访问过几个网址。</li>
+<li>由于安全原因，浏览器不允许脚本读取这些地址，但是允许在地址之间导航。</li>
+<li>浏览器工具栏的“前进”和“后退”按钮，其实就是对 History 对象进行操作。</li>
+</ul>
+<h3 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h3><p>History 对象主要有两个属性。</p>
+<ul>
+<li>History.length：当前窗口访问过的网址数量（包括当前网页）</li>
+<li>History.state：History 堆栈最上层的状态值（详见下文）</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 当前窗口访问过多少个网页</span></span><br><span class="line">history.length; <span class="comment">// 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// History 对象的当前状态</span></span><br><span class="line"><span class="comment">// 通常是 undefined，即未设置</span></span><br><span class="line">history.state; <span class="comment">// undefined</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><p><strong>History.back()、History.forward()、History.go()</strong><br>这三个方法用于在历史之中移动。</p>
+<ul>
+<li>**History.back()**：移动到上一个网址，等同于点击浏览器的后退键。对于第一个访问的网址，该方法无效果。</li>
+<li>**History.forward()**：移动到下一个网址，等同于点击浏览器的前进键。对于最后一个访问的网址，该方法无效果。</li>
+<li>**History.go()**：接受一个整数作为参数，以当前网址为基准，移动到参数指定的网址。如果参数超过实际存在的网址范围，该方法无效果；如果不指定参数，默认参数为 0，相当于刷新当前页面。</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">history.back();</span><br><span class="line">history.forward();</span><br><span class="line">history.go(<span class="number">1</span>); <span class="comment">//相当于history.forward()</span></span><br><span class="line">history.go(-<span class="number">1</span>); <span class="comment">//相当于history.back()</span></span><br><span class="line">history.go(<span class="number">0</span>); <span class="comment">// 刷新当前页面</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：移动到以前访问过的页面时，页面通常是从浏览器缓存之中加载，而不是重新要求服务器发送新的网页。</p>
+<p><strong>History.pushState()</strong><br>该方法用于在历史中添加一条记录。pushState()方法不会触发页面刷新，只是导致 History 对象发生变化，地址栏会有变化。</p>
+<p>语法：history.pushState(object, title, url)</p>
+<p>该方法接受三个参数，依次为：</p>
+<ul>
+<li>object：是一个对象，通过 pushState 方法可以将该对象内容传递到新页面中。如果不需要这个对象，此处可以填 null。</li>
+<li>title：指标题，几乎没有浏览器支持该参数，传一个空字符串比较安全。</li>
+<li>url：新的网址，必须与当前页面处在同一个域。不指定的话则为当前的路径，如果设置了一个跨域网址，则会报错。</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> data = &#123; <span class="attr">foo</span>: <span class="string">&quot;bar&quot;</span> &#125;;</span><br><span class="line">history.pushState(data, <span class="string">&quot;&quot;</span>, <span class="string">&quot;2.html&quot;</span>);</span><br><span class="line"><span class="built_in">console</span>.log(history.state); <span class="comment">// &#123;foo: &quot;bar&quot;&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：如果 pushState 的 URL 参数设置了一个新的锚点值（即 hash），并不会触发 hashchange 事件。反过来，如果 URL 的锚点值变了，则会在 History 对象创建一条浏览记录。</p>
+<p>如果 pushState() 方法设置了一个跨域网址，则会报错。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 报错</span></span><br><span class="line"><span class="comment">// 当前网址为 http://example.com</span></span><br><span class="line">history.pushState(<span class="literal">null</span>, <span class="string">&quot;&quot;</span>, <span class="string">&quot;https://twitter.com/hello&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中，pushState 想要插入一个跨域的网址，导致报错。这样设计的目的是，防止恶意代码让用户以为他们是在另一个网站上，因为这个方法不会导致页面跳转。</p>
+<p><strong>History.replaceState()</strong><br>该方法用来修改 History 对象的当前记录，用法与 pushState() 方法一样。<br>假定当前网页是 example.com/example.html。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">history.pushState(&#123; <span class="attr">page</span>: <span class="number">1</span> &#125;, <span class="string">&quot;&quot;</span>, <span class="string">&quot;?page=1&quot;</span>);</span><br><span class="line"><span class="comment">// URL 显示为 http://example.com/example.html?page=1</span></span><br><span class="line"></span><br><span class="line">history.pushState(&#123; <span class="attr">page</span>: <span class="number">2</span> &#125;, <span class="string">&quot;&quot;</span>, <span class="string">&quot;?page=2&quot;</span>);</span><br><span class="line"><span class="comment">// URL 显示为 http://example.com/example.html?page=2</span></span><br><span class="line"></span><br><span class="line">history.replaceState(&#123; <span class="attr">page</span>: <span class="number">3</span> &#125;, <span class="string">&quot;&quot;</span>, <span class="string">&quot;?page=3&quot;</span>);</span><br><span class="line"><span class="comment">// URL 显示为 http://example.com/example.html?page=3</span></span><br><span class="line"></span><br><span class="line">history.back();</span><br><span class="line"><span class="comment">// URL 显示为 http://example.com/example.html?page=1</span></span><br><span class="line"></span><br><span class="line">history.back();</span><br><span class="line"><span class="comment">// URL 显示为 http://example.com/example.html</span></span><br><span class="line"></span><br><span class="line">history.go(<span class="number">2</span>);</span><br><span class="line"><span class="comment">// URL 显示为 http://example.com/example.html?page=3</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>popstate 事件</strong><br>每当 history 对象出现变化时，就会触发 popstate 事件。<br>注意：</p>
+<ul>
+<li>仅仅调用 pushState()方法或 replaceState()方法 ，并不会触发该事件;</li>
+<li>只有用户点击浏览器倒退按钮和前进按钮，或者使用 JavaScript 调用 History.back()、History.forward()、History.go()方法时才会触发。</li>
+<li>另外，该事件只针对同一个文档，如果浏览历史的切换，导致加载不同的文档，该事件也不会触发。</li>
+<li>页面第一次加载的时候，浏览器不会触发 popstate 事件。</li>
+</ul>
+<p>使用的时候，可以为 popstate 事件指定回调函数，回调函数的参数是一个 event 事件对象，它的 state 属性指向当前的 state 对象。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">&quot;popstate&quot;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">  <span class="comment">//e.state 相当于 history.state</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;state: &quot;</span> + <span class="built_in">JSON</span>.stringify(e.state));</span><br><span class="line">  <span class="built_in">console</span>.log(history.state);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Charissa2017/article/details/103841476">点击查看</a><br>通过 history.pushState 实现页面 tab 切换的功能。<br>history 致命的缺点就是当改变页面地址后，强制刷新浏览器时，（如果后端没有做准备的话）会报错，因为刷新是拿当前地址去请求服务器的，如果服务器中没有相应的响应，会出现 404 页面。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/19/yuque/%E8%B7%A8%E9%A1%B5%E9%9D%A2%E9%80%9A%E4%BF%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -177,7 +600,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 20:03:55" itemprop="dateModified" datetime="2021-04-26T20:03:55+08:00">2021-04-26</time>
+                <time title="修改时间：2021-04-29 18:36:18" itemprop="dateModified" datetime="2021-04-29T18:36:18+08:00">2021-04-29</time>
               </span>
 
           
@@ -400,7 +823,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 20:03:55" itemprop="dateModified" datetime="2021-04-26T20:03:55+08:00">2021-04-26</time>
+                <time title="修改时间：2021-04-29 18:36:18" itemprop="dateModified" datetime="2021-04-29T18:36:18+08:00">2021-04-29</time>
               </span>
 
           
@@ -595,7 +1018,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 20:03:55" itemprop="dateModified" datetime="2021-04-26T20:03:55+08:00">2021-04-26</time>
+                <time title="修改时间：2021-04-29 18:36:18" itemprop="dateModified" datetime="2021-04-29T18:36:18+08:00">2021-04-29</time>
               </span>
 
           
@@ -694,7 +1117,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 20:03:55" itemprop="dateModified" datetime="2021-04-26T20:03:55+08:00">2021-04-26</time>
+                <time title="修改时间：2021-04-29 18:36:18" itemprop="dateModified" datetime="2021-04-29T18:36:18+08:00">2021-04-29</time>
               </span>
 
           
@@ -893,7 +1316,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 20:03:55" itemprop="dateModified" datetime="2021-04-26T20:03:55+08:00">2021-04-26</time>
+                <time title="修改时间：2021-04-29 18:36:18" itemprop="dateModified" datetime="2021-04-29T18:36:18+08:00">2021-04-29</time>
               </span>
 
           
@@ -1099,7 +1522,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 20:03:56" itemprop="dateModified" datetime="2021-04-26T20:03:56+08:00">2021-04-26</time>
+                <time title="修改时间：2021-04-29 18:36:18" itemprop="dateModified" datetime="2021-04-29T18:36:18+08:00">2021-04-29</time>
               </span>
 
           
@@ -1164,7 +1587,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 20:03:56" itemprop="dateModified" datetime="2021-04-26T20:03:56+08:00">2021-04-26</time>
+                <time title="修改时间：2021-04-29 18:36:18" itemprop="dateModified" datetime="2021-04-29T18:36:18+08:00">2021-04-29</time>
               </span>
 
           
@@ -1355,523 +1778,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/16/yuque/%E4%BD%9C%E7%94%A8%E5%9F%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Adam Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Adam">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/16/yuque/%E4%BD%9C%E7%94%A8%E5%9F%9F/" class="post-title-link" itemprop="url">作用域</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-16 18:18:01" itemprop="dateCreated datePublished" datetime="2021-04-16T18:18:01+08:00">2021-04-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 20:03:56" itemprop="dateModified" datetime="2021-04-26T20:03:56+08:00">2021-04-26</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>JavaScript 中有一个被称为作用域(Scope)的特性。虽然对于许多新手开发者来说，作用域的概念并不是很容易理解，本文我会尽我所能用最简单的方式来解释作用域和作用域链，希望大家有所收获！</p>
-<p><strong>想阅读更多优质文章请猛戳</strong><a target="_blank" rel="noopener" href="https://github.com/ljianshu/Blog"><strong>GitHub 博客</strong></a></p>
-<h2 id="作用域-Scope"><a href="#作用域-Scope" class="headerlink" title="作用域(Scope)"></a>作用域(Scope)</h2><h3 id="1-什么是作用域"><a href="#1-什么是作用域" class="headerlink" title="1.什么是作用域"></a>1.什么是作用域</h3><p>作用域是在运行时代码中的某些特定部分中变量，函数和对象的可访问性。换句话说，作用域决定了代码区块中变量和其他资源的可见性。可能这两句话并不好理解，我们先来看个例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function outFun2() &#123;</span><br><span class="line">    var inVariable &#x3D; &quot;内层变量2&quot;;</span><br><span class="line">&#125;</span><br><span class="line">outFun2();&#x2F;&#x2F;要先执行这个函数，否则根本不知道里面是啥</span><br><span class="line">console.log(inVariable); &#x2F;&#x2F; Uncaught ReferenceError: inVariable is not defined</span><br></pre></td></tr></table></figure>
-
-<p>从上面的例子可以体会到作用域的概念，变量 inVariable 在全局作用域没有声明，所以在全局作用域下取值会报错。我们可以这样理解：<strong>作用域就是一个独立的地盘，让变量不会外泄、暴露出去</strong>。也就是说<strong>作用域最大的用处就是隔离变量，不同作用域下同名变量不会有冲突。</strong></p>
-<p><strong>ES6 之前 JavaScript 没有块级作用域,只有全局作用域和函数作用域</strong>。ES6 的到来，为我们提供了‘块级作用域’,可通过新增命令 let 和 const 来体现。</p>
-<h3 id="2-全局作用域和函数作用域"><a href="#2-全局作用域和函数作用域" class="headerlink" title="2.全局作用域和函数作用域"></a>2.全局作用域和函数作用域</h3><p>在代码中任何地方都能访问到的对象拥有全局作用域，一般来说以下几种情形拥有全局作用域：</p>
-<ul>
-<li>最外层函数 和在最外层函数外面定义的变量拥有全局作用域</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">var outVariable &#x3D; &quot;我是最外层变量&quot;; &#x2F;&#x2F;最外层变量</span><br><span class="line">function outFun() &#123; &#x2F;&#x2F;最外层函数</span><br><span class="line">    var inVariable &#x3D; &quot;内层变量&quot;;</span><br><span class="line">    function innerFun() &#123; &#x2F;&#x2F;内层函数</span><br><span class="line">        console.log(inVariable);</span><br><span class="line">    &#125;</span><br><span class="line">    innerFun();</span><br><span class="line">&#125;</span><br><span class="line">console.log(outVariable); &#x2F;&#x2F;我是最外层变量</span><br><span class="line">outFun(); &#x2F;&#x2F;内层变量</span><br><span class="line">console.log(inVariable); &#x2F;&#x2F;inVariable is not defined</span><br><span class="line">innerFun(); &#x2F;&#x2F;innerFun is not defined</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>所有末定义直接赋值的变量自动声明为拥有全局作用域</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function outFun2() &#123;</span><br><span class="line">    variable &#x3D; &quot;未定义直接赋值的变量&quot;;</span><br><span class="line">    var inVariable2 &#x3D; &quot;内层变量2&quot;;</span><br><span class="line">&#125;</span><br><span class="line">outFun2();&#x2F;&#x2F;要先执行这个函数，否则根本不知道里面是啥</span><br><span class="line">console.log(variable); &#x2F;&#x2F;未定义直接赋值的变量</span><br><span class="line">console.log(inVariable2); &#x2F;&#x2F;inVariable2 is not defined</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>所有 window 对象的属性拥有全局作用域</li>
-</ul>
-<p>一般情况下，window 对象的内置属性都拥有全局作用域，例如 window.name、window.location、window.top 等等。</p>
-<p>全局作用域有个弊端：如果我们写了很多行 JS 代码，变量定义都没有用函数包括，那么它们就全部都在全局作用域中。这样就会 污染全局命名空间, 容易引起命名冲突。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 张三写的代码中</span><br><span class="line">var data &#x3D; &#123;a: 100&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 李四写的代码中</span><br><span class="line">var data &#x3D; &#123;x: true&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这就是为何 jQuery、Zepto 等库的源码，所有的代码都会放在<code>(function()&#123;....&#125;)()</code>中。因为放在里面的所有变量，都不会被外泄和暴露，不会污染到外面，不会对其他的库或者 JS 脚本造成影响。这是函数作用域的一个体现。</p>
-<p>函数作用域,是指声明在函数内部的变量，和全局作用域相反，局部作用域一般只在固定的代码片段内可访问到，最常见的例如函数内部。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">function doSomething()&#123;</span><br><span class="line">    var blogName&#x3D;&quot;浪里行舟&quot;;</span><br><span class="line">    function innerSay()&#123;</span><br><span class="line">        alert(blogName);</span><br><span class="line">    &#125;</span><br><span class="line">    innerSay();</span><br><span class="line">&#125;</span><br><span class="line">alert(blogName); &#x2F;&#x2F;脚本错误</span><br><span class="line">innerSay(); &#x2F;&#x2F;脚本错误</span><br></pre></td></tr></table></figure>
-
-<p><strong>作用域是分层的，内层作用域可以访问外层作用域的变量，反之则不行</strong>。我们看个例子，用泡泡来比喻作用域可能好理解一点：</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618568347878-7b1e69f1-82cd-44f5-8577-203aec5debf6.png#clientId=u86861ac7-38dd-4&from=drop&height=294&id=u853b9505&margin=%5Bobject%20Object%5D&originHeight=294&originWidth=461&originalType=binary&size=37264&status=done&style=none&taskId=u1902bc6f-4248-4373-9939-5f737f86482&width=461"></p>
-<p>最后输出的结果为 2, 4, 12</p>
-<ul>
-<li>泡泡 1 是全局作用域，有标识符 foo；</li>
-<li>泡泡 2 是作用域 foo，有标识符 a,bar,b；</li>
-<li>泡泡 3 是作用域 bar，仅有标识符 c。</li>
-</ul>
-<p>值得注意的是：<strong>块语句（大括号“｛｝”中间的语句），如 if 和 switch 条件语句或 for 和 while 循环语句，不像函数，它们不会创建一个新的作用域</strong>。在块语句中定义的变量将保留在它们已经存在的作用域中。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">if (true) &#123;</span><br><span class="line">    &#x2F;&#x2F; &#39;if&#39; 条件语句块不会创建一个新的作用域</span><br><span class="line">    var name &#x3D; &#39;Hammad&#39;; &#x2F;&#x2F; name 依然在全局作用域中</span><br><span class="line">&#125;</span><br><span class="line">console.log(name); &#x2F;&#x2F; logs &#39;Hammad&#39;</span><br></pre></td></tr></table></figure>
-
-<p>JS 的初学者经常需要花点时间才能习惯变量提升，而如果不理解这种特有行为，就可能导致 bug 。正因为如此， ES6 引入了块级作用域，让变量的生命周期更加可控。</p>
-<h3 id="3-块级作用域"><a href="#3-块级作用域" class="headerlink" title="3.块级作用域"></a>3.块级作用域</h3><p>块级作用域可通过新增命令 let 和 const 声明，所声明的变量在指定块的作用域外无法被访问。块级作用域在如下情况被创建：</p>
-<ol>
-<li>在一个函数内部</li>
-<li>在一个代码块（由一对花括号包裹）内部</li>
-</ol>
-<p>let 声明的语法与 var 的语法一致。你基本上可以用 let 来代替 var 进行变量声明，但会将变量的作用域限制在当前代码块中。块级作用域有以下几个特点：</p>
-<ul>
-<li>声明变量不会提升到代码块顶部</li>
-</ul>
-<p>let/const 声明并不会被提升到当前代码块的顶部，因此你需要手动将 let/const 声明放置到顶部，以便让变量在整个代码块内部可用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function getValue(condition) &#123;</span><br><span class="line">if (condition) &#123;</span><br><span class="line">let value &#x3D; &quot;blue&quot;;</span><br><span class="line">return value;</span><br><span class="line">&#125; else &#123;</span><br><span class="line">&#x2F;&#x2F; value 在此处不可用</span><br><span class="line">return null;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; value 在此处不可用</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>禁止重复声明</li>
-</ul>
-<p>如果一个标识符已经在代码块内部被定义，那么在此代码块内使用同一个标识符进行 let 声明就会导致抛出错误。例如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var count &#x3D; 30;</span><br><span class="line">let count &#x3D; 40; &#x2F;&#x2F; Uncaught SyntaxError: Identifier &#39;count&#39; has already been declared</span><br></pre></td></tr></table></figure>
-
-<p>在本例中， count 变量被声明了两次：一次使用 var ，另一次使用 let 。因为 let 不能在同一作用域内重复声明一个已有标识符，此处的 let 声明就会抛出错误。但如果在嵌套的作用域内使用 let 声明一个同名的新变量，则不会抛出错误。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var count &#x3D; 30;</span><br><span class="line">&#x2F;&#x2F; 不会抛出错误</span><br><span class="line">if (condition) &#123;</span><br><span class="line">let count &#x3D; 40;</span><br><span class="line">&#x2F;&#x2F; 其他代码</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>循环中的绑定块作用域的妙用</li>
-</ul>
-<p>开发者可能最希望实现 for 循环的块级作用域了，因为可以把声明的计数器变量限制在循环内，例如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">for (let i &#x3D; 0; i &lt; 10; i++) &#123;</span><br><span class="line">  &#x2F;&#x2F; ...</span><br><span class="line">&#125;</span><br><span class="line">console.log(i);</span><br><span class="line">&#x2F;&#x2F; ReferenceError: i is not defined</span><br></pre></td></tr></table></figure>
-
-<p>上面代码中，计数器 i 只在 for 循环体内有效，在循环体外引用就会报错。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var a &#x3D; [];</span><br><span class="line">for (var i &#x3D; 0; i &lt; 10; i++) &#123;</span><br><span class="line">  a[i] &#x3D; function () &#123;</span><br><span class="line">    console.log(i);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line">a[6](); &#x2F;&#x2F; 10</span><br></pre></td></tr></table></figure>
-
-<p>上面代码中，变量 i 是 var 命令声明的，在全局范围内都有效，所以全局只有一个变量 i。每一次循环，变量 i 的值都会发生改变，而循环内被赋给数组 a 的函数内部的 console.log(i)，里面的 i 指向的就是全局的 i。也就是说，所有数组 a 的成员里面的 i，指向的都是同一个 i，导致运行时输出的是最后一轮的 i 的值，也就是 10。</p>
-<p>如果使用 let，声明的变量仅在块级作用域内有效，最后输出的是 6。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var a &#x3D; [];</span><br><span class="line">for (let i &#x3D; 0; i &lt; 10; i++) &#123;</span><br><span class="line">  a[i] &#x3D; function () &#123;</span><br><span class="line">    console.log(i);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line">a[6](); &#x2F;&#x2F; 6</span><br></pre></td></tr></table></figure>
-
-<p>上面代码中，变量 i 是 let 声明的，当前的 i 只在本轮循环有效，所以每一次循环的 i 其实都是一个新的变量，所以最后输出的是 6。你可能会问，如果每一轮循环的变量 i 都是重新声明的，那它怎么知道上一轮循环的值，从而计算出本轮循环的值？这是因为 JavaScript 引擎内部会记住上一轮循环的值，初始化本轮的变量 i 时，就在上一轮循环的基础上进行计算。</p>
-<p>另外，for 循环还有一个特别之处，就是设置循环变量的那部分是一个父作用域，而循环体内部是一个单独的子作用域。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">for (let i &#x3D; 0; i &lt; 3; i++) &#123;</span><br><span class="line">  let i &#x3D; &#39;abc&#39;;</span><br><span class="line">  console.log(i);</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; abc</span><br><span class="line">&#x2F;&#x2F; abc</span><br><span class="line">&#x2F;&#x2F; abc</span><br></pre></td></tr></table></figure>
-
-<p>上面代码正确运行，输出了 3 次 abc。这表明函数内部的变量 i 与循环变量 i 不在同一个作用域，有各自单独的作用域。</p>
-<h2 id="作用域链"><a href="#作用域链" class="headerlink" title="作用域链"></a>作用域链</h2><h3 id="1-什么是自由变量"><a href="#1-什么是自由变量" class="headerlink" title="1.什么是自由变量"></a>1.什么是自由变量</h3><p>首先认识一下什么叫做 <strong>自由变量</strong> 。如下代码中，<code>console.log(a)</code>要得到 a 变量，但是在当前的作用域中没有定义 a（可对比一下 b）。当前作用域没有定义的变量，这成为 自由变量 。自由变量的值如何得到 —— 向父级作用域寻找（注意：这种说法并不严谨，下文会重点解释）。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var a &#x3D; 100</span><br><span class="line">function fn() &#123;</span><br><span class="line">    var b &#x3D; 200</span><br><span class="line">    console.log(a) &#x2F;&#x2F; 这里的a在这里就是一个自由变量</span><br><span class="line">    console.log(b)</span><br><span class="line">&#125;</span><br><span class="line">fn()</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-什么是作用域链"><a href="#2-什么是作用域链" class="headerlink" title="2.什么是作用域链"></a>2.什么是作用域链</h3><p>如果父级也没呢？再一层一层向上寻找，直到找到全局作用域还是没找到，就宣布放弃。这种一层一层的关系，就是 作用域链 。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">var a &#x3D; 100</span><br><span class="line">function F1() &#123;</span><br><span class="line">    var b &#x3D; 200</span><br><span class="line">    function F2() &#123;</span><br><span class="line">        var c &#x3D; 300</span><br><span class="line">        console.log(a) &#x2F;&#x2F; 自由变量，顺作用域链向父作用域找</span><br><span class="line">        console.log(b) &#x2F;&#x2F; 自由变量，顺作用域链向父作用域找</span><br><span class="line">        console.log(c) &#x2F;&#x2F; 本作用域的变量</span><br><span class="line">    &#125;</span><br><span class="line">    F2()</span><br><span class="line">&#125;</span><br><span class="line">F1()</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-关于自由变量的取值"><a href="#3-关于自由变量的取值" class="headerlink" title="3.关于自由变量的取值"></a>3.关于自由变量的取值</h3><p>关于自由变量的值，上文提到要到父作用域中取，其实有时候这种解释会产生歧义。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">var x &#x3D; 10</span><br><span class="line">function fn() &#123;</span><br><span class="line">  console.log(x)</span><br><span class="line">&#125;</span><br><span class="line">function show(f) &#123;</span><br><span class="line">  var x &#x3D; 20</span><br><span class="line">  (function() &#123;</span><br><span class="line">    f() &#x2F;&#x2F;10，而不是20</span><br><span class="line">  &#125;)()</span><br><span class="line">&#125;</span><br><span class="line">show(fn)</span><br></pre></td></tr></table></figure>
-
-<p>在 fn 函数中，取自由变量 x 的值时，要到哪个作用域中取？——要到创建 fn 函数的那个作用域中取，<strong>无论 fn 函数将在哪里调用</strong>。</p>
-<p>所以，不要在用以上说法了。相比而言，用这句话描述会更加贴切:<strong>要到创建这个函数的那个域”。 作用域中取值,这里强调的是“创建”，而不是“调用”</strong>，切记切记——其实这就是所谓的”静态作用域”</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">var a &#x3D; 10</span><br><span class="line">function fn() &#123;</span><br><span class="line">  var b &#x3D; 20</span><br><span class="line">  function bar() &#123;</span><br><span class="line">    console.log(a + b) &#x2F;&#x2F;30</span><br><span class="line">  &#125;</span><br><span class="line">  return bar</span><br><span class="line">&#125;</span><br><span class="line">var x &#x3D; fn(),</span><br><span class="line">  b &#x3D; 200</span><br><span class="line">x() &#x2F;&#x2F;bar()</span><br></pre></td></tr></table></figure>
-
-<p>fn()返回的是 bar 函数，赋值给 x。执行 x()，即执行 bar 函数代码。取 b 的值时，直接在 fn 作用域取出。取 a 的值时，试图在 fn 作用域取，但是取不到，只能转向创建 fn 的那个作用域中去查找，结果找到了,所以最后的结果是 30</p>
-<h2 id="作用域与执行上下文"><a href="#作用域与执行上下文" class="headerlink" title="作用域与执行上下文"></a>作用域与执行上下文</h2><p>许多开发人员经常混淆作用域和执行上下文的概念，误认为它们是相同的概念，但事实并非如此。</p>
-<p>我们知道 JavaScript 属于解释型语言，JavaScript 的执行分为：解释和执行两个阶段,这两个阶段所做的事并不一样：</p>
-<h3 id="解释阶段："><a href="#解释阶段：" class="headerlink" title="解释阶段："></a>解释阶段：</h3><ul>
-<li>词法分析</li>
-<li>语法分析</li>
-<li>作用域规则确定</li>
-</ul>
-<h3 id="执行阶段："><a href="#执行阶段：" class="headerlink" title="执行阶段："></a>执行阶段：</h3><ul>
-<li>创建执行上下文</li>
-<li>执行函数代码</li>
-<li>垃圾回收</li>
-</ul>
-<p>JavaScript 解释阶段便会确定作用域规则，因此作用域在函数定义时就已经确定了，而不是在函数调用时确定，但是执行上下文是函数执行之前创建的。执行上下文最明显的就是 this 的指向是执行时确定的。而作用域访问的变量是编写代码的结构确定的。</p>
-<p>作用域和执行上下文之间最大的区别是： <strong>执行上下文在运行时确定，随时可能改变；作用域在定义时就确定，并且不会改变</strong>。</p>
-<p>一个作用域下可能包含若干个上下文环境。有可能从来没有过上下文环境（函数从来就没有被调用过）；有可能有过，现在函数被调用完毕后，上下文环境被销毁了；有可能同时存在一个或多个（闭包）。<strong>同一个作用域下，不同的调用会产生不同的执行上下文环境，继而产生不同的变量的值</strong>。</p>
-<p><strong>给大家推荐一个好用的 BUG 监控工具</strong><a target="_blank" rel="noopener" href="https://www.fundebug.com/?utm_source=liao"><strong>Fundebug</strong></a><strong>，欢迎免费试用！</strong></p>
-<p>欢迎关注公众号：<strong>前端工匠</strong>，你的成长我们一起见证！如果你感觉有收获，欢迎给我打赏,以激励我更多输出优质开源内容</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618568367206-228fd607-a241-405c-9887-aa0d1698b534.png#clientId=u86861ac7-38dd-4&from=drop&id=u57884e8e&margin=%5Bobject%20Object%5D&originHeight=372&originWidth=1179&originalType=binary&size=533174&status=done&style=none&taskId=uf98150e8-7678-4277-9772-679cf28bd81"></p>
-<h2 id="参考文章和书籍"><a href="#参考文章和书籍" class="headerlink" title="参考文章和书籍"></a>参考文章和书籍</h2><ul>
-<li><a target="_blank" rel="noopener" href="http://www.cnblogs.com/wangfupeng1988/p/4001284.html">深入理解 javascript 原型和闭包系列</a></li>
-<li><a target="_blank" rel="noopener" href="https://juejin.im/book/6844733713780047886/section/6844733713830379533">Web 前端面试指南与高频考题解析</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/creeperyang/blog/issues/16">深入理解 JS 中声明提升、作用域（链）和关键字</a><code>this</code></li>
-<li><a target="_blank" rel="noopener" href="http://www.cnblogs.com/lhb25/archive/2011/09/06/javascript-scope-chain.html">JavaScript 开发进阶：理解 JavaScript 作用域和作用域链</a></li>
-<li><a target="_blank" rel="noopener" href="https://gaohaoyang.github.io/2015/05/20/scope/#top">JavaScript 作用域和作用域链</a></li>
-<li><a target="_blank" rel="noopener" href="https://book.douban.com/subject/27072230/">深入理解 ES6</a></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/16/yuque/v8%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Adam Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Adam">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/16/yuque/v8%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" class="post-title-link" itemprop="url">v8垃圾回收</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-16 14:57:33" itemprop="dateCreated datePublished" datetime="2021-04-16T14:57:33+08:00">2021-04-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 20:03:56" itemprop="dateModified" datetime="2021-04-26T20:03:56+08:00">2021-04-26</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>作为目前最流行的 JavaScript 引擎，V8 引擎从出现的那一刻起便广泛受到人们的关注，我们知道，JavaScript 可以高效地运行在浏览器和 Nodejs 这两大宿主环境中，也是因为背后有强大的 V8 引擎在为其保驾护航，甚至成就了 Chrome 在浏览器中的霸主地位。不得不说，V8 引擎为了追求极致的性能和更好的用户体验，为我们做了太多太多，从原始的<code>Full-codegen</code>和<code>Crankshaft</code>编译器升级为<code>Ignition</code>解释器和<code>TurboFan</code>编译器的强强组合，到隐藏类，内联缓存和<code>HotSpot</code>热点代码收集等一系列强有力的优化策略，V8 引擎正在努力降低整体的内存占用和提升到更高的运行性能。</p>
-<p>本篇主要是从 V8 引擎的垃圾回收机制入手，讲解一下在 JavaScript 代码执行的整个生命周期中 V8 引擎是采取怎样的垃圾回收策略来减少内存占比的，当然这部分的知识并不太影响我们写代码的流程，毕竟在一般情况下我们很少会遇到浏览器端出现内存溢出而导致程序崩溃的情况，但是至少我们对这方面有一定的了解之后，能增强我们在写代码过程中对减少内存占用，避免内存泄漏的主观意识，也许能够帮助你写出更加健壮和对 V8 引擎更加友好的代码。本文也是笔者在查阅资料巩固复习的过程中慢慢总结和整理出来的，若文中有错误的地方，还请指正。</p>
-<h3 id="1、为何需要垃圾回收"><a href="#1、为何需要垃圾回收" class="headerlink" title="1、为何需要垃圾回收"></a>1、为何需要垃圾回收</h3><p>我们知道，在 V8 引擎逐行执行 JavaScript 代码的过程中，当遇到函数的情况时，会为其创建一个函数执行上下文(Context)环境并添加到调用堆栈的栈顶，函数的作用域(handleScope)中包含了该函数中声明的所有变量，当该函数执行完毕后，对应的执行上下文从栈顶弹出，函数的作用域会随之销毁，其包含的所有变量也会统一释放并被自动回收。试想如果在这个作用域被销毁的过程中，其中的变量不被回收，即持久占用内存，那么必然会导致内存暴增，从而引发内存泄漏导致程序的性能直线下降甚至崩溃，因此内存在使用完毕之后理当归还给操作系统以保证内存的重复利用。</p>
-<blockquote>
-<p>这个过程就好比你向亲戚朋友借钱，借得多了却不按时归还，那么你再下次借钱的时候肯定没有那么顺利了，或者说你的亲戚朋友不愿意再借你了，导致你的手头有点儿紧(内存泄漏，性能下降)，所以说有借有还，再借不难嘛，毕竟出来混都是要还的。</p>
-</blockquote>
-<p>但是 JavaScript 作为一门高级编程语言，并不像 C 语言或 C++语言中需要手动地申请分配和释放内存，V8 引擎已经帮我们自动进行了内存的分配和管理，好让我们有更多的精力去专注于业务层面的复杂逻辑，这对于我们前端开发人员来说是一项福利，但是随之带来的问题也是显而易见的，那就是由于不用去手动管理内存，导致写代码的过程中不够严谨从而容易引发内存泄漏(毕竟这是别人对你的好，你没有付出过，又怎能体会得到？)。</p>
-<h3 id="2、V8-引擎的内存限制"><a href="#2、V8-引擎的内存限制" class="headerlink" title="2、V8 引擎的内存限制"></a>2、V8 引擎的内存限制</h3><p>虽然 V8 引擎帮助我们实现了自动的垃圾回收管理，解放了我们勤劳的双手，但 V8 引擎中的内存使用也并不是无限制的。具体来说，默认情况下，V8 引擎在<code>64</code>位系统下最多只能使用约<code>1.4GB</code>的内存，在<code>32</code>位系统下最多只能使用约<code>0.7GB</code>的内存，在这样的限制下，必然会导致在 node 中无法直接操作大内存对象，比如将一个<code>2GB</code>大小的文件全部读入内存进行字符串分析处理，即使物理内存高达<code>32GB</code>也无法充分利用计算机的内存资源，那么为什么会有这种限制呢？这个要回到 V8 引擎的设计之初，起初只是作为浏览器端 JavaScript 的执行环境，在浏览器端我们其实很少会遇到使用大量内存的场景，因此也就没有必要将最大内存设置得过高。但这只是一方面，其实还有另外两个主要的原因：</p>
-<ul>
-<li><code>JS单线程机制</code>：作为浏览器的脚本语言，JS 的主要用途是与用户交互以及操作 DOM，那么这也决定了其作为单线程的本质，单线程意味着执行的代码必须按顺序执行，在同一时间只能处理一个任务。试想如果 JS 是多线程的，一个线程在删除 DOM 元素的同时，另一个线程对该元素进行修改操作，那么必然会导致复杂的同步问题。既然 JS 是单线程的，那么也就意味着在 V8 执行垃圾回收时，程序中的其他各种逻辑都要进入暂停等待阶段，直到垃圾回收结束后才会再次重新执行 JS 逻辑。因此，由于 JS 的单线程机制，垃圾回收的过程阻碍了主线程逻辑的执行。</li>
-</ul>
-<blockquote>
-<p>虽然 JS 是单线程的，但是为了能够充分利用操作系统的多核 CPU 计算能力，在 HTML5 中引入了新的 Web Worker 标准，其作用就是为 JS 创造多线程环境，允许主线程创建 Worker 线程，将一些任务分配给后者运行。在主线程运行的同时，Worker 在后台运行，两者互不干扰。等到 Worker 线程完成计算任务，再把结果返回给主线程。这样的好处是， 一些计算密集型或高延迟的任务，被 Worker 线程负担，主线程(通常负责 UI 交互)就会很流畅，不会被阻塞或者拖慢。Web Worker 不是 JS 的一部分，而是通过 JS 访问的浏览器特性，其虽然创造了一个多线程的执行环境，但是子线程完全受主线程控制，不能访问浏览器特定的 API，例如操作 DOM，因此这个新标准并没有改变 JS 单线程的本质。</p>
-</blockquote>
-<ul>
-<li><code>垃圾回收机制</code>：垃圾回收本身也是一件非常耗时的操作，假设 V8 的堆内存为<code>1.5G</code>，那么 V8 做一次小的垃圾回收需要 50ms 以上，而做一次非增量式回收甚至需要 1s 以上，可见其耗时之久，而在这 1s 的时间内，浏览器一直处于等待的状态，同时会失去对用户的响应，如果有动画正在运行，也会造成动画卡顿掉帧的情况，严重影响应用程序的性能。因此如果内存使用过高，那么必然会导致垃圾回收的过程缓慢，也就会导致主线程的等待时间越长，浏览器也就越长时间得不到响应。</li>
-</ul>
-<p>基于以上两点，V8 引擎为了减少对应用的性能造成的影响，采用了一种比较粗暴的手段，那就是直接限制堆内存的大小，毕竟在浏览器端一般也不会遇到需要操作几个 G 内存这样的场景。但是在 node 端，涉及到的<code>I/O</code>操作可能会比浏览器端更加复杂多样，因此更有可能出现内存溢出的情况。不过也没关系，V8 为我们提供了可配置项来让我们手动地调整内存大小，但是需要在 node 初始化的时候进行配置，我们可以通过如下方式来手动设置。</p>
-<p>我们尝试在 node 命令行中输入以下命令：</p>
-<blockquote>
-<p>笔者本地安装的 node 版本为<code>v10.14.2</code>，可通过<code>node -v</code>查看本地 node 的版本号，不同版本可能会导致下面的命令会有所差异。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 该命令可以用来查看node中可用的V8引擎的选项及其含义</span><br><span class="line">node --v8-options</span><br></pre></td></tr></table></figure>
-
-<p>然后我们会在命令行窗口中看到大量关于 V8 的选项，这里我们暂且只关注图中红色选框中的几个选项：</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556392205-53d15a2e-dafc-456b-81c8-8198f4eae507.png#clientId=u856810d9-b761-4&from=drop&id=u4baad9aa&margin=%5Bobject%20Object%5D&originHeight=645&originWidth=562&originalType=binary&size=44221&status=done&style=none&taskId=ue255d879-02ff-4889-8e9e-46a02ad64dd"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 设置新生代内存中单个半空间的内存最小值，单位MB</span><br><span class="line">node --min-semi-space-size&#x3D;1024 xxx.js</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 设置新生代内存中单个半空间的内存最大值，单位MB</span><br><span class="line">node --max-semi-space-size&#x3D;1024 xxx.js</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 设置老生代内存最大值，单位MB</span><br><span class="line">node --max-old-space-size&#x3D;2048 xxx.js</span><br></pre></td></tr></table></figure>
-
-<p>通过以上方法便可以手动放宽 V8 引擎所使用的内存限制，同时 node 也为我们提供了<code>process.memoryUsage()</code>方法来让我们可以查看当前 node 进程所占用的实际内存大小。</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556402385-853c0ca9-4f7c-4ab7-bf08-0132221cb9fe.png#clientId=u856810d9-b761-4&from=drop&id=u8368831f&margin=%5Bobject%20Object%5D&originHeight=76&originWidth=561&originalType=binary&size=3536&status=done&style=none&taskId=u357f1167-4113-407a-b124-120b1572f2c"></p>
-<p>在上图中，包含的几个字段的含义分别如下所示，单位均为字节：</p>
-<ul>
-<li><code>heapTotal</code>：表示 V8 当前申请到的堆内存总大小。</li>
-<li><code>heapUsed</code>：表示当前内存使用量。</li>
-<li><code>external</code>：表示 V8 内部的 C++对象所占用的内存。</li>
-<li><code>rss(resident set size)</code>：表示驻留集大小，是给这个 node 进程分配了多少物理内存，这些物理内存中包含堆，栈和代码片段。对象，闭包等存于堆内存，变量存于栈内存，实际的 JavaScript 源代码存于代码段内存。使用 Worker 线程时，<code>rss</code>将会是一个对整个进程有效的值，而其他字段则只针对当前线程。</li>
-</ul>
-<blockquote>
-<p>在 JS 中声明对象时，该对象的内存就分配在堆中，如果当前已申请的堆内存已经不够分配新的对象，则会继续申请堆内存直到堆的大小超过 V8 的限制为止。</p>
-</blockquote>
-<h3 id="3、V8-的垃圾回收策略"><a href="#3、V8-的垃圾回收策略" class="headerlink" title="3、V8 的垃圾回收策略"></a>3、V8 的垃圾回收策略</h3><p>V8 的垃圾回收策略主要是基于<code>分代式垃圾回收机制</code>，其根据<strong>对象的存活时间</strong>将内存的垃圾回收进行不同的分代，然后对不同的分代采用不同的垃圾回收算法。</p>
-<h4 id="3-1-V8-的内存结构"><a href="#3-1-V8-的内存结构" class="headerlink" title="3.1 V8 的内存结构"></a>3.1 V8 的内存结构</h4><p>在 V8 引擎的堆结构组成中，其实除了<code>新生代</code>和<code>老生代</code>外，还包含其他几个部分，但是垃圾回收的过程主要出现在新生代和老生代，所以对于其他的部分我们没必要做太多的深入，有兴趣的小伙伴儿可以查阅下相关资料，V8 的内存结构主要由以下几个部分组成：</p>
-<ul>
-<li><code>新生代(new_space)</code>：大多数的对象开始都会被分配在这里，这个区域相对较小但是垃圾回收特别频繁，该区域被分为两半，一半用来分配内存，另一半用于在垃圾回收时将需要保留的对象复制过来。</li>
-<li><code>老生代(old_space)</code>：新生代中的对象在存活一段时间后就会被转移到老生代内存区，相对于新生代该内存区域的垃圾回收频率较低。老生代又分为<code>老生代指针区</code>和<code>老生代数据区</code>，前者包含大多数可能存在指向其他对象的指针的对象，后者只保存原始数据对象，这些对象没有指向其他对象的指针。</li>
-<li><code>大对象区(large_object_space)</code>：存放体积超越其他区域大小的对象，每个对象都会有自己的内存，垃圾回收不会移动大对象区。</li>
-<li><code>代码区(code_space)</code>：代码对象，会被分配在这里，唯一拥有执行权限的内存区域。</li>
-<li><code>map区(map_space)</code>：存放 Cell 和 Map，每个区域都是存放相同大小的元素，结构简单(这里没有做具体深入的了解，有清楚的小伙伴儿还麻烦解释下)。</li>
-</ul>
-<p>内存结构图如下所示：</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1618556410928-bcbf5ffb-24e9-4a53-afe9-5e0f67fce05d.jpeg#clientId=u856810d9-b761-4&from=drop&id=u997d73d0&margin=%5Bobject%20Object%5D&originHeight=808&originWidth=720&originalType=binary&size=48717&status=done&style=none&taskId=u2605fe1e-815e-4a97-9954-3bf2ff8d6cf"></p>
-<p>上图中的带斜纹的区域代表暂未使用的内存，新生代(new_space)被划分为了两个部分，其中一部分叫做 inactive new space，表示暂未激活的内存区域，另一部分为激活状态，为什么会划分为两个部分呢，在下一小节我们会讲到。</p>
-<h4 id="3-2-新生代"><a href="#3-2-新生代" class="headerlink" title="3.2 新生代"></a>3.2 新生代</h4><p>在 V8 引擎的内存结构中，新生代主要用于存放存活时间较短的对象。新生代内存是由两个<code>semispace(半空间)</code>构成的，内存最大值在<code>64</code>位系统和<code>32</code>位系统上分别为<code>32MB</code>和<code>16MB</code>，在新生代的垃圾回收过程中主要采用了<code>Scavenge</code>算法。</p>
-<p><code>Scavenge</code>算法是一种典型的牺牲空间换取时间的算法，对于老生代内存来说，可能会存储大量对象，如果在老生代中使用这种算法，势必会造成内存资源的浪费，但是在新生代内存中，大部分对象的生命周期较短，在时间效率上表现可观，所以还是比较适合这种算法。</p>
-<blockquote>
-<p>在<code>Scavenge</code>算法的具体实现中，主要采用了<code>Cheney</code>算法，它将新生代内存一分为二，每一个部分的空间称为<code>semispace</code>，也就是我们在上图中看见的 new_space 中划分的两个区域，其中处于激活状态的区域我们称为<code>From</code>空间，未激活(inactive new space)的区域我们称为<code>To</code>空间。这两个空间中，始终只有一个处于使用状态，另一个处于闲置状态。我们的程序中声明的对象首先会被分配到<code>From</code>空间，当进行垃圾回收时，如果<code>From</code>空间中尚有存活对象，则会被复制到<code>To</code>空间进行保存，非存活的对象会被自动回收。当复制完成后，<code>From</code>空间和<code>To</code>空间完成一次角色互换，<code>To</code>空间会变为新的<code>From</code>空间，原来的<code>From</code>空间则变为<code>To</code>空间。</p>
-</blockquote>
-<p>基于以上算法，我们可以画出如下的流程图：</p>
-<ul>
-<li>假设我们在<code>From</code>空间中分配了三个对象 A、B、C</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556417901-4764a14c-4c18-4238-aef9-c8b8f919bb17.png#clientId=u856810d9-b761-4&from=drop&id=u666fba20&margin=%5Bobject%20Object%5D&originHeight=140&originWidth=584&originalType=binary&size=3213&status=done&style=none&taskId=ude39435b-84fa-4766-8573-92259e0df56"></p>
-<ul>
-<li>当程序主线程任务第一次执行完毕后进入垃圾回收时，发现对象 A 已经没有其他引用，则表示可以对其进行回收</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556552186-c5995ca5-f6cc-42fd-b572-4495eb8e3743.png#clientId=u796c5444-3980-4&from=drop&id=u878ccebe&margin=%5Bobject%20Object%5D&originHeight=148&originWidth=584&originalType=binary&size=4085&status=done&style=none&taskId=u1bde79ac-b19d-4f93-b798-d64d79a4938"></p>
-<ul>
-<li>对象 B 和对象 C 此时依旧处于活跃状态，因此会被复制到<code>To</code>空间中进行保存</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556599984-e1642821-810b-4fc6-985b-d0dae7bcd14e.png#clientId=u796c5444-3980-4&from=drop&id=u21cd25e0&margin=%5Bobject%20Object%5D&originHeight=200&originWidth=584&originalType=binary&size=5733&status=done&style=none&taskId=ucc413b0b-d0ea-4acf-a275-327f48b7537"></p>
-<ul>
-<li>接下来将<code>From</code>空间中的所有非存活对象全部清除</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556605740-2591d281-a67f-492d-a5b4-be933130a798.png#clientId=u796c5444-3980-4&from=drop&id=u282b17e5&margin=%5Bobject%20Object%5D&originHeight=140&originWidth=584&originalType=binary&size=2998&status=done&style=none&taskId=u7213736d-4fa6-4547-8ed3-f6e37e1d245"></p>
-<ul>
-<li>此时<code>From</code>空间中的内存已经清空，开始和<code>To</code>空间完成一次角色互换</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556609297-7e5e4203-7206-4c3b-a2e6-8b5d98d1a54f.png#clientId=u796c5444-3980-4&from=drop&id=ud49d305f&margin=%5Bobject%20Object%5D&originHeight=142&originWidth=584&originalType=binary&size=3012&status=done&style=none&taskId=ucfdf71fa-2f0c-415e-aa25-433ab7c88b7"></p>
-<ul>
-<li>当程序主线程在执行第二个任务时，在<code>From</code>空间中分配了一个新对象 D</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556613855-439e5e39-12ae-46d8-a049-c7498c351a83.png#clientId=u796c5444-3980-4&from=drop&id=uc743071e&margin=%5Bobject%20Object%5D&originHeight=142&originWidth=584&originalType=binary&size=3376&status=done&style=none&taskId=u778168c0-31ae-4811-ac01-85eb29b20c9"></p>
-<ul>
-<li>任务执行完毕后再次进入垃圾回收，发现对象 D 已经没有其他引用，表示可以对其进行回收</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556617549-6777aebb-ab8e-4292-8df0-465f4507c80c.png#clientId=u796c5444-3980-4&from=drop&id=u65b43522&margin=%5Bobject%20Object%5D&originHeight=142&originWidth=584&originalType=binary&size=4154&status=done&style=none&taskId=ubca05d31-6ec7-47e2-81b5-ddfac69fee3"></p>
-<ul>
-<li>对象 B 和对象 C 此时依旧处于活跃状态，再次被复制到<code>To</code>空间中进行保存</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556621148-8d50818f-3fd7-47f4-b287-781685afd0d2.png#clientId=u796c5444-3980-4&from=drop&id=uda7418a7&margin=%5Bobject%20Object%5D&originHeight=198&originWidth=584&originalType=binary&size=5990&status=done&style=none&taskId=u305d4e64-ded8-45eb-9633-2bebcbd5848"></p>
-<ul>
-<li>再次将<code>From</code>空间中的所有非存活对象全部清除</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556625026-ee7ca11f-1e74-4550-b5bc-41bdd7f122f7.png#clientId=u796c5444-3980-4&from=drop&id=uee07d8d7&margin=%5Bobject%20Object%5D&originHeight=142&originWidth=584&originalType=binary&size=2959&status=done&style=none&taskId=u3ff100ac-c1de-4c1f-af19-f79961274c3"></p>
-<ul>
-<li><code>From</code>空间和<code>To</code>空间继续完成一次角色互换</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556629048-c47937bd-be13-40d0-8a63-d2b76a90a269.png#clientId=u796c5444-3980-4&from=drop&id=ua2901259&margin=%5Bobject%20Object%5D&originHeight=142&originWidth=584&originalType=binary&size=2955&status=done&style=none&taskId=ud81f688d-ca47-4720-b5b6-20386c3c3fd"></p>
-<p>通过以上的流程图，我们可以很清楚地看到，<code>Scavenge</code>算法的垃圾回收过程主要就是将存活对象在<code>From</code>空间和<code>To</code>空间之间进行复制，同时完成两个空间之间的角色互换，因此该算法的缺点也比较明显，浪费了一半的内存用于复制。</p>
-<h4 id="3-3-对象晋升"><a href="#3-3-对象晋升" class="headerlink" title="3.3 对象晋升"></a>3.3 对象晋升</h4><p>当一个对象在经过多次复制之后依旧存活，那么它会被认为是一个生命周期较长的对象，在下一次进行垃圾回收时，该对象会被直接转移到老生代中，这种对象从新生代转移到老生代的过程我们称之为<code>晋升</code>。</p>
-<p>对象晋升的条件主要有以下两个：</p>
-<ul>
-<li>对象是否经历过一次<code>Scavenge</code>算法</li>
-<li><code>To</code>空间的内存占比是否已经超过<code>25%</code></li>
-</ul>
-<p>默认情况下，我们创建的对象都会分配在<code>From</code>空间中，当进行垃圾回收时，在将对象从<code>From</code>空间复制到<code>To</code>空间之前，会先检查该对象的内存地址来判断是否已经经历过一次<code>Scavenge</code>算法，如果地址已经发生变动则会将该对象转移到老生代中，不会再被复制到<code>To</code>空间，可以用以下的流程图来表示：</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556633076-66423330-7e8a-4a25-8502-6c4b42b2cb95.png#clientId=u796c5444-3980-4&from=drop&id=u6ee2fff9&margin=%5Bobject%20Object%5D&originHeight=400&originWidth=540&originalType=binary&size=9876&status=done&style=none&taskId=u6ca12477-753c-4755-876f-96c5d406865"></p>
-<p>如果对象没有经历过<code>Scavenge</code>算法，会被复制到<code>To</code>空间，但是如果此时<code>To</code>空间的内存占比已经超过<code>25%</code>，则该对象依旧会被转移到老生代，如下图所示:</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556638016-da33991f-9844-4823-816b-cd17c17d0cc5.png#clientId=u796c5444-3980-4&from=drop&id=u644369fc&margin=%5Bobject%20Object%5D&originHeight=400&originWidth=480&originalType=binary&size=9415&status=done&style=none&taskId=u1b158474-8f22-4bfd-b198-94865150497"></p>
-<p>之所以有<code>25%</code>的内存限制是因为<code>To</code>空间在经历过一次<code>Scavenge</code>算法后会和<code>From</code>空间完成角色互换，会变为<code>From</code>空间，后续的内存分配都是在<code>From</code>空间中进行的，如果内存使用过高甚至溢出，则会影响后续对象的分配，因此超过这个限制之后对象会被直接转移到老生代来进行管理。</p>
-<h4 id="3-4-老生代"><a href="#3-4-老生代" class="headerlink" title="3.4 老生代"></a>3.4 老生代</h4><p>在老生代中，因为管理着大量的存活对象，如果依旧使用<code>Scavenge</code>算法的话，很明显会浪费一半的内存，因此已经不再使用<code>Scavenge</code>算法，而是采用新的算法<code>Mark-Sweep(标记清除)</code>和<code>Mark-Compact(标记整理)</code>来进行管理。</p>
-<p>在早前我们可能听说过一种算法叫做<code>引用计数</code>，该算法的原理比较简单，就是看对象是否还有其他引用指向它，如果没有指向该对象的引用，则该对象会被视为垃圾并被垃圾回收器回收，示例如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 创建了两个对象obj1和obj2，其中obj2作为obj1的属性被obj1引用，因此不会被垃圾回收</span><br><span class="line">let obj1 &#x3D; &#123;</span><br><span class="line">    obj2: &#123;</span><br><span class="line">        a: 1</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 创建obj3并将obj1赋值给obj3，让两个对象指向同一个内存地址</span><br><span class="line">let obj3 &#x3D; obj1;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 将obj1重新赋值，此时原来obj1指向的对象现在只由obj3来表示</span><br><span class="line">obj1 &#x3D; null;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 创建obj4并将obj3.obj2赋值给obj4</span><br><span class="line">&#x2F;&#x2F; 此时obj2所指向的对象有两个引用：一个是作为obj3的属性，另一个是变量obj4</span><br><span class="line">let obj4 &#x3D; obj3.obj2;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 将obj3重新赋值，此时本可以对obj3指向的对象进行回收，但是因为obj3.obj2被obj4所引用，因此依旧不能被回收</span><br><span class="line">obj3 &#x3D; null;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 此时obj3.obj2已经没有指向它的引用，因此obj3指向的对象在此时可以被回收</span><br><span class="line">obj4 &#x3D; null;</span><br></pre></td></tr></table></figure>
-
-<p>上述例子在经过一系列操作后最终对象会被垃圾回收，但是一旦我们碰到<code>循环引用</code>的场景，就会出现问题，我们看下面的例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function foo() &#123;</span><br><span class="line">    let a &#x3D; &#123;&#125;;</span><br><span class="line">    let b &#x3D; &#123;&#125;;</span><br><span class="line">    a.a1 &#x3D; b;</span><br><span class="line">    b.b1 &#x3D; a;</span><br><span class="line">&#125;</span><br><span class="line">foo();</span><br></pre></td></tr></table></figure>
-
-<p>这个例子中我们将对象<code>a</code>的<code>a1</code>属性指向对象<code>b</code>，将对象<code>b</code>的<code>b1</code>属性指向对象<code>a</code>，形成两个对象相互引用，在<code>foo</code>函数执行完毕后，函数的作用域已经被销毁，作用域中包含的变量<code>a</code>和<code>b</code>本应该可以被回收，但是因为采用了<code>引用计数</code>的算法，两个变量均存在指向自身的引用，因此依旧无法被回收，导致内存泄漏。</p>
-<p>因此为了避免循环引用导致的内存泄漏问题，截至 2012 年所有的现代浏览器均放弃了这种算法，转而采用新的<code>Mark-Sweep(标记清除)</code>和<code>Mark-Compact(标记整理)</code>算法。在上面循环引用的例子中，因为变量<code>a</code>和变量<code>b</code>无法从<code>window</code>全局对象访问到，因此无法对其进行标记，所以最终会被回收。</p>
-<p><code>Mark-Sweep(标记清除)</code>分为<code>标记</code>和<code>清除</code>两个阶段，在标记阶段会遍历堆中的所有对象，然后标记活着的对象，在清除阶段中，会将死亡的对象进行清除。<code>Mark-Sweep</code>算法主要是通过判断某个对象是否可以被访问到，从而知道该对象是否应该被回收，具体步骤如下：</p>
-<ul>
-<li>垃圾回收器会在内部构建一个<code>根列表</code>，用于从根节点出发去寻找那些可以被访问到的变量。比如在 JavaScript 中，<code>window</code>全局对象可以看成一个根节点。</li>
-<li>然后，垃圾回收器从所有根节点出发，遍历其可以访问到的子节点，并将其标记为活动的，根节点不能到达的地方即为非活动的，将会被视为垃圾。</li>
-<li>最后，垃圾回收器将会释放所有非活动的内存块，并将其归还给操作系统。</li>
-</ul>
-<blockquote>
-<p>以下几种情况都可以作为根节点：</p>
-</blockquote>
-<blockquote>
-<ol>
-<li>全局对象</li>
-<li>本地函数的局部变量和参数</li>
-<li>当前嵌套调用链上的其他函数的变量和参数</li>
-</ol>
-</blockquote>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/gif/21377586/1618556644747-c6a31323-b04d-4a34-9f74-4d980e9e15d4.gif#clientId=u796c5444-3980-4&from=drop&id=u08dc6f73&margin=%5Bobject%20Object%5D&originHeight=423&originWidth=800&originalType=binary&size=208377&status=done&style=none&taskId=udc49af91-b293-4544-830d-4e4c08d0e94"></p>
-<p>但是<code>Mark-Sweep</code>算法存在一个问题，就是在经历过一次标记清除后，内存空间可能会出现不连续的状态，因为我们所清理的对象的内存地址可能不是连续的，所以就会出现内存碎片的问题，导致后面如果需要分配一个大对象而空闲内存不足以分配，就会提前触发垃圾回收，而这次垃圾回收其实是没必要的，因为我们确实有很多空闲内存，只不过是不连续的。</p>
-<p>为了解决这种内存碎片的问题，<code>Mark-Compact(标记整理)</code>算法被提了出来，该算法主要就是用来解决内存的碎片化问题的，回收过程中将死亡对象清除后，在整理的过程中，会将活动的对象往堆内存的一端进行移动，移动完成后再清理掉边界外的全部内存，我们可以用如下流程图来表示：</p>
-<ul>
-<li>假设在老生代中有 A、B、C、D 四个对象</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556649389-a9d11901-305c-4569-aaca-b3b59772645e.png#clientId=u796c5444-3980-4&from=drop&id=u0a97ec42&margin=%5Bobject%20Object%5D&originHeight=142&originWidth=584&originalType=binary&size=2709&status=done&style=none&taskId=u1f5e86b6-447a-4f6d-9eb5-90649eba3af"></p>
-<ul>
-<li>在垃圾回收的<code>标记</code>阶段，将对象 A 和对象 C 标记为活动的</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556653279-b263985d-8d79-449a-8db3-d02d2ac083c5.png#clientId=u796c5444-3980-4&from=drop&id=ua776187b&margin=%5Bobject%20Object%5D&originHeight=142&originWidth=584&originalType=binary&size=4467&status=done&style=none&taskId=u6ace71ac-69b5-4180-9e0b-44961c9aaa1"></p>
-<ul>
-<li>在垃圾回收的<code>整理</code>阶段，将活动的对象往堆内存的一端移动</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556656810-6157a37c-bde0-4520-8b3a-6dac4d9e4ab0.png#clientId=u796c5444-3980-4&from=drop&id=u81f40d88&margin=%5Bobject%20Object%5D&originHeight=188&originWidth=584&originalType=binary&size=6086&status=done&style=none&taskId=u7a6925ff-d58e-4e71-8cf2-96b4719e797"></p>
-<ul>
-<li>在垃圾回收的<code>清除</code>阶段，将活动对象左侧的内存全部回收</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556660355-6811dad8-6df4-4287-9115-dc391dbc6bb2.png#clientId=u796c5444-3980-4&from=drop&id=ud4ecd8e3&margin=%5Bobject%20Object%5D&originHeight=142&originWidth=584&originalType=binary&size=3863&status=done&style=none&taskId=u6ad31a80-4161-474e-98aa-d680b0d8423"></p>
-<p>至此就完成了一次老生代垃圾回收的全部过程，我们在前文中说过，由于 JS 的单线程机制，垃圾回收的过程会阻碍主线程同步任务的执行，待执行完垃圾回收后才会再次恢复执行主任务的逻辑，这种行为被称为<code>全停顿(stop-the-world)</code>。在标记阶段同样会阻碍主线程的执行，一般来说，老生代会保存大量存活的对象，如果在标记阶段将整个堆内存遍历一遍，那么势必会造成严重的卡顿。</p>
-<p>因此，为了减少垃圾回收带来的停顿时间，V8 引擎又引入了<code>Incremental Marking(增量标记)</code>的概念，即将原本需要一次性遍历堆内存的操作改为增量标记的方式，先标记堆内存中的一部分对象，然后暂停，将执行权重新交给 JS 主线程，待主线程任务执行完毕后再从原来暂停标记的地方继续标记，直到标记完整个堆内存。这个理念其实有点像<code>React</code>框架中的<code>Fiber</code>架构，只有在浏览器的空闲时间才会去遍历<code>Fiber Tree</code>执行对应的任务，否则延迟执行，尽可能少地影响主线程的任务，避免应用卡顿，提升应用性能。</p>
-<p>得益于增量标记的好处，V8 引擎后续继续引入了<code>延迟清理(lazy sweeping)</code>和<code>增量式整理(incremental compaction)</code>，让清理和整理的过程也变成增量式的。同时为了充分利用多核 CPU 的性能，也将引入<code>并行标记</code>和<code>并行清理</code>，进一步地减少垃圾回收对主线程的影响，为应用提升更多的性能。</p>
-<h3 id="4、如何避免内存泄漏"><a href="#4、如何避免内存泄漏" class="headerlink" title="4、如何避免内存泄漏"></a>4、如何避免内存泄漏</h3><p>在我们写代码的过程中，基本上都不太会关注写出怎样的代码才能有效地避免内存泄漏，或者说浏览器和大部分的前端框架在底层已经帮助我们处理了常见的内存泄漏问题，但是我们还是有必要了解一下常见的几种避免内存泄漏的方式，毕竟在面试过程中也是经常考察的要点。</p>
-<h4 id="4-1-尽可能少地创建全局变量"><a href="#4-1-尽可能少地创建全局变量" class="headerlink" title="4.1 尽可能少地创建全局变量"></a>4.1 尽可能少地创建全局变量</h4><p>在 ES5 中以<code>var</code>声明的方式在全局作用域中创建一个变量时，或者在函数作用域中不以任何声明的方式创建一个变量时，都会无形地挂载到<code>window</code>全局对象上，如下所示：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var a &#x3D; 1; &#x2F;&#x2F; 等价于 window.a &#x3D; 1;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function foo() &#123;</span><br><span class="line">    a &#x3D; 1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>等价于</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function foo() &#123;</span><br><span class="line">    window.a &#x3D; 1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>我们在<code>foo</code>函数中创建了一个变量<code>a</code>但是忘记使用<code>var</code>来声明，此时会意想不到地创建一个全局变量并挂载到 window 对象上，另外还有一种比较隐蔽的方式来创建全局变量：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">function foo() &#123;</span><br><span class="line">    this.a &#x3D; 1;</span><br><span class="line">&#125;</span><br><span class="line">foo(); &#x2F;&#x2F; 相当于 window.foo()</span><br></pre></td></tr></table></figure>
-
-<p>当<code>foo</code>函数在调用时，它所指向的运行上下文环境为<code>window</code>全局对象，因此函数中的<code>this</code>指向的其实是<code>window</code>，也就无意创建了一个全局变量。当进行垃圾回收时，在标记阶段因为<code>window</code>对象可以作为根节点，在<code>window</code>上挂载的属性均可以被访问到，并将其标记为活动的从而常驻内存，因此也就不会被垃圾回收，只有在整个进程退出时全局作用域才会被销毁。如果你遇到需要必须使用全局变量的场景，那么请保证一定要在全局变量使用完毕后将其设置为<code>null</code>从而触发回收机制。</p>
-<h4 id="4-2-手动清除定时器"><a href="#4-2-手动清除定时器" class="headerlink" title="4.2 手动清除定时器"></a>4.2 手动清除定时器</h4><p>在我们的应用中经常会有使用<code>setTimeout</code>或者<code>setInterval</code>等定时器的场景，定时器本身是一个非常有用的功能，但是如果我们稍不注意，忘记在适当的时间手动清除定时器，那么很有可能就会导致内存泄漏，示例如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const numbers &#x3D; [];</span><br><span class="line">const foo &#x3D; function() &#123;</span><br><span class="line">    for(let i &#x3D; 0;i &lt; 100000;i++) &#123;</span><br><span class="line">        numbers.push(i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">window.setInterval(foo, 1000);</span><br></pre></td></tr></table></figure>
-
-<p>在这个示例中，由于我们没有手动清除定时器，导致回调任务会不断地执行下去，回调中所引用的<code>numbers</code>变量也不会被垃圾回收，最终导致<code>numbers</code>数组长度无限递增，从而引发内存泄漏。</p>
-<h4 id="4-3-少用闭包"><a href="#4-3-少用闭包" class="headerlink" title="4.3 少用闭包"></a>4.3 少用闭包</h4><p>闭包是 JS 中的一个高级特性，巧妙地利用闭包可以帮助我们实现很多高级功能。一般来说，我们在查找变量时，在本地作用域中查找不到就会沿着作用域链从内向外单向查找，但是闭包的特性可以让我们在外部作用域访问内部作用域中的变量，示例如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">function foo() &#123;</span><br><span class="line">    let local &#x3D; 123;</span><br><span class="line">    return function() &#123;</span><br><span class="line">        return local;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">const bar &#x3D; foo();</span><br><span class="line">console.log(bar()); &#x2F;&#x2F; -&gt; 123</span><br></pre></td></tr></table></figure>
-
-<p>在这个示例中，<code>foo</code>函数执行完毕后会返回一个匿名函数，该函数内部引用了<code>foo</code>函数中的局部变量<code>local</code>，并且通过变量<code>bar</code>来引用这个匿名的函数定义，通过这种闭包的方式我们就可以在<code>foo</code>函数的外部作用域中访问到它的局部变量<code>local</code>。一般情况下，当<code>foo</code>函数执行完毕后，它的作用域会被销毁，但是由于存在变量引用其返回的匿名函数，导致作用域无法得到释放，也就导致<code>local</code>变量无法回收，只有当我们取消掉对匿名函数的引用才会进入垃圾回收阶段。</p>
-<h4 id="4-4-清除-DOM-引用"><a href="#4-4-清除-DOM-引用" class="headerlink" title="4.4 清除 DOM 引用"></a>4.4 清除 DOM 引用</h4><p>以往我们在操作 DOM 元素时，为了避免多次获取 DOM 元素，我们会将 DOM 元素存储在一个数据字典中，示例如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const elements &#x3D; &#123;</span><br><span class="line">    button: document.getElementById(&#39;button&#39;)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">function removeButton() &#123;</span><br><span class="line">    document.body.removeChild(document.getElementById(&#39;button&#39;));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在这个示例中，我们想调用<code>removeButton</code>方法来清除<code>button</code>元素，但是由于在<code>elements</code>字典中存在对<code>button</code>元素的引用，所以即使我们通过<code>removeChild</code>方法移除了<code>button</code>元素，它其实还是依旧存储在内存中无法得到释放，只有我们手动清除对<code>button</code>元素的引用才会被垃圾回收。</p>
-<h4 id="4-5-弱引用"><a href="#4-5-弱引用" class="headerlink" title="4.5 弱引用"></a>4.5 弱引用</h4><p>通过前几个示例我们会发现如果我们一旦疏忽，就会容易地引发内存泄漏的问题，为此，在 ES6 中为我们新增了两个有效的数据结构<code>WeakMap</code>和<code>WeakSet</code>，就是为了解决内存泄漏的问题而诞生的。其表示<code>弱引用</code>，它的键名所引用的对象均是弱引用，弱引用是指垃圾回收的过程中不会将键名对该对象的引用考虑进去，只要所引用的对象没有其他的引用了，垃圾回收机制就会释放该对象所占用的内存。这也就意味着我们不需要关心<code>WeakMap</code>中键名对其他对象的引用，也不需要手动地进行引用清除，我们尝试在 node 中演示一下过程(参考阮一峰 ES6 标准入门中的示例，自己手动实现了一遍)。</p>
-<p>首先打开 node 命令行，输入以下命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node --expose-gc &#x2F;&#x2F; --expose-gc 表示允许手动执行垃圾回收机制</span><br></pre></td></tr></table></figure>
-
-<p>然后我们执行下面的代码。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 手动执行一次垃圾回收保证内存数据准确</span><br><span class="line">&gt; global.gc();</span><br><span class="line">undefined</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 查看当前占用的内存，主要关心heapUsed字段，大小约为4.4MB</span><br><span class="line">&gt; process.memoryUsage();</span><br><span class="line">&#123; rss: 21626880,</span><br><span class="line">  heapTotal: 7585792,</span><br><span class="line">  heapUsed: 4708440,</span><br><span class="line">  external: 8710 &#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 创建一个WeakMap</span><br><span class="line">&gt; let wm &#x3D; new WeakMap();</span><br><span class="line">undefined</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 创建一个数组并赋值给变量key</span><br><span class="line">&gt; let key &#x3D; new Array(1000000);</span><br><span class="line">undefined</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 将WeakMap的键名指向该数组</span><br><span class="line">&#x2F;&#x2F; 此时该数组存在两个引用，一个是key，一个是WeakMap的键名</span><br><span class="line">&#x2F;&#x2F; 注意WeakMap是弱引用</span><br><span class="line">&gt; wm.set(key, 1);</span><br><span class="line">WeakMap &#123; [items unknown] &#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 手动执行一次垃圾回收</span><br><span class="line">&gt; global.gc();</span><br><span class="line">undefined</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 再次查看内存占用大小，heapUsed已经增加到约12MB</span><br><span class="line">&gt; process.memoryUsage();</span><br><span class="line">&#123; rss: 30232576,</span><br><span class="line">  heapTotal: 17694720,</span><br><span class="line">  heapUsed: 13068464,</span><br><span class="line">  external: 8688 &#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 手动清除变量key对数组的引用</span><br><span class="line">&#x2F;&#x2F; 注意这里并没有清除WeakMap中键名对数组的引用</span><br><span class="line">&gt; key &#x3D; null;</span><br><span class="line">null</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 再次执行垃圾回收</span><br><span class="line">&gt; global.gc()</span><br><span class="line">undefined</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 查看内存占用大小，发现heapUsed已经回到了之前的大小(这里约为4.8M，原来为4.4M，稍微有些浮动)</span><br><span class="line">&gt; process.memoryUsage();</span><br><span class="line">&#123; rss: 22110208,</span><br><span class="line">  heapTotal: 9158656,</span><br><span class="line">  heapUsed: 5089752,</span><br><span class="line">  external: 8698 &#125;</span><br></pre></td></tr></table></figure>
-
-<p>在上述示例中，我们发现虽然我们没有手动清除<code>WeakMap</code>中的键名对数组的引用，但是内存依旧已经回到原始的大小，说明该数组已经被回收，那么这个也就是弱引用的具体含义了。</p>
-<h3 id="5、总结"><a href="#5、总结" class="headerlink" title="5、总结"></a>5、总结</h3><p>本文中主要讲解了一下 V8 引擎的垃圾回收机制，并分别从新生代和老生代讲述了不同分代中的垃圾回收策略以及对应的回收算法，之后列出了几种常见的避免内存泄漏的方式来帮助我们写出更加优雅的代码。如果你已经了解过垃圾回收相关的内容，那么这篇文章可以帮助你简单复习加深印象，如果没有了解过，那么笔者也希望这篇文章能够帮助到你了解一些代码层面之外的底层知识点，由于 V8 引擎的源码是用 C++实现的，所以笔者也就没有做这方面的深入了，有兴趣的小伙伴儿可以自行探究，文中有错误的地方，还希望能够在评论区指正。</p>
-<h3 id="6、交流"><a href="#6、交流" class="headerlink" title="6、交流"></a>6、交流</h3><p>如果你觉得这篇文章的内容对你有帮助，能否帮个忙关注一下笔者的公众号[<strong>前端之境</strong>]，每周都会努力原创一些前端技术干货，关注公众号后可以邀你加入前端技术交流群，我们可以一起互相交流，共同进步。</p>
-<p><strong>文章已同步更新至</strong><a target="_blank" rel="noopener" href="https://github.com/qq591468061/xwfe"><strong>Github 博客</strong></a><strong>，若觉文章尚可，欢迎前往 star！</strong></p>
-<p><strong>你的一个点赞，值得让我付出更多的努力！</strong></p>
-<p><strong>逆境中成长，只有不断地学习，才能成为更好的自己，与君共勉！</strong></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618556667285-bbce4363-750d-4a66-adc0-9e4a1f52d35e.png#clientId=u796c5444-3980-4&from=drop&id=uc14aed16&margin=%5Bobject%20Object%5D&originHeight=500&originWidth=900&originalType=binary&size=116998&status=done&style=none&taskId=u4c1805e7-8eae-4f97-bd20-55033247308"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/16/yuque/%E9%98%B2%E6%8A%96/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Adam Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Adam">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/16/yuque/%E9%98%B2%E6%8A%96/" class="post-title-link" itemprop="url">防抖</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-16 00:20:07" itemprop="dateCreated datePublished" datetime="2021-04-16T00:20:07+08:00">2021-04-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 20:03:56" itemprop="dateModified" datetime="2021-04-26T20:03:56+08:00">2021-04-26</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>防抖<br>作用：在多次触发事件的情况下，只执行一次</p>
-<h2 id="第一版"><a href="#第一版" class="headerlink" title="第一版"></a>第一版</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> debounce = <span class="function"><span class="keyword">function</span> (<span class="params">func</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> timer;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (timer) &#123;</span><br><span class="line">      <span class="built_in">clearTimeout</span>(timer);</span><br><span class="line">    &#125;</span><br><span class="line">    timer = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// func()</span></span><br><span class="line">      <span class="built_in">console</span>.log(<span class="built_in">this</span>);</span><br><span class="line">      func.apply(<span class="built_in">this</span>);</span><br><span class="line">    &#125;, <span class="number">1000</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> fun1 = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="built_in">this</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> debounceTask = debounce(fun1);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> input = <span class="built_in">document</span>.getElementById(<span class="string">&quot;input&quot;</span>);</span><br><span class="line">input.addEventListener(<span class="string">&quot;keydown&quot;</span>, debounceTask);</span><br></pre></td></tr></table></figure>
-
-<p>思路<br>首先定义一个变量   用于接收创建定时器的 id，方便清除定时器<br>在设置定时器前，先判断是否之前创建的定时器存在，如果存在就清除</p>
-<p><strong>问题</strong><br><strong>没有绑定 this</strong><br><strong>没有使用 apply 之前，this 默认指向 window</strong><br><strong>使用 apply 之后，this 就会指向函数执行的环境</strong></p>
-<h2 id="第二版"><a href="#第二版" class="headerlink" title="第二版"></a>第二版</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> debounce = <span class="function"><span class="keyword">function</span> (<span class="params">func, wait</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> timer;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">...args</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (timer) &#123;</span><br><span class="line">      <span class="built_in">clearTimeout</span>(timer);</span><br><span class="line">    &#125;</span><br><span class="line">    timer = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      func.apply(<span class="built_in">this</span>, args);</span><br><span class="line">    &#125;, wait);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>优化<br>两种情况： 1.用户在搜索问题时连续输入内容，在输入最后一个字符时执行函数，函数执行时间间隔小于指定的时间。 2.用户在 star 时，需要第一时间看到反馈，此函数需要立即执行，反馈情况给用户看,下一次调用时间间隔必须大于 wait 才会触发</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> button = <span class="built_in">document</span>.getElementById(<span class="string">&quot;button&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> start = <span class="built_in">document</span>.getElementById(<span class="string">&quot;star&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> divstatue = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (start.style.background == <span class="string">&quot;red&quot;</span>) &#123;</span><br><span class="line">    start.style.background = <span class="string">&quot;blue&quot;</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    start.style.background = <span class="string">&quot;red&quot;</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> debounce2 = <span class="function"><span class="keyword">function</span> (<span class="params">func, wait</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> context, arg;</span><br><span class="line">  <span class="keyword">var</span> timer;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> later = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    timer = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      timer = <span class="literal">null</span>;</span><br><span class="line">      func.apply(context, timer);</span><br><span class="line">    &#125;, wait);</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">...args</span>) </span>&#123;</span><br><span class="line">    context = <span class="built_in">this</span>;</span><br><span class="line">    arg = args;</span><br><span class="line">    <span class="keyword">if</span> (!timer) &#123;</span><br><span class="line">      func.apply(context, arg);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      later();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> debounceTask2 = deboncetest3(divstatue, <span class="number">1000</span>);</span><br><span class="line">button.addEventListener(<span class="string">&quot;click&quot;</span>, debounceTask2);</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1941,7 +1847,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">61</span>
+          <span class="site-state-item-count">64</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="1.String.fromCharCode()String 对象提供的静态方法（即定义在对象本身，而不是定义在对象实例的方法），主要是 String.fromCharCode()。该方法的参数是一个或多个数值，代表 Unicode 码点，返回值是这些码点组成的字符串。 12String.fromCharCode(104, 101, 108, 108, 111);&#x2F;&#x2F; &quot;hello&amp;quo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="String常用方法api">
+<meta property="og:url" content="http://example.com/2021/04/29/yuque/String%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95api/index.html">
+<meta property="og:site_name" content="Adam">
+<meta property="og:description" content="1.String.fromCharCode()String 对象提供的静态方法（即定义在对象本身，而不是定义在对象实例的方法），主要是 String.fromCharCode()。该方法的参数是一个或多个数值，代表 Unicode 码点，返回值是这些码点组成的字符串。 12String.fromCharCode(104, 101, 108, 108, 111);&#x2F;&#x2F; &quot;hello&amp;quo">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-29T05:06:47.000Z">
+<meta property="article:modified_time" content="2021-04-29T10:36:13.174Z">
+<meta property="article:author" content="Adam Blog">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/04/29/yuque/String%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95api/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>String常用方法api | Adam</title>
+  <meta name="referrer" content="no-referrer" />
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Adam</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/29/yuque/String%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95api/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          String常用方法api
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-29 13:06:47 / 修改时间：18:36:13" itemprop="dateCreated datePublished" datetime="2021-04-29T13:06:47+08:00">2021-04-29</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="1-String-fromCharCode"><a href="#1-String-fromCharCode" class="headerlink" title="1.String.fromCharCode()"></a>1.String.fromCharCode()</h1><p><strong>String 对象提供的静态方法（即定义在对象本身，而不是定义在对象实例的方法），主要是 String.fromCharCode()。该方法的参数是一个或多个数值，代表 Unicode 码点，返回值是这些码点组成的字符串。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">String</span>.fromCharCode(<span class="number">104</span>, <span class="number">101</span>, <span class="number">108</span>, <span class="number">108</span>, <span class="number">111</span>);</span><br><span class="line"><span class="comment">// &quot;hello&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="2-String-prototype-length"><a href="#2-String-prototype-length" class="headerlink" title="2.String.prototype.length"></a>2.String.prototype.length</h1><p>字符串实例的 length 属性返回字符串的长度。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;abc&quot;</span>.length; <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="3-String-prototype-charAt"><a href="#3-String-prototype-charAt" class="headerlink" title="3.String.prototype.charAt()"></a>3.String.prototype.charAt()</h1><p>charAt 方法返回指定位置的字符，参数是从 0 开始编号的位置。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> s = <span class="keyword">new</span> <span class="built_in">String</span>(<span class="string">&quot;abc&quot;</span>);</span><br><span class="line">s.charAt();</span><br><span class="line">a;</span><br><span class="line"><span class="built_in">console</span>.log(s);</span><br><span class="line"><span class="comment">// String &#123;&quot;abc&quot;&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="4-String-prototype-charCodeAt"><a href="#4-String-prototype-charCodeAt" class="headerlink" title="4.String.prototype.charCodeAt()"></a>4.String.prototype.charCodeAt()</h1><p><strong>charCodeAt()方法返回字符串指定位置的 Unicode 码点（十进制表示），相当于 String.fromCharCode()的逆操作。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;abc&quot;</span>.charCodeAt(<span class="number">1</span>); <span class="comment">// 98</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="5-String-prototype-concat"><a href="#5-String-prototype-concat" class="headerlink" title="5.String.prototype.concat()"></a>5.String.prototype.concat()</h1><p><strong>concat 方法用于连接两个字符串，返回一个新字符串，不改变原字符串。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;abc&quot;</span>.concat(<span class="string">&quot;bcd&quot;</span>);</span><br><span class="line"><span class="comment">// &quot;abcbcd&quot;</span></span><br><span class="line"><span class="string">&quot;abc&quot;</span>.concat(<span class="string">&quot;bcd&quot;</span>, <span class="string">&quot;dss&quot;</span>);</span><br><span class="line"><span class="comment">// &quot;abcbcddss&quot;</span></span><br><span class="line"><span class="string">&quot;abc&quot;</span>.concat(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);</span><br><span class="line"><span class="comment">// &quot;abc123&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="6-String-prototype-slice"><a href="#6-String-prototype-slice" class="headerlink" title="6.String.prototype.slice()"></a>6.String.prototype.slice()</h1><p><strong>slice()方法用于从原字符串取出子字符串并返回，不改变原字符串。它的第一个参数是子字符串的开始位置，第二个参数是子字符串的结束位置（不含该位置）。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;JavaScript&quot;</span>.slice(<span class="number">0</span>, <span class="number">4</span>); <span class="comment">// &quot;Java&quot;</span></span><br><span class="line"><span class="string">&quot;JavaScript&quot;</span>.slice(<span class="number">4</span>); <span class="comment">// &quot;Script&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="7-String-prototype-substring"><a href="#7-String-prototype-substring" class="headerlink" title="7.String.prototype.substring()"></a>7.String.prototype.substring()</h1><p><strong>substring 方法用于从原字符串取出子字符串并返回，不改变原字符串，跟 slice 方法很相像。它的第一个参数表示子字符串的开始位置，第二个位置表示结束位置（返回结果不含该位置）</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;Javascript&quot;</span>.substring(<span class="number">0</span>, <span class="number">4</span>); <span class="comment">// &quot;Java&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="8-String-prototype-substr"><a href="#8-String-prototype-substr" class="headerlink" title="8.String.prototype.substr()"></a>8.String.prototype.substr()</h1><p><strong>substr 方法用于从原字符串取出子字符串并返回，不改变原字符串，跟 slice 和 substring 方法的作用相同。</strong><br><strong>substr 方法的第一个参数是子字符串的开始位置（从 0 开始计算），第二个参数是子字符串的长度</strong>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;Javascript&quot;</span>.substr(<span class="number">0</span>, <span class="number">4</span>); <span class="comment">// &quot;Java&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="9-String-prototype-indexOf-，String-prototype-lastIndexOf"><a href="#9-String-prototype-indexOf-，String-prototype-lastIndexOf" class="headerlink" title="9.String.prototype.indexOf()，String.prototype.lastIndexOf()"></a>9.String.prototype.indexOf()，String.prototype.lastIndexOf()</h1><p><strong>indexOf 方法用于确定一个字符串在另一个字符串中第一次出现的位置，返回结果是匹配开始的位置。如果返回-1，就表示不匹配。</strong><br><strong>indexOf 方法还可以接受第二个参数，表示从该位置开始向后匹配。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;hello&quot;</span>.indexOf(<span class="string">&quot;o&quot;</span>); <span class="comment">// 4</span></span><br><span class="line"><span class="string">&quot;hello&quot;</span>.indexOf(<span class="string">&quot;h&quot;</span>, <span class="number">1</span>); <span class="comment">// -1</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>lastIndexOf 方法的用法跟 indexOf 方法一致，主要的区别是 lastIndexOf 从尾部开始匹配，indexOf 则是从头部开始匹配。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;hello world&quot;</span>.lastIndexOf(<span class="string">&quot;o&quot;</span>); <span class="comment">// 7</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="10-String-prototype-trim"><a href="#10-String-prototype-trim" class="headerlink" title="10.String.prototype.trim()"></a>10.String.prototype.trim()</h1><p><strong>trim 方法用于去除字符串两端的空格，返回一个新字符串，不改变原字符串。</strong><br><strong>该方法去除的不仅是空格，还包括制表符（\t、\v）、换行符（\n）和回车符（\r）。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;  hello world  &quot;</span>.trim();</span><br><span class="line"><span class="comment">// &quot;hello world&quot;</span></span><br><span class="line"><span class="string">&quot;\r\nabc \t&quot;</span>.trim(); <span class="comment">// &#x27;abc&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="11-String-prototype-toLowerCase-，String-prototype-toUpperCase"><a href="#11-String-prototype-toLowerCase-，String-prototype-toUpperCase" class="headerlink" title="11.String.prototype.toLowerCase()，String.prototype.toUpperCase()"></a>11.String.prototype.toLowerCase()，String.prototype.toUpperCase()</h1><p><strong>toLowerCase 方法用于将一个字符串全部转为小写，toUpperCase 则是全部转为大写。它们都返回一个新字符串，不改变原字符串。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;Hello World&quot;</span>.toLowerCase();</span><br><span class="line"><span class="comment">// &quot;hello world&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;Hello World&quot;</span>.toUpperCase();</span><br><span class="line"><span class="comment">// &quot;HELLO WORLD&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="12-String-prototype-match"><a href="#12-String-prototype-match" class="headerlink" title="12.String.prototype.match()"></a>12.String.prototype.match()</h1><p><strong>match 方法用于确定原字符串是否匹配某个子字符串，返回一个数组，成员为匹配的第一个字符串。如果没有找到匹配，则返回 null。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;hello&quot;</span>.match(<span class="string">&quot;ll&quot;</span>);</span><br><span class="line"><span class="comment">// [&quot;ll&quot;, index: 2, input: &quot;hello&quot;, groups: undefined]</span></span><br><span class="line"><span class="string">&quot;hello&quot;</span>.match(<span class="string">&quot;;;&quot;</span>);</span><br><span class="line"><span class="comment">// null</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>返回的数组还有 index 属性和 input 属性，分别表示匹配字符串开始的位置和原始字符串。</strong></p>
+<h1 id="13-String-prototype-search-，String-prototype-replace"><a href="#13-String-prototype-search-，String-prototype-replace" class="headerlink" title="13.String.prototype.search()，String.prototype.replace()"></a>13.String.prototype.search()，String.prototype.replace()</h1><p><strong>search 方法的用法基本等同于 match，但是返回值为匹配的第一个位置。如果没有找到匹配，则返回-1。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;hello&quot;</span>.search(<span class="string">&quot;ll&quot;</span>); <span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="14-String-prototype-split"><a href="#14-String-prototype-split" class="headerlink" title="14.String.prototype.split()"></a>14.String.prototype.split()</h1><p><strong>split 方法按照给定规则分割字符串，返回一个由分割出来的子字符串组成的数组。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;a|b|c&quot;</span>.split(<span class="string">&quot;|&quot;</span>); <span class="comment">// [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;]</span></span><br><span class="line"><span class="string">&quot;a|b|c&quot;</span>.split(<span class="string">&quot;&quot;</span>); <span class="comment">// [&quot;a&quot;, &quot;|&quot;, &quot;b&quot;, &quot;|&quot;, &quot;c&quot;]</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>replace 方法用于替换匹配的子字符串，一般情况下只替换第一个匹配（除非使用带有 g 修饰符的正则表达式）。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;aaa&quot;</span>.replace(<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>); <span class="comment">// &quot;baa&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="15-String-prototype-localeCompare"><a href="#15-String-prototype-localeCompare" class="headerlink" title="15.String.prototype.localeCompare()"></a>15.String.prototype.localeCompare()</h1><p><strong>localeCompare 方法用于比较两个字符串。它返回一个整数，如果小于 0，表示第一个字符串小于第二个字符串；如果等于 0，表示两者相等；如果大于 0，表示第一个字符串大于第二个字符串。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;apple&quot;</span>.localeCompare(<span class="string">&quot;banana&quot;</span>); <span class="comment">// -1</span></span><br><span class="line"><span class="string">&quot;apple&quot;</span>.localeCompare(<span class="string">&quot;apple&quot;</span>); <span class="comment">// 0</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="16-repeat"><a href="#16-repeat" class="headerlink" title="16.repeat()"></a>16.repeat()</h1>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/29/yuque/uglify%E5%8E%9F%E7%90%86/" rel="prev" title="uglify原理">
+      <i class="fa fa-chevron-left"></i> uglify原理
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/29/hello-world/" rel="next" title="Hello World">
+      Hello World <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-String-fromCharCode"><span class="nav-number">1.</span> <span class="nav-text">1.String.fromCharCode()</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-String-prototype-length"><span class="nav-number">2.</span> <span class="nav-text">2.String.prototype.length</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-String-prototype-charAt"><span class="nav-number">3.</span> <span class="nav-text">3.String.prototype.charAt()</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-String-prototype-charCodeAt"><span class="nav-number">4.</span> <span class="nav-text">4.String.prototype.charCodeAt()</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-String-prototype-concat"><span class="nav-number">5.</span> <span class="nav-text">5.String.prototype.concat()</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-String-prototype-slice"><span class="nav-number">6.</span> <span class="nav-text">6.String.prototype.slice()</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-String-prototype-substring"><span class="nav-number">7.</span> <span class="nav-text">7.String.prototype.substring()</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-String-prototype-substr"><span class="nav-number">8.</span> <span class="nav-text">8.String.prototype.substr()</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#9-String-prototype-indexOf-%EF%BC%8CString-prototype-lastIndexOf"><span class="nav-number">9.</span> <span class="nav-text">9.String.prototype.indexOf()，String.prototype.lastIndexOf()</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#10-String-prototype-trim"><span class="nav-number">10.</span> <span class="nav-text">10.String.prototype.trim()</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#11-String-prototype-toLowerCase-%EF%BC%8CString-prototype-toUpperCase"><span class="nav-number">11.</span> <span class="nav-text">11.String.prototype.toLowerCase()，String.prototype.toUpperCase()</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#12-String-prototype-match"><span class="nav-number">12.</span> <span class="nav-text">12.String.prototype.match()</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#13-String-prototype-search-%EF%BC%8CString-prototype-replace"><span class="nav-number">13.</span> <span class="nav-text">13.String.prototype.search()，String.prototype.replace()</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#14-String-prototype-split"><span class="nav-number">14.</span> <span class="nav-text">14.String.prototype.split()</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#15-String-prototype-localeCompare"><span class="nav-number">15.</span> <span class="nav-text">15.String.prototype.localeCompare()</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#16-repeat"><span class="nav-number">16.</span> <span class="nav-text">16.repeat()</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Adam Blog</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">64</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Adam Blog</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

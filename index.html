@@ -146,7 +146,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/26/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/29/hello-world/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -160,7 +160,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/04/26/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
+            <a href="/2021/04/29/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
         </h2>
 
         <div class="post-meta">
@@ -170,7 +170,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-04-26 20:03:11" itemprop="dateCreated datePublished" datetime="2021-04-26T20:03:11+08:00">2021-04-26</time>
+              <time title="创建时间：2021-04-29 18:35:30" itemprop="dateCreated datePublished" datetime="2021-04-29T18:35:30+08:00">2021-04-29</time>
             </span>
 
           
@@ -216,6 +216,395 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/29/yuque/String%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95api/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/29/yuque/String%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95api/" class="post-title-link" itemprop="url">String常用方法api</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-29 13:06:47 / 修改时间：18:36:13" itemprop="dateCreated datePublished" datetime="2021-04-29T13:06:47+08:00">2021-04-29</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="1-String-fromCharCode"><a href="#1-String-fromCharCode" class="headerlink" title="1.String.fromCharCode()"></a>1.String.fromCharCode()</h1><p><strong>String 对象提供的静态方法（即定义在对象本身，而不是定义在对象实例的方法），主要是 String.fromCharCode()。该方法的参数是一个或多个数值，代表 Unicode 码点，返回值是这些码点组成的字符串。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">String</span>.fromCharCode(<span class="number">104</span>, <span class="number">101</span>, <span class="number">108</span>, <span class="number">108</span>, <span class="number">111</span>);</span><br><span class="line"><span class="comment">// &quot;hello&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="2-String-prototype-length"><a href="#2-String-prototype-length" class="headerlink" title="2.String.prototype.length"></a>2.String.prototype.length</h1><p>字符串实例的 length 属性返回字符串的长度。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;abc&quot;</span>.length; <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="3-String-prototype-charAt"><a href="#3-String-prototype-charAt" class="headerlink" title="3.String.prototype.charAt()"></a>3.String.prototype.charAt()</h1><p>charAt 方法返回指定位置的字符，参数是从 0 开始编号的位置。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> s = <span class="keyword">new</span> <span class="built_in">String</span>(<span class="string">&quot;abc&quot;</span>);</span><br><span class="line">s.charAt();</span><br><span class="line">a;</span><br><span class="line"><span class="built_in">console</span>.log(s);</span><br><span class="line"><span class="comment">// String &#123;&quot;abc&quot;&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="4-String-prototype-charCodeAt"><a href="#4-String-prototype-charCodeAt" class="headerlink" title="4.String.prototype.charCodeAt()"></a>4.String.prototype.charCodeAt()</h1><p><strong>charCodeAt()方法返回字符串指定位置的 Unicode 码点（十进制表示），相当于 String.fromCharCode()的逆操作。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;abc&quot;</span>.charCodeAt(<span class="number">1</span>); <span class="comment">// 98</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="5-String-prototype-concat"><a href="#5-String-prototype-concat" class="headerlink" title="5.String.prototype.concat()"></a>5.String.prototype.concat()</h1><p><strong>concat 方法用于连接两个字符串，返回一个新字符串，不改变原字符串。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;abc&quot;</span>.concat(<span class="string">&quot;bcd&quot;</span>);</span><br><span class="line"><span class="comment">// &quot;abcbcd&quot;</span></span><br><span class="line"><span class="string">&quot;abc&quot;</span>.concat(<span class="string">&quot;bcd&quot;</span>, <span class="string">&quot;dss&quot;</span>);</span><br><span class="line"><span class="comment">// &quot;abcbcddss&quot;</span></span><br><span class="line"><span class="string">&quot;abc&quot;</span>.concat(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);</span><br><span class="line"><span class="comment">// &quot;abc123&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="6-String-prototype-slice"><a href="#6-String-prototype-slice" class="headerlink" title="6.String.prototype.slice()"></a>6.String.prototype.slice()</h1><p><strong>slice()方法用于从原字符串取出子字符串并返回，不改变原字符串。它的第一个参数是子字符串的开始位置，第二个参数是子字符串的结束位置（不含该位置）。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;JavaScript&quot;</span>.slice(<span class="number">0</span>, <span class="number">4</span>); <span class="comment">// &quot;Java&quot;</span></span><br><span class="line"><span class="string">&quot;JavaScript&quot;</span>.slice(<span class="number">4</span>); <span class="comment">// &quot;Script&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="7-String-prototype-substring"><a href="#7-String-prototype-substring" class="headerlink" title="7.String.prototype.substring()"></a>7.String.prototype.substring()</h1><p><strong>substring 方法用于从原字符串取出子字符串并返回，不改变原字符串，跟 slice 方法很相像。它的第一个参数表示子字符串的开始位置，第二个位置表示结束位置（返回结果不含该位置）</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;Javascript&quot;</span>.substring(<span class="number">0</span>, <span class="number">4</span>); <span class="comment">// &quot;Java&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="8-String-prototype-substr"><a href="#8-String-prototype-substr" class="headerlink" title="8.String.prototype.substr()"></a>8.String.prototype.substr()</h1><p><strong>substr 方法用于从原字符串取出子字符串并返回，不改变原字符串，跟 slice 和 substring 方法的作用相同。</strong><br><strong>substr 方法的第一个参数是子字符串的开始位置（从 0 开始计算），第二个参数是子字符串的长度</strong>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;Javascript&quot;</span>.substr(<span class="number">0</span>, <span class="number">4</span>); <span class="comment">// &quot;Java&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="9-String-prototype-indexOf-，String-prototype-lastIndexOf"><a href="#9-String-prototype-indexOf-，String-prototype-lastIndexOf" class="headerlink" title="9.String.prototype.indexOf()，String.prototype.lastIndexOf()"></a>9.String.prototype.indexOf()，String.prototype.lastIndexOf()</h1><p><strong>indexOf 方法用于确定一个字符串在另一个字符串中第一次出现的位置，返回结果是匹配开始的位置。如果返回-1，就表示不匹配。</strong><br><strong>indexOf 方法还可以接受第二个参数，表示从该位置开始向后匹配。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;hello&quot;</span>.indexOf(<span class="string">&quot;o&quot;</span>); <span class="comment">// 4</span></span><br><span class="line"><span class="string">&quot;hello&quot;</span>.indexOf(<span class="string">&quot;h&quot;</span>, <span class="number">1</span>); <span class="comment">// -1</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>lastIndexOf 方法的用法跟 indexOf 方法一致，主要的区别是 lastIndexOf 从尾部开始匹配，indexOf 则是从头部开始匹配。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;hello world&quot;</span>.lastIndexOf(<span class="string">&quot;o&quot;</span>); <span class="comment">// 7</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="10-String-prototype-trim"><a href="#10-String-prototype-trim" class="headerlink" title="10.String.prototype.trim()"></a>10.String.prototype.trim()</h1><p><strong>trim 方法用于去除字符串两端的空格，返回一个新字符串，不改变原字符串。</strong><br><strong>该方法去除的不仅是空格，还包括制表符（\t、\v）、换行符（\n）和回车符（\r）。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;  hello world  &quot;</span>.trim();</span><br><span class="line"><span class="comment">// &quot;hello world&quot;</span></span><br><span class="line"><span class="string">&quot;\r\nabc \t&quot;</span>.trim(); <span class="comment">// &#x27;abc&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="11-String-prototype-toLowerCase-，String-prototype-toUpperCase"><a href="#11-String-prototype-toLowerCase-，String-prototype-toUpperCase" class="headerlink" title="11.String.prototype.toLowerCase()，String.prototype.toUpperCase()"></a>11.String.prototype.toLowerCase()，String.prototype.toUpperCase()</h1><p><strong>toLowerCase 方法用于将一个字符串全部转为小写，toUpperCase 则是全部转为大写。它们都返回一个新字符串，不改变原字符串。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;Hello World&quot;</span>.toLowerCase();</span><br><span class="line"><span class="comment">// &quot;hello world&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;Hello World&quot;</span>.toUpperCase();</span><br><span class="line"><span class="comment">// &quot;HELLO WORLD&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="12-String-prototype-match"><a href="#12-String-prototype-match" class="headerlink" title="12.String.prototype.match()"></a>12.String.prototype.match()</h1><p><strong>match 方法用于确定原字符串是否匹配某个子字符串，返回一个数组，成员为匹配的第一个字符串。如果没有找到匹配，则返回 null。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;hello&quot;</span>.match(<span class="string">&quot;ll&quot;</span>);</span><br><span class="line"><span class="comment">// [&quot;ll&quot;, index: 2, input: &quot;hello&quot;, groups: undefined]</span></span><br><span class="line"><span class="string">&quot;hello&quot;</span>.match(<span class="string">&quot;;;&quot;</span>);</span><br><span class="line"><span class="comment">// null</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>返回的数组还有 index 属性和 input 属性，分别表示匹配字符串开始的位置和原始字符串。</strong></p>
+<h1 id="13-String-prototype-search-，String-prototype-replace"><a href="#13-String-prototype-search-，String-prototype-replace" class="headerlink" title="13.String.prototype.search()，String.prototype.replace()"></a>13.String.prototype.search()，String.prototype.replace()</h1><p><strong>search 方法的用法基本等同于 match，但是返回值为匹配的第一个位置。如果没有找到匹配，则返回-1。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;hello&quot;</span>.search(<span class="string">&quot;ll&quot;</span>); <span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="14-String-prototype-split"><a href="#14-String-prototype-split" class="headerlink" title="14.String.prototype.split()"></a>14.String.prototype.split()</h1><p><strong>split 方法按照给定规则分割字符串，返回一个由分割出来的子字符串组成的数组。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;a|b|c&quot;</span>.split(<span class="string">&quot;|&quot;</span>); <span class="comment">// [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;]</span></span><br><span class="line"><span class="string">&quot;a|b|c&quot;</span>.split(<span class="string">&quot;&quot;</span>); <span class="comment">// [&quot;a&quot;, &quot;|&quot;, &quot;b&quot;, &quot;|&quot;, &quot;c&quot;]</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>replace 方法用于替换匹配的子字符串，一般情况下只替换第一个匹配（除非使用带有 g 修饰符的正则表达式）。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;aaa&quot;</span>.replace(<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>); <span class="comment">// &quot;baa&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="15-String-prototype-localeCompare"><a href="#15-String-prototype-localeCompare" class="headerlink" title="15.String.prototype.localeCompare()"></a>15.String.prototype.localeCompare()</h1><p><strong>localeCompare 方法用于比较两个字符串。它返回一个整数，如果小于 0，表示第一个字符串小于第二个字符串；如果等于 0，表示两者相等；如果大于 0，表示第一个字符串大于第二个字符串。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;apple&quot;</span>.localeCompare(<span class="string">&quot;banana&quot;</span>); <span class="comment">// -1</span></span><br><span class="line"><span class="string">&quot;apple&quot;</span>.localeCompare(<span class="string">&quot;apple&quot;</span>); <span class="comment">// 0</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="16-repeat"><a href="#16-repeat" class="headerlink" title="16.repeat()"></a>16.repeat()</h1>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/29/yuque/uglify%E5%8E%9F%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/29/yuque/uglify%E5%8E%9F%E7%90%86/" class="post-title-link" itemprop="url">uglify原理</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-29 13:03:10 / 修改时间：18:36:13" itemprop="dateCreated datePublished" datetime="2021-04-29T13:03:10+08:00">2021-04-29</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="1-AST（抽象语法树）"><a href="#1-AST（抽象语法树）" class="headerlink" title="1. AST（抽象语法树）"></a>1. AST（抽象语法树）</h2><p>要想了解 JS 的压缩原理，需要首先了解 AST。<br>抽象语法树：AST（Abstract Syntax Tree)，是源代码的抽象语法结构的树状表现形式，这里特指编程语言的源代码。树上的每个节点都表示源代码中的一种结构。之所以说语法是「抽象」的，是因为这里的语法并不会表示出真实语法中出现的每个细节。<br>举个例子：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619672668724-5d3358d3-d081-4ee0-8dfb-5ea211241701.png#clientId=u345a0e7d-2a1d-4&from=paste&height=288&id=u08c9713a&margin=%5Bobject%20Object%5D&originHeight=288&originWidth=800&originalType=url&status=done&style=none&taskId=u7b2e6f9e-7023-443f-bad2-85b82471e5d&width=800"><br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619672668632-dfb7a922-3e21-4aa2-a90e-1f63de20b25d.png#clientId=u345a0e7d-2a1d-4&from=paste&height=599&id=u35c87bbd&margin=%5Bobject%20Object%5D&originHeight=599&originWidth=800&originalType=url&status=done&style=none&taskId=u89688d6a-a0a1-46a2-8ea2-8032c37b70d&width=800"><br>从上面两个例子中，可以看出 AST 是源代码根据其语法结构，省略一些细节（比如：括号没有生成节点），抽象成树形表达。抽象语法树在计算机科学中有很多应用，比如编译器、IDE、压缩代码、格式化代码等。[1]</p>
+<h2 id="2-代码压缩原理"><a href="#2-代码压缩原理" class="headerlink" title="2. 代码压缩原理"></a>2. 代码压缩原理</h2><p>了解了 AST 之后，我们再分析一下 JS 的代码压缩原理。简单的说，就是</p>
+<ol>
+<li>将 code 转换成 AST</li>
+<li>将 AST 进行优化，生成一个更小的 AST</li>
+<li>将新生成的 AST 再转化成 code<br>PS：具体的 AST 树大家可以在 astexplorer 上在线获得<br>babel，eslint，v8 的逻辑均与此类似，下图是我们引用了 babel 的转化示意图：<img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619672668742-e01926f8-b6e2-484e-8199-be950d1dc148.jpeg#clientId=u345a0e7d-2a1d-4&from=paste&height=332&id=uea97fb66&margin=%5Bobject%20Object%5D&originHeight=332&originWidth=800&originalType=url&status=done&style=none&taskId=ubdc3cbe5-e218-40ee-9e90-498a01e57ba&width=800"><br>以我们之前被质疑的代码为例，看看它在 uglify 中是怎么样一步一步被压缩的：</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// uglify-js的版本需要为2.x, 3.0之后uglifyjs不再暴露Compressor api</span></span><br><span class="line"><span class="comment">// 2.x的uglify不能自动解析es6，所以这里先切换成es5</span></span><br><span class="line"><span class="comment">// npm install uglify-js@2.x</span></span><br><span class="line"><span class="keyword">var</span> UglifyJS = <span class="built_in">require</span>(<span class="string">&quot;uglify-js&quot;</span>);</span><br><span class="line"><span class="comment">// 原始代码</span></span><br><span class="line"><span class="keyword">var</span> code = <span class="string">`var a;</span></span><br><span class="line"><span class="string">var x = &#123; b: 123 &#125;;</span></span><br><span class="line"><span class="string">a = 123,</span></span><br><span class="line"><span class="string">delete x`</span>;</span><br><span class="line"><span class="comment">// 通过 UglifyJS 把代码解析为 AST</span></span><br><span class="line"><span class="keyword">var</span> ast = UglifyJS.parse(code);</span><br><span class="line">ast.figure_out_scope();</span><br><span class="line"><span class="comment">// 转化为一颗更小的 AST 树</span></span><br><span class="line">compressor = UglifyJS.Compressor();</span><br><span class="line">ast = ast.transform(compressor);</span><br><span class="line"><span class="comment">// 再把 AST 转化为代码</span></span><br><span class="line">code = ast.print_to_string();</span><br><span class="line"><span class="comment">// var a,x=&#123;b:123&#125;;a=123,delete x;</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&quot;code&quot;</span>, code);</span><br></pre></td></tr></table></figure>
+
+<p>到这里，我们已经了解了 uglifyjs 的代码压缩原理，但是还没有解决一个问题——为什么某些语句间的分号会被转换为逗号，某些不会转换。这就涉及到了 uglifyjs 的压缩规则。</p>
+<h2 id="3-代码压缩规则"><a href="#3-代码压缩规则" class="headerlink" title="3. 代码压缩规则"></a>3. 代码压缩规则</h2><p>由于 uglifyjs 的代码压缩规则很多，我们这里只分析与本文中相关的部分:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">uglifyjs的全部压缩规则可以参见：</span><br><span class="line">《[解读uglifyJS（四）——Javascript代码压缩](https:&#x2F;&#x2F;rapheal.sinaapp.com&#x2F;2014&#x2F;05&#x2F;22&#x2F;uglifyjs-squeeze&#x2F;#more-705)》</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619672718992-6f322231-e031-4622-9fe6-93c5bed01720.png#clientId=u345a0e7d-2a1d-4&from=paste&height=145&id=u42935634&margin=%5Bobject%20Object%5D&originHeight=145&originWidth=800&originalType=url&status=done&style=none&taskId=u9312dfff-ac37-4f6a-b034-b454e30c000&width=800"><br>PS：在线 demo<br>这其中需要注意的是只有“表达式语句”才能被合并，那么什么是表达式语句呢？<br><strong>表达式 VS 语句 VS 表达式语句</strong><br>例如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a; <span class="comment">//返回a的值</span></span><br><span class="line">b + <span class="number">3</span>; <span class="comment">// 返回b+3的结果</span></span><br></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">if</span>(x &gt; <span class="number">0</span>) &#123;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i &lt; arr.length; i ++) &#123;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> a = <span class="number">123</span>;</span><br></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">   A();</span><br><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;();</span><br><span class="line"><span class="keyword">delete</span> x.b;</span><br><span class="line">b = b + <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+
+<p>综上所述，因为 a = 123 和 delete x 都是表达式语句，所以分号被转换为逗号。而 var x = {b:123}则因为是声明语句，所以和 a=123 不会合并，分号不会被转换。但 var x = {b:123}和第一行 var a 又触发了另外一条规则，<br>所以第一行和第二行会被合并为 var a,x={b:123}</p>
+<h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h2><p>在本文中，我们讨论了什么是抽象语法树，uglifyjs 的压缩原理，以及相应的压缩规则，最终明晰了为什么代码会被压缩成我们得到的样子，希望对大家有所帮助。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/28/yuque/Array%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95api/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/28/yuque/Array%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95api/" class="post-title-link" itemprop="url">Array常用方法api</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-28 13:22:31" itemprop="dateCreated datePublished" datetime="2021-04-28T13:22:31+08:00">2021-04-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-29 18:36:13" itemprop="dateModified" datetime="2021-04-29T18:36:13+08:00">2021-04-29</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="1-扩展运算符"><a href="#1-扩展运算符" class="headerlink" title="1.扩展运算符"></a>1.扩展运算符</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(...[<span class="number">1</span>, <span class="number">2</span>]); <span class="comment">// 1 2</span></span><br><span class="line"><span class="keyword">const</span> arr1 = [<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>];</span><br><span class="line"><span class="keyword">const</span> arr2 = [<span class="string">&quot;c&quot;</span>, <span class="string">&quot;d&quot;</span>];</span><br><span class="line"><span class="keyword">const</span> arr3 = arr1.concat(arr2);</span><br><span class="line"><span class="built_in">console</span>.log(...[arr3]); <span class="comment">// [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;]</span></span><br><span class="line"><span class="keyword">const</span> [a, b, c] = [...arr3];</span><br><span class="line"><span class="comment">// a : &quot;a&quot;</span></span><br><span class="line"><span class="comment">// b : &quot;b&quot;</span></span><br><span class="line"><span class="comment">// c : &quot;c&quot;</span></span><br><span class="line"><span class="keyword">const</span> d = [...<span class="string">&quot;hello&quot;</span>];</span><br><span class="line"><span class="comment">// [&quot;h&quot;, &quot;e&quot;, &quot;l&quot;, &quot;l&quot;, &quot;o&quot;]</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="2-Array-from"><a href="#2-Array-from" class="headerlink" title="2.Array.from()"></a>2.Array.from()</h1><p><strong>Array.from 方法用于将两类对象转为真正的数组：类似数组的对象（array-like object）和可遍历（iterable）的对象（包括 ES6 新增的数据结构 Set 和 Map）。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> arraylike = &#123;</span><br><span class="line">  <span class="number">0</span>: <span class="string">&quot;1&quot;</span>,</span><br><span class="line">  <span class="number">1</span>: <span class="string">&quot;2&quot;</span>,</span><br><span class="line">  length: <span class="number">2</span>,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">let</span> arr = <span class="built_in">Array</span>.from(arraylike);</span><br><span class="line"><span class="comment">// [&quot;1&quot;, &quot;2&quot;]</span></span><br><span class="line"><span class="built_in">Array</span>.from(<span class="string">&quot;hello&quot;</span>); <span class="comment">//[&quot;h&quot;, &quot;e&quot;, &quot;l&quot;, &quot;l&quot;, &quot;o&quot;]</span></span><br><span class="line"><span class="keyword">let</span> nameSet = <span class="keyword">new</span> <span class="built_in">Set</span>([<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>]);</span><br><span class="line"><span class="built_in">Array</span>.from(nameSet); <span class="comment">// [&quot;a&quot;, &quot;b&quot;]</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>Array.from 还可以接受第二个参数，作用类似于数组的 map 方法，用来对每个元素进行处理，将处理后的值放入返回的数组。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Array</span>.from([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], <span class="function">(<span class="params">x</span>) =&gt;</span> x * x); <span class="comment">// [1, 4, 9]</span></span><br><span class="line"><span class="built_in">Array</span>.from([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]).map(<span class="function">(<span class="params">x</span>) =&gt;</span> x * x); <span class="comment">// [1, 4, 9]</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="3-Array-of"><a href="#3-Array-of" class="headerlink" title="3.Array.of()"></a>3.Array.of()</h1><p><strong>Array.of()方法用于将一组值，转换为数组。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Array</span>.of(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>); <span class="comment">// [1，2，3]</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="4-数组实例的-copyWithin"><a href="#4-数组实例的-copyWithin" class="headerlink" title="4.数组实例的 copyWithin()"></a>4.数组实例的 copyWithin()</h1><p>数组实例的 copyWithin()方法，在当前数组内部，将指定位置的成员复制到其他位置（会覆盖原有成员），然后返回当前数组。也就是说，使用这个方法，会修改当前数组。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Array</span>.prototype.copyWithin(target, (start = <span class="number">0</span>), (end = <span class="built_in">this</span>.length));</span><br></pre></td></tr></table></figure>
+
+<p>它接受三个参数。</p>
+<ul>
+<li>target（必需）：从该位置开始替换数据。如果为负值，表示倒数。</li>
+<li>start（可选）：从该位置开始读取数据，默认为 0。如果为负值，表示从末尾开始计算。</li>
+<li>end（可选）：到该位置前停止读取数据，默认等于数组长度。如果为负值，表示从末尾开始计算。</li>
+</ul>
+<p>这三个参数都应该是数值，如果不是，会自动转为数值。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br><span class="line">  .copyWithin(<span class="number">0</span>, <span class="number">3</span>) <span class="comment">// [4, 5, 3, 4, 5]</span></span><br><span class="line">  [(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>)].copyWithin(<span class="number">0</span>, <span class="number">4</span>); <span class="comment">// [5, 5, 3, 4, 5]</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="5-数组实例的-find-和-findIndex"><a href="#5-数组实例的-find-和-findIndex" class="headerlink" title="5.数组实例的 find() 和 findIndex()"></a>5.数组实例的 find() 和 findIndex()</h1><p><strong>数组实例的 find 方法，用于找出第一个符合条件的数组成员。它的参数是一个回调函数，所有数组成员依次执行该回调函数，直到找出第一个返回值为 true 的成员，然后返回该成员。如果没有符合条件的成员，则返回 undefined。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">6</span>]</span><br><span class="line">  .find(<span class="function">(<span class="params">n</span>) =&gt;</span> n &gt; <span class="number">0</span>) <span class="comment">// 1</span></span><br><span class="line">  [(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">6</span>)].find(<span class="function">(<span class="params">n</span>) =&gt;</span> n &lt; <span class="number">0</span>) <span class="comment">// undefined</span></span><br><span class="line"></span><br><span class="line">  [(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">6</span>)].find(<span class="function"><span class="keyword">function</span> (<span class="params">value, index, arr</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> value &gt; <span class="number">1</span>;</span><br><span class="line">  &#125;); <span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>上面代码中，find 方法的回调函数可以接受三个参数，依次为当前的值、当前的位置和原数组。</strong><br><strong>数组实例的 findIndex 方法的用法与 find 方法非常类似，返回第一个符合条件的数组成员的位置，如果所有成员都不符合条件，则返回-1。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">5</span>, <span class="number">10</span>, <span class="number">15</span>].findIndex(<span class="function"><span class="keyword">function</span> (<span class="params">value, index, arr</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> value &gt; <span class="number">9</span>;</span><br><span class="line">&#125;); <span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>这两个方法都可以接受第二个参数，用来绑定回调函数的 this 对象。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">v</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> v &gt; <span class="built_in">this</span>.age;</span><br><span class="line">&#125;</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">19</span>, <span class="number">27</span>].find(f, &#123; <span class="attr">age</span>: <span class="number">26</span> &#125;); <span class="comment">// 27</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="6-数组实例的-fill"><a href="#6-数组实例的-fill" class="headerlink" title="6.数组实例的 fill()"></a>6.数组实例的 fill()</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>].fill(<span class="number">7</span>); <span class="comment">// [7,7,7]</span></span><br><span class="line"><span class="built_in">Array</span>(<span class="number">3</span>).fill(<span class="number">1</span>); <span class="comment">// [1,1,1]</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>fill 方法还可以接受第二个和第三个参数，用于指定填充的起始位置和结束位置。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>].fill(<span class="number">7</span>, <span class="number">1</span>, <span class="number">2</span>);</span><br><span class="line"><span class="comment">// [&#x27;a&#x27;, 7, &#x27;c&#x27;]</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>上面代码表示，fill 方法从 1 号位开始，向原数组填充 7，到 2 号位之前结束。</strong><br><strong>注意，如果填充的类型为对象，那么被赋值的是同一个内存地址的对象，而不是深拷贝对象。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> arr = <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="number">3</span>).fill(&#123; <span class="attr">name</span>: <span class="string">&quot;Mike&quot;</span> &#125;);</span><br><span class="line">arr[<span class="number">0</span>].name = <span class="string">&quot;Ben&quot;</span>;</span><br><span class="line">arr;</span><br><span class="line"><span class="comment">// [&#123;name: &quot;Ben&quot;&#125;, &#123;name: &quot;Ben&quot;&#125;, &#123;name: &quot;Ben&quot;&#125;]</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="7-数组实例的-entries-，keys-和-values"><a href="#7-数组实例的-entries-，keys-和-values" class="headerlink" title="7.数组实例的 entries()，keys() 和 values()"></a>7.数组实例的 entries()，keys() 和 values()</h1><p><strong>ES6 提供三个新的方法——entries()，keys()和 values()——用于遍历数组。它们都返回一个遍历器对象（详见《Iterator》一章），可以用 for…of 循环进行遍历，唯一的区别是 keys()是对键名的遍历、values()是对键值的遍历，entries()是对键值对的遍历。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> index <span class="keyword">of</span> [<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>].keys()) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(index);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 0</span></span><br><span class="line"><span class="comment">// 1</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> elem <span class="keyword">of</span> [<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>].values()) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(elem);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// a</span></span><br><span class="line"><span class="comment">// b</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> [index, elem] <span class="keyword">of</span> [<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>].entries()) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(index, elem);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 0 &quot;a&quot;</span></span><br><span class="line"><span class="comment">// 1 &quot;b&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>如果不使用 for…of 循环，可以手动调用遍历器对象的 next 方法，进行遍历。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> letter = [<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>];</span><br><span class="line"><span class="keyword">let</span> entries = letter.entries();</span><br><span class="line"><span class="built_in">console</span>.log(entries.next().value); <span class="comment">// [0, &#x27;a&#x27;]</span></span><br><span class="line"><span class="built_in">console</span>.log(entries.next().value); <span class="comment">// [1, &#x27;b&#x27;]</span></span><br><span class="line"><span class="built_in">console</span>.log(entries.next().value); <span class="comment">// [2, &#x27;c&#x27;]</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="8-数组实例的-includes"><a href="#8-数组实例的-includes" class="headerlink" title="8.数组实例的 includes()"></a>8.数组实例的 includes()</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">  .includes(<span class="number">1</span>) <span class="comment">// true</span></span><br><span class="line">  [(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)].includes(<span class="number">0</span>); <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>该方法的第二个参数表示搜索的起始位置，默认为 0。如果第二个参数为负数，则表示倒数的位置，如果这时它大于数组长度（比如第二个参数为-4，但数组长度为 3），则会重置为从 0 开始。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].includes(<span class="number">3</span>, <span class="number">3</span>); <span class="comment">// false</span></span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].includes(<span class="number">3</span>, -<span class="number">1</span>); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="9-数组实例的-flat-，flatMap"><a href="#9-数组实例的-flat-，flatMap" class="headerlink" title="9.数组实例的 flat()，flatMap()"></a>9.数组实例的 flat()，flatMap()</h1><p><strong>数组的成员有时还是数组，Array.prototype.flat()用于将嵌套的数组“拉平”，变成一维的数组。该方法返回一个新数组，对原数据没有影响。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, [<span class="number">3</span>, <span class="number">4</span>]].flat() <span class="comment">// [1,2,3,4]</span></span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, [<span class="number">3</span>, <span class="number">4</span>,[<span class="number">4</span>],[<span class="number">5</span>]]].flat(<span class="number">2</span>) <span class="comment">//  [1, 2, 3, 4, 4, 5]</span></span><br><span class="line">[<span class="number">1</span>, [<span class="number">2</span>, [<span class="number">3</span>]]].flat(<span class="literal">Infinity</span>) <span class="comment">// [1,2,3]</span></span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, , <span class="number">4</span>, <span class="number">5</span>].flat() <span class="comment">// [1,2,4,5]</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>flatMap()方法对原数组的每个成员执行一个函数（相当于执行 Array.prototype.map()），然后对返回值组成的数组执行 flat()方法。该方法返回一个新数组，不改变原数组。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>].flatMap(<span class="function">(<span class="params">x</span>) =&gt;</span> x * x); <span class="comment">// [4, 9, 16]</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="10-Array-prototype-sort-的排序稳定性"><a href="#10-Array-prototype-sort-的排序稳定性" class="headerlink" title="10.Array.prototype.sort() 的排序稳定性"></a>10.Array.prototype.sort() 的排序稳定性</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">10</span>, <span class="number">4</span>, <span class="number">2</span>]</span><br><span class="line">  .sort(<span class="function"><span class="keyword">function</span> (<span class="params">a1, a2</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a1 - a2;</span><br><span class="line">  &#125;) <span class="comment">// [1, 2, 4, 10]</span></span><br><span class="line">  [(<span class="number">1</span>, <span class="number">10</span>, <span class="number">4</span>, <span class="number">2</span>)].sort(<span class="function"><span class="keyword">function</span> (<span class="params">a1, a2</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a2 - a1;</span><br><span class="line">  &#125;); <span class="comment">// [10, 4, 2, 1]</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="11-Array-isArray"><a href="#11-Array-isArray" class="headerlink" title="11.Array.isArray()"></a>11.Array.isArray()</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Array</span>.isArray(&#123;&#125;); <span class="comment">// false</span></span><br><span class="line"><span class="built_in">Array</span>.isArray([]); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="12-valueOf-，toString"><a href="#12-valueOf-，toString" class="headerlink" title="12.valueOf()，toString()"></a>12.valueOf()，toString()</h1><p><strong>valueOf 方法是一个所有对象都拥有的方法，表示对该对象求值。不同对象的 valueOf 方法不尽一致，数组的 valueOf 方法返回数组本身。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>].valueOf()[</span><br><span class="line">  <span class="comment">// [1, 2, 3, 4]</span></span><br><span class="line">  (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line">].toString();</span><br><span class="line"><span class="comment">// &quot;1,2,3,4&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="13-push-，pop"><a href="#13-push-，pop" class="headerlink" title="13.push()，pop()"></a>13.push()，pop()</h1><p><strong>push 方法用于在数组的末端添加一个或多个元素，并返回添加新元素后的数组长度。注意，该方法会改变原数组。</strong><br><strong>pop 方法用于删除数组的最后一个元素，并返回该元素。注意，该方法会改变原数组。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> arr2 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line">arr2.push(<span class="number">4</span>);</span><br><span class="line"><span class="comment">// [1,2,3,4]</span></span><br><span class="line">arr2.pop();</span><br><span class="line"><span class="comment">// [1, 2, 3]</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="14-shift-，unshift"><a href="#14-shift-，unshift" class="headerlink" title="14.shift()，unshift()"></a>14.shift()，unshift()</h1><p>shift()方法用于删除数组的第一个元素，并返回该元素。注意，该方法会改变原数组。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> b = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line">b.shift(); <span class="comment">// 1</span></span><br><span class="line"><span class="built_in">console</span>.log(b); <span class="comment">// [2,3]</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>unshift()方法用于在数组的第一个位置添加元素，并返回添加新元素后的数组长度。注意，该方法会改变原数组。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> c = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line">c.unshift(<span class="number">5</span>); <span class="comment">// 4</span></span><br><span class="line"><span class="built_in">console</span>.log(c);</span><br><span class="line"><span class="comment">// [1,2,3,5]</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="15-join"><a href="#15-join" class="headerlink" title="15.join()"></a>15.join()</h1><p><strong>join()方法以指定参数作为分隔符，将所有数组成员连接为一个字符串返回。如果不提供参数，默认用逗号分隔。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>];</span><br><span class="line">a.join();</span><br><span class="line"><span class="comment">// 1,2,3,4</span></span><br><span class="line">a.join(<span class="string">&quot; &quot;</span>);</span><br><span class="line"><span class="comment">// 1 2 3 4</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>如果数组成员是 undefined 或 null 或空位，会被转成空字符串。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[<span class="literal">undefined</span>, <span class="literal">null</span>].join(<span class="string">&quot;&quot;</span>);</span><br><span class="line"><span class="comment">// &quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="16-concat"><a href="#16-concat" class="headerlink" title="16.concat()"></a>16.concat()</h1><p><strong>concat 方法用于多个数组的合并。它将新数组的成员，添加到原数组成员的后部，然后返回一个新数组，原数组不变。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> g = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line">g.concat(<span class="number">4</span>);</span><br><span class="line"><span class="comment">// [1,2,3,4]</span></span><br><span class="line">g.concat([<span class="number">5</span>]);</span><br><span class="line"><span class="comment">// [1, 2, 3, 5]</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>如果数组成员包括对象，concat 方法返回当前数组的一个浅拷贝。所谓“浅拷贝”，指的是新数组拷贝的是对象的引用。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> g = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"><span class="keyword">let</span> b = &#123; <span class="attr">a</span>: <span class="string">&quot;123&quot;</span> &#125;;</span><br><span class="line">g = g.concat(b);</span><br><span class="line"><span class="comment">// [1, 2, 3, &#123;…&#125;]</span></span><br><span class="line"><span class="built_in">console</span>.log(g[<span class="number">3</span>].a);</span><br><span class="line"><span class="comment">// &#123;a: &quot;123&quot;&#125;</span></span><br><span class="line">g3.a = <span class="string">&quot;1&quot;</span>;</span><br><span class="line"><span class="built_in">console</span>.log(b);</span><br><span class="line"><span class="comment">// a : &#x27;1&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="17-reverse"><a href="#17-reverse" class="headerlink" title="17.reverse()"></a>17.reverse()</h1><p><strong>reverse 方法用于颠倒排列数组元素，返回改变后的数组。注意，该方法将改变原数组。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> h = [<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>];</span><br><span class="line">h.reverse();</span><br><span class="line"><span class="comment">// [&quot;c&quot;, &quot;b&quot;, &quot;a&quot;]</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="18-slice"><a href="#18-slice" class="headerlink" title="18.slice()"></a>18.slice()</h1><p><strong>slice()方法用于提取目标数组的一部分，返回一个新数组，原数组不变。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arr.slice(start, end);</span><br></pre></td></tr></table></figure>
+
+<p><strong>它的第一个参数为起始位置（从 0 开始，会包括在返回的新数组之中），第二个参数为终止位置（但该位置的元素本身不包括在内）。如果省略第二个参数，则一直返回到原数组的最后一个成员。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>];</span><br><span class="line">a.slice(<span class="number">1</span>);</span><br><span class="line"><span class="comment">// [2,3,4]</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>slice()方法的一个重要应用，是将类似数组的对象转为真正的数组。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Array</span>.prototype.slice.call(&#123; <span class="number">0</span>: <span class="string">&quot;1&quot;</span>, <span class="number">1</span>: <span class="string">&quot;2&quot;</span>, <span class="attr">length</span>: <span class="number">2</span> &#125;);</span><br><span class="line"><span class="comment">// [&quot;1&quot;, &quot;2&quot;]</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="19-splice"><a href="#19-splice" class="headerlink" title="19.splice()"></a>19.splice()</h1><p><strong>splice()方法用于删除原数组的一部分成员，并可以在删除的位置添加新的数组成员，返回值是被删除的元素。注意，该方法会改变原数组。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arr.splice(start, count, addElement1, addElement2, ...);</span><br></pre></td></tr></table></figure>
+
+<p><strong>splice 的第一个参数是删除的起始位置（从 0 开始），第二个参数是被删除的元素个数。如果后面还有更多的参数，则表示这些就是要被插入数组的新元素。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> u = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>];</span><br><span class="line">u.splice(<span class="number">1</span>, <span class="number">2</span>);</span><br><span class="line"><span class="comment">// [2,3]</span></span><br><span class="line"><span class="built_in">console</span>.log(u);</span><br><span class="line"><span class="comment">// [1,4]</span></span><br><span class="line">u.push(<span class="number">2</span>, <span class="number">3</span>);</span><br><span class="line"><span class="comment">// [1,4,2,3]</span></span><br><span class="line">u.splice(<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line"><span class="comment">// [4,2]</span></span><br><span class="line"><span class="built_in">console</span>.log(u);</span><br><span class="line"><span class="comment">// [1, 1, 1, 3]</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="20-sort"><a href="#20-sort" class="headerlink" title="20.sort()"></a>20.sort()</h1><p><strong>sort 方法对数组成员进行排序，默认是按照字典顺序排序。排序后，原数组将被改变。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">&quot;d&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;a&quot;</span>]</span><br><span class="line">  .sort() <span class="comment">// [&#x27;a&#x27;,&#x27;b&#x27;,&#x27;c&#x27;,&#x27;d&#x27;]</span></span><br><span class="line">  [(<span class="number">5</span>, <span class="number">1</span>, <span class="number">8</span>, <span class="number">0</span>)].sort(); <span class="comment">// [0,1,5,8]</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="21-map"><a href="#21-map" class="headerlink" title="21.map()"></a>21.map()</h1><p><strong>map 方法将数组的所有成员依次传入参数函数，然后把每一次的执行结果组成一个新数组返回。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> m1 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line">m1.map(<span class="function"><span class="keyword">function</span> (<span class="params">elem, index, arr</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> elem * index;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// [0,2,6]</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="22-forEach"><a href="#22-forEach" class="headerlink" title="22.forEach()"></a>22.forEach()</h1><p><strong>forEach 方法与 map 方法很相似，也是对数组的所有成员依次执行参数函数。但是，forEach 方法不返回值，只用来操作数据。这就是说，如果数组遍历的目的是为了得到返回值，那么使用 map 方法，否则使用 forEach 方法。</strong><br><strong>forEach 的用法与 map 方法一致，参数是一个函数，该函数同样接受三个参数：当前值、当前位置、整个数组。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> out = [];</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].forEach(<span class="function"><span class="keyword">function</span> (<span class="params">elem</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">this</span>.push(elem * elem);</span><br><span class="line">&#125;, out);</span><br><span class="line"><span class="comment">// [1,4,9]</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>注意，forEach 方法无法中断执行，总是会将所有成员遍历完。如果希望符合某种条件时，就中断遍历，要使用 for 循环。</strong></p>
+<h1 id="23-filter"><a href="#23-filter" class="headerlink" title="23.filter()"></a>23.filter()</h1><p><strong>filter 方法用于过滤数组成员，满足条件的成员组成一个新数组返回。</strong><br><strong>它的参数是一个函数，所有数组成员依次执行该函数，返回结果为 true 的成员组成一个新数组返回。该方法不会改变原数组。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>].filter(<span class="function"><span class="keyword">function</span> (<span class="params">elem, index, arr</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> elem &gt; <span class="number">1</span>;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// [2,3,4,5]</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="24-some-，every"><a href="#24-some-，every" class="headerlink" title="24.some()，every()"></a>24.some()，every()</h1><p><strong>这两个方法类似“断言”（assert），返回一个布尔值，表示判断数组成员是否符合某种条件。</strong><br><strong>它们接受一个函数作为参数，所有数组成员依次执行该函数。该函数接受三个参数：当前成员、当前位置和整个数组，然后返回一个布尔值。</strong><br><strong>some 方法是只要一个成员的返回值是 true，则整个 some 方法的返回值就是 true，否则返回 false。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].some(<span class="function"><span class="keyword">function</span> (<span class="params">elem</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> elem &gt; <span class="number">1</span>;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>every 方法是所有成员的返回值都是 true，整个 every 方法才返回 true，否则返回 false。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].every(<span class="function"><span class="keyword">function</span> (<span class="params">elem</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> elem &gt; <span class="number">1</span>;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="25-reduce-，reduceRight"><a href="#25-reduce-，reduceRight" class="headerlink" title="25.reduce()，reduceRight()"></a>25.reduce()，reduceRight()</h1><p><strong>reduce 方法和 reduceRight 方法依次处理数组的每个成员，最终累计为一个值。它们的差别是，reduce 是从左到右处理（从第一个成员到最后一个成员），reduceRight 则是从右到左（从最后一个成员到第一个成员），其他完全一样。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>].reduce(<span class="function"><span class="keyword">function</span> (<span class="params">a1, a2</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> a1 + a2;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// 15</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="26-indexOf-，lastIndexOf"><a href="#26-indexOf-，lastIndexOf" class="headerlink" title="26.indexOf()，lastIndexOf()"></a>26.indexOf()，lastIndexOf()</h1><p>**indexOf 方法返回给定元素在数组中第一次出现的位置，如果没有出现则返回-1 **<br><strong>indexOf 方法还可以接受第二个参数，表示搜索的开始位置。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>].indexOf(<span class="number">1</span>)[</span><br><span class="line">  <span class="comment">// 0</span></span><br><span class="line">  (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>)</span><br><span class="line">].indexOf(<span class="number">5</span>, <span class="number">1</span>);</span><br><span class="line"><span class="comment">// 4</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>lastIndexOf 方法返回给定元素在数组中最后一次出现的位置，如果没有出现则返回-1。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>].lastIndexOf(<span class="number">5</span>);</span><br><span class="line"><span class="comment">// 4</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="27-总结图"><a href="#27-总结图" class="headerlink" title="27.总结图"></a>27.总结图</h1><p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619672235917-33ae37b0-6740-4040-af97-6b80eb16a7ac.png#clientId=u5f198714-ef64-4&from=paste&height=912&id=uf6695a7d&margin=%5Bobject%20Object%5D&name=image.png&originHeight=917&originWidth=823&originalType=binary&size=524360&status=done&style=none&taskId=u459400e2-8921-4dd7-a229-92597137029&width=818.5" alt="image.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619672246144-2a807e43-11a5-421f-b3e7-e72920d0c788.png#clientId=u5f198714-ef64-4&from=paste&height=1908&id=ud045c8ec&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1946&originWidth=1080&originalType=binary&size=865562&status=done&style=none&taskId=u7c8d3621-8d81-49e1-9257-e047cc5ab3b&width=1059" alt="image.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/26/yuque/Tree-Shaking%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5-%E5%AE%9E%E8%B7%B5%E7%AF%87/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -239,10 +628,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-04-26 14:05:39 / 修改时间：20:03:50" itemprop="dateCreated datePublished" datetime="2021-04-26T14:05:39+08:00">2021-04-26</time>
+              <time title="创建时间：2021-04-26 14:05:39" itemprop="dateCreated datePublished" datetime="2021-04-26T14:05:39+08:00">2021-04-26</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-29 18:36:13" itemprop="dateModified" datetime="2021-04-29T18:36:13+08:00">2021-04-29</time>
+              </span>
 
           
 
@@ -400,10 +795,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-04-26 01:04:35 / 修改时间：20:03:50" itemprop="dateCreated datePublished" datetime="2021-04-26T01:04:35+08:00">2021-04-26</time>
+              <time title="创建时间：2021-04-26 01:04:35" itemprop="dateCreated datePublished" datetime="2021-04-26T01:04:35+08:00">2021-04-26</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-29 18:36:13" itemprop="dateModified" datetime="2021-04-29T18:36:13+08:00">2021-04-29</time>
+              </span>
 
           
 
@@ -596,10 +997,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-04-26 00:26:40 / 修改时间：20:03:50" itemprop="dateCreated datePublished" datetime="2021-04-26T00:26:40+08:00">2021-04-26</time>
+              <time title="创建时间：2021-04-26 00:26:40" itemprop="dateCreated datePublished" datetime="2021-04-26T00:26:40+08:00">2021-04-26</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-29 18:36:14" itemprop="dateModified" datetime="2021-04-29T18:36:14+08:00">2021-04-29</time>
+              </span>
 
           
 
@@ -897,7 +1304,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 20:03:51" itemprop="dateModified" datetime="2021-04-26T20:03:51+08:00">2021-04-26</time>
+                <time title="修改时间：2021-04-29 18:36:14" itemprop="dateModified" datetime="2021-04-29T18:36:14+08:00">2021-04-29</time>
               </span>
 
           
@@ -1033,7 +1440,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 20:03:51" itemprop="dateModified" datetime="2021-04-26T20:03:51+08:00">2021-04-26</time>
+                <time title="修改时间：2021-04-29 18:36:14" itemprop="dateModified" datetime="2021-04-29T18:36:14+08:00">2021-04-29</time>
               </span>
 
           
@@ -1107,7 +1514,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 20:03:51" itemprop="dateModified" datetime="2021-04-26T20:03:51+08:00">2021-04-26</time>
+                <time title="修改时间：2021-04-29 18:36:14" itemprop="dateModified" datetime="2021-04-29T18:36:14+08:00">2021-04-29</time>
               </span>
 
           
@@ -1255,533 +1662,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/25/yuque/TCP%20%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF%EF%BC%88%E4%B8%8A%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Adam Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Adam">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/25/yuque/TCP%20%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF%EF%BC%88%E4%B8%8A%EF%BC%89/" class="post-title-link" itemprop="url">TCP 的那些事儿（上）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-25 22:19:58" itemprop="dateCreated datePublished" datetime="2021-04-25T22:19:58+08:00">2021-04-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 20:03:51" itemprop="dateModified" datetime="2021-04-26T20:03:51+08:00">2021-04-26</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>TCP 是一个巨复杂的协议，因为他要解决很多问题，而这些问题又带出了很多子问题和阴暗面。所以学习 TCP 本身是个比较痛苦的过程，但对于学习的过程却能让人有很多收获。关于 TCP 这个协议的细节，我还是推荐你去看<a target="_blank" rel="noopener" href="http://www.kohala.com/start/">W.Richard Stevens</a>的《<a target="_blank" rel="noopener" href="http://book.douban.com/subject/1088054/">TCP/IP 详解 卷 1：协议</a>》（当然，你也可以去读一下<a target="_blank" rel="noopener" href="http://tools.ietf.org/html/rfc793">RFC793</a>以及后面 N 多的 RFC）。另外，本文我会使用英文术语，这样方便你通过这些英文关键词来查找相关的技术文档。<br>之所以想写这篇文章，目的有三个，</p>
-<ul>
-<li>一个是想锻炼一下自己是否可以用简单的篇幅把这么复杂的 TCP 协议描清楚的能力。</li>
-<li>另一个是觉得现在的好多程序员基本上不会认认真真地读本书，喜欢快餐文化，所以，希望这篇快餐文章可以让你对 TCP 这个古典技术有所了解，并能体会到软件设计中的种种难处。并且你可以从中有一些软件设计上的收获。</li>
-<li>最重要的希望这些基础知识可以让你搞清很多以前一些似是而非的东西，并且你能意识到基础的重要。</li>
-</ul>
-<p>所以，本文不会面面俱到，只是对 TCP 协议、算法和原理的科普。<br>我本来只想写一个篇幅的文章的，但是 TCP 真 TMD 的复杂，比 C++复杂多了，这 30 多年来，各种优化变种争论和修改。所以，写着写着就发现只有砍成两篇。</p>
-<ul>
-<li>上篇中，主要向你介绍 TCP 协议的定义和丢包时的重传机制。</li>
-<li>下篇中，重点介绍 TCP 的流迭、拥塞处理。</li>
-</ul>
-<p>废话少说，首先，我们需要知道 TCP 在网络 OSI 的七层模型中的第四层——Transport 层，IP 在第三层——Network 层，ARP 在第二层——Data Link 层，在第二层上的数据，我们叫 Frame，在第三层上的数据叫 Packet，第四层的数据叫 Segment。<br>首先，我们需要知道，我们程序的数据首先会打到 TCP 的 Segment 中，然后 TCP 的 Segment 会打到 IP 的 Packet 中，然后再打到以太网 Ethernet 的 Frame 中，传到对端后，各个层解析自己的协议，然后把数据交给更高层的协议处理。</p>
-<h1 id="TCP-头格式"><a href="#TCP-头格式" class="headerlink" title="TCP 头格式"></a>TCP 头格式</h1><p>接下来，我们来看一下 TCP 头的格式<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619360435712-cb93875c-cbbb-4568-a93c-cd610d064896.jpeg#clientId=ud05b6d37-a831-4&from=paste&height=324&id=u73cb9979&margin=%5Bobject%20Object%5D&originHeight=324&originWidth=800&originalType=url&status=done&style=none&taskId=ub7a2e625-7c99-4e81-a419-5a010e35f15&width=800">TCP 头格式（<a target="_blank" rel="noopener" href="http://nmap.org/book/tcpip-ref.html">图片来源</a>）<br>你需要注意这么几点：</p>
-<ul>
-<li>TCP 的包是没有 IP 地址的，那是 IP 层上的事。但是有源端口和目标端口。</li>
-<li>一个 TCP 连接需要四个元组来表示是同一个连接（src_ip, src_port, dst_ip, dst_port）准确说是五元组，还有一个是协议。但因为这里只是说 TCP 协议，所以，这里我只说四元组。</li>
-<li>注意上图中的四个非常重要的东西：<ul>
-<li><strong>Sequence Number</strong>是包的序号，<strong>用来解决网络包乱序（reordering）问题。</strong></li>
-<li><strong>Acknowledgement Number</strong>就是 ACK——用于确认收到，<strong>用来解决不丢包的问题</strong>。</li>
-<li><strong>Window 又叫 Advertised-Window</strong>，也就是著名的滑动窗口（Sliding Window），<strong>用于解决流控的</strong>。</li>
-<li><strong>TCP Flag</strong>，也就是包的类型，<strong>主要是用于操控 TCP 的状态机的</strong>。</li>
-</ul>
-</li>
-</ul>
-<p>关于其它的东西，可以参看下面的图示<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619360435612-00cf3a4b-0003-418b-aa31-24ba052fe8c4.jpeg#clientId=ud05b6d37-a831-4&from=paste&height=245&id=u69ac5547&margin=%5Bobject%20Object%5D&originHeight=245&originWidth=800&originalType=url&status=done&style=none&taskId=u86f9dfbe-f310-4599-8fa7-c7a71241924&width=800"><br>（<a target="_blank" rel="noopener" href="http://nmap.org/book/tcpip-ref.html">图片来源</a>）</p>
-<h1 id="TCP-的状态机"><a href="#TCP-的状态机" class="headerlink" title="TCP 的状态机"></a>TCP 的状态机</h1><p>其实，<strong>网络上的传输是没有连接的，包括 TCP 也是一样的</strong>。而 TCP 所谓的“连接”，其实只不过是在通讯的双方维护一个“连接状态”，让它看上去好像有连接一样。所以，TCP 的状态变换是非常重要的。<br>下面是：“<strong>TCP 协议的状态机</strong>”（<a target="_blank" rel="noopener" href="http://www.tcpipguide.com/free/t_TCPOperationalOverviewandtheTCPFiniteStateMachineF-2.htm">图片来源</a>） 和 “<strong>TCP 建链接</strong>”、“<strong>TCP 断链接</strong>”、“<strong>传数据</strong>” 的对照图，我把两个图并排放在一起，这样方便在你对照着看。另外，下面这两个图非常非常的重要，你一定要记牢。（吐个槽：看到这样复杂的状态机，就知道这个协议有多复杂，复杂的东西总是有很多坑爹的事情，所以 TCP 协议其实也挺坑爹的）<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619360435478-bdc079d8-59eb-4c14-b331-a1da33d9d01c.png#clientId=ud05b6d37-a831-4&from=paste&height=401&id=u58631bd8&margin=%5Bobject%20Object%5D&originHeight=801&originWidth=562&originalType=url&status=done&style=none&taskId=u2e244c08-3758-4f85-b8af-bea88766a30&width=281"><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619360435742-10a18c36-7582-46d0-8722-b1765b434855.jpeg#clientId=ud05b6d37-a831-4&from=paste&height=488&id=u92e9d4bc&margin=%5Bobject%20Object%5D&originHeight=976&originWidth=875&originalType=url&status=done&style=none&taskId=ubbcb5cdf-a996-417b-9dc7-9d94bbdd3c0&width=437.5"><br>很多人会问，为什么建链接要 3 次握手，断链接需要 4 次挥手？</p>
-<ul>
-<li><strong>对于建链接的 3 次握手，</strong>主要是要初始化 Sequence Number 的初始值。通信的双方要互相通知对方自己的初始化的 Sequence Number（缩写为 ISN：Inital Sequence Number）——所以叫 SYN，全称 Synchronize Sequence Numbers。也就上图中的 x 和 y。这个号要作为以后的数据通信的序号，以保证应用层接收到的数据不会因为网络上的传输的问题而乱序（TCP 会用这个序号来拼接数据）。</li>
-<li><strong>对于 4 次挥手，</strong>其实你仔细看是 2 次，因为 TCP 是全双工的，所以，发送方和接收方都需要 Fin 和 Ack。只不过，有一方是被动的，所以看上去就成了所谓的 4 次挥手。如果两边同时断连接，那就会就进入到 CLOSING 状态，然后到达 TIME_WAIT 状态。下图是双方同时断连接的示意图（你同样可以对照着 TCP 状态机看）：</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619360435653-74f01dce-4151-4153-ae85-ef5f7c8934ef.png#clientId=ud05b6d37-a831-4&from=paste&height=526&id=u9a87d6d5&margin=%5Bobject%20Object%5D&originHeight=526&originWidth=666&originalType=url&status=done&style=none&taskId=u366cc996-5eb3-4b87-b5ff-af4b774637b&width=666"><br>两端同时断连接（<a target="_blank" rel="noopener" href="http://www.tcpipguide.com/free/t_TCPConnectionTermination-4.htm">图片来源</a>）<br>另外，有几个事情需要注意一下：</p>
-<ul>
-<li><strong>关于建连接时 SYN 超时</strong>。试想一下，如果 server 端接到了 clien 发的 SYN 后回了 SYN-ACK 后 client 掉线了，server 端没有收到 client 回来的 ACK，那么，这个连接处于一个中间状态，即没成功，也没失败。于是，server 端如果在一定时间内没有收到的 TCP 会重发 SYN-ACK。在 Linux 下，默认重试次数为 5 次，重试的间隔时间从 1s 开始每次都翻售，5 次的重试时间间隔为 1s, 2s, 4s, 8s, 16s，总共 31s，第 5 次发出后还要等 32s 都知道第 5 次也超时了，所以，总共需要 1s + 2s + 4s+ 8s+ 16s + 32s = 2^6 -1 = 63s，TCP 才会把断开这个连接。</li>
-<li><strong>关于 SYN Flood 攻击</strong>。一些恶意的人就为此制造了 SYN Flood 攻击——给服务器发了一个 SYN 后，就下线了，于是服务器需要默认等 63s 才会断开连接，这样，攻击者就可以把服务器的 syn 连接的队列耗尽，让正常的连接请求不能处理。于是，Linux 下给了一个叫<strong>tcp_syncookies</strong>的参数来应对这个事——当 SYN 队列满了后，TCP 会通过源地址端口、目标地址端口和时间戳打造出一个特别的 Sequence Number 发回去（又叫 cookie），如果是攻击者则不会有响应，如果是正常连接，则会把这个 SYN Cookie 发回来，然后服务端可以通过 cookie 建连接（即使你不在 SYN 队列中）。请注意，<strong>请先千万别用 tcp_syncookies 来处理正常的大负载的连接的情况</strong>。因为，synccookies 是妥协版的 TCP 协议，并不严谨。对于正常的请求，你应该调整三个 TCP 参数可供你选择，第一个是：tcp_synack_retries 可以用他来减少重试次数；第二个是：tcp_max_syn_backlog，可以增大 SYN 连接数；第三个是：tcp_abort_on_overflow 处理不过来干脆就直接拒绝连接了。</li>
-<li><strong>关于 ISN 的初始化</strong>。ISN 是不能 hard code 的，不然会出问题的——比如：如果连接建好后始终用 1 来做 ISN，如果 client 发了 30 个 segment 过去，但是网络断了，于是 client 重连，又用了 1 做 ISN，但是之前连接的那些包到了，于是就被当成了新连接的包，此时，client 的 Sequence Number 可能是 3，而 Server 端认为 client 端的这个号是 30 了。全乱了。<a target="_blank" rel="noopener" href="http://tools.ietf.org/html/rfc793">RFC793</a>中说，ISN 会和一个假的时钟绑在一起，这个时钟会在每 4 微秒对 ISN 做加一操作，直到超过 2^32，又从 0 开始。这样，一个 ISN 的周期大约是 4.55 个小时。因为，我们假设我们的 TCP Segment 在网络上的存活时间不会超过 Maximum Segment Lifetime（缩写为 MSL – <a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Maximum_Segment_Lifetime">Wikipedia 语条</a>），所以，只要 MSL 的值小于 4.55 小时，那么，我们就不会重用到 ISN。</li>
-<li><strong>关于 MSL 和  TIME_WAIT</strong>。通过上面的 ISN 的描述，相信你也知道 MSL 是怎么来的了。我们注意到，在 TCP 的状态图中，从 TIME_WAIT 状态到 CLOSED 状态，有一个超时设置，这个超时设置是 2*MSL（<a target="_blank" rel="noopener" href="http://tools.ietf.org/html/rfc793">RFC793</a>定义了 MSL 为 2 分钟，Linux 设置成了 30s）为什么要这有 TIME_WAIT？为什么不直接给转成 CLOSED 状态呢？主要有两个原因：1）TIME_WAIT 确保有足够的时间让对端收到了 ACK，如果被动关闭的那方没有收到 Ack，就会触发被动端重发 Fin，一来一去正好 2 个 MSL，2）有足够的时间让这个连接不会跟后面的连接混在一起（你要知道，有些自做主张的路由器会缓存 IP 数据包，如果连接被重用了，那么这些延迟收到的包就有可能会跟新连接混在一起）。你可以看看这篇文章《<a target="_blank" rel="noopener" href="http://www.serverframework.com/asynchronousevents/2011/01/time-wait-and-its-design-implications-for-protocols-and-scalable-servers.html">TIME_WAIT and its design implications for protocols and scalable client server systems</a>》</li>
-<li><strong>关于 TIME_WAIT 数量太多</strong>。从上面的描述我们可以知道，TIME_WAIT 是个很重要的状态，但是如果在大并发的短链接下，TIME_WAIT 就会太多，这也会消耗很多系统资源。只要搜一下，你就会发现，十有八九的处理方式都是教你设置两个参数，一个叫<strong>tcp_tw_reuse</strong>，另一个叫<strong>tcp_tw_recycle</strong>的参数，这两个参数默认值都是被关闭的，后者 recyle 比前者 resue 更为激进，resue 要温柔一些。另外，如果使用 tcp_tw_reuse，必需设置 tcp_timestamps=1，否则无效。这里，你一定要注意，<strong>打开这两个参数会有比较大的坑——可能会让 TCP 连接出一些诡异的问题</strong>（因为如上述一样，如果不等待超时重用连接的话，新的连接可能会建不上。正如<a target="_blank" rel="noopener" href="https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt">官方文档</a>上说的一样“<strong>It should not be changed without advice/request of technical experts</strong>”）。<ul>
-<li><strong>关于 tcp_tw_reuse</strong>。官方文档上说 tcp_tw_reuse 加上 tcp_timestamps（又叫 PAWS, for Protection Against Wrapped Sequence Numbers）可以保证协议的角度上的安全，但是你需要 tcp_timestamps 在两边都被打开（你可以读一下<a target="_blank" rel="noopener" href="http://lxr.free-electrons.com/ident?i=tcp_twsk_unique">tcp_twsk_unique</a>的源码）。我个人估计还是有一些场景会有问题。</li>
-<li><strong>关于 tcp_tw_recycle</strong>。如果是 tcp_tw_recycle 被打开了话，会假设对端开启了 tcp_timestamps，然后会去比较时间戳，如果时间戳变大了，就可以重用。但是，如果对端是一个 NAT 网络的话（如：一个公司只用一个 IP 出公网）或是对端的 IP 被另一台重用了，这个事就复杂了。建链接的 SYN 可能就被直接丢掉了（你可能会看到 connection time out 的错误）（如果你想观摩一下 Linux 的内核代码，请参看源码<a target="_blank" rel="noopener" href="http://lxr.free-electrons.com/ident?i=tcp_timewait_state_process">tcp_timewait_state_process</a>）。</li>
-<li><strong>关于 tcp_max_tw_buckets</strong>。这个是控制并发的 TIME_WAIT 的数量，默认值是 180000，如果超限，那么，系统会把多的给 destory 掉，然后在日志里打一个警告（如：time wait bucket table overflow），官网文档说这个参数是用来对抗 DDoS 攻击的。也说的默认值 180000 并不小。这个还是需要根据实际情况考虑。</li>
-</ul>
-</li>
-</ul>
-<p><strong>Again，使用 tcp_tw_reuse 和 tcp_tw_recycle 来解决 TIME_WAIT 的问题是非常非常危险的，因为这两个参数违反了 TCP 协议（</strong><a target="_blank" rel="noopener" href="http://tools.ietf.org/html/rfc1122">RFC 1122</a>**） **<br>其实，TIME_WAIT 表示的是你主动断连接，所以，这就是所谓的“不作死不会死”。试想，如果让对端断连接，那么这个破问题就是对方的了，呵呵。另外，如果你的服务器是于 HTTP 服务器，那么设置一个<a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/HTTP_persistent_connection">HTTP 的 KeepAlive</a>有多重要（浏览器会重用一个 TCP 连接来处理多个 HTTP 请求），然后让客户端去断链接（你要小心，浏览器可能会非常贪婪，他们不到万不得已不会主动断连接）。</p>
-<h1 id="数据传输中的-Sequence-Number"><a href="#数据传输中的-Sequence-Number" class="headerlink" title="数据传输中的 Sequence Number"></a>数据传输中的 Sequence Number</h1><p>下图是我从 Wireshark 中截了个我在访问 coolshell.cn 时的有数据传输的图给你看一下，SeqNum 是怎么变的。（使用 Wireshark 菜单中的 Statistics -&gt;Flow Graph… ）<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619360436840-9ad57394-22a9-4ea3-b7cb-3e1f3c4b2288.jpeg#clientId=ud05b6d37-a831-4&from=paste&height=181&id=u961b086c&margin=%5Bobject%20Object%5D&originHeight=361&originWidth=381&originalType=url&status=done&style=none&taskId=ufa11b3ce-ee94-4178-ba9a-f7fc169d625&width=190.5"><br>你可以看到，<strong>SeqNum 的增加是和传输的字节数相关的</strong>。上图中，三次握手后，来了两个 Len:1440 的包，而第二个包的 SeqNum 就成了 1441。然后第一个 ACK 回的是 1441，表示第一个 1440 收到了。<br><strong>注意</strong>：如果你用 Wireshark 抓包程序看 3 次握手，你会发现 SeqNum 总是为 0，不是这样的，Wireshark 为了显示更友好，使用了 Relative SeqNum——相对序号，你只要在右键菜单中的 protocol preference 中取消掉就可以看到“Absolute SeqNum”了</p>
-<h1 id="TCP-重传机制"><a href="#TCP-重传机制" class="headerlink" title="TCP 重传机制"></a>TCP 重传机制</h1><p>TCP 要保证所有的数据包都可以到达，所以，必需要有重传机制。<br>注意，接收端给发送端的 Ack 确认只会确认最后一个连续的包，比如，发送端发了 1,2,3,4,5 一共五份数据，接收端收到了 1，2，于是回 ack 3，然后收到了 4（注意此时 3 没收到），此时的 TCP 会怎么办？我们要知道，因为正如前面所说的，<strong>SeqNum 和 Ack 是以字节数为单位，所以 ack 的时候，不能跳着确认，只能确认最大的连续收到的包</strong>，不然，发送端就以为之前的都收到了。</p>
-<h2 id="超时重传机制"><a href="#超时重传机制" class="headerlink" title="超时重传机制"></a>超时重传机制</h2><p>一种是不回 ack，死等 3，当发送方发现收不到 3 的 ack 超时后，会重传 3。一旦接收方收到 3 后，会 ack 回 4——意味着 3 和 4 都收到了。<br>但是，这种方式会有比较严重的问题，那就是因为要死等 3，所以会导致 4 和 5 即便已经收到了，而发送方也完全不知道发生了什么事，因为没有收到 Ack，所以，发送方可能会悲观地认为也丢了，所以有可能也会导致 4 和 5 的重传。<br>对此有两种选择：</p>
-<ul>
-<li>一种是仅重传 timeout 的包。也就是第 3 份数据。</li>
-<li>另一种是重传 timeout 后所有的数据，也就是第 3，4，5 这三份数据。</li>
-</ul>
-<p>这两种方式有好也有不好。第一种会节省带宽，但是慢，第二种会快一点，但是会浪费带宽，也可能会有无用功。但总体来说都不好。因为都在等 timeout，timeout 可能会很长（在下篇会说 TCP 是怎么动态地计算出 timeout 的）</p>
-<h2 id="快速重传机制"><a href="#快速重传机制" class="headerlink" title="快速重传机制"></a>快速重传机制</h2><p>于是，TCP 引入了一种叫<strong>Fast Retransmit</strong>的算法，<strong>不以时间驱动，而以数据驱动重传</strong>。也就是说，如果，包没有连续到达，就 ack 最后那个可能被丢了的包，如果发送方连续收到 3 次相同的 ack，就重传。Fast Retransmit 的好处是不用等 timeout 了再重传。<br>比如：如果发送方发出了 1，2，3，4，5 份数据，第一份先到送了，于是就 ack 回 2，结果 2 因为某些原因没收到，3 到达了，于是还是 ack 回 2，后面的 4 和 5 都到了，但是还是 ack 回 2，因为 2 还是没有收到，于是发送端收到了三个 ack=2 的确认，知道了 2 还没有到，于是就马上重转 2。然后，接收端收到了 2，此时因为 3，4，5 都收到了，于是 ack 回 6。示意图如下：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619360436853-3da25777-c070-4722-8c42-e3c5fc36707b.png#clientId=ud05b6d37-a831-4&from=paste&height=291&id=u83d95bef&margin=%5Bobject%20Object%5D&originHeight=291&originWidth=450&originalType=url&status=done&style=none&taskId=u246727c5-356f-42de-8b6a-e79c6b1156f&width=450"><br>Fast Retransmit 只解决了一个问题，就是 timeout 的问题，它依然面临一个艰难的选择，就是，是重传之前的一个还是重传所有的问题。对于上面的示例来说，是重传#2 呢还是重传#2，#3，#4，#5 呢？因为发送端并不清楚这连续的 3 个 ack(2)是谁传回来的？也许发送端发了 20 份数据，是#6，#10，#20 传来的呢。这样，发送端很有可能要重传从 2 到 20 的这堆数据（这就是某些 TCP 的实际的实现）。可见，这是一把双刃剑。</p>
-<h2 id="SACK-方法"><a href="#SACK-方法" class="headerlink" title="SACK 方法"></a>SACK 方法</h2><p>另外一种更好的方式叫：<strong>Selective Acknowledgment (SACK)<strong>（参看<a target="_blank" rel="noopener" href="http://tools.ietf.org/html/rfc2018">RFC 2018</a>），这种方式需要在 TCP 头里加一个 SACK 的东西，ACK 还是 Fast Retransmit 的 ACK，SACK 则是汇报收到的数据碎版。参看下图：<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619360436992-f9514dc3-2ff5-4739-b8b3-abeca5fcf8d9.jpeg#clientId=ud05b6d37-a831-4&from=paste&height=431&id=u3b552a87&margin=%5Bobject%20Object%5D&originHeight=577&originWidth=1024&originalType=url&status=done&style=none&taskId=ud770b3d1-7779-4030-932e-452d804ed7c&width=765"><br>这样，在发送端就可以根据回传的 SACK 来知道哪些数据到了，哪些没有到。于是就优化了 Fast Retransmit 的算法。当然，这个协议需要两边都支持。在 Linux 下，可以通过</strong>tcp_sack</strong>参数打开这个功能（Linux 2.4 后默认打开）。<br>这里还需要注意一个问题——<strong>接收方 Reneging，所谓 Reneging 的意思就是接收方有权把已经报给发送端 SACK 里的数据给丢了</strong>。这样干是不被鼓励的，因为这个事会把问题复杂化了，但是，接收方这么做可能会有些极端情况，比如要把内存给别的更重要的东西。<strong>所以，发送方也不能完全依赖 SACK，还是要依赖 ACK，并维护 Time-Out，如果后续的 ACK 没有增长，那么还是要把 SACK 的东西重传，另外，接收端这边永远不能把 SACK 的包标记为 Ack。</strong><br>注意：SACK 会消费发送方的资源，试想，如果一个攻击者给数据发送方发一堆 SACK 的选项，这会导致发送方开始要重传甚至遍历已经发出的数据，这会消耗很多发送端的资源。详细的东西请参看《<a target="_blank" rel="noopener" href="http://www.ibm.com/developerworks/cn/linux/l-tcp-sack/">TCP SACK 的性能权衡</a>》</p>
-<h2 id="Duplicate-SACK-–-重复收到数据的问题"><a href="#Duplicate-SACK-–-重复收到数据的问题" class="headerlink" title="Duplicate SACK – 重复收到数据的问题"></a>Duplicate SACK – 重复收到数据的问题</h2><p>Duplicate SACK 又称 D-SACK，<strong>其主要使用了 SACK 来告诉发送方有哪些数据被重复接收了</strong>。<a target="_blank" rel="noopener" href="http://www.ietf.org/rfc/rfc2883.txt">RFC-2883</a>里有详细描述和示例。下面举几个例子（来源于<a target="_blank" rel="noopener" href="http://www.ietf.org/rfc/rfc2883.txt">RFC-2883</a>）<br>D-SACK 使用了 SACK 的第一个段来做标志，</p>
-<ul>
-<li>如果 SACK 的第一个段的范围被 ACK 所覆盖，那么就是 D-SACK</li>
-<li>如果 SACK 的第一个段的范围被 SACK 的第二个段覆盖，那么就是 D-SACK</li>
-</ul>
-<p><strong>示例一：ACK 丢包</strong><br>下面的示例中，丢了两个 ACK，所以，发送端重传了第一个数据包（3000-3499），于是接收端发现重复收到，于是回了一个 SACK=3000-3500，因为 ACK 都到了 4000 意味着收到了 4000 之前的所有数据，所以这个 SACK 就是 D-SACK——旨在告诉发送端我收到了重复的数据，而且我们的发送端还知道，数据包没有丢，丢的是 ACK 包。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Transmitted  Received    ACK Sent</span><br><span class="line">Segment      Segment     (Including SACK Blocks)</span><br><span class="line"></span><br><span class="line">3000-34993000-34993500 (ACK dropped)</span><br><span class="line">3500-39993500-39994000 (ACK dropped)</span><br><span class="line">3000-34993000-34994000, SACK&#x3D;3000-3500</span><br><span class="line">                                        ---------</span><br></pre></td></tr></table></figure>
-
-<p>**  示例二，网络延误**<br>下面的示例中，网络包（1000-1499）被网络给延误了，导致发送方没有收到 ACK，而后面到达的三个包触发了“Fast Retransmit 算法”，所以重传，但重传时，被延误的包又到了，所以，回了一个 SACK=1000-1500，因为 ACK 已到了 3000，所以，这个 SACK 是 D-SACK——标识收到了重复的包。<br>这个案例下，发送端知道之前因为“Fast Retransmit 算法”触发的重传不是因为发出去的包丢了，也不是因为回应的 ACK 包丢了，而是因为网络延时了。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Transmitted    Received    ACK Sent</span><br><span class="line">Segment        Segment     (Including SACK Blocks)</span><br><span class="line"></span><br><span class="line">500-999500-9991000</span><br><span class="line">1000-1499      (delayed)</span><br><span class="line">1500-19991500-19991000, SACK&#x3D;1500-2000</span><br><span class="line">2000-24992000-24991000, SACK&#x3D;1500-2500</span><br><span class="line">2500-29992500-29991000, SACK&#x3D;1500-3000</span><br><span class="line">1000-14991000-14993000</span><br><span class="line">1000-14993000, SACK&#x3D;1000-1500</span><br><span class="line">                                          ---------</span><br></pre></td></tr></table></figure>
-
-<p>可见，引入了 D-SACK，有这么几个好处：<br>1）可以让发送方知道，是发出去的包丢了，还是回来的 ACK 包丢了。<br>2）是不是自己的 timeout 太小了，导致重传。<br>3）网络上出现了先发的包后到的情况（又称 reordering）<br>4）网络上是不是把我的数据包给复制了。<br><strong>知道这些东西可以很好得帮助 TCP 了解网络情况，从而可以更好的做网络上的流控</strong>。<br>Linux 下的 tcp_dsack 参数用于开启这个功能（Linux 2.4 后默认打开）<br>好了，上篇就到这里结束了。如果你觉得我写得还比较浅显易懂，那么，欢迎移步看下篇《<a target="_blank" rel="noopener" href="https://coolshell.cn/articles/11609.html">TCP 的那些事（下）</a>》<br><a target="_blank" rel="noopener" href="https://coolshell.cn/articles/11609.html">TCP 的那些事儿（下）&gt;&gt;&gt;</a><br>（上篇完）<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619360437335-05195b27-62c3-44dd-b137-209d4380410b.jpeg#clientId=ud05b6d37-a831-4&from=paste&height=129&id=u0e081c04&margin=%5Bobject%20Object%5D&originHeight=258&originWidth=258&originalType=url&status=done&style=none&taskId=ue1002983-687d-4442-bb7c-9692e8f2dc8&width=129"><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619360438065-ea6f45eb-52cd-490e-a2a0-ffdcb1957a54.jpeg#clientId=ud05b6d37-a831-4&from=paste&height=129&id=u6dbf991e&margin=%5Bobject%20Object%5D&originHeight=258&originWidth=258&originalType=url&status=done&style=none&taskId=ufc420364-0496-4029-82f4-e8800284f91&width=129">关注 CoolShell 微信公众账号和微信小程序<br><strong>（转载本站文章请注明作者和出处</strong><a target="_blank" rel="noopener" href="https://coolshell.cn/">酷 壳 – CoolShell</a><strong>，请勿用于任何商业用途）</strong></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/25/yuque/websocket%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3%E5%8F%8A%E6%8A%A5%E6%96%87%E5%88%86%E6%9E%90/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Adam Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Adam">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/25/yuque/websocket%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3%E5%8F%8A%E6%8A%A5%E6%96%87%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">websocket协议详解及报文分析</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-25 22:01:29" itemprop="dateCreated datePublished" datetime="2021-04-25T22:01:29+08:00">2021-04-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 20:03:51" itemprop="dateModified" datetime="2021-04-26T20:03:51+08:00">2021-04-26</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>#websocket 协议详解及报文分析</p>
-<h1 id="websocket-协议详解及报文分析"><a href="#websocket-协议详解及报文分析" class="headerlink" title="websocket 协议详解及报文分析"></a>websocket 协议详解及报文分析</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>相较于 HTTP 协议，HTTP 协议有一个的缺陷为：通信只能由客户端发起。在一些场景下，这种单向请求的特点，注定了如果服务器有连续的状态变化，客户端要获知就非常麻烦。我们只能使用轮询：每隔一段时候，就发出一个询问，了解服务器有没有新的信息。最典型的场景就是聊天室。</p>
-<p>轮询的效率低，非常浪费资源（因为必须不停连接，或者 HTTP 连接始终打开）。因此，工程师们一直在思考，有没有更好的方法。WebSocket 就是这样发明的。</p>
-<h2 id="websocket-协议概述"><a href="#websocket-协议概述" class="headerlink" title="websocket 协议概述"></a>websocket 协议概述</h2><p>Webscoket 是 Web 浏览器和服务器之间的一种全双工通信协议，其中 WebSocket 协议由 IETF 定为标准，WebSocket API 由 W3C 定为标准。一旦 Web 客户端与服务器建立起连接，之后的全部数据通信都通过这个连接进行。通信过程中，可互相发送 JSON、XML、HTML 或图片等任意格式的数据。 WS（WebSocket）与 HTTP 协议相比，</p>
-<p><strong>相同点主要有：</strong></p>
-<ul>
-<li>都是基于 TCP 的应用层协议；- 都使用 Request/Response 模型进行连接的建立；- 在连接的建立过程中对错误的处理方式相同，在这个阶段 WS 可能返回和 HTTP 相同的返回码；- 都可以在网络中传输数据。</li>
-</ul>
-<p><strong>不同之处在于：</strong></p>
-<ul>
-<li>WS 使用 HTTP 来建立连接，但是定义了一系列新的 header 域，这些域在 HTTP 中并不会使用；- WS 的连接不能通过中间人来转发，它必须是一个直接连接；- WS 连接建立之后，通信双方都可以在任何时刻向另一方发送数据；- WS 连接建立之后，数据的传输使用帧来传递，不再需要 Request 消息；- WS 的数据帧有序。</li>
-</ul>
-<h2 id="websocket-通信过程及对应报文分析"><a href="#websocket-通信过程及对应报文分析" class="headerlink" title="websocket 通信过程及对应报文分析"></a>websocket 通信过程及对应报文分析</h2><p>WS 整个通信过程如下图所示： <img src="https://img-blog.csdnimg.cn/20200527233222508.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xMODQ1ODc2NDI1,size_16,color_FFFFFF,t_70#alt="> <img src="https://img-blog.csdnimg.cn/20200527233246458.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xMODQ1ODc2NDI1,size_16,color_FFFFFF,t_70#alt="></p>
-<p>websocket 是基于 TCP 的一个应用协议，与 HTTP 协议的关联之处在于 websocket 的握手数据被 HTTP 服务器当作 HTTP 包来处理，主要通过 Update request HTTP 包建立起连接，之后的通信全部使用 websocket 自己的协议。</p>
-<p><strong>请求：</strong>TCP 连接建立后，客户端发送 websocket 的握手请求，请求报文头部如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F;uin&#x3D;xxxxxxxx&amp;app&#x3D;xxxxxxxxx&amp;token&#x3D;XXXXXXXXXXXX HTTP&#x2F;1.1</span><br><span class="line">Host: server.example.cn:443</span><br><span class="line">Connection: Upgrade</span><br><span class="line">Pragma: no-cache</span><br><span class="line">Cache-Control: no-cache</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Macintosh; Intel Mac OS X 10_15_2) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;81.0.4044.138 Safari&#x2F;537.36</span><br><span class="line">Upgrade: websocket</span><br><span class="line">Sec-WebSocket-Version: 13</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q&#x3D;0.9</span><br><span class="line">Cookie: user_id&#x3D;XXXXX</span><br><span class="line">Sec-WebSocket-Key: 1&#x2F;2hTi&#x2F;+eNURiekpNI4k5Q&#x3D;&#x3D;</span><br><span class="line">Sec-WebSocket-Extensions: permessage-deflate; client_max_window_bits</span><br><span class="line">Sec-WebSocket-Protocol: binary, base64</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>第一行为为请求的方法，类型必须为 GET，协议版本号必须大于 1.1- Upgrade 字段必须包含，值为 websocket- Connection 字段必须包含，值为 Upgrade- Sec-WebSocket-Key 字段必须包含 ，记录着握手过程中必不可少的键值。- Sec-WebSocket-Protocol 字段必须包含 ，记录着使用的子协议- Origin（请求头）：Origin 用来指明请求的来源，Origin 头部主要用于保护 Websocket 服务器免受非授权的跨域脚本调用 Websocket API 的请求。也就是不想没被授权的跨域访问与服务器建立连接，服务器可以通过这个字段来判断来源的域并有选择的拒绝。</li>
-</ul>
-<p><img src="https://img-blog.csdnimg.cn/20200527233303721.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xMODQ1ODc2NDI1,size_16,color_FFFFFF,t_70#alt="></p>
-<p><strong>响应：</strong>服务器接收到请求后，返回状态码为 101 Switching Protocols 的响应。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">HTTP&#x2F;1.1 101 Switching Protocols</span><br><span class="line">Server: WebSockify Python&#x2F;2.6.6</span><br><span class="line">Date: Wed, 27 May 2020 03:03:21 GMT</span><br><span class="line">Upgrade: websocket</span><br><span class="line">Connection: Upgrade</span><br><span class="line">Sec-WebSocket-Accept: hXXXXXXXXXXXXXXxGmM&#x3D;</span><br><span class="line">Sec-WebSocket-Protocol: binary</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://img-blog.csdnimg.cn/20200527233326813.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xMODQ1ODc2NDI1,size_16,color_FFFFFF,t_70#alt="></p>
-<p>Sec-WebSocket-Accept 字段是由握手请求中的 Sec-WebSocket-Key 字段生层的。</p>
-<p>握手成功后，通信不再使用 HTTP 协议，而采用 WebSocket 独立的数据帧。如下图所示，为协议帧格式：</p>
-<p><img src="https://img-blog.csdnimg.cn/20200527233345809.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xMODQ1ODc2NDI1,size_16,color_FFFFFF,t_70#alt="></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">FIN，指明Frame是否是一个Message里最后Frame（之前说过一个Message可能又多个Frame组成）；1bit，是否为信息的最后一帧</span><br><span class="line">RSV1-3，默认是0 (必须是0)，除非有扩展定义了非零值的意义。</span><br><span class="line">Opcode，这个比较重要，有如下取值是被协议定义的</span><br><span class="line">				0x00 denotes a continuation frame</span><br><span class="line">				0x01 表示一个text frame</span><br><span class="line">				0x02 表示一个binary frame</span><br><span class="line">				0x03 ~~ 0x07 are reserved for further non-control frames,为将来的非控制消息片段保留测操作码</span><br><span class="line">				0x08 表示连接关闭</span><br><span class="line">				0x09 表示 ping (心跳检测相关)</span><br><span class="line">				0x0a 表示 pong (心跳检测相关)</span><br><span class="line">				0x0b ~~ 0x0f are reserved for further control frames,为将来的控制消息片段保留的操作码</span><br><span class="line">Mask，这个是指明“payload data”是否被计算掩码。这个和后面的Masking-key有关，如果设置为1,掩码键必须放在masking-key区域，客户端发送给服务端的所有消息，此位的值都是1；</span><br><span class="line">Payload len，数据的长度，</span><br><span class="line">Masking-key，0或者4bit，只有当MASK设置为1时才有效。，给一个Websocket中掩码的意义</span><br><span class="line">Payload data，帧真正要发送的数据，可以是任意长度，但尽管理论上帧的大小没有限制，但发送的数据不能太大，否则会导致无法高效利用网络带宽，正如上面所说Websocket提供分片。</span><br><span class="line">Extension data：扩展数据，如果客户端和服务端没有特殊的约定，那么扩展数据长度始终为0</span><br><span class="line">Application data：应用数据，</span><br></pre></td></tr></table></figure>
-
-<p>websocket 报文细节，这里由于 client 和 server 端的 ip 都是 127.0.0.1 ：</p>
-<p><img src="https://img-blog.csdnimg.cn/20200527233405188.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0xMODQ1ODc2NDI1,size_16,color_FFFFFF,t_70#alt="></p>
-<h2 id="nginx-支持-websocket-配置"><a href="#nginx-支持-websocket-配置" class="headerlink" title="nginx 支持 websocket 配置"></a>nginx 支持 websocket 配置</h2><p>由于 http 请求 涉及 反向代理 所以就涉及 nginx 配置需要支持 websocket 需要做一些特殊的配置；</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 配置Nginx支持webSocket开始</span><br><span class="line">proxy_set_header Host $http_host;</span><br><span class="line">proxy_http_version 1.1;</span><br><span class="line">proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">proxy_set_header Connection &quot;upgrade&quot;;</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://img-blog.csdnimg.cn/20200527233424850.png#alt="></p>
-<p>其他通过代码模拟 websocket 的代码可以查阅其他博客内容，这里就不赘述；</p>
-<p><a target="_blank" rel="noopener" href="https://www.tutorialspoint.com/websockets/websockets_send_receive_messages.htm">https://www.tutorialspoint.com/websockets/websockets_send_receive_messages.htm</a></p>
-<p><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2017/05/websocket.html">http://www.ruanyifeng.com/blog/2017/05/websocket.html</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/25/yuque/HTTP3.0%E5%92%8CQUIC%E5%8D%8F%E8%AE%AE%E9%82%A3%E4%BA%9B%E4%BA%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Adam Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Adam">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/25/yuque/HTTP3.0%E5%92%8CQUIC%E5%8D%8F%E8%AE%AE%E9%82%A3%E4%BA%9B%E4%BA%8B/" class="post-title-link" itemprop="url">HTTP3.0和QUIC协议那些事</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-25 17:04:07" itemprop="dateCreated datePublished" datetime="2021-04-25T17:04:07+08:00">2021-04-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 20:03:51" itemprop="dateModified" datetime="2021-04-26T20:03:51+08:00">2021-04-26</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>#HTTP3.0 和 QUIC 协议那些事</p>
-<h1 id="HTTP3-0-和-QUIC-协议那些事"><a href="#HTTP3-0-和-QUIC-协议那些事" class="headerlink" title="HTTP3.0 和 QUIC 协议那些事"></a>HTTP3.0 和 QUIC 协议那些事</h1><ul>
-<li>写在前面<blockquote>
-<ul>
-<li>如果你的 App，在不需要任何修改的情况下就能提升 15% 以上的访问速度。特别是弱网络的时候能够提升 20% 以上的访问速度。</li>
-<li>如果你的 App，在频繁切换 4G 和 WIFI 网络的情况下，不会断线，不需要重连，用户无任何感知。如果你的 App，既需要 TLS 的安全，也想实现 HTTP2 多路复用的强大。</li>
-<li>如果你刚刚才听说 HTTP2 是下一代互联网协议，如果你刚刚才关注到 TLS1.3 是一个革命性具有里程碑意义的协议，但是这两个协议却一直在被另一个更新兴的协议所影响和挑战。</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-<h2 id="一、HTTP2-0-和-HTTP3-0"><a href="#一、HTTP2-0-和-HTTP3-0" class="headerlink" title="一、HTTP2.0 和 HTTP3.0"></a>一、HTTP2.0 和 HTTP3.0</h2><blockquote>
-<p>科技永不止步 -   我们都知道互联网中业务是不断迭代前进的，像 HTTP 这种重要的网络协议也是如此，新版本是对旧版本的扬弃。</p>
-</blockquote>
-<h3 id="1-1-HTTP2-0-和-TCP-的爱恨纠葛"><a href="#1-1-HTTP2-0-和-TCP-的爱恨纠葛" class="headerlink" title="1.1 HTTP2.0 和 TCP 的爱恨纠葛"></a>1.1 HTTP2.0 和 TCP 的爱恨纠葛</h3><p><code>**HTTP2.0**</code><strong>是 2015 年推出的，还是比较年轻的，</strong><code>**其重要的二进制分帧协议、多路复用、头部压缩、服务端推送等**</code><strong>重要优化使 HTTP 协议真正上了一个新台阶。</strong></p>
-<p><img src="https://img-blog.csdnimg.cn/20200922123003302.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dvbGZHdWlEYW8=,size_16,color_FFFFFF,t_70#pic_center#id=BHt2w&originHeight=962&originWidth=828&originalType=binary&status=done&style=none"></p>
-<blockquote>
-<p>像谷歌这种重要的公司并没有满足于此，而且想继续提升 HTTP 的性能，花最少的时间和资源获取极致体验。<br>那么肯定要问 HTTP2.0 虽然性能已经不错了，还有什么不足吗？ <code>建立连接时间长(本质上是TCP的问题) ,队头阻塞问题</code> &gt; <code>移动互联网领域表现不佳(弱网环境</code>) …</p>
-</blockquote>
-<ul>
-<li><strong>熟悉 HTTP2.0 协议的同学应该知道，这些缺点基本都是由于 TCP 协议引起的，水能载舟亦能覆舟，其实 TCP 也很无辜呀！</strong></li>
-</ul>
-<p><img src="https://img-blog.csdnimg.cn/20200922123253603.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dvbGZHdWlEYW8=,size_16,color_FFFFFF,t_70#pic_center#id=tAooz&originHeight=748&originWidth=1080&originalType=binary&status=done&style=none"></p>
-<ul>
-<li><code>**在我们眼里，TCP是面向连接、可靠的传输层协议，当前几乎所有重要的协议和应用都是基于TCP来实现的。**</code></li>
-<li><strong>网络环境的改变速度很快，但是 TCP 协议相对缓慢，正是这种矛盾促使谷歌做出了一个看似出乎意料的决定-</strong><code>**基于UDP来开发新一代HTTP协议**</code><strong>。</strong></li>
-</ul>
-<h3 id="1-2-谷歌为什么选择-UDP"><a href="#1-2-谷歌为什么选择-UDP" class="headerlink" title="1.2 谷歌为什么选择 UDP"></a>1.2 谷歌为什么选择 UDP</h3><p>上面提到，谷歌选择 UDP 是看似出乎意料的，仔细想一想其实很有道理。</p>
-<p>我们单纯地看看 TCP 协议的不足和 UDP 的一些优点：</p>
-<ul>
-<li>基于 TCP 开发的设备和协议非常多，兼容困难</li>
-<li>TCP 协议栈是 Linux 内部的重要部分，修改和升级成本很大</li>
-<li>UDP 本身是无连接的、没有建链和拆链成本</li>
-<li>UDP 的数据包无队头阻塞问题</li>
-<li>UDP 改造成本小</li>
-</ul>
-<p>从上面的对比可以知道，<code>谷歌要想从TCP上进行改造升级绝非易事，但是UDP虽然没有TCP为了保证可靠连接而引发的问题，但是UDP本身不可靠，又不能直接用</code></p>
-<p><img src="https://img-blog.csdnimg.cn/20200922123855517.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dvbGZHdWlEYW8=,size_16,color_FFFFFF,t_70#pic_center#id=tDBTF&originHeight=378&originWidth=548&originalType=binary&status=done&style=none"></p>
-<blockquote>
-<p>综合而知，谷歌决定在 UDP 基础上改造一个具备 TCP 协议优点的新协议也就顺理成章了，这个新协议就是 QUIC 协议。</p>
-</blockquote>
-<h3 id=""><a href="#" class="headerlink" title=""></a></h3><p>1.3 QUIC 协议和 HTTP3.0</p>
-<p>QUIC 其实是 Quick UDP Internet Connections 的缩写，直译为快速 UDP 互联网连接。</p>
-<p><img src="https://img-blog.csdnimg.cn/20200922124004308.png#pic_center#id=NQ3nM&originHeight=133&originWidth=308&originalType=binary&status=done&style=none"></p>
-<p>我们来看看维基百科对于 QUIC 协议的一些介绍：</p>
-<blockquote>
-<p>QUIC 协议最初由 Google 的 Jim Roskind 设计，实施并于 2012 年部署，在 2013 年随着实验的扩大而公开宣布，并向 IETF 进行了描述。<br>QUIC 提高了当前正在使用 TCP 的面向连接的 Web 应用程序的性能。它在两个端点之间使用用户数据报协议（UDP）建立多个复用连接来实现此目的。<br>QUIC 的次要目标包括减少连接和传输延迟，在每个方向进行带宽估计以避免拥塞。它还将拥塞控制算法移动到用户空间，而不是内核空间，此外使用前向纠错（FEC）进行扩展，以在出现错误时进一步提高性能。</p>
-</blockquote>
-<ul>
-<li><strong>HTTP3.0 又称为 HTTP Over QUIC，其弃用 TCP 协议，改为使用基于 UDP 协议的 QUIC 协议来实现。</strong> <img src="https://img-blog.csdnimg.cn/20200922124129106.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dvbGZHdWlEYW8=,size_16,color_FFFFFF,t_70#pic_center#height=306&id=lfjni&originHeight=306&originWidth=357&originalType=binary&status=done&style=none&width=357"></li>
-</ul>
-<h2 id="二、QUIC-详解"><a href="#二、QUIC-详解" class="headerlink" title="二、QUIC 详解"></a>二、QUIC 详解</h2><p>择其善者而从之，其不善者而改之。</p>
-<ul>
-<li><code>**HTTP3.0既然选择了QUIC协议，也就意味着HTTP3.0基本继承了HTTP2.0的强大功能，并且进一步解决了HTTP2.0存在的一些问题，同时必然引入了新的问题**</code></li>
-</ul>
-<p><img src="https://img-blog.csdnimg.cn/20200922124303607.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dvbGZHdWlEYW8=,size_16,color_FFFFFF,t_70#pic_center#id=nq4cr&originHeight=305&originWidth=778&originalType=binary&status=done&style=none"> QUIC 协议必须要实现 HTTP2.0 在 TCP 协议上的重要功能，同时解决遗留问题，我们来看看 QUIC 是如何实现的。</p>
-<h3 id="2-1-队头阻塞问题"><a href="#2-1-队头阻塞问题" class="headerlink" title="2.1 队头阻塞问题"></a>2.1 队头阻塞问题</h3><ul>
-<li><p><code>**队头阻塞 Head-of-line blocking（缩写为HOL blocking）是计算机网络中是一种性能受限的现象**</code><strong>，通俗来说就是：</strong><code>**一个数据包影响了一堆数据包，它不来大家都走不了**</code><strong>。</strong></p>
-</li>
-<li><p><code>队头阻塞问题可能存在于HTTP层和TCP层，在HTTP1.x时两个层次都存在该问题</code>。 <img src="https://img-blog.csdnimg.cn/20200922124452630.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dvbGZHdWlEYW8=,size_16,color_FFFFFF,t_70#pic_center#id=oAWYE&originHeight=444&originWidth=812&originalType=binary&status=done&style=none"></p>
-</li>
-<li><p><code>**HTTP2.0协议的多路复用机制解决了HTTP层的队头阻塞问题，但是在TCP层仍然存在队头阻塞问题。**</code></p>
-</li>
-<li><p><code>**TCP协议在收到数据包之后，这部分数据可能是乱序到达的，但是TCP必须将所有数据收集排序整合后给上层使用，如果其中某个包丢失了，就必须等待重传，从而出现某个丢包数据阻塞整个连接的数据使用。**</code></p>
-</li>
-<li><p>多路复用是 HTTP2 最强大的特性 ，能够将多条请求在一条 TCP 连接上同时发出去。但也恶化了 TCP 的一个问题，队头阻塞 ，如下图示： <img src="https://img-blog.csdnimg.cn/20200922135620387.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dvbGZHdWlEYW8=,size_16,color_FFFFFF,t_70#pic_center#id=ptWhT&originHeight=377&originWidth=1011&originalType=binary&status=done&style=none"></p>
-</li>
-<li><p><strong>HTTP2 在一个 TCP 连接上同时发送 4 个 Stream。其中 Stream1 已经正确到达，并被应用层读取</strong>。</p>
-</li>
-<li><p><code>但是 Stream2 的第三个 tcp segment 丢失了，TCP 为了保证数据的可靠性，需要发送端重传第 3 个 segment 才能通知应用层读取接下去的数据，虽然这个时候 Stream3 和 Stream4 的全部数据已经到达了接收端，但都被阻塞住了</code>。</p>
-</li>
-<li><p><code>不仅如此，由于 HTTP2 强制使用 TLS，还存在一个 TLS 协议层面的队头阻塞</code> <img src="https://img-blog.csdnimg.cn/20200922135807354.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dvbGZHdWlEYW8=,size_16,color_FFFFFF,t_70#pic_center#id=B4UBy&originHeight=692&originWidth=1080&originalType=binary&status=done&style=none"></p>
-</li>
-<li><p><strong>QUIC 的多路复用和 HTTP2 类似。</strong><code>**在一条 QUIC 连接上可以并发发送多个 HTTP 请求 (stream)**</code><strong>。但是 QUIC 的多路复用相比 HTTP2 有一个很大的优势</strong>。</p>
-</li>
-<li><p><code>**QUIC 一个连接上的多个 stream 之间没有依赖。这样假如 stream2 丢了一个 udp packet，也只会影响 stream2 的处理。不会影响 stream2 之前及之后的 stream 的处理**</code><strong>。</strong> -   这也就在很大程度上缓解甚至消除了队头阻塞的影响。</p>
-</li>
-<li><p><strong>QUIC 协议是基于 UDP 协议实现的，</strong><code>**在一条链接上可以有多个流，流与流之间是互不影响的，当一个流出现丢包影响范围非常小，从而解决队头阻塞**</code><strong>问题</strong></p>
-</li>
-</ul>
-<h3 id="2-2-0RTT-建链"><a href="#2-2-0RTT-建链" class="headerlink" title="2.2 0RTT 建链"></a>2.2 0RTT 建链</h3><ul>
-<li><code>**衡量网络建链的常用指标是RTT Round-Trip Time，也就是数据包一来一回的时间消耗。**</code> <img src="https://img-blog.csdnimg.cn/20200922124623833.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dvbGZHdWlEYW8=,size_16,color_FFFFFF,t_70#pic_center#id=AsS3u&originHeight=226&originWidth=372&originalType=binary&status=done&style=none"></li>
-<li><code>**RTT包括三部分：往返传播时延、网络设备内排队时延、应用程序数据处理时延。**</code> <img src="https://img-blog.csdnimg.cn/20200922124649743.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dvbGZHdWlEYW8=,size_16,color_FFFFFF,t_70#pic_center#id=hg0Cd&originHeight=239&originWidth=579&originalType=binary&status=done&style=none"></li>
-<li><strong>一般来说 HTTPS 协议要建立完整链接包括:TCP 握手和 TLS 握手，总计需要至少 2-3 个 RTT，普通的 HTTP 协议也需要至少 1 个 RTT 才可以完成握手。</strong></li>
-<li><strong>然而，</strong><code>**QUIC协议可以实现在第一个包就可以包含有效的应用数据，从而实现0RTT，但这也是有条件**</code><strong>的。</strong> - 0RTT 建连可以说是 QUIC 相比 HTTP2 最大的性能优势。那什么是 0RTT 建连呢？这里面有两层含义。</li>
-<li><code>传输层 0RTT 就能建立连接</code></li>
-<li><code>加密层 0RTT 就能建立加密连接</code> <img src="https://img-blog.csdnimg.cn/20200922132748609.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dvbGZHdWlEYW8=,size_16,color_FFFFFF,t_70#pic_center#id=oQp0N&originHeight=530&originWidth=1080&originalType=binary&status=done&style=none"></li>
-</ul>
-<blockquote>
-<ul>
-<li>比如上图左边是 HTTPS 的一次完全握手的建连过程，需要 3 个 RTT。就算是 Session Resumption，也需要至少 2 个 RTT。</li>
-<li>而 QUIC 呢？由于建立在 UDP 的基础上，同时又实现了 0RTT 的安全握手，所以在大部分情况下，只需要 0 个 RTT 就能实现数据发送，在实现前向加密 的基础上，并且 0RTT 的成功率相比 TLS 的 Sesison Ticket 要高很多。</li>
-</ul>
-</blockquote>
-<ul>
-<li>简单来说，<code>基于TCP协议和TLS协议的HTTP2.0在真正发送数据包之前需要花费一些时间来完成握手和加密协商，完成之后才可以真正传输业务数据</code>。</li>
-<li><strong>但是 QUIC 则第一个数据包就可以发业务数据，从而在连接延时有很大优势，可以节约数百毫秒的时间。</strong></li>
-</ul>
-<p><img src="https://img-blog.csdnimg.cn/20200922124817379.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dvbGZHdWlEYW8=,size_16,color_FFFFFF,t_70#pic_center#id=pqC6c&originHeight=530&originWidth=748&originalType=binary&status=done&style=none"></p>
-<ul>
-<li><strong>QUIC 的 0RTT 也是需要条件的，</strong><code>**对于第一次交互的客户端和服务端0RTT也是做不到的**</code><strong>，毕竟双方完全陌生。</strong>- <strong>因此，QUIC 协议可以分为首次连接和非首次连接，两种情况进行讨论。</strong></li>
-</ul>
-<h4 id="2-2-1-首次连接和非首次连接"><a href="#2-2-1-首次连接和非首次连接" class="headerlink" title="2.2.1 首次连接和非首次连接"></a>2.2.1 首次连接和非首次连接</h4><ul>
-<li><code>**使用QUIC协议的客户端和服务端要使用1RTT进行密钥交换，使用的交换算法是DH(Diffie-Hellman)迪菲-赫尔曼算法。**</code></li>
-</ul>
-<h4 id="2-2-2-首次连接"><a href="#2-2-2-首次连接" class="headerlink" title="2.2.2 首次连接"></a>2.2.2 首次连接</h4><ul>
-<li>简单来说一下，<code>**首次连接时客户端和服务端的密钥协商和数据传输过程**</code>，其中涉及了 DH 算法的基本过程： <img src="https://img-blog.csdnimg.cn/20200922125205577.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dvbGZHdWlEYW8=,size_16,color_FFFFFF,t_70#pic_center#id=Vl5eN&originHeight=1020&originWidth=1356&originalType=binary&status=done&style=none"> <img src="https://img-blog.csdnimg.cn/20200922125320566.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dvbGZHdWlEYW8=,size_16,color_FFFFFF,t_70#pic_center#id=kzbFK&originHeight=1030&originWidth=1080&originalType=binary&status=done&style=none"></li>
-</ul>
-<h4 id="2-2-3-非首次连接"><a href="#2-2-3-非首次连接" class="headerlink" title="2.2.3 非首次连接"></a>2.2.3 非首次连接</h4><ul>
-<li><code>**前面提到客户端和服务端首次连接时服务端传递了config包，里面包含了服务端公钥和两个随机数，客户端会将config存储下来，后续再连接时可以直接使用，从而跳过这个1RTT，实现0RTT的业务数据交互**</code><strong>。</strong>- <code>**客户端保存config是有时间期限的，在config失效之后仍然需要进行首次连接时的密钥交换。**</code></li>
-</ul>
-<h3 id="2-3-前向安全问题"><a href="#2-3-前向安全问题" class="headerlink" title="2.3 前向安全问题"></a>2.3 前向安全问题</h3><p>前向安全是密码学领域的专业术语，看下百度上的解释：</p>
-<blockquote>
-<ul>
-<li><code>前向安全或前向保密Forward Secrecy是密码学中通讯协议的安全属性，指的是长期使用的主密钥泄漏不会导致过去的会话密钥泄漏</code>。</li>
-<li><code>前向安全能够保护过去进行的通讯不受密码或密钥在未来暴露的威胁，如果系统具有前向安全性，就可以保证在主密钥泄露时历史通讯的安全，即使系统遭到主动攻击也是如此</code></li>
-</ul>
-</blockquote>
-<p><strong>通俗来说，</strong><code>**前向安全指的是密钥泄漏也不会让之前加密的数据被泄漏，影响的只有当前，对之前的数据无影响**</code><strong>。</strong></p>
-<p><img src="https://img-blog.csdnimg.cn/20200922125908240.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dvbGZHdWlEYW8=,size_16,color_FFFFFF,t_70#pic_center#id=NuSZa&originHeight=232&originWidth=1224&originalType=binary&status=done&style=none"> <img src="https://img-blog.csdnimg.cn/20200922125953787.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dvbGZHdWlEYW8=,size_16,color_FFFFFF,t_70#pic_center#id=ZYRgn&originHeight=722&originWidth=1080&originalType=binary&status=done&style=none"></p>
-<h3 id="2-4-前向纠错"><a href="#2-4-前向纠错" class="headerlink" title="2.4 前向纠错"></a>2.4 前向纠错</h3><p>前向纠错是通信领域的术语，看下百科的解释：</p>
-<ul>
-<li>前向纠错也叫前向纠错码 Forward Error Correction 简称 FEC;<code>是增加数据通讯可信度的方法，在单向通讯信道中，一旦错误被发现，其接收器将无权再请求传输</code>。- FEC 是利用数据进行传输冗余信息的方法，当传输中出现错误，将允许接收器再建数据。</li>
-<li>听这段描述就是做校验的，看看 QUIC 协议是如何实现的：</li>
-<li><code>**QUIC每发送一组数据就对这组数据进行异或运算，并将结果作为一个FEC包发送出去，接收方收到这一组数据后根据数据包和FEC包即可进行校验和纠错**</code>。</li>
-</ul>
-<h3 id="2-5-连接迁移"><a href="#2-5-连接迁移" class="headerlink" title="2.5 连接迁移"></a>2.5 连接迁移</h3><p>网络切换几乎无时无刻不在发生。</p>
-<ul>
-<li><code>TCP协议使用五元组来表示一条唯一的连接，当我们从4G环境切换到wifi环境时，手机的IP地址就会发生变化，这时必须创建新的TCP连接才能继续传输数据</code>。</li>
-<li><strong>QUIC 协议基于 UDP 实现摒弃了五元组的概念，使用 64 位的随机数作为连接的 ID，并使用该 ID 表示连接。</strong></li>
-<li><code>基于QUIC协议之下，我们在日常wifi和4G切换时，或者不同基站之间切换都不会重连，从而提高业务层的体验。</code></li>
-</ul>
-<p><img src="https://img-blog.csdnimg.cn/20200922130333415.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dvbGZHdWlEYW8=,size_16,color_FFFFFF,t_70#pic_center#id=SOMdm&originHeight=723&originWidth=1080&originalType=binary&status=done&style=none"></p>
-<h3 id="2-6-改进的拥塞控制"><a href="#2-6-改进的拥塞控制" class="headerlink" title="2.6 改进的拥塞控制"></a>2.6 改进的拥塞控制</h3><ul>
-<li><code>**TCP 的拥塞控制实际上包含了四个算法：慢启动，拥塞避免，快速重传，快速恢复**</code> -  QUIC 协议当前默认使用了 TCP 协议的 Cubic 拥塞控制算法 ，同时也支持 CubicBytes, Reno, RenoBytes, BBR, PCC 等拥塞控制算法。</li>
-<li><code>从拥塞算法本身来看，QUIC 只是按照 TCP 协议重新实现了一遍</code>，那么 QUIC 协议到底改进在哪些方面呢？主要有如下几点：</li>
-</ul>
-<h4 id="2-6-1-可插拔"><a href="#2-6-1-可插拔" class="headerlink" title="2.6.1 可插拔"></a>2.6.1 可插拔</h4><p>什么叫可插拔呢？<code>就是能够非常灵活地生效，变更和停止</code>,体现在如下方面：</p>
-<ul>
-<li><code>**应用程序层面就能实现不同的拥塞控制算法，不需要操作系统，不需要内核支持**</code><strong>。这是一个飞跃，因为</strong><code>**传统的 TCP 拥塞控制，必须要端到端的网络协议栈支持，才能实现控制效果**</code><strong>。而内核和操作系统的部署成本非常高，升级周期很长，这在产品快速迭代，网络爆炸式增长的今天，显然有点满足不了需求。</strong></li>
-<li><strong>即使是单个应用程序的不同连接也能支持配置不同的拥塞控制。就算是一台服务器，接入的用户网络环境也千差万别，结合大数据及人工智能处理，我们能为各个用户提供不同的但又更加精准更加有效的拥塞控制。比如 BBR 适合，Cubic 适合。</strong></li>
-<li><code>**应用程序不需要停机和升级就能实现拥塞控制的变更**</code><strong>，我们在服务端只需要修改一下配置，reload 一下，</strong><code>**完全不需要停止服务就能实现拥塞控制的切换**</code><strong>。STGW 在配置层面进行了优化，我们可以针对不同业务，不同网络制式，甚至不同的 RTT，使用不同的拥塞控制算法。</strong></li>
-</ul>
-<h4 id="2-6-2-单调递增的-Packet-Number"><a href="#2-6-2-单调递增的-Packet-Number" class="headerlink" title="2.6.2 单调递增的 Packet Number"></a>2.6.2 单调递增的 Packet Number</h4><ul>
-<li><code>**TCP 为了保证可靠性，使用了基于字节序号的 Sequence Number 及 Ack 来确认消息的有序到达。**</code></li>
-<li><code>**QUIC**</code>** 同样是一个可靠的协议，它**<code>**使用 Packet Number 代替了 TCP 的 sequence number，并且每个 Packet Number 都严格递增**</code><strong>，也就是说</strong><code>**就算 Packet N 丢失了，重传的 Packet N 的 Packet Number 已经不是 N，而是一个比 N 大的值**</code><strong>。</strong></li>
-<li><strong>而 TCP 呢，重传 segment 的 sequence number 和原始的 segment 的 Sequence Number 保持不变，也正是由于这个特性，引入了 Tcp 重传的歧义问题</strong></li>
-</ul>
-<p><img src="https://img-blog.csdnimg.cn/20200922133727910.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dvbGZHdWlEYW8=,size_16,color_FFFFFF,t_70#pic_center#id=eVtip&originHeight=473&originWidth=1080&originalType=binary&status=done&style=none"></p>
-<ul>
-<li><strong>如上图所示，超时事件 RTO 发生后，</strong><code>**客户端发起重传**</code><strong>，然后接收到了 Ack 数据。</strong><code>**由于序列号一样，这个 Ack 数据到底是原始请求的响应还是重传请求的响应呢？不好判断**</code><strong>。</strong></li>
-<li>如果<code>算成原始请求的响应，但实际上是重传请求的响应（上图左），会导致采样 RTT 变大。如果算成重传请求的响应，但实际上是原始请求的响应，又很容易导致采样 RTT 过小</code>。</li>
-<li><code>**由于 Quic 重传的 Packet 和原始 Packet 的 Pakcet Number 是严格递增的，所以很容易就解决了这个问题。**</code></li>
-</ul>
-<p><img src="https://img-blog.csdnimg.cn/20200922133916874.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dvbGZHdWlEYW8=,size_16,color_FFFFFF,t_70#pic_center#id=UF0FI&originHeight=427&originWidth=1080&originalType=binary&status=done&style=none"></p>
-<ul>
-<li><code>如上图所示，RTO 发生后，根据重传的 Packet Number 就能确定精确的 RTT 计算。如果 Ack 的 Packet Number 是 N+M，就根据重传请求计算采样 RTT。如果 Ack 的 Pakcet Number 是 N，就根据原始请求的时间计算采样 RTT，没有歧义性</code>。</li>
-<li><strong>但是单纯依靠严格递增的 Packet Number 肯定是无法保证数据的顺序性和可靠性。QUIC 又引入了一个 <strong><code>**Stream Offset**</code></strong> 的概念。</strong></li>
-</ul>
-<p><img src="https://img-blog.csdnimg.cn/20200922134146426.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dvbGZHdWlEYW8=,size_16,color_FFFFFF,t_70#pic_center#id=ZMt3g&originHeight=312&originWidth=1080&originalType=binary&status=done&style=none"></p>
-<ul>
-<li>即<code>一个 Stream 可以经过多个 Packet 传输，Packet Number 严格递增，没有依赖</code>。<blockquote>
-<ul>
-<li>Packet 里的 Payload 如果是 Stream 的话，就需要依靠 Stream 的 Offset 来保证应用数据的顺序。</li>
-<li>如图所示，发送端先后发送了 Pakcet N 和 Pakcet N+1，Stream 的 Offset 分别是 x 和 x+y。</li>
-<li>假设 Packet N 丢失了，发起重传，重传的 Packet Number 是 N+2，但是它的 Stream 的 Offset 依然是 x，这样就算 Packet N + 2 是后到的，依然可以将 Stream x 和 Stream x+y 按照顺序组织起来，交给应用程序处理。</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-<h4 id="2-6-3-不允许-Reneging"><a href="#2-6-3-不允许-Reneging" class="headerlink" title="2.6.3 不允许 Reneging"></a>2.6.3 不允许 Reneging</h4><ul>
-<li><code>**什么叫 Reneging 呢？就是接收方丢弃已经接收并且上报给 SACK 选项的内容 。TCP 协议不鼓励这种行为，但是协议层面允许这样的行为。主要是考虑到服务器资源有限，比如 Buffer 溢出，内存不够等情况。**</code></li>
-<li><strong>Reneging 对数据重传会产生很大的干扰。因为 Sack 都已经表明接收到了，但是接收端事实上丢弃了该数据</strong>。</li>
-<li><code>QUIC 在协议层面禁止 Reneging，一个 Packet 只要被 Ack，就认为它一定被正确接收，减少了这种干扰</code>。</li>
-</ul>
-<h4 id="2-6-4-更多的-Ack-块"><a href="#2-6-4-更多的-Ack-块" class="headerlink" title="2.6.4 更多的 Ack 块"></a>2.6.4 更多的 Ack 块</h4><ul>
-<li><strong>TCP 的 Sack 选项能够告诉发送方已经接收到的连续 Segment 的范围，方便发送方进行选择性重传。</strong> -   <code>由于 TCP 头部最大只有 60 个字节，标准头部占用了 20 字节，所以 Tcp Option 最大长度只有 40 字节，再加上 Tcp Timestamp option 占用了 10 个字节 ，所以留给 Sack 选项的只有 30 个字节</code>。</li>
-<li><strong>每一个 Sack Block 的长度是 8 个，加上 Sack Option 头部 2 个字节，也就意味着 Tcp Sack Option 最大只能提供 3 个 Block</strong>。</li>
-<li><code>但是 Quic Ack Frame 可以同时提供 256 个 Ack Block，在丢包率比较高的网络下，更多的 Sack Block 可以提升网络的恢复速度，减少重传量</code>。</li>
-</ul>
-<h4 id="2-6-5-Ack-Delay-时间"><a href="#2-6-5-Ack-Delay-时间" class="headerlink" title="2.6.5 Ack Delay 时间"></a>2.6.5 Ack Delay 时间</h4><ul>
-<li><code>**Tcp 的 Timestamp 选项存在一个问题 ，它只是回显了发送方的时间戳，但是没有计算接收端接收到 segment 到发送 Ack 该 segment 的时间。这个时间可以简称为 Ack Delay。**</code></li>
-<li>这样就会导致 RTT 计算误差。如下图：</li>
-</ul>
-<p><img src="https://img-blog.csdnimg.cn/20200922134723577.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dvbGZHdWlEYW8=,size_16,color_FFFFFF,t_70#pic_center#id=BEhaw&originHeight=816&originWidth=1080&originalType=binary&status=done&style=none"></p>
-<ul>
-<li>可以认为 TCP 的 RTT 计算： <img src="https://img-blog.csdnimg.cn/20200922134807851.png#pic_center#id=KPX6u&originHeight=41&originWidth=301&originalType=binary&status=done&style=none"></li>
-<li>而 Quic 计算如下： <img src="https://img-blog.csdnimg.cn/20200922134824234.png#pic_center#id=k1B88&originHeight=41&originWidth=367&originalType=binary&status=done&style=none"></li>
-</ul>
-<blockquote>
-<ul>
-<li>当然 RTT 的具体计算没有这么简单，需要采样，参考历史数值进行平滑计算，参考如下公式:</li>
-</ul>
-</blockquote>
-<blockquote>
-<p><img src="https://img-blog.csdnimg.cn/20200922134848538.png#pic_center#id=JDhGD&originHeight=67&originWidth=301&originalType=binary&status=done&style=none"></p>
-</blockquote>
-<h4 id="2-6-6-基于-stream-和-connecton-级别的流量控制"><a href="#2-6-6-基于-stream-和-connecton-级别的流量控制" class="headerlink" title="2.6.6 基于 stream 和 connecton 级别的流量控制"></a>2.6.6 基于 stream 和 connecton 级别的流量控制</h4><ul>
-<li>QUIC 的流量控制 类似 HTTP2，<code>即在 Connection 和 Stream 级别提供了两种流量控制</code>。为什么需要两类流量控制呢？主要是因为 QUIC 支持多路复用。</li>
-<li>Stream 可以认为就是一条 HTTP 请求。</li>
-<li>Connection 可以类比一条 TCP 连接。</li>
-<li><strong>多路复用意味着在一条 Connetion 上会同时存在多条 Stream。既需要对单个 Stream 进行控制，又需要针对所有 Stream 进行总体控制。</strong></li>
-</ul>
-<p>QUIC 实现流量控制的原理比较简单：</p>
-<ul>
-<li><code>通过 window_update 帧告诉对端自己可以接收的字节数，这样发送方就不会发送超过这个数量的数据</code>。- <strong>通过 BlockFrame 告诉对端由于流量控制被阻塞了，无法发送数据</strong>。</li>
-<li><code>QUIC 的流量控制和 TCP 有点区别，TCP 为了保证可靠性，窗口左边沿向右滑动时的长度取决于已经确认的字节数。如果中间出现丢包，就算接收到了更大序号的 Segment，窗口也无法超过这个序列号</code>。</li>
-<li><strong>但 QUIC 不同，就算此前有些 packet 没有接收到，它的滑动只取决于接收到的最大偏移字节数。</strong></li>
-</ul>
-<p><img src="https://img-blog.csdnimg.cn/20200922135106709.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dvbGZHdWlEYW8=,size_16,color_FFFFFF,t_70#pic_center#id=Lk09m&originHeight=442&originWidth=1080&originalType=binary&status=done&style=none"></p>
-<ul>
-<li>针对 Stream：</li>
-</ul>
-<p><img src="https://img-blog.csdnimg.cn/20200922135129300.png#pic_center#id=wNSZL&originHeight=37&originWidth=431&originalType=binary&status=done&style=none"><br>针对 Connection：<br><img src="https://img-blog.csdnimg.cn/20200922135146282.png#pic_center#id=fmXEv&originHeight=37&originWidth=610&originalType=binary&status=done&style=none"><br>同样地，STGW 也在连接和 Stream 级别设置了不同的窗口数。</p>
-<p>最重要的是，我们可以在内存不足或者上游处理性能出现问题时，通过流量控制来限制传输速率，保障服务可用性。</p>
-<h2 id="三、总结"><a href="#三、总结" class="headerlink" title="三、总结"></a>三、总结</h2><p>QUIC 协议 存在的意义在于解决 TCP 协议的一些无法解决的痛点</p>
-<ul>
-<li><code>多次握手</code>：TCP 协议需要三次握手建立连接，而如果需要 TLS 证书的交换，那么则需要更多次的握手才能建立可靠连接，这在如今长肥网络的趋势下是一个巨大的痛点</li>
-<li><code>队头阻塞</code>：TCP 协议下，如果出现丢包，则一条连接将一直被阻塞等待该包的重传，即使后来的数据包可以被缓存，但也无法被递交给应用层去处理。</li>
-<li><code>无法判断一个 ACK 是重传包的 ACK 还是原本包的 ACK</code>：比如 一个包 seq=1, 超时重传的包同样是 seq=1，这样在收到一个 ack=1 之后，我们无法判断这个 ack 是对之前的包的 ack 还是对重传包的 ack，这会导致我们对 RTT 的估计出现误差，无法提供更准确的拥塞控制</li>
-<li><code>无法进行连接迁移</code>：<strong>一条连接由一个四元组标识，在当今移动互联网的时代，如果一台手机从一个 wifi 环境切换到另一个 wifi 环境，ip 发生变化，那么连接必须重新建立，inflight 的包全部丢失。</strong></li>
-</ul>
-<p>现在我们给出一个 QUIC 协议的 Overview</p>
-<ul>
-<li><code>更好的连接建立方式</code></li>
-<li><code>更好的拥塞控制</code></li>
-<li><code>没有队头阻塞的多路复用</code></li>
-<li><code>前向纠错</code></li>
-<li><code>连接迁移</code></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1851,7 +1731,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">61</span>
+          <span class="site-state-item-count">64</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

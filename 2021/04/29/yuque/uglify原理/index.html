@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="1. AST（抽象语法树）要想了解 JS 的压缩原理，需要首先了解 AST。抽象语法树：AST（Abstract Syntax Tree)，是源代码的抽象语法结构的树状表现形式，这里特指编程语言的源代码。树上的每个节点都表示源代码中的一种结构。之所以说语法是「抽象」的，是因为这里的语法并不会表示出真实语法中出现的每个细节。举个例子：从上面两个例子中，可以看出 AST 是源代码根据其语法结构，省略一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="uglify原理">
+<meta property="og:url" content="http://example.com/2021/04/29/yuque/uglify%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="Adam">
+<meta property="og:description" content="1. AST（抽象语法树）要想了解 JS 的压缩原理，需要首先了解 AST。抽象语法树：AST（Abstract Syntax Tree)，是源代码的抽象语法结构的树状表现形式，这里特指编程语言的源代码。树上的每个节点都表示源代码中的一种结构。之所以说语法是「抽象」的，是因为这里的语法并不会表示出真实语法中出现的每个细节。举个例子：从上面两个例子中，可以看出 AST 是源代码根据其语法结构，省略一">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619672668724-5d3358d3-d081-4ee0-8dfb-5ea211241701.png#clientId=u345a0e7d-2a1d-4&from=paste&height=288&id=u08c9713a&margin=%5Bobject%20Object%5D&originHeight=288&originWidth=800&originalType=url&status=done&style=none&taskId=u7b2e6f9e-7023-443f-bad2-85b82471e5d&width=800">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619672668632-dfb7a922-3e21-4aa2-a90e-1f63de20b25d.png#clientId=u345a0e7d-2a1d-4&from=paste&height=599&id=u35c87bbd&margin=%5Bobject%20Object%5D&originHeight=599&originWidth=800&originalType=url&status=done&style=none&taskId=u89688d6a-a0a1-46a2-8ea2-8032c37b70d&width=800">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619672668742-e01926f8-b6e2-484e-8199-be950d1dc148.jpeg#clientId=u345a0e7d-2a1d-4&from=paste&height=332&id=uea97fb66&margin=%5Bobject%20Object%5D&originHeight=332&originWidth=800&originalType=url&status=done&style=none&taskId=ubdc3cbe5-e218-40ee-9e90-498a01e57ba&width=800">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619672718992-6f322231-e031-4622-9fe6-93c5bed01720.png#clientId=u345a0e7d-2a1d-4&from=paste&height=145&id=u42935634&margin=%5Bobject%20Object%5D&originHeight=145&originWidth=800&originalType=url&status=done&style=none&taskId=u9312dfff-ac37-4f6a-b034-b454e30c000&width=800">
+<meta property="article:published_time" content="2021-04-29T05:03:10.000Z">
+<meta property="article:modified_time" content="2021-04-29T10:36:13.238Z">
+<meta property="article:author" content="Adam Blog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619672668724-5d3358d3-d081-4ee0-8dfb-5ea211241701.png#clientId=u345a0e7d-2a1d-4&from=paste&height=288&id=u08c9713a&margin=%5Bobject%20Object%5D&originHeight=288&originWidth=800&originalType=url&status=done&style=none&taskId=u7b2e6f9e-7023-443f-bad2-85b82471e5d&width=800">
+
+<link rel="canonical" href="http://example.com/2021/04/29/yuque/uglify%E5%8E%9F%E7%90%86/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>uglify原理 | Adam</title>
+  <meta name="referrer" content="no-referrer" />
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Adam</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/29/yuque/uglify%E5%8E%9F%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          uglify原理
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-29 13:03:10 / 修改时间：18:36:13" itemprop="dateCreated datePublished" datetime="2021-04-29T13:03:10+08:00">2021-04-29</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="1-AST（抽象语法树）"><a href="#1-AST（抽象语法树）" class="headerlink" title="1. AST（抽象语法树）"></a>1. AST（抽象语法树）</h2><p>要想了解 JS 的压缩原理，需要首先了解 AST。<br>抽象语法树：AST（Abstract Syntax Tree)，是源代码的抽象语法结构的树状表现形式，这里特指编程语言的源代码。树上的每个节点都表示源代码中的一种结构。之所以说语法是「抽象」的，是因为这里的语法并不会表示出真实语法中出现的每个细节。<br>举个例子：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619672668724-5d3358d3-d081-4ee0-8dfb-5ea211241701.png#clientId=u345a0e7d-2a1d-4&from=paste&height=288&id=u08c9713a&margin=%5Bobject%20Object%5D&originHeight=288&originWidth=800&originalType=url&status=done&style=none&taskId=u7b2e6f9e-7023-443f-bad2-85b82471e5d&width=800"><br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619672668632-dfb7a922-3e21-4aa2-a90e-1f63de20b25d.png#clientId=u345a0e7d-2a1d-4&from=paste&height=599&id=u35c87bbd&margin=%5Bobject%20Object%5D&originHeight=599&originWidth=800&originalType=url&status=done&style=none&taskId=u89688d6a-a0a1-46a2-8ea2-8032c37b70d&width=800"><br>从上面两个例子中，可以看出 AST 是源代码根据其语法结构，省略一些细节（比如：括号没有生成节点），抽象成树形表达。抽象语法树在计算机科学中有很多应用，比如编译器、IDE、压缩代码、格式化代码等。[1]</p>
+<h2 id="2-代码压缩原理"><a href="#2-代码压缩原理" class="headerlink" title="2. 代码压缩原理"></a>2. 代码压缩原理</h2><p>了解了 AST 之后，我们再分析一下 JS 的代码压缩原理。简单的说，就是</p>
+<ol>
+<li>将 code 转换成 AST</li>
+<li>将 AST 进行优化，生成一个更小的 AST</li>
+<li>将新生成的 AST 再转化成 code<br>PS：具体的 AST 树大家可以在 astexplorer 上在线获得<br>babel，eslint，v8 的逻辑均与此类似，下图是我们引用了 babel 的转化示意图：<img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619672668742-e01926f8-b6e2-484e-8199-be950d1dc148.jpeg#clientId=u345a0e7d-2a1d-4&from=paste&height=332&id=uea97fb66&margin=%5Bobject%20Object%5D&originHeight=332&originWidth=800&originalType=url&status=done&style=none&taskId=ubdc3cbe5-e218-40ee-9e90-498a01e57ba&width=800"><br>以我们之前被质疑的代码为例，看看它在 uglify 中是怎么样一步一步被压缩的：</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// uglify-js的版本需要为2.x, 3.0之后uglifyjs不再暴露Compressor api</span></span><br><span class="line"><span class="comment">// 2.x的uglify不能自动解析es6，所以这里先切换成es5</span></span><br><span class="line"><span class="comment">// npm install uglify-js@2.x</span></span><br><span class="line"><span class="keyword">var</span> UglifyJS = <span class="built_in">require</span>(<span class="string">&quot;uglify-js&quot;</span>);</span><br><span class="line"><span class="comment">// 原始代码</span></span><br><span class="line"><span class="keyword">var</span> code = <span class="string">`var a;</span></span><br><span class="line"><span class="string">var x = &#123; b: 123 &#125;;</span></span><br><span class="line"><span class="string">a = 123,</span></span><br><span class="line"><span class="string">delete x`</span>;</span><br><span class="line"><span class="comment">// 通过 UglifyJS 把代码解析为 AST</span></span><br><span class="line"><span class="keyword">var</span> ast = UglifyJS.parse(code);</span><br><span class="line">ast.figure_out_scope();</span><br><span class="line"><span class="comment">// 转化为一颗更小的 AST 树</span></span><br><span class="line">compressor = UglifyJS.Compressor();</span><br><span class="line">ast = ast.transform(compressor);</span><br><span class="line"><span class="comment">// 再把 AST 转化为代码</span></span><br><span class="line">code = ast.print_to_string();</span><br><span class="line"><span class="comment">// var a,x=&#123;b:123&#125;;a=123,delete x;</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&quot;code&quot;</span>, code);</span><br></pre></td></tr></table></figure>
+
+<p>到这里，我们已经了解了 uglifyjs 的代码压缩原理，但是还没有解决一个问题——为什么某些语句间的分号会被转换为逗号，某些不会转换。这就涉及到了 uglifyjs 的压缩规则。</p>
+<h2 id="3-代码压缩规则"><a href="#3-代码压缩规则" class="headerlink" title="3. 代码压缩规则"></a>3. 代码压缩规则</h2><p>由于 uglifyjs 的代码压缩规则很多，我们这里只分析与本文中相关的部分:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">uglifyjs的全部压缩规则可以参见：</span><br><span class="line">《[解读uglifyJS（四）——Javascript代码压缩](https:&#x2F;&#x2F;rapheal.sinaapp.com&#x2F;2014&#x2F;05&#x2F;22&#x2F;uglifyjs-squeeze&#x2F;#more-705)》</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619672718992-6f322231-e031-4622-9fe6-93c5bed01720.png#clientId=u345a0e7d-2a1d-4&from=paste&height=145&id=u42935634&margin=%5Bobject%20Object%5D&originHeight=145&originWidth=800&originalType=url&status=done&style=none&taskId=u9312dfff-ac37-4f6a-b034-b454e30c000&width=800"><br>PS：在线 demo<br>这其中需要注意的是只有“表达式语句”才能被合并，那么什么是表达式语句呢？<br><strong>表达式 VS 语句 VS 表达式语句</strong><br>例如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a; <span class="comment">//返回a的值</span></span><br><span class="line">b + <span class="number">3</span>; <span class="comment">// 返回b+3的结果</span></span><br></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">if</span>(x &gt; <span class="number">0</span>) &#123;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i &lt; arr.length; i ++) &#123;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> a = <span class="number">123</span>;</span><br></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">   A();</span><br><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;();</span><br><span class="line"><span class="keyword">delete</span> x.b;</span><br><span class="line">b = b + <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+
+<p>综上所述，因为 a = 123 和 delete x 都是表达式语句，所以分号被转换为逗号。而 var x = {b:123}则因为是声明语句，所以和 a=123 不会合并，分号不会被转换。但 var x = {b:123}和第一行 var a 又触发了另外一条规则，<br>所以第一行和第二行会被合并为 var a,x={b:123}</p>
+<h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h2><p>在本文中，我们讨论了什么是抽象语法树，uglifyjs 的压缩原理，以及相应的压缩规则，最终明晰了为什么代码会被压缩成我们得到的样子，希望对大家有所帮助。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/28/yuque/Array%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95api/" rel="prev" title="Array常用方法api">
+      <i class="fa fa-chevron-left"></i> Array常用方法api
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/29/yuque/String%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95api/" rel="next" title="String常用方法api">
+      String常用方法api <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-AST%EF%BC%88%E6%8A%BD%E8%B1%A1%E8%AF%AD%E6%B3%95%E6%A0%91%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">1. AST（抽象语法树）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%BB%A3%E7%A0%81%E5%8E%8B%E7%BC%A9%E5%8E%9F%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">2. 代码压缩原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E4%BB%A3%E7%A0%81%E5%8E%8B%E7%BC%A9%E8%A7%84%E5%88%99"><span class="nav-number">3.</span> <span class="nav-text">3. 代码压缩规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">4. 总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Adam Blog</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">64</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Adam Blog</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
