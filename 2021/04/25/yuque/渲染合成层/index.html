@@ -35,7 +35,7 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619363714774-f2da0ca4-e51e-4fbc-91f7-307d4388cf87.png#clientId=u5af2961a-f81b-4&from=paste&height=732&id=u9e699078&margin=%5Bobject%20Object%5D&name=image.png&originHeight=732&originWidth=641&originalType=binary&size=154880&status=done&style=none&taskId=ubf52f35a-428c-4da3-be16-f3031b35920&width=641">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619363748135-c0ff102e-1850-410e-81dd-77d7afe77610.png#clientId=u5af2961a-f81b-4&from=paste&height=732&id=u13441047&margin=%5Bobject%20Object%5D&name=image.png&originHeight=732&originWidth=653&originalType=binary&size=187431&status=done&style=none&taskId=uced4698a-1d9a-4209-8b1c-a91dad1df24&width=653">
 <meta property="article:published_time" content="2021-04-25T15:11:28.000Z">
-<meta property="article:modified_time" content="2021-04-29T10:36:14.262Z">
+<meta property="article:modified_time" content="2021-04-30T09:57:07.646Z">
 <meta property="article:author" content="Adam Blog">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619363642174-481e16d9-9a43-4096-b6e3-0d05efa9c009.png#clientId=u5af2961a-f81b-4&from=paste&height=289&id=u4f533940&margin=%5Bobject%20Object%5D&name=image.png&originHeight=289&originWidth=624&originalType=binary&size=39586&status=done&style=none&taskId=u9daf1abb-fe8b-4964-9127-e58530ea4e2&width=624">
@@ -189,7 +189,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-29 18:36:14" itemprop="dateModified" datetime="2021-04-29T18:36:14+08:00">2021-04-29</time>
+                <time title="修改时间：2021-04-30 17:57:07" itemprop="dateModified" datetime="2021-04-30T17:57:07+08:00">2021-04-30</time>
               </span>
 
           
@@ -203,7 +203,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="梳理浏览器渲染流程"><a href="#梳理浏览器渲染流程" class="headerlink" title="梳理浏览器渲染流程"></a>梳理浏览器渲染流程</h2><p>首先简单了解一下浏览器请求、加载、渲染一个页面的大致过程：</p>
+        <h1 id="梳理浏览器渲染流程"><a href="#梳理浏览器渲染流程" class="headerlink" title="梳理浏览器渲染流程"></a>梳理浏览器渲染流程</h1><p>首先简单了解一下浏览器请求、加载、渲染一个页面的大致过程：</p>
 <ul>
 <li>DNS 查询</li>
 <li>TCP 连接</li>
@@ -227,7 +227,7 @@
 </ol>
 <p>再参考一张图理解一下：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619363668703-951a22f8-23c8-4b9b-9abf-c3c4e82ddb6a.png#clientId=u5af2961a-f81b-4&from=paste&height=111&id=u4e02cff7&margin=%5Bobject%20Object%5D&name=image.png&originHeight=111&originWidth=700&originalType=binary&size=56388&status=done&style=none&taskId=u5b23f9b4-f095-42f4-8ee4-9785c055796&width=700" alt="image.png"><br>细致分离两个环节，其他环节参考上述概念注解：<br>JavaScript：JavaScript 实现动画效果，DOM 元素操作等。Composite（渲染层合并）：对页面中 DOM 元素的绘制是在多个层上进行的。在每个层上完成绘制过程之后，浏览器会将所有层按照合理的顺序合并成一个图层，然后显示在屏幕上。对于有位置重叠的元素的页面，这个过程尤其重要，因为一旦图层的合并顺序出错，将会导致元素显示异常。<br>在实际场景下，大致会出现三种常见的渲染流程（Layout 和 Paint 步骤是可避免的，可参考上一张图的注意部分理解）：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619363684549-4c380d60-da59-499e-802f-040741adf294.png#clientId=u5af2961a-f81b-4&from=paste&height=381&id=u6450f303&margin=%5Bobject%20Object%5D&name=image.png&originHeight=381&originWidth=580&originalType=binary&size=140788&status=done&style=none&taskId=u978aeeac-ffc9-4a25-a9fb-86a97c01760&width=580" alt="image.png"></p>
 <hr>
-<h2 id="Composite"><a href="#Composite" class="headerlink" title="Composite"></a>Composite</h2><h4 id="了解层"><a href="#了解层" class="headerlink" title="了解层"></a>了解层</h4><p><strong>注意：首先说明，这里讨论的是 WebKit，描述的是 Chrome 的实现细节，而并非是 web 平台的功能，因此这里介绍的内容不一定适用于其他浏览器。</strong></p>
+<h1 id="Composite"><a href="#Composite" class="headerlink" title="Composite"></a>Composite</h1><h2 id="了解层"><a href="#了解层" class="headerlink" title="了解层"></a>了解层</h2><p><strong>注意：首先说明，这里讨论的是 WebKit，描述的是 Chrome 的实现细节，而并非是 web 平台的功能，因此这里介绍的内容不一定适用于其他浏览器。</strong></p>
 <ul>
 <li>Chrome 拥有两套不同的渲染路径(rendering path)：硬件加速路径和旧软件路径(older software path)</li>
 <li>Chrome 中有不同类型的层： RenderLayer(负责 DOM 子树)和 GraphicsLayer(负责 RenderLayer 的子树)，只有 GraphicsLayer 是作为纹理(texture)上传给 GPU 的。</li>
@@ -240,7 +240,7 @@
 <li>GraphicsLayers 图形层，这是负责对应 RenderLayers 子树。</li>
 </ul>
 <p>在浏览器渲染流程中提到了 composite 概念，在 DOM 树中每个节点都会对应一个 LayoutObject，当他们的 LayoutObject 处于相同的坐标空间时，就会形成一个 RenderLayers ，也就是渲染层。RenderLayers 来保证页面元素以正确的顺序合成，这时候就会出现层合成（composite），从而正确处理透明元素和重叠元素的显示。<br>某些特殊的渲染层会被认为是合成层（Compositing Layers），合成层拥有单独的 GraphicsLayer，而其他不是合成层的渲染层，则和其第一个拥有 GraphicsLayer 父层公用一个。<br>而每个 GraphicsLayer（合成层单独拥有的图层） 都有一个 GraphicsContext，GraphicsContext 会负责输出该层的位图，位图是存储在共享内存中，作为纹理上传到 GPU 中，最后由 GPU 将多个位图进行合成，然后显示到屏幕上。</p>
-<h2 id="如何变成合成层"><a href="#如何变成合成层" class="headerlink" title="如何变成合成层"></a>如何变成合成层</h2><h4 id="合成层创建标准"><a href="#合成层创建标准" class="headerlink" title="合成层创建标准"></a>合成层创建标准</h4><p>什么情况下能使元素获得自己的层？虽然 Chrome 的启发式方法(heuristic)随着时间在不断发展进步，但是从目前来说，满足以下任意情况便会创建层：</p>
+<h1 id="如何变成合成层"><a href="#如何变成合成层" class="headerlink" title="如何变成合成层"></a>如何变成合成层</h1><h2 id="合成层创建标准"><a href="#合成层创建标准" class="headerlink" title="合成层创建标准"></a>合成层创建标准</h2><p>什么情况下能使元素获得自己的层？虽然 Chrome 的启发式方法(heuristic)随着时间在不断发展进步，但是从目前来说，满足以下任意情况便会创建层：</p>
 <ul>
 <li>3D 或透视变换(perspective transform) CSS 属性</li>
 <li>使用加速视频解码的 <video> 元素 拥有 3D</li>
@@ -355,7 +355,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A2%B3%E7%90%86%E6%B5%8F%E8%A7%88%E5%99%A8%E6%B8%B2%E6%9F%93%E6%B5%81%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">梳理浏览器渲染流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Composite"><span class="nav-number">2.</span> <span class="nav-text">Composite</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%86%E8%A7%A3%E5%B1%82"><span class="nav-number">2.0.1.</span> <span class="nav-text">了解层</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%8F%98%E6%88%90%E5%90%88%E6%88%90%E5%B1%82"><span class="nav-number">3.</span> <span class="nav-text">如何变成合成层</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%88%E6%88%90%E5%B1%82%E5%88%9B%E5%BB%BA%E6%A0%87%E5%87%86"><span class="nav-number">3.0.1.</span> <span class="nav-text">合成层创建标准</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%88%E6%88%90%E5%B1%82%E7%9A%84%E4%BC%98%E7%82%B9"><span class="nav-number">4.</span> <span class="nav-text">合成层的优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E5%90%88%E6%88%90%E5%B1%82%E5%8F%AF%E8%83%BD%E8%B8%A9%E5%88%B0%E7%9A%84%E5%9D%91"><span class="nav-number">5.</span> <span class="nav-text">利用合成层可能踩到的坑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%90%8E"><span class="nav-number">6.</span> <span class="nav-text">最后</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A2%B3%E7%90%86%E6%B5%8F%E8%A7%88%E5%99%A8%E6%B8%B2%E6%9F%93%E6%B5%81%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">梳理浏览器渲染流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Composite"><span class="nav-number">2.</span> <span class="nav-text">Composite</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%86%E8%A7%A3%E5%B1%82"><span class="nav-number">2.1.</span> <span class="nav-text">了解层</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%8F%98%E6%88%90%E5%90%88%E6%88%90%E5%B1%82"><span class="nav-number">3.</span> <span class="nav-text">如何变成合成层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%88%E6%88%90%E5%B1%82%E5%88%9B%E5%BB%BA%E6%A0%87%E5%87%86"><span class="nav-number">3.1.</span> <span class="nav-text">合成层创建标准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%88%E6%88%90%E5%B1%82%E7%9A%84%E4%BC%98%E7%82%B9"><span class="nav-number">3.2.</span> <span class="nav-text">合成层的优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E5%90%88%E6%88%90%E5%B1%82%E5%8F%AF%E8%83%BD%E8%B8%A9%E5%88%B0%E7%9A%84%E5%9D%91"><span class="nav-number">3.3.</span> <span class="nav-text">利用合成层可能踩到的坑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%90%8E"><span class="nav-number">3.4.</span> <span class="nav-text">最后</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
