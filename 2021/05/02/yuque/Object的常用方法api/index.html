@@ -20,21 +20,19 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="性能优化网站">
+  <meta name="description" content="1.Object.keys()，Object.getOwnPropertyNames()Object.keys 方法和 Object.getOwnPropertyNames 方法都用来遍历对象的属性。Object.keys 方法的参数是一个对象，返回一个数组。该数组的成员都是该对象自身的（而不是继承的）所有属性名 123let obj &#x3D; &amp;#123; a: &quot;123&quot;, b:">
 <meta property="og:type" content="article">
-<meta property="og:title" content="性能优化手段">
-<meta property="og:url" content="http://example.com/2021/04/23/yuque/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%89%8B%E6%AE%B5/index.html">
+<meta property="og:title" content="Object的常用方法api">
+<meta property="og:url" content="http://example.com/2021/05/02/yuque/Object%E7%9A%84%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95api/index.html">
 <meta property="og:site_name" content="Adam">
-<meta property="og:description" content="性能优化网站">
+<meta property="og:description" content="1.Object.keys()，Object.getOwnPropertyNames()Object.keys 方法和 Object.getOwnPropertyNames 方法都用来遍历对象的属性。Object.keys 方法的参数是一个对象，返回一个数组。该数组的成员都是该对象自身的（而不是继承的）所有属性名 123let obj &#x3D; &amp;#123; a: &quot;123&quot;, b:">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619151042204-47a6c0b4-9803-47d8-8c30-4250196c6c45.png#clientId=u36fa501e-dc3b-4&from=paste&height=2948&id=u21574d4d&margin=%5Bobject%20Object%5D&name=image.png&originHeight=2948&originWidth=1063&originalType=binary&size=251688&status=done&style=none&taskId=uc2d5a027-1c85-4cf1-b38e-b8a955834e2&width=1063">
-<meta property="article:published_time" content="2021-04-23T04:09:55.000Z">
-<meta property="article:modified_time" content="2021-05-02T12:01:29.717Z">
+<meta property="article:published_time" content="2021-05-02T09:58:08.000Z">
+<meta property="article:modified_time" content="2021-05-02T12:01:26.065Z">
 <meta property="article:author" content="Adam Blog">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619151042204-47a6c0b4-9803-47d8-8c30-4250196c6c45.png#clientId=u36fa501e-dc3b-4&from=paste&height=2948&id=u21574d4d&margin=%5Bobject%20Object%5D&name=image.png&originHeight=2948&originWidth=1063&originalType=binary&size=251688&status=done&style=none&taskId=uc2d5a027-1c85-4cf1-b38e-b8a955834e2&width=1063">
 
-<link rel="canonical" href="http://example.com/2021/04/23/yuque/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%89%8B%E6%AE%B5/">
+<link rel="canonical" href="http://example.com/2021/05/02/yuque/Object%E7%9A%84%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95api/">
 
 
 <script id="page-configurations">
@@ -47,7 +45,7 @@
   };
 </script>
 
-  <title>性能优化手段 | Adam</title>
+  <title>Object的常用方法api | Adam</title>
   <meta name="referrer" content="no-referrer" />
   
 
@@ -153,7 +151,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/23/yuque/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%89%8B%E6%AE%B5/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/02/yuque/Object%E7%9A%84%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95api/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -166,7 +164,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          性能优化手段
+          Object的常用方法api
         </h1>
 
         <div class="post-meta">
@@ -175,16 +173,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2021-04-23 12:09:55" itemprop="dateCreated datePublished" datetime="2021-04-23T12:09:55+08:00">2021-04-23</time>
+              <time title="创建时间：2021-05-02 17:58:08 / 修改时间：20:01:26" itemprop="dateCreated datePublished" datetime="2021-05-02T17:58:08+08:00">2021-05-02</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-02 20:01:29" itemprop="dateModified" datetime="2021-05-02T20:01:29+08:00">2021-05-02</time>
-              </span>
 
           
 
@@ -197,7 +189,23 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1619151042204-47a6c0b4-9803-47d8-8c30-4250196c6c45.png#clientId=u36fa501e-dc3b-4&from=paste&height=2948&id=u21574d4d&margin=%5Bobject%20Object%5D&name=image.png&originHeight=2948&originWidth=1063&originalType=binary&size=251688&status=done&style=none&taskId=uc2d5a027-1c85-4cf1-b38e-b8a955834e2&width=1063" alt="image.png"><br><a target="_blank" rel="noopener" href="https://alienzhou.com/projects/fe-performance-journey/#%E5%A6%82%E4%BD%95%E5%AD%A6%E4%B9%A0%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%EF%BC%9F">性能优化网站</a></p>
+        <h1 id="1-Object-keys-，Object-getOwnPropertyNames"><a href="#1-Object-keys-，Object-getOwnPropertyNames" class="headerlink" title="1.Object.keys()，Object.getOwnPropertyNames()"></a>1.Object.keys()，Object.getOwnPropertyNames()</h1><p><strong>Object.keys 方法和 Object.getOwnPropertyNames 方法都用来遍历对象的属性。</strong><br><strong>Object.keys 方法的参数是一个对象，返回一个数组。该数组的成员都是该对象自身的（而不是继承的）所有属性名</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123; <span class="attr">a</span>: <span class="string">&quot;123&quot;</span>, <span class="attr">b</span>: <span class="string">&quot;456&quot;</span> &#125;;</span><br><span class="line"><span class="built_in">Object</span>.keys(obj);</span><br><span class="line"><span class="comment">// [&quot;a&quot;, &quot;b&quot;]</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>Object.getOwnPropertyNames 方法与 Object.keys 类似，也是接受一个对象作为参数，返回一个数组，包含了该对象自身的所有属性名。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123; <span class="attr">a</span>: <span class="string">&quot;123&quot;</span>, <span class="attr">b</span>: <span class="string">&quot;456&quot;</span> &#125;;</span><br><span class="line"><span class="built_in">Object</span>.getOwnPropertyNames(obj);</span><br><span class="line"><span class="comment">// [&quot;a&quot;, &quot;b&quot;]</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>对于一般的对象来说，Object.keys()和 Object.getOwnPropertyNames()返回的结果是一样的。只有涉及不可枚举属性时，才会有不一样的结果。Object.keys 方法只返回可枚举的属性（详见《对象属性的描述对象》一章），Object.getOwnPropertyNames 方法还返回不可枚举的属性名。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Object</span>.getOwnPropertyNames([<span class="number">123</span>, <span class="number">456</span>]); <span class="comment">// [&quot;0&quot;, &quot;1&quot;, &quot;length&quot;]</span></span><br><span class="line"><span class="built_in">Object</span>.keys([<span class="number">123</span>, <span class="number">456</span>]); <span class="comment">// [&quot;0&quot;, &quot;1&quot;]</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="2-Object-prototype-valueOf"><a href="#2-Object-prototype-valueOf" class="headerlink" title="2.Object.prototype.valueOf()"></a>2.Object.prototype.valueOf()</h1><p><strong>valueOf 方法的作用是返回一个对象的“值”，默认情况下返回对象本身。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123; <span class="attr">a</span>: <span class="string">&quot;123&quot;</span>, <span class="attr">b</span>: <span class="string">&quot;456&quot;</span> &#125;;</span><br><span class="line">obj.valueOf() === obj; <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="3-Object-prototype-toString"><a href="#3-Object-prototype-toString" class="headerlink" title="3.Object.prototype.toString()"></a>3.Object.prototype.toString()</h1><p><strong>toString 方法的作用是返回一个对象的字符串形式，默认情况下返回类型字符串。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123; <span class="attr">a</span>: <span class="string">&quot;123&quot;</span>, <span class="attr">b</span>: <span class="string">&quot;456&quot;</span> &#125;;</span><br><span class="line">obj.toString(); <span class="comment">// &quot;[object Object]&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>Object.prototype.toString 方法返回对象的类型字符串，因此可以用来判断一个值的类型。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Object</span>.prototype.toString.call(value);</span><br></pre></td></tr></table></figure>
 
     </div>
 
@@ -213,12 +221,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/04/23/yuque/RAIL%E6%A8%A1%E5%9E%8B/" rel="prev" title="RAIL模型">
-      <i class="fa fa-chevron-left"></i> RAIL模型
+    <a href="/2021/04/29/yuque/String%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95api/" rel="prev" title="String常用方法api">
+      <i class="fa fa-chevron-left"></i> String常用方法api
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/04/23/yuque/%E9%87%8D%E6%8E%92%E5%92%8C%E9%87%8D%E7%BB%98/" rel="next" title="重排和重绘">
-      重排和重绘 <i class="fa fa-chevron-right"></i>
+    <a href="/2021/05/02/hello-world/" rel="next" title="Hello World">
+      Hello World <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -278,6 +286,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Object-keys-%EF%BC%8CObject-getOwnPropertyNames"><span class="nav-number">1.</span> <span class="nav-text">1.Object.keys()，Object.getOwnPropertyNames()</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Object-prototype-valueOf"><span class="nav-number">2.</span> <span class="nav-text">2.Object.prototype.valueOf()</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Object-prototype-toString"><span class="nav-number">3.</span> <span class="nav-text">3.Object.prototype.toString()</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

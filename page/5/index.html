@@ -146,6 +146,138 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/20/yuque/Chrome%E7%9A%84%E6%9E%B6%E6%9E%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/20/yuque/Chrome%E7%9A%84%E6%9E%B6%E6%9E%84/" class="post-title-link" itemprop="url">Chrome的架构</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-20 23:53:01" itemprop="dateCreated datePublished" datetime="2021-04-20T23:53:01+08:00">2021-04-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-05-02 20:01:32" itemprop="dateModified" datetime="2021-05-02T20:01:32+08:00">2021-05-02</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="CPU-与-GPU"><a href="#CPU-与-GPU" class="headerlink" title="CPU 与 GPU"></a>CPU 与 GPU</h1><p>CPU 和 GPU 作为计算机中最重要的两个计算单元直接决定了计算性能。</p>
+<h2 id="CPU"><a href="#CPU" class="headerlink" title="CPU"></a>CPU</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934003028-bd865e07-a3b1-4995-b674-31e47cf32b0c.png#clientId=u7e5a642c-af68-4&from=paste&height=246&id=u177dfc79&margin=%5Bobject%20Object%5D&originHeight=491&originWidth=856&originalType=url&status=done&style=none&taskId=uec5ae0bf-01df-4280-9da7-aff9451be96&width=428"><br><strong>CPU.png</strong><br>CPU 是计算机的大脑，负责处理各种不同的任务。在过去，大多数 CPU 是单芯片的，核心被安置在同一个芯片上。更新的 CPU 可以支持多核心，运算能力大大加强。而最新的的 cpu 已经达到 10 核心 20 线程数的能力了。</p>
+<h2 id="GPU"><a href="#GPU" class="headerlink" title="GPU"></a>GPU</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934003052-7ab05c5d-7d55-4725-9625-b4e9989ad607.png#clientId=u7e5a642c-af68-4&from=paste&height=246&id=u4aff73c4&margin=%5Bobject%20Object%5D&originHeight=491&originWidth=856&originalType=url&status=done&style=none&taskId=ud331ba8d-a9b2-4d6c-bd0e-29f98466b50&width=428"><br><strong>GPU.png</strong><br>GPU 是另一个计算机的组成部分，与 CPU 不同，GPU 更擅长利用多核心同时处理单一的任务。像命名那样，GPU 最初被用于处理图像。这就是为什么使用 GPU 可以更快、更顺畅的渲染页面内容。随着 GPU 的发展，越来越多的计算任务也可以使用 GPU 来处理。甚至有人说 GPU 是人工智能的大功臣，可见 GPU 已经不再仅用于图像处理上了。</p>
+<h1 id="计算机架构"><a href="#计算机架构" class="headerlink" title="计算机架构"></a>计算机架构</h1><p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934002954-0f71ff44-b6f0-4309-9a3a-89d0d529bac3.png#clientId=u7e5a642c-af68-4&from=paste&height=223&id=u3a0d814e&margin=%5Bobject%20Object%5D&originHeight=446&originWidth=856&originalType=url&status=done&style=none&taskId=u160a39ce-20cc-496a-9c6c-b157323bc0b&width=428"><br><strong>hw-os-app.png</strong><br>我们可以把计算机自下而上分成三层：硬件、操作系统和应用。有了操作系统的存在，上层运行的应用可以使用操作系统提供的能力使用硬件资源而不会直接访问硬件资源。</p>
+<h1 id="进程与线程"><a href="#进程与线程" class="headerlink" title="进程与线程"></a>进程与线程</h1><p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934002327-1a820058-c867-4ff5-9850-660d05934ed2.png#clientId=u7e5a642c-af68-4&from=paste&height=273&id=u9a70ae1e&margin=%5Bobject%20Object%5D&originHeight=546&originWidth=856&originalType=url&status=done&style=none&taskId=u57fb98ef-c81b-4a41-9186-91a4cf41dba&width=428"><br><strong>process-thread.png</strong><br>一个进程是应用正在运行的程序。而线程是进程中更小的一部分。当应用被启动，进程就被创建出来。程序可以创建线程来帮助其工作。操作系统会为进程分配私有的内存空间以供使用，当关闭程序时，这段私有的内存也会被释放。其实还有比线程更小的存在就是<strong>协程，而协成是运行在线程中更小的单位。async/await 就是基于协程实现的。</strong></p>
+<h1 id="进程间通信（IPC）"><a href="#进程间通信（IPC）" class="headerlink" title="进程间通信（IPC）"></a>进程间通信（IPC）</h1><p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934003083-61296147-26ba-4d43-9b96-e566f29c6dc5.png#clientId=u7e5a642c-af68-4&from=paste&height=171&id=uea90958e&margin=%5Bobject%20Object%5D&originHeight=341&originWidth=620&originalType=url&status=done&style=none&taskId=u2195b2b3-b590-4f99-ab30-eda051908b8&width=310"><br>一个进程可以让操作系统开启另一个进程处理不同的任务。当两个进程需要通信时，可以时用 IPC(Inter Process Communication)。<br>多数程序被设计成使用 IPC 来进行进程间的通信，好处在于当一个进程给另一个进程发消息而没有回应时，并不影响当前的进程继续工作。</p>
+<h1 id="浏览器架构"><a href="#浏览器架构" class="headerlink" title="浏览器架构"></a>浏览器架构</h1><p>借助进程和线程，浏览器可以被设计成单进程、多线程架构，或者利用 IPC 实现多进程、多线程架构。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934003232-42468ef0-ecd8-4956-bd77-1250284261f6.png#clientId=u7e5a642c-af68-4&from=paste&height=130&id=ub3302b7a&margin=%5Bobject%20Object%5D&originHeight=259&originWidth=865&originalType=url&status=done&style=none&taskId=u0bb9a499-0134-4471-ab99-506e2f7d025&width=432.5"><br><strong>browser-arch.png</strong><br>这里我们以 Chrome 多进程架构介绍，在 Chrome 中存在这不同种类型的进程，它们各司其职。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934003726-6b2d1bc6-28c0-4438-bcc1-e1851952a734.png#clientId=u7e5a642c-af68-4&from=paste&height=250&id=u7a409bfd&margin=%5Bobject%20Object%5D&originHeight=499&originWidth=865&originalType=url&status=done&style=none&taskId=u788a9652-0f60-4e25-ad24-52e3940139c&width=432.5"><br><strong>browser-arch2.png</strong><br>浏览器进程做为 Chrome 中最核心的进程管理着 Chrome 中的其他进程，而 Renderer 则负责渲染不同的站点。</p>
+<h2 id="进程工作内容"><a href="#进程工作内容" class="headerlink" title="进程工作内容"></a>进程工作内容</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934003996-59e79ff7-e4e2-4d9f-a9fe-9db04c75093b.png#clientId=u7e5a642c-af68-4&from=paste&height=189&id=u4101488a&margin=%5Bobject%20Object%5D&originHeight=378&originWidth=742&originalType=url&status=done&style=none&taskId=uc7c943ad-51fd-4cae-a48c-962bb76fcda&width=371"><br><strong>browserui.png</strong></p>
+<h3 id="浏览器进程（Browser-process）"><a href="#浏览器进程（Browser-process）" class="headerlink" title="浏览器进程（Browser process）"></a>浏览器进程（Browser process）</h3><p>浏览器进程负责管理 Chrome 应用本身，包括地址栏、书签、前进和后退按钮。同时也负责可不见的功能，比如网络请求、文件按访问等，也负责其他进程的调度。</p>
+<h3 id="渲染进程（Renderer-process）"><a href="#渲染进程（Renderer-process）" class="headerlink" title="渲染进程（Renderer process）"></a>渲染进程（Renderer process）</h3><p>渲染进程负责站点的渲染，其中也包括 JavaScript 代码的运行，web worker 的管理等。</p>
+<h3 id="插件进程（Plugin-process）"><a href="#插件进程（Plugin-process）" class="headerlink" title="插件进程（Plugin process）"></a>插件进程（Plugin process）</h3><p>插件进程负责为浏览器提供各种额外的插件功能，例如 flash。</p>
+<h3 id="GPU-进程（GPU-process）"><a href="#GPU-进程（GPU-process）" class="headerlink" title="GPU 进程（GPU process）"></a>GPU 进程（GPU process）</h3><p>GPU 进程负责提供成像的功能。<br>当然还有其他像扩展进程或工具进程等其他进程，可以在 Chrome 的 Task Manager 面板中查看，面板中列出了运行的进程和其占用的 CPU、内存情况。</p>
+<h2 id="多进程架构的好处"><a href="#多进程架构的好处" class="headerlink" title="多进程架构的好处"></a>多进程架构的好处</h2><p>当我们访问一个站点时，渲染进程会负责运行站点的代码，渲染站点的页面，同时响应用户的交互动作，当我们在 Chrome 中打开三个页签同时访问三个站点时，如果其中一个没有响应，我们可以关闭它然后使用其他的页签，这是因为 Chrome 为每个站点创建一个独立的渲染进程，专门处理当前站点的渲染工作。如果所有的页面运行在同一个进程中，当有一个页面没有响应时，所有的页面就都卡住了。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934004106-e00dc082-ea62-41d9-9ad3-8be1f40323ed.png#clientId=u7e5a642c-af68-4&from=paste&height=247&id=u37240335&margin=%5Bobject%20Object%5D&originHeight=494&originWidth=865&originalType=url&status=done&style=none&taskId=u44b71abe-a14a-4ab8-8d59-ebd38415e74&width=432.5"><br><strong>tabs.png</strong><br>另一个好处是，借助操作系统对进程安全的控制，浏览器可以将页面放置在沙箱中，站点的代码可以运行在隔离的环境中，保证核心进程的安全。<br>虽然多进程的架构优于单进程架构，但由于进程独享自己的私有内存，以渲染进程为例，虽然渲染的站点不同，但工作内容大体相似，为了完成渲染工作它们会在自己的内存中包含相同的功能，例如 V8 引擎（用于解析和运行 Javascript），这意味着这部分相同的功能需要占用每个进程的内存空间。为了节省内存，Chrome 限制了最大进程数，最大进程数取决于硬件的能力，同时<strong>当使用多个页签访问相同的站点时浏览器不会创建新的渲染进程</strong>。</p>
+<h2 id="面向服务的架构"><a href="#面向服务的架构" class="headerlink" title="面向服务的架构"></a>面向服务的架构</h2><p>Chrome 将架构从多进程模型转变成面向服务。浏览器将功能以服务的方式提供，以解决多进程架构中的问题。<br>当 Chrome 运行在拥有强大硬件的计算机上时，会将一个服务以多个进程的方式实现，提高稳定性，当计算机硬件资源紧张时，则可以将多个服务放在一个进程中节省资源。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934003941-34ad2ef7-0cce-4201-9bf8-668f286dc9f7.png#clientId=u7e5a642c-af68-4&from=paste&height=155&id=u1ae6c215&margin=%5Bobject%20Object%5D&originHeight=310&originWidth=950&originalType=url&status=done&style=none&taskId=ubaa93831-53a0-426e-8398-fdde83d16f5&width=475"><br><strong>servicfication.png</strong></p>
+<h2 id="基于站点隔离的渲染进程"><a href="#基于站点隔离的渲染进程" class="headerlink" title="基于站点隔离的渲染进程"></a>基于站点隔离的渲染进程</h2><p>利用 iframe 我们可以在同一个页面访问不同站点的资源，但从安全的角度考虑，同源策略不允许一个站点在未得到同意的情况下访问其他站点的资源，所以从 Chrome 67 开始每个站点由独立的渲染进程处理被默认启用。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934004117-a6cba08e-7ee6-4c03-a37c-c56543eb2531.png#clientId=u7e5a642c-af68-4&from=paste&height=222&id=ubbb04d89&margin=%5Bobject%20Object%5D&originHeight=443&originWidth=865&originalType=url&status=done&style=none&taskId=u2167c42e-e31d-4eea-86c1-10ec00eb8a0&width=432.5"><br><strong>isolation.png</strong></p>
+<h2 id="浏览器进程"><a href="#浏览器进程" class="headerlink" title="浏览器进程"></a>浏览器进程</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934005035-1287b2aa-eab1-4dea-87c7-dad66f1dd135.png#clientId=u7e5a642c-af68-4&from=paste&height=252&id=ud23037c0&margin=%5Bobject%20Object%5D&originHeight=504&originWidth=865&originalType=url&status=done&style=none&taskId=uac350306-f60b-4c6b-9187-7ad52817aa2&width=432.5"><br><strong>browserprocesses.png</strong><br>浏览器进程负责处理除了渲染外的大部分工作，浏览器进程包括几个线程：</p>
+<ul>
+<li>UI 线程负责绘制工具栏中的按钮、地址栏等。</li>
+<li>网络线程负责从网络中获取数据。</li>
+<li>存储线程负责文件等功能。</li>
+</ul>
+<p>当我们在地址栏中输入一个地址时，浏览器进程中的 UI 线程最先得知这个动作，并开始处理。</p>
+<h1 id="一次访问"><a href="#一次访问" class="headerlink" title="一次访问"></a>一次访问</h1><p>下面我们就从一次常见的访问入手，逐步了解浏览器是如何展示页面的。</p>
+<h2 id="Step-1：输入处理"><a href="#Step-1：输入处理" class="headerlink" title="Step 1：输入处理"></a>Step 1：输入处理</h2><p>当我们在地址栏中输入时，UI 线程会先判断我们输入的内容是要搜索的内容还是要访问一个站点，因为地址栏同时也是一个搜索框。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934004966-8743b0c3-98bb-4c71-9651-eb1a99af7d4f.png#clientId=u7e5a642c-af68-4&from=paste&height=252&id=u11e09253&margin=%5Bobject%20Object%5D&originHeight=504&originWidth=865&originalType=url&status=done&style=none&taskId=u033ea2e5-c700-451f-8213-1d6017a6eab&width=432.5"><br><strong>input.png</strong></p>
+<h2 id="Step-2：访问开始"><a href="#Step-2：访问开始" class="headerlink" title="Step 2：访问开始"></a>Step 2：访问开始</h2><p>当我们按下回车开始访问时，UI 线程将借助网络线程访问站点资源. 浏览器页签的标题上会出现加载中的图标，同时网络线程会根据适当的网络协议，例如 DNS lookup 和 TLS 为这次请求建立连接。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934004973-5cc6ec92-1004-4b35-baed-bf5b9958a435.png#clientId=u7e5a642c-af68-4&from=paste&height=252&id=udb01aa0f&margin=%5Bobject%20Object%5D&originHeight=504&originWidth=865&originalType=url&status=done&style=none&taskId=u6f43a1fd-4901-4114-8854-c768a94b9cc&width=432.5"><br><strong>navstart.png</strong><br>当服务器返回给浏览器重定向请求时，网络线程会通知 UI 线程需要重定向，然后会以新的地址做开始请求资源。</p>
+<h2 id="Step-3：处理响应数据"><a href="#Step-3：处理响应数据" class="headerlink" title="Step 3：处理响应数据"></a>Step 3：处理响应数据</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934005034-892b8c23-b856-4e06-bb02-ac4066327046.png#clientId=u7e5a642c-af68-4&from=paste&height=182&id=uc407e9bc&margin=%5Bobject%20Object%5D&originHeight=363&originWidth=720&originalType=url&status=done&style=none&taskId=u6b69d545-f6b6-417c-bb65-5ac0b5e8967&width=360"><br><strong>response.png</strong><br>当网络线程收到来自服务器的数据时，会试图从数据中的前面的一些字节中得到数据的类型（<strong>Content-Type</strong>），以试图了解数据的格式。<br>当返回的数据类型是 HTML 时，会将数据传递给渲染进程做进一步的渲染工作。但是如果数据类型是 zip 文件或者其他文件格式时，会将数据传递给下载管理器做进一步的文件预览或者下载工作。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934005104-1944851f-0b57-4ed1-85aa-146065255369.png#clientId=u7e5a642c-af68-4&from=paste&height=252&id=u8f1990c2&margin=%5Bobject%20Object%5D&originHeight=504&originWidth=865&originalType=url&status=done&style=none&taskId=u92c18d8f-4bad-46cc-bb1e-0b3402a61b1&width=432.5"><br><strong>sniff.png</strong><br>在开始渲染之前，网络线程要先检查数据的安全性，这里也是浏览器保证安全的地方。如果返回的数据来自一些恶意的站点，网络线程会显示警告的页面。同时，Cross Origin Read Blocking(CORB)策略也会确保跨域的敏感数据不会被传递给渲染进程。</p>
+<h2 id="Step-3：渲染过程"><a href="#Step-3：渲染过程" class="headerlink" title="Step 3：渲染过程"></a>Step 3：渲染过程</h2><p>当所有的检查结束后，网络线程确信浏览器可以访问站点时，网络线程通知 UI 线程数据已经准备好了。UI 线程会根据当前的站点找到一个渲染进程完成接下来的渲染工作。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934005800-aecdd5a8-f552-40a8-bf09-6ab4bca2cf86.png#clientId=u7e5a642c-af68-4&from=paste&height=252&id=ub06301a0&margin=%5Bobject%20Object%5D&originHeight=504&originWidth=865&originalType=url&status=done&style=none&taskId=u2c1cc22b-3600-431e-aa2c-1dd10aa115f&width=432.5"><br><strong>findrenderer.png</strong><br>在第二步，UI 线程将请求地址传递给网络线程时，UI 线程就已经知道了要访问的站点。此时 UI 线程就可以开始查找或启动一个渲染进程，这个动作与让网络线程下载数据是同时的。如果网络线程按照预期获取到数据，则渲染进程就已经可以开始渲染了，这个动作减少了从网络线程开始请求数据到渲染进程可以开始渲染页面的时间。当然，如果出现重定向的请求时，提前初始化的渲染进程可能就不会被使用了，但相比正常访问站点的场景，重定向往往是少数，在实际工作中，也需要根据特定的场景给出特定的方案，不必追求完美的方案。</p>
+<h2 id="Step-4：提交访问"><a href="#Step-4：提交访问" class="headerlink" title="Step 4：提交访问"></a>Step 4：提交访问</h2><p>经历前面的步骤，数据和渲染进程都已经准备好了。浏览器进程会通过 IPC 向渲染进程提交这次访问，同时也会保证渲染进程可以通过网络线程继续获取数据。一旦浏览器进程收到来自渲染进程的确认完毕的消息，就意味着访问的过程结束了，文档渲染的过程就开始了。<br>这时，地址栏显示出表明安全的图标，同时显示出站点的信息。访问历史中也会加入当前的站点信息。为了能恢复访问历史信息，当页签或窗口被关闭时，访问历史的信息会被存储在硬盘中。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934005924-46c88fcb-d94c-4aa2-8cfd-361d229648e1.png#clientId=u7e5a642c-af68-4&from=paste&height=252&id=u1fa9f7eb&margin=%5Bobject%20Object%5D&originHeight=504&originWidth=865&originalType=url&status=done&style=none&taskId=u0dae2c5d-3238-419b-93cd-25c7e147e7c&width=432.5"><br><strong>commit.png</strong></p>
+<h2 id="Extra-Step：加载完毕"><a href="#Extra-Step：加载完毕" class="headerlink" title="Extra Step：加载完毕"></a>Extra Step：加载完毕</h2><p>当访问被提交给渲染进程，渲染进程会继续加载页面资源并且渲染页面。当渲染进程”结束”渲染工作，会给浏览器进程发送消息，这个消息会在页面中所有子页面（frame）结束加载后发出，也就是 onLoad 事件触发后发送。当收到”结束”消息后，UI 线程会隐藏页签标题上的加载状态图标，表明页面加载完毕。<br>但这里”结束”并不意味着所有的加载工作都结束了，因为可能还有 JavaScript 在加载额外的资源或者渲染新的视图。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934006481-c5794c26-8590-46db-9e56-3cca84878eb2.png#clientId=u7e5a642c-af68-4&from=paste&height=252&id=ub3109f77&margin=%5Bobject%20Object%5D&originHeight=504&originWidth=865&originalType=url&status=done&style=none&taskId=u37f3aeae-1024-471a-9f7e-31f5e5d27eb&width=432.5"><br><strong>loaded.png</strong></p>
+<h1 id="访问不同的站点"><a href="#访问不同的站点" class="headerlink" title="访问不同的站点"></a>访问不同的站点</h1><p>一次普通的访问到此就结束了。当我们输入另外一个地址时，浏览器进程会重复上面的过程。但是在开始新的访问前，会确认当前的站点是否关心 beforeunload 事件。<br>beforeunload 事件可以提醒用户是否要访问新的站点或者关闭页签，如果用户拒绝则新的访问或关闭会被阻止。<br>由于所有的包括渲染、运行 Javascript 的工作都发生在渲染进程中，浏览器进程需要在新的访问开始前与渲染进程确认当前的站点是否关心 unload。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934005917-978d5925-83bb-4e5a-8fbf-9a0a12fd20dc.png#clientId=u7e5a642c-af68-4&from=paste&height=252&id=u1cad19f4&margin=%5Bobject%20Object%5D&originHeight=504&originWidth=865&originalType=url&status=done&style=none&taskId=uc5c4a078-966d-4b63-bcc1-380a20291b4&width=432.5"><br><strong>beforeunload.png</strong><br>如果一次访问是从一个渲染进程中发起的，例如用户点击一个链接或者运行 JavaScript 代码 location = ‘<a target="_blank" rel="noopener" href="http://newsite.com&/#39;%E6%97%B6%EF%BC%8C%E6%B8%B2%E6%9F%93%E8%BF%9B%E7%A8%8B%E9%A6%96%E5%85%88%E6%A3%80%E6%9F%A5beforeunload%E3%80%82%E7%84%B6%E5%90%8E%E5%86%8D%E6%89%A7%E8%A1%8C%E5%92%8C%E6%B5%8F%E8%A7%88%E5%99%A8%E8%BF%9B%E7%A8%8B%E5%88%9D%E5%A7%8B%E5%8C%96%E8%AE%BF%E9%97%AE%E5%90%8C%E6%A0%B7%E7%9A%84%E6%AD%A5%E9%AA%A4%EF%BC%8C%E5%8F%AA%E4%B8%8D%E8%BF%87%E5%8C%BA%E5%88%AB%E5%9C%A8%E4%BA%8E%E8%BF%99%E6%A0%B7%E7%9A%84%E8%AE%BF%E9%97%AE%E8%AF%B7%E6%B1%82%E6%98%AF%E7%94%B1%E6%B8%B2%E6%9F%93%E8%BF%9B%E7%A8%8B%E5%90%91%E6%B5%8F%E8%A7%88%E5%99%A8%E8%BF%9B%E7%A8%8B%E5%8F%91%E8%B5%B7%E7%9A%84%E3%80%82">http://newsite.com&#39;时，渲染进程首先检查beforeunload。然后再执行和浏览器进程初始化访问同样的步骤，只不过区别在于这样的访问请求是由渲染进程向浏览器进程发起的。</a><br>当新的站点请求被创建时，一个独立的渲染进程将被用于处理这个请求。为了支持像 unload 的事件触发，老的渲染进程需要保持住当前的状态。更详细的生命周期介绍可以参考<a target="_blank" rel="noopener" href="https://developers.google.com/web/updates/2018/07/page-lifecycle-api#overview_of_page_lifecycle_states_and_events">Page lifecycle</a>。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934005884-4203144b-e013-4792-878f-81acb6764128.png#clientId=u7e5a642c-af68-4&from=paste&height=252&id=u09693347&margin=%5Bobject%20Object%5D&originHeight=504&originWidth=865&originalType=url&status=done&style=none&taskId=u1b09b32f-8c98-41a6-bcff-b31936a1ebe&width=432.5"><br><strong>unload.png</strong></p>
+<h1 id="Service-worker"><a href="#Service-worker" class="headerlink" title="Service worker"></a>Service worker</h1><p>Service worker 是一种可以 web 开发者控制缓存的技术。如果 Service worker 被实现成从本地存储获取数据时，那么原本的请求就不会被浏览器发送给服务器了。<br>值得注意的是，Service worker 中的代码是运行在渲染进程中的。当访问开始时，网络线程会根据域名检查是否有 Service worker 会处理当前地址的请求，如果有，则 UI 线程会找到对应的渲染进程去执行 Service worker 的代码，而 Service worker 可以让开发者决定这个请求是从本地存储还是从网络中获取数据。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934006494-3b8c4481-7f75-4ae9-b37b-1192308e0d20.png#clientId=u7e5a642c-af68-4&from=paste&height=224&id=uc072772a&margin=%5Bobject%20Object%5D&originHeight=447&originWidth=726&originalType=url&status=done&style=none&taskId=u4b726b6d-6ba7-4ee9-bf1f-6ab0055819d&width=363"><br><strong>scope_lookup.png</strong><br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934006655-4e8c3b43-89bc-4ad4-907c-a70909673322.png#clientId=u7e5a642c-af68-4&from=paste&height=221&id=u3d198b69&margin=%5Bobject%20Object%5D&originHeight=442&originWidth=758&originalType=url&status=done&style=none&taskId=uc238b3fa-67f5-4dbf-b079-763d3bdb6b1&width=379"><br><strong>serviceworker.png</strong></p>
+<h1 id="访问预加载"><a href="#访问预加载" class="headerlink" title="访问预加载"></a>访问预加载</h1><p>如果 Service worker 最终决定要从网络中获取数据时，我们会发现这种跨进程的通信会造成一些延迟。<a target="_blank" rel="noopener" href="https://developers.google.com/web/updates/2017/02/navigation-preload">Navigation Preload</a>是一种可以在 Service worker 启动的同时加载资源的优化机制。借助特殊的请求头，服务器可以决定返回什么样的内容给浏览器。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934006611-e42c2ff0-80d3-4745-9405-1ab1a1a3f286.png#clientId=u7e5a642c-af68-4&from=paste&height=252&id=ubffa26f2&margin=%5Bobject%20Object%5D&originHeight=504&originWidth=865&originalType=url&status=done&style=none&taskId=u686457de-9751-457f-9660-e870d5a9943&width=432.5"><br><strong>navpreload.png</strong></p>
+<h2 id="渲染进程负责页面的内容"><a href="#渲染进程负责页面的内容" class="headerlink" title="渲染进程负责页面的内容"></a>渲染进程负责页面的内容</h2><p>渲染进程负责所有发生在浏览器页签中的事情。在一个渲染进程中，主线程负责解析，编译或运行代码等工作，当我们使用 Worker 时，Worker 线程会负责运行一部分代码。合成线程和光栅线程是也是运行在渲染进程中的，负责更高效和顺畅的渲染页面。<br>渲染进程最重要的工作就是将 HTML、CSS 和 Javascript 代码转换成一个可以与用户产生交互的页面。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934006747-6f943860-47b0-4b90-b0d9-fd184d15c9fc.png#clientId=u7e5a642c-af68-4&from=paste&height=228&id=u3850c0fc&margin=%5Bobject%20Object%5D&originHeight=455&originWidth=865&originalType=url&status=done&style=none&taskId=ue2cbbc64-4836-419b-b5d9-9e4c77dc21d&width=432.5"><br><strong>renderer.png</strong></p>
+<h2 id="解析过程"><a href="#解析过程" class="headerlink" title="解析过程"></a>解析过程</h2><p>下面的章节主要介绍渲染进程如何将从网络线程中获取的文本转化成图像的过程。</p>
+<h3 id="DOM-的创建"><a href="#DOM-的创建" class="headerlink" title="DOM 的创建"></a>DOM 的创建</h3><p>当渲染进程接收到来自浏览器进程提交访问的消息后就开始接受 HTML 数据，主线程开始解析 HTML 文本字符串，并且将其转化成 <strong>Document Object Model（DOM）</strong>。<br>DOM 是一种浏览器内部用于表达页面结构的数据，同时也为 Web 开发者提供了操作页面元素的接口，让 web 开发者可以在 Javascript 代码中获取和操作页面中的元素。<br>将 HTML 文本转化成 DOM 的标准被<a target="_blank" rel="noopener" href="https://html.spec.whatwg.org/">HTML Standard</a>定义。我们会发现在转化过程中浏览器从来不会抛出异常，类似关闭标签的丢失，开始、关闭标签匹配错误等等。这是因为 HTML 标准中定义了要静默的处理这些错误，如果对此感兴趣可以阅读<a target="_blank" rel="noopener" href="https://html.spec.whatwg.org/multipage/parsing.html#an-introduction-to-error-handling-and-strange-cases-in-the-parser">An introduction to error handling and strange cases in the parser</a>。</p>
+<h4 id="额外资源的加载"><a href="#额外资源的加载" class="headerlink" title="额外资源的加载"></a>额外资源的加载</h4><p>一个网站通常还会使用类似图片，样式文件和 JavaScript 代码等额外的资源。这些资源也需要从网络或缓存中获取。主线程在转化 HTML 的过程中理应挨个加载它们，但是为了提高效率，预加载扫描（Preload Scanner）与转换过程会同时运行着。当预加载扫描在分析器分析 HTML 过程中发现了类似 img 或 link 这样的标签时，就会发送请求给浏览器进程的网络线程，而主线程会根据这些额外资源是否会阻塞转化过程而决定是否等待资源加载完毕。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934007360-df9df3b3-f2e3-488a-aa9e-1296761c3a11.png#clientId=u7e5a642c-af68-4&from=paste&height=228&id=u07bc619c&margin=%5Bobject%20Object%5D&originHeight=455&originWidth=865&originalType=url&status=done&style=none&taskId=u36b103ac-60fb-406c-a1a2-259804af8be&width=432.5"><br><strong>dom.png</strong></p>
+<h4 id="JavaScript-会阻塞转化过程"><a href="#JavaScript-会阻塞转化过程" class="headerlink" title="JavaScript 会阻塞转化过程"></a>JavaScript 会阻塞转化过程</h4><p>当 HTML 分析器发现<script>标签时，会暂停接下来的 HTML 转化工作，然后加载、解析并且运行 Javascript 代码。因为在 Javascript 代码中可能会使用类似 document.write 这样的 API 去改变 DOM 的结构。这就是为什么 HTML 分析器必须等待 Javascript 代码运行结束才能继续分析的原因。</p>
+<h4 id="告诉浏览器要如何加载资源"><a href="#告诉浏览器要如何加载资源" class="headerlink" title="告诉浏览器要如何加载资源"></a>告诉浏览器要如何加载资源</h4><p>如果我们的 Javascript 代码并不需要改变 DOM，可以为<script>标签添加 async 或 defer 属性，这样浏览器就会异步的加载这些资源并且不会阻塞 HTML 转化过程。<strong>如果 script 标签是由 JavaScript 代码创建的，标签的 async 属性会默认为 true。</strong>同时我们也可以使用一些预加载技术，比如<link ref="preload">来通知浏览器这些资源需要越快下载越好。</p>
+<h3 id="样式计算（Style-calculation）"><a href="#样式计算（Style-calculation）" class="headerlink" title="样式计算（Style calculation）"></a>样式计算（Style calculation）</h3><p>对于展示一个页面，光有 DOM 是不够的，因为我们还需要样式来让页面变得更美观。主线程会解析样式（CSS）并决定每个 DOM 元素的样式。这些样式取决于 CSS 选择器的范围，在浏览器开发者工具中我们可以看到这些信息。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934007563-93ce7863-7ad1-4f6c-86fe-612928f3f5c0.png#clientId=u7e5a642c-af68-4&from=paste&height=228&id=u6142df39&margin=%5Bobject%20Object%5D&originHeight=455&originWidth=865&originalType=url&status=done&style=none&taskId=u2a4ba030-ebcb-45bf-99b7-87ad8782d54&width=432.5"><br><strong>computedstyle.png</strong><br>即使我们没有给 DOM 指定任何的样式，<h1>标签也会比<h2>标签显示的大。这是因为浏览器为不同的标签内置了不同的样式。可以通过<a target="_blank" rel="noopener" href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/html/resources/html.css">Chromium 源代码</a>得到这些默认样式。</p>
+<h3 id="布局（layout）"><a href="#布局（layout）" class="headerlink" title="布局（layout）"></a>布局（layout）</h3><p>完成了样式计算工作后，渲染进程已经知道了 DOM 的结构和每个节点的样式，但是依然不足以渲染一个页面。想象一下，让你在电话中向朋友描述一张图：“图中有一个大红色圆和一个小的、蓝色的方块”是不足以让朋友知道这张图到底是什么样的。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934007672-0aadb7f8-406d-44f4-8257-4ce2b5e36695.png#clientId=u7e5a642c-af68-4&from=paste&height=231&id=uf5746401&margin=%5Bobject%20Object%5D&originHeight=461&originWidth=865&originalType=url&status=done&style=none&taskId=u47c18de1-4ce1-41f4-b915-f1c6b0f8ba6&width=432.5"><br><strong>tellgame.png</strong><br>布局是为元素指定几何信息的过程。主线程遍历 DOM 结构中的元素及其样式，同时创建出带有坐标和元素尺寸信息的布局树（Layout tree）。布局树的结构与 DOM 树的结构十分相似，但只包含将会在页面中显示的元素。<strong>当一个元素的样式被设置成 display: none 时，元素就不会出现在布局树中，但那些样式被设置成 visiblility：hidden 的元素会出现在布局树中。</strong>相似的，当我们使用一个包含内容的伪元素（例如 p::before { content: ‘Hi!’ }）时，元素会出现在布局树中即使这个元素不存在于 DOM 树中，这也是为什么我们<strong>使用 DOM 提供的 API 无法获取伪元素</strong>的原因。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934007621-1b25a9fb-5500-409f-9904-e71543894ff9.png#clientId=u7e5a642c-af68-4&from=paste&height=228&id=udf1d409f&margin=%5Bobject%20Object%5D&originHeight=455&originWidth=865&originalType=url&status=done&style=none&taskId=u2d01263a-9577-4f53-8303-1f9e3f66837&width=432.5"><br><strong>layout.png</strong><br>描述页面布局信息是一项具有挑战性的工作，即使在只有块元素的页面中也必须要考虑字体的大小和在哪里换行，因为在计算下一个元素的位置时需要知道上一个元素的尺寸和形状。<br>CSS 可以让元素浮动、可以让元素在父元素中溢出，可以改变文字的方向。可以想象，在布局这个阶段是多么繁重的工作。在 Chrome 中，有一整个团队在维护布局工作，更详细的信息可以观看<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=Y5Xa4H2wtVA">视频</a>。</p>
+<h3 id="绘制（Paint）"><a href="#绘制（Paint）" class="headerlink" title="绘制（Paint）"></a>绘制（Paint）</h3><p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934007694-33e551f5-cb76-42ad-91f6-a43a97f9505c.png#clientId=u7e5a642c-af68-4&from=paste&height=162&id=ud275dd2a&margin=%5Bobject%20Object%5D&originHeight=324&originWidth=865&originalType=url&status=done&style=none&taskId=ub0617243-7549-44bd-a392-dc2a0e0fe1b&width=432.5"><br><strong>drawgame.png</strong><br>有了 DOM、样式和布局还是无法完成渲染工作。试想，当我们试图复制一张图画。我们知道图画中元素的尺寸、形状和位置，我们还需要知道绘制这些元素的顺序。<br>例如，当一个元素 z-index 属性被设置后，绘制的顺序会导致渲染成错误的结果。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934008042-8afd6617-fdd3-4e4d-9317-3503a12d78e7.png#clientId=u7e5a642c-af68-4&from=paste&height=265&id=u82913587&margin=%5Bobject%20Object%5D&originHeight=530&originWidth=992&originalType=url&status=done&style=none&taskId=uf4de4a9d-53ae-4257-bbad-10bc9f2df13&width=496"><br><strong>zindex.png</strong><br>在这个阶段，主线程遍历布局树并创建绘制记录，绘制记录是一系列由绘制步骤组成的流程，例如先绘制背景，然后是文字，然后是形状。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934008240-dcf787f2-8ea5-4601-b364-4a9db34f5de6.png#clientId=u7e5a642c-af68-4&from=paste&height=228&id=u1df38a7d&margin=%5Bobject%20Object%5D&originHeight=455&originWidth=865&originalType=url&status=done&style=none&taskId=u3e05e175-15ce-4bd3-b355-facf29091f1&width=432.5"><br><strong>paint.png</strong></p>
+<h3 id="渲染过程是昂贵的"><a href="#渲染过程是昂贵的" class="headerlink" title="渲染过程是昂贵的"></a>渲染过程是昂贵的</h3><p>在渲染过程中，任何一个步骤中产生的数据变化都会引起后续一系列的的变化。例如，当布局树改变时，绘制需要重构页面中变化的部分。<br>当一些元素有动画发生时，浏览器需要在每一帧中绘制这些元素。当无法保证每一帧绘制的连续性时，用户就会感觉到卡顿。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934008356-6b30570b-6c21-4c37-90f9-b3398ee48826.png#clientId=u7e5a642c-af68-4&from=paste&height=115&id=udbb16982&margin=%5Bobject%20Object%5D&originHeight=229&originWidth=992&originalType=url&status=done&style=none&taskId=u4b31dc25-239d-4c00-bece-125160671c8&width=496"><br><strong>pagejank1.png</strong><br>正常情况下渲染操作可以与屏幕刷新保持同步，但由于这些操作运行在主线程中，也就意味这些操作可能被正在运行的 Javascript 代码所阻塞。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934008278-9c7c4ce8-8481-468a-93e0-e78bc23baf92.png#clientId=u7e5a642c-af68-4&from=paste&height=115&id=u1c320689&margin=%5Bobject%20Object%5D&originHeight=229&originWidth=992&originalType=url&status=done&style=none&taskId=u0326fb68-e03a-42b8-be80-9cf475ff51e&width=496"><br><strong>pagejank2.png</strong><br>为了不影响渲染操作，我们可以将 Javascript 操作优化成小块，然后使用 requestAnimationFrame()，关于如何优化可以参考<a target="_blank" rel="noopener" href="https://developers.google.com/web/fundamentals/performance/rendering/optimize-javascript-execution">Optimize JavaScript Exectuion</a>。当需要大量计算时，也可以使用 Worker 来避免阻塞主进程。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934008347-18b2a8c1-9506-486b-abd6-66139725df06.png#clientId=u7e5a642c-af68-4&from=paste&height=115&id=u536db10f&margin=%5Bobject%20Object%5D&originHeight=229&originWidth=992&originalType=url&status=done&style=none&taskId=u6ee4b819-c6fc-4658-a30a-232fa4c283e&width=496"><br><strong>raf.png</strong></p>
+<h3 id="合成（Compositing）"><a href="#合成（Compositing）" class="headerlink" title="合成（Compositing）"></a>合成（Compositing）</h3><p>现在，浏览器已经知道了文档结构、每一个元素的样式，元素的几何信息，绘制的顺序。将这些信息转化成屏幕上像素的过程叫做光栅化，光栅化是图形学的范畴。<br><img src="https://cdn.nlark.com/yuque/0/2021/gif/21377586/1618934008573-1e972d65-bab8-42a7-9499-0e3387d7aa73.gif#clientId=u7e5a642c-af68-4&from=paste&height=150&id=ua886e0e6&margin=%5Bobject%20Object%5D&originHeight=300&originWidth=480&originalType=url&status=done&style=none&taskId=ub83ea59f-d7da-4146-af63-9b3d77e63dd&width=240"><br><strong>rasterizing.gif</strong><br>传统的做法是将可视区域的内容进行光栅化。随着用户滚动页面，不断的光栅化更多的区域。然而对于现代浏览器，有着更复杂的的过程，这个过程被称做合成。<br><img src="https://cdn.nlark.com/yuque/0/2021/gif/21377586/1618934008940-607636f9-75f2-4ee9-8159-5d75f730e6b6.gif#clientId=u7e5a642c-af68-4&from=paste&height=150&id=u95e06d48&margin=%5Bobject%20Object%5D&originHeight=300&originWidth=480&originalType=url&status=done&style=none&taskId=u9a458b4b-059a-4b96-b8a0-85885cf758c&width=240"><br><strong>composit.gif</strong><br>合成是一种将页面拆分成多层的技术，合成线程可以将各个层在不同线程中光栅化，再组合成一个页面。当滚动时，如果层已经被光栅化，则会使用已经存在的层合成新的帧，动画则可以通过移动层来实现。</p>
+<h4 id="层（Layer）"><a href="#层（Layer）" class="headerlink" title="层（Layer）"></a>层（Layer）</h4><p>为了决定层包含哪些元素，主线程需要遍历布局树以找到需要生成的部分。对开发者来说，当某一部分需要用独立的层渲染，我们可以使用 css 属性 will-change 让浏览器创建层，关于浏览器如何生成层的标准可自行查阅。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934009073-bbb7893d-b763-41bd-8acc-aced944c9f20.png#clientId=u7e5a642c-af68-4&from=paste&height=228&id=u898b34bb&margin=%5Bobject%20Object%5D&originHeight=455&originWidth=865&originalType=url&status=done&style=none&taskId=u0520dc6b-4668-4ffc-ad9a-f66f7d21d8a&width=432.5"><br><strong>layer.png</strong><br>虽然通过分层可以优化浏览器性能，但并不意味着应该给每个元素一个层，过多的层反而影响性能，所以在层的划分上应该具体形况具体分析。</p>
+<h3 id="栅格线程与合成线程"><a href="#栅格线程与合成线程" class="headerlink" title="栅格线程与合成线程"></a>栅格线程与合成线程</h3><p>当布局树和绘制顺序确定以后，主线程会将这些信息提交给合成线程。合成线程会光栅化各个层。一个层包含的内容可能是一个完整的页面，也可能是页面的部分，所以合成线程将层拆分成许多块，并将它们发送给栅格线程。栅格线程光栅化这些块并将它们存储在 GPU 缓存中。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934009073-9d269f33-8a28-4547-98f3-df83d2c1f687.png#clientId=u7e5a642c-af68-4&from=paste&height=228&id=u61c62b45&margin=%5Bobject%20Object%5D&originHeight=455&originWidth=865&originalType=url&status=done&style=none&taskId=u433d6766-6775-4142-ae93-e50186039e8&width=432.5"><br><strong>raster.png</strong><br>合成线程可以决定栅格线程光栅块的优先级，这样可以保证用户能看到的部分可以先被光栅化。一个层也会包含多种块以支持类似缩放这样的功能。<br>当块被光栅化后，合成线程会使用 draw quads 收集这些信息并创建合成帧（Compositor frame）。</p>
+<h4 id="Draw-quads"><a href="#Draw-quads" class="headerlink" title="Draw quads"></a>Draw quads</h4><p>存储在缓存中，包含类似块位置这样的信息，用于描述如何使用块合成页面。</p>
+<h4 id="Compositor-frame"><a href="#Compositor-frame" class="headerlink" title="Compositor frame"></a>Compositor frame</h4><p>用于存储表现页面一帧中包含哪些 Draw quads 的集合。<br>然后一个合成帧被提交给浏览器进程。这时如果浏览器 UI 有变化，或者插件的 UI 有变化时，另一个合成帧就会被创建出来。所以每当有交互发生时，合成线程就会创建更多的合成帧然后通过 GPU 将新的部分渲染出来。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934009090-fde15baa-ad9b-411d-aee7-40e10bc6334d.png#clientId=u7e5a642c-af68-4&from=paste&height=228&id=u8a4d107f&margin=%5Bobject%20Object%5D&originHeight=455&originWidth=865&originalType=url&status=done&style=none&taskId=uc827bc87-f0c8-4e35-8ca4-c5eab7c33ed&width=432.5"><br><strong>composit.png</strong><br>合成的好处在于其独立于主线程。合成线程不需要等待样式计算和 Javascript 代码的运行。这也是为什么合成更适合优化交互性能，但如果布局或者绘制需要重新计算则主线程是必须要参与的。<br>本质上，浏览器的渲染过程就是将文本转换成图像的过程，而当用户与页面发生交互动作时，则显示新的图像。在这个过程中由渲染进程中的主线程完成计算工作，由合成线程和栅格线程完成图像的绘制工作。而在计算过程中，还有强制布局、重排、重绘等更加细节的概念会在后面的文章中做讲解。</p>
+<h2 id="从浏览器的角度看事件"><a href="#从浏览器的角度看事件" class="headerlink" title="从浏览器的角度看事件"></a>从浏览器的角度看事件</h2><p>当我们听到事件时，通常会联想到在一个文本框中输入或者单击鼠标，但从浏览器的角度看，输入事件意味着所有的用户动作。鼠标滚轮滚动或者屏幕触摸都是输入事件。<br>当用户与页面发生交互时，浏览器进程首先接收到事件，然而，浏览器进程只关心事件发生时是在哪个页签中，所以浏览器进程会将事件类型和位置信息等发送给负责当前页签的渲染进程，渲染进程会恰当的找到事件发生的元素并且触发事件监听器。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934009352-215c2639-0376-4f55-8d3c-838735bf3f08.png#clientId=u7e5a642c-af68-4&from=paste&height=249&id=ua6cfd7f3&margin=%5Bobject%20Object%5D&originHeight=498&originWidth=992&originalType=url&status=done&style=none&taskId=u4a6b16bc-02f4-48b5-ae92-1f0dc6815c0&width=496"><br><strong>input (1).png</strong></p>
+<h2 id="合成线程对事件的处理"><a href="#合成线程对事件的处理" class="headerlink" title="合成线程对事件的处理"></a>合成线程对事件的处理</h2><p>在前面的章节中，我们知道了合成线程可以通过合成技术合成不同的光栅层优化性能，如果页面并不监听任何事件，合成线程可以完全独立于主线程生成新的合成帧。但如果页面监听了事件呢？</p>
+<h3 id="标记“慢滚动”区域"><a href="#标记“慢滚动”区域" class="headerlink" title="标记“慢滚动”区域"></a>标记“慢滚动”区域</h3><p>由于运行 Javascript 是主线程的工作，当页面被合成线程合成过，合成线程会标记那些有事件监听的区域。有了这些信息，当事件发生在响应的区域时，合成线程就会将事件发送给主线程处理。如果在非事件监听区域，则渲染进程直接创建新的帧而不关心主线程。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934009877-7462a2ee-fd3d-406a-94c7-8beee387ac78.png#clientId=u7e5a642c-af68-4&from=paste&height=265&id=uec1d25b2&margin=%5Bobject%20Object%5D&originHeight=530&originWidth=950&originalType=url&status=done&style=none&taskId=u4006498b-e5bb-490c-8c0e-c7104d5f986&width=475"><br><strong>nfsr1.png</strong></p>
+<h3 id="在事件监听时标记"><a href="#在事件监听时标记" class="headerlink" title="在事件监听时标记"></a>在事件监听时标记</h3><p>在 web 开发中常见的方式就是事件代理。利用事件冒泡，我们可以在目标元素的上层元素中监听事件。参照下面的代码。</p>
+<p>document.body.addEventListener(‘touchstart’, event =&gt; { if (event.target === area) { event.preventDefault(); }});</p>
+<p>复制代码</p>
+<p>通过这种写法，可以更高效的监听事件。但如果从浏览器的角度看，此时整个页面会被标记成“慢滚动”区域。这意味着虽然页面中的某些部分并不需要事件监听，但合成线程依然要在每次交互发生后等待主线程处理事件，合成线程的优化效果不复存在。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934009923-a222f0f0-0dd4-4ecf-8fa7-67f4fec2b21a.png#clientId=u7e5a642c-af68-4&from=paste&height=265&id=ue22c836c&margin=%5Bobject%20Object%5D&originHeight=530&originWidth=950&originalType=url&status=done&style=none&taskId=u5938db6d-3466-4d07-956a-ea7435f24f3&width=475"><br><strong>nfsr2.png</strong><br>为了解决这个问题，我们可在事件代理时传入 passive: true<strong>（IE 不支持）</strong>参数。这样告诉渲染线程，依然需要将事件发送给主线程处理，但不需要等待。</p>
+<p>document.body.addEventListener(‘touchstart’, event =&gt; { if (event.target === area) { event.preventDefault() } }, {passive: true});</p>
+<p>复制代码</p>
+<p>关于使用 passive 改善滚屏性能，可以参考<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/EventTarget/addEventListener#%E4%BD%BF%E7%94%A8_passive_%E6%94%B9%E5%96%84%E7%9A%84%E6%BB%9A%E5%B1%8F%E6%80%A7%E8%83%BD">MDN 使用 passive 改善滚屏性能</a>。</p>
+<h3 id="查找事件目标"><a href="#查找事件目标" class="headerlink" title="查找事件目标"></a>查找事件目标</h3><p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934009967-f8ea0ce1-5733-4c17-818c-a8b38f789f15.png#clientId=u7e5a642c-af68-4&from=paste&height=253&id=ueac5a325&margin=%5Bobject%20Object%5D&originHeight=506&originWidth=865&originalType=url&status=done&style=none&taskId=ub7e1252d-4a34-4acf-becf-6f6feb9bf31&width=432.5"><br><strong>hittest.png</strong><br>当渲染线程将事件发送给主线程后，第一件事就是找到事件触发的目标。通过在渲染过程中生成的绘制信息，可以根据坐标找到目标元素。</p>
+<h3 id="减少发送给主线程的事件数量"><a href="#减少发送给主线程的事件数量" class="headerlink" title="减少发送给主线程的事件数量"></a>减少发送给主线程的事件数量</h3><p>为了保证动画的顺畅，需要显示器在每秒刷新 60 次。对于典型的触摸事件由合成线程提交给主线程的事件频率可以达到每秒 60-120 次，对于典型的鼠标事件每秒会发送 100 次。事件发送的频率通常比屏幕刷新频率要高。<br>如果类似 touchmove 这样的事件每秒向主线程发送 120 次可能会造成主线程执行时间过长而影响性能。<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934009800-71e1b559-d05d-4000-9c42-37306cc04491.png#clientId=u7e5a642c-af68-4&from=paste&height=121&id=u6b4b3008&margin=%5Bobject%20Object%5D&originHeight=241&originWidth=992&originalType=url&status=done&style=none&taskId=u41416794-5da6-4ac9-b74c-376ba7c4595&width=496"><br><strong>rawevents.png</strong><br>为了减少发送给主线程的事件数量，Chrome 合并了连续的事件。类似 wheel，mousewheel，mousemove，pointermove，touchmove 这样的事件会被延迟到下一次 requestAnimationFrame 前触发.<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618934010057-725b016b-d11a-4392-a7e9-8121beb90da3.png#clientId=u7e5a642c-af68-4&from=paste&height=146&id=u7fb39f50&margin=%5Bobject%20Object%5D&originHeight=292&originWidth=992&originalType=url&status=done&style=none&taskId=uefb40f5b-c44a-43ad-b507-3b3c382be71&width=496"><br><strong>coalescedevents.png</strong><br>而任何的离散事件，类似 keydown, keyup, mouseup, mousedown, touchstart 和 touchend 都会立即被发送给主线程处理。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>到此，我们已经可以通过从用户在浏览器地址栏中的一次输入到页面图像的显示了解浏览器是如何工作的。这里我们总结一下。</p>
+<ul>
+<li>浏览器进程做为最重要的进程负责大多数页签外部的工作，包括地址栏显示、网络请求、页签状态管理等。</li>
+<li>不同的渲染进程负责不同的站点渲染工作，渲染进程间彼此独立。</li>
+<li>渲染进程在渲染页面的过程中会通过浏览器进程获取站点资源，只有安全的资源才会被渲染进程接收到。</li>
+<li>渲染进程中主线程负责除了图像生成外绝大多数工作，如何减少主线程上代码的运行是交互性能优化的关键。</li>
+<li>渲染进程中的合成线程和栅格线程负责图像生成，利用分层技术可以优化图像生成的效率。</li>
+<li>当用户与页面发生交互时，事件的传播途径从浏览器进程到渲染进程的合成线程再根据事件监听的区域决定是否要传递给渲染进程的主线程处理。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/20/yuque/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -177,7 +309,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-30 19:10:59" itemprop="dateModified" datetime="2021-04-30T19:10:59+08:00">2021-04-30</time>
+                <time title="修改时间：2021-05-02 20:01:32" itemprop="dateModified" datetime="2021-05-02T20:01:32+08:00">2021-05-02</time>
               </span>
 
           
@@ -364,7 +496,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-30 19:10:59" itemprop="dateModified" datetime="2021-04-30T19:10:59+08:00">2021-04-30</time>
+                <time title="修改时间：2021-05-02 20:01:32" itemprop="dateModified" datetime="2021-05-02T20:01:32+08:00">2021-05-02</time>
               </span>
 
           
@@ -459,7 +591,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-30 19:10:59" itemprop="dateModified" datetime="2021-04-30T19:10:59+08:00">2021-04-30</time>
+                <time title="修改时间：2021-05-02 20:01:32" itemprop="dateModified" datetime="2021-05-02T20:01:32+08:00">2021-05-02</time>
               </span>
 
           
@@ -600,7 +732,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-30 19:10:59" itemprop="dateModified" datetime="2021-04-30T19:10:59+08:00">2021-04-30</time>
+                <time title="修改时间：2021-05-02 20:01:32" itemprop="dateModified" datetime="2021-05-02T20:01:32+08:00">2021-05-02</time>
               </span>
 
           
@@ -823,7 +955,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-30 19:11:00" itemprop="dateModified" datetime="2021-04-30T19:11:00+08:00">2021-04-30</time>
+                <time title="修改时间：2021-05-02 20:01:32" itemprop="dateModified" datetime="2021-05-02T20:01:32+08:00">2021-05-02</time>
               </span>
 
           
@@ -1018,7 +1150,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-30 19:11:00" itemprop="dateModified" datetime="2021-04-30T19:11:00+08:00">2021-04-30</time>
+                <time title="修改时间：2021-05-02 20:01:32" itemprop="dateModified" datetime="2021-05-02T20:01:32+08:00">2021-05-02</time>
               </span>
 
           
@@ -1117,7 +1249,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-30 19:11:00" itemprop="dateModified" datetime="2021-04-30T19:11:00+08:00">2021-04-30</time>
+                <time title="修改时间：2021-05-02 20:01:32" itemprop="dateModified" datetime="2021-05-02T20:01:32+08:00">2021-05-02</time>
               </span>
 
           
@@ -1316,7 +1448,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-30 19:11:00" itemprop="dateModified" datetime="2021-04-30T19:11:00+08:00">2021-04-30</time>
+                <time title="修改时间：2021-05-02 20:01:32" itemprop="dateModified" datetime="2021-05-02T20:01:32+08:00">2021-05-02</time>
               </span>
 
           
@@ -1522,7 +1654,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-30 19:11:00" itemprop="dateModified" datetime="2021-04-30T19:11:00+08:00">2021-04-30</time>
+                <time title="修改时间：2021-05-02 20:01:32" itemprop="dateModified" datetime="2021-05-02T20:01:32+08:00">2021-05-02</time>
               </span>
 
           
@@ -1537,232 +1669,6 @@
 
       
           <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> RESOLVE = <span class="string">&quot;resolved&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> REJECT = <span class="string">&quot;rejected&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> PENDING = <span class="string">&quot;pending&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> handlePromise = <span class="function">(<span class="params">result, newPromise, resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (result === newPromise) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&quot;can&#x27;t not return oneself&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (</span><br><span class="line">    (<span class="keyword">typeof</span> result === <span class="string">&quot;object&quot;</span> &amp;&amp; <span class="keyword">typeof</span> result !== <span class="literal">null</span>) ||</span><br><span class="line">    <span class="keyword">typeof</span> result === <span class="string">&quot;function&quot;</span></span><br><span class="line">  ) &#123;</span><br><span class="line">    <span class="keyword">let</span> lock = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> then = result.then;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">typeof</span> then === <span class="string">&quot;function&quot;</span>) &#123;</span><br><span class="line">        then.call(</span><br><span class="line">          result,</span><br><span class="line">          (r) =&gt; &#123;</span><br><span class="line">            <span class="keyword">if</span> (lock) <span class="keyword">return</span>;</span><br><span class="line">            handlePromise(r, newPromise, resolve, reject);</span><br><span class="line">            lock = <span class="literal">true</span>;</span><br><span class="line">          &#125;,</span><br><span class="line">          (e) =&gt; &#123;</span><br><span class="line">            <span class="keyword">if</span> (lock) <span class="keyword">return</span>;</span><br><span class="line">            reject(e);</span><br><span class="line">            lock = <span class="literal">true</span>;</span><br><span class="line">          &#125;</span><br><span class="line">        );</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        resolve(result);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">      reject(error);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    resolve(result);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">JJPromise</span> </span>&#123;</span><br><span class="line">  status = PENDING;</span><br><span class="line">  result = <span class="literal">undefined</span>;</span><br><span class="line">  reason = <span class="literal">undefined</span>;</span><br><span class="line">  onResolveArr = [];</span><br><span class="line">  onRejectArr = [];</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">excution</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> resolve = <span class="function">(<span class="params">result</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="built_in">this</span>.status === PENDING) &#123;</span><br><span class="line">        <span class="built_in">this</span>.result = result;</span><br><span class="line">        <span class="built_in">this</span>.status = RESOLVE;</span><br><span class="line">        <span class="built_in">this</span>.onResolveArr.map(<span class="function">(<span class="params">fn</span>) =&gt;</span> fn());</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> reject = <span class="function">(<span class="params">reason</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="built_in">this</span>.status === PENDING) &#123;</span><br><span class="line">        <span class="built_in">this</span>.reason = reason;</span><br><span class="line">        <span class="built_in">this</span>.status = REJECT;</span><br><span class="line">        <span class="built_in">this</span>.onRejectArr.map(<span class="function">(<span class="params">fn</span>) =&gt;</span> fn());</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      excution(resolve, reject);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">      reject(error);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="title">then</span>(<span class="params">onResolved, onRejected</span>)</span> &#123;</span><br><span class="line">    onResolved = <span class="keyword">typeof</span> onResolved === <span class="string">&quot;function&quot;</span> ? onResolved : <span class="function">(<span class="params">data</span>) =&gt;</span> data;</span><br><span class="line">    onRejected =</span><br><span class="line">      <span class="keyword">typeof</span> onRejected === <span class="string">&quot;function&quot;</span></span><br><span class="line">        ? onRejected</span><br><span class="line">        : <span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(err);</span><br><span class="line">          &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> newPromise = <span class="keyword">new</span> JJPromise(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="built_in">this</span>.status === RESOLVE) &#123;</span><br><span class="line">        <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">          <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">const</span> result = onResolved(<span class="built_in">this</span>.result);</span><br><span class="line">            handlePromise(result, newPromise, resolve, reject);</span><br><span class="line">          &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">            reject(error);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;, <span class="number">0</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (<span class="built_in">this</span>.status === REJECT) &#123;</span><br><span class="line">        <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">          <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">const</span> result = onRejected(<span class="built_in">this</span>.reason);</span><br><span class="line">            handlePromise(result, newPromise, resolve, reject);</span><br><span class="line">          &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">            reject(error);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;, <span class="number">0</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (<span class="built_in">this</span>.status === PENDING) &#123;</span><br><span class="line">        <span class="built_in">this</span>.onResolveArr.push(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">          <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">const</span> result = onResolved(<span class="built_in">this</span>.result);</span><br><span class="line">            handlePromise(result, newPromise, resolve, reject);</span><br><span class="line">          &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">            reject(error);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="built_in">this</span>.onRejectArr.push(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">          <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">const</span> result = onRejected(<span class="built_in">this</span>.result);</span><br><span class="line">            handlePromise(result, newPromise, resolve, reject);</span><br><span class="line">          &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">            reject(error);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span> newPromise;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">catch</span>(onRejected) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.then(<span class="literal">undefined</span>, onRejected);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> test = <span class="keyword">new</span> JJPromise(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">  resolve(<span class="string">&quot;123&quot;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">test.then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(res);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&quot;1&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1</span></span><br><span class="line"><span class="comment">// 123</span></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/16/yuque/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E6%9C%BA%E5%88%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Adam Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Adam">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/16/yuque/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E6%9C%BA%E5%88%B6/" class="post-title-link" itemprop="url">事件循环机制</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-16 19:47:37" itemprop="dateCreated datePublished" datetime="2021-04-16T19:47:37+08:00">2021-04-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-30 19:11:00" itemprop="dateModified" datetime="2021-04-30T19:11:00+08:00">2021-04-30</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="答题大纲"><a href="#答题大纲" class="headerlink" title="答题大纲"></a>答题大纲</h3><ol>
-<li>先说基本知识点，宏任务、微任务有哪些</li>
-<li>说事件循环机制过程，边说边画图出来</li>
-<li>说 async/await 执行顺序注意，可以把 chrome 的优化，做法其实是违法了规范的，V8 团队的 PR 这些自信点说出来，显得你很好学，理解得很详细，很透彻。</li>
-<li>把 node 的事件循环也说一下，重复 1、2、3 点，node 中的第 3 点要说的是 node11 前后的事件循环变动点。</li>
-</ol>
-<p>下面就跟着这个大纲走，每个点来说一下吧～</p>
-<h3 id="浏览器中的事件循环"><a href="#浏览器中的事件循环" class="headerlink" title="浏览器中的事件循环"></a>浏览器中的事件循环</h3><p>JavaScript 代码的执行过程中，除了依靠函数调用栈来搞定函数的执行顺序外，还依靠任务队列(task queue)来搞定另外一些代码的执行。整个执行过程，我们称为事件循环过程。一个线程中，事件循环是唯一的，但是任务队列可以拥有多个。任务队列又分为 macro-task（宏任务）与 micro-task（微任务），在最新标准中，它们被分别称为 task 与 jobs。</p>
-<p>macro-task 大概包括：</p>
-<ul>
-<li>script(整体代码)</li>
-<li>setTimeout</li>
-<li>setInterval</li>
-<li>setImmediate</li>
-<li>I/O</li>
-<li>UI render</li>
-</ul>
-<p>micro-task 大概包括:</p>
-<ul>
-<li>process.nextTick</li>
-<li>Promise</li>
-<li>Async/Await(实际就是 promise)</li>
-<li>MutationObserver(html5 新特性)</li>
-</ul>
-<p>整体执行，我画了一个流程图：</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618573781952-7782507e-dfda-41bf-8417-0435c4b684c9.png#clientId=u0fbb7ad9-f0df-4&from=drop&id=u25578fe7&margin=%5Bobject%20Object%5D&originHeight=818&originWidth=1678&originalType=binary&size=59057&status=done&style=none&taskId=u73daa851-8b7c-42da-8bec-df55426c906"></p>
-<p>总的结论就是，执行宏任务，然后执行该宏任务产生的微任务，若微任务在执行过程中产生了新的微任务，则继续执行微任务，微任务执行完毕后，再回到宏任务中进行下一轮循环。举个例子：</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1618573787405-8a3aca03-1875-4117-b918-81ae19c99e11.jpeg#clientId=u0fbb7ad9-f0df-4&from=drop&id=ubfc6d14f&margin=%5Bobject%20Object%5D&originHeight=488&originWidth=1000&originalType=binary&size=80503&status=done&style=none&taskId=ufac4233a-7981-4bb7-8d51-1bbbd5e63f6"></p>
-<p>结合流程图理解，答案输出为：async2 end =&gt; Promise =&gt; async1 end =&gt; promise1 =&gt; promise2 =&gt; setTimeout</p>
-<p>但是，对于 async/await ，我们有个细节还要处理一下。如下：</p>
-<h3 id="async-await-执行顺序"><a href="#async-await-执行顺序" class="headerlink" title="async/await 执行顺序"></a>async/await 执行顺序</h3><p>我们知道<code>async</code>隐式返回 Promise 作为结果的函数,那么可以简单理解为，await 后面的函数执行完毕时，await 会产生一个微任务(Promise.then 是微任务)。但是我们要注意这个微任务产生的时机，它是执行完 await 之后，直接跳出 async 函数，执行其他代码(此处就是协程的运作，A 暂停执行，控制权交给 B)。其他代码执行完毕后，再回到 async 函数去执行剩下的代码，然后把 await 后面的代码注册到微任务队列当中。我们来看个例子：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">&quot;script start&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">await</span> async2();</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;async1 end&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;async2 end&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line">async1();</span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;setTimeout&quot;</span>);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;Promise&quot;</span>);</span><br><span class="line">  resolve();</span><br><span class="line">&#125;)</span><br><span class="line">  .then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;promise1&quot;</span>);</span><br><span class="line">  &#125;)</span><br><span class="line">  .then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;promise2&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&quot;script end&quot;</span>);</span><br><span class="line"><span class="comment">// 旧版输出如下，但是请继续看完本文下面的注意那里，新版有改动</span></span><br><span class="line"><span class="comment">// script start =&gt; async2 end =&gt; Promise =&gt; script end =&gt; promise1 =&gt; promise2 =&gt; async1 end =&gt; setTimeout</span></span><br></pre></td></tr></table></figure>
-
-<p>分析这段代码：</p>
-<ul>
-<li>执行代码，输出<code>script start</code>。</li>
-<li>执行 async1(),会调用 async2(),然后输出<code>async2 end</code>,此时将会保留 async1 函数的上下文，然后跳出 async1 函数。</li>
-<li>遇到 setTimeout，产生一个宏任务</li>
-<li>执行 Promise，输出<code>Promise</code>。遇到 then，产生第一个微任务</li>
-<li>继续执行代码，输出<code>script end</code></li>
-<li>代码逻辑执行完毕(当前宏任务执行完毕)，开始执行当前宏任务产生的微任务队列，输出<code>promise1</code>，该微任务遇到 then，产生一个新的微任务</li>
-<li>执行产生的微任务，输出<code>promise2</code>,当前微任务队列执行完毕。执行权回到 async1</li>
-<li>执行 await,实际上会产生一个 promise 返回，即</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> promise_ = <span class="keyword">new</span> <span class="built_in">Promise</span>((resolve,reject)&#123; resolve(<span class="literal">undefined</span>)&#125;)</span><br></pre></td></tr></table></figure>
-
-<p>执行完成，执行 await 后面的语句，输出<code>async1 end</code></p>
-<ul>
-<li>最后，执行下一个宏任务，即执行 setTimeout，输出<code>setTimeout</code></li>
-</ul>
-<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><p>新版的 chrome 浏览器中不是如上打印的，因为 chrome 优化了,await 变得更快了,输出为:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// script start =&gt; async2 end =&gt; Promise =&gt; script end =&gt; async1 end =&gt; promise1 =&gt; promise2 =&gt; setTimeout</span></span><br></pre></td></tr></table></figure>
-
-<p>但是这种做法其实是违法了规范的，当然规范也是可以更改的，这是 V8 团队的一个 <a target="_blank" rel="noopener" href="https://github.com/tc39/ecma262/pull/1250#issue-197979338">PR</a> ，目前新版打印已经修改。</p>
-<p>知乎上也有相关讨论,可以看看 <a target="_blank" rel="noopener" href="https://www.zhihu.com/question/268007969">https://www.zhihu.com/question/268007969</a></p>
-<p>我们可以分 2 种情况来理解：</p>
-<ol>
-<li> 如果 await 后面直接跟的为一个变量，比如：await 1；这种情况的话相当于直接把 await 后面的代码注册为一个微任务，可以简单理解为 promise.then(await 下面的代码)。然后跳出 async1 函数，执行其他代码，当遇到 promise 函数的时候，会注册 promise.then()函数到微任务队列，注意此时微任务队列里面已经存在 await 后面的微任务。所以这种情况会先执行 await 后面的代码（async1 end），再执行 async1 函数后面注册的微任务代码(promise1,promise2)。</li>
-<li> 如果 await 后面跟的是一个异步函数的调用，比如上面的代码，将代码改成这样：</li>
-</ol>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">&quot;script start&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">await</span> async2();</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;async1 end&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;async2 end&quot;</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve().then(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;async2 end1&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line">async1();</span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;setTimeout&quot;</span>);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;Promise&quot;</span>);</span><br><span class="line">  resolve();</span><br><span class="line">&#125;)</span><br><span class="line">  .then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;promise1&quot;</span>);</span><br><span class="line">  &#125;)</span><br><span class="line">  .then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;promise2&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&quot;script end&quot;</span>);</span><br></pre></td></tr></table></figure>
-
-<p>输出为：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// script start =&gt; async2 end =&gt; Promise =&gt; script end =&gt; async2 end1 =&gt; promise1 =&gt; promise2 =&gt; async1 end =&gt; setTimeout</span></span><br></pre></td></tr></table></figure>
-
-<p>此时执行完 awit 并不先把 await 后面的代码注册到微任务队列中去，而是执行完 await 之后，直接跳出 async1 函数，执行其他代码。然后遇到 promise 的时候，把 promise.then 注册为微任务。其他代码执行完毕后，需要回到 async1 函数去执行剩下的代码，然后把 await 后面的代码注册到微任务队列当中，注意此时微任务队列中是有之前注册的微任务的。所以这种情况会先执行 async1 函数之外的微任务(promise1,promise2)，然后才执行 async1 内注册的微任务(async1 end).</p>
-<p>可以理解为，这种情况下，await 后面的代码会在本轮循环的最后被执行.</p>
-<p>浏览器中有事件循环，node 中也有，事件循环是 node 处理非阻塞 I/O 操作的机制，node 中事件循环的实现是依靠的 libuv 引擎。由于 node 11 之后，事件循环的一些原理发生了变化，这里就以新的标准去讲，最后再列上变化点让大家了解前因后果。</p>
-<h3 id="node-中的事件循环"><a href="#node-中的事件循环" class="headerlink" title="node 中的事件循环"></a>node 中的事件循环</h3><p>浏览器中有事件循环，node 中也有，事件循环是 node 处理非阻塞 I/O 操作的机制，node 中事件循环的实现是依靠的 libuv 引擎。由于 node 11 之后，事件循环的一些原理发生了变化，这里就以新的标准去讲，最后再列上变化点让大家了解前因后果。</p>
-<h4 id="宏任务和微任务"><a href="#宏任务和微任务" class="headerlink" title="宏任务和微任务"></a>宏任务和微任务</h4><p>node 中也有宏任务和微任务，与浏览器中的事件循环类似，其中，</p>
-<p>macro-task 大概包括：</p>
-<ul>
-<li>setTimeout</li>
-<li>setInterval</li>
-<li>setImmediate</li>
-<li>script（整体代码)</li>
-<li>I/O 操作等。</li>
-</ul>
-<p>micro-task 大概包括：</p>
-<ul>
-<li>process.nextTick(与普通微任务有区别，在微任务队列执行之前执行)</li>
-<li>new Promise().then(回调)等。</li>
-</ul>
-<h4 id="node-事件循环整体理解"><a href="#node-事件循环整体理解" class="headerlink" title="node 事件循环整体理解"></a>node 事件循环整体理解</h4><p>先看一张官网的 node 事件循环简化图：</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618573805467-2e96e30d-3f85-40c5-9215-78a7795fa76c.png#clientId=u0fbb7ad9-f0df-4&from=drop&id=u24642caa&margin=%5Bobject%20Object%5D&originHeight=451&originWidth=751&originalType=binary&size=25564&status=done&style=none&taskId=ud4bb323f-7d66-49c8-919b-bb1d659d487"></p>
-<p>图中的每个框被称为事件循环机制的一个阶段，每个阶段都有一个 FIFO 队列来执行回调。虽然每个阶段都是特殊的，但通常情况下，当事件循环进入给定的阶段时，它将执行特定于该阶段的任何操作，然后执行该阶段队列中的回调，直到队列用尽或最大回调数已执行。当该队列已用尽或达到回调限制，事件循环将移动到下一阶段。</p>
-<p>因此，从上面这个简化图中，我们可以分析出 node 的事件循环的阶段顺序为：</p>
-<p>输入数据阶段(incoming data)-&gt;轮询阶段(poll)-&gt;检查阶段(check)-&gt;关闭事件回调阶段(close callback)-&gt;定时器检测阶段(timers)-&gt;I/O 事件回调阶段(I/O callbacks)-&gt;闲置阶段(idle, prepare)-&gt;轮询阶段…</p>
-<h4 id="阶段概述"><a href="#阶段概述" class="headerlink" title="阶段概述"></a>阶段概述</h4><ul>
-<li>定时器检测阶段(timers)：本阶段执行 timer 的回调，即 setTimeout、setInterval 里面的回调函数。</li>
-<li>I/O 事件回调阶段(I/O callbacks)：执行延迟到下一个循环迭代的 I/O 回调，即上一轮循环中未被执行的一些 I/O 回调。</li>
-<li>闲置阶段(idle, prepare)：仅系统内部使用。</li>
-<li>轮询阶段(poll)：检索新的 I/O 事件;执行与 I/O 相关的回调（几乎所有情况下，除了关闭的回调函数，那些由计时器和 setImmediate() 调度的之外），其余情况 node 将在适当的时候在此阻塞。</li>
-<li>检查阶段(check)：setImmediate() 回调函数在这里执行</li>
-<li>关闭事件回调阶段(close callback)：一些关闭的回调函数，如：socket.on(‘close’, …)。</li>
-</ul>
-<h4 id="三大重点阶段"><a href="#三大重点阶段" class="headerlink" title="三大重点阶段"></a>三大重点阶段</h4><p>日常开发中的绝大部分异步任务都是在 poll、check、timers 这 3 个阶段处理的,所以我们来重点看看。</p>
-<h5 id="timers"><a href="#timers" class="headerlink" title="timers"></a>timers</h5><p>timers 阶段会执行 setTimeout 和 setInterval 回调，并且是由 poll 阶段控制的。 同样，在 Node 中定时器指定的时间也不是准确时间，只能是尽快执行。</p>
-<h5 id="poll"><a href="#poll" class="headerlink" title="poll"></a>poll</h5><p>poll 是一个至关重要的阶段，poll 阶段的执行逻辑流程图如下：</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1618573818346-738f855a-9297-4b19-9e7e-4350d4e3e7d1.jpeg#clientId=u0fbb7ad9-f0df-4&from=drop&id=ubb22cbe6&margin=%5Bobject%20Object%5D&originHeight=594&originWidth=625&originalType=binary&size=38789&status=done&style=none&taskId=u17631d17-a0d2-4dfb-acf9-0827e261e10"></p>
-<p>如果当前已经存在定时器，而且有定时器到时间了，拿出来执行，eventLoop 将回到 timers 阶段。</p>
-<p>如果没有定时器, 会去看回调函数队列。</p>
-<ul>
-<li>如果 poll 队列不为空，会遍历回调队列并同步执行，直到队列为空或者达到系统限制</li>
-<li>如果 poll 队列为空时，会有两件事发生<ul>
-<li>如果有 setImmediate 回调需要执行，poll 阶段会停止并且进入到 check 阶段执行回调</li>
-<li>如果没有 setImmediate 回调需要执行，会等待回调被加入到队列中并立即执行回调，这里同样会有个超时时间设置防止一直等待下去,一段时间后自动进入 check 阶段。</li>
-</ul>
-</li>
-</ul>
-<h5 id="check"><a href="#check" class="headerlink" title="check"></a>check</h5><p>check 阶段。这是一个比较简单的阶段，直接执行 setImmdiate 的回调。</p>
-<h4 id="process-nextTick"><a href="#process-nextTick" class="headerlink" title="process.nextTick"></a>process.nextTick</h4><p>process.nextTick 是一个独立于 eventLoop 的任务队列。</p>
-<p>在每一个 eventLoop 阶段完成后会去检查 nextTick 队列，如果里面有任务，会让这部分任务优先于微任务执行。</p>
-<p>看一个例子：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">setImmediate(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;timeout1&quot;</span>);</span><br><span class="line">  <span class="built_in">Promise</span>.resolve().then(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;promise resolve&quot;</span>));</span><br><span class="line">  process.nextTick(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;next tick1&quot;</span>));</span><br><span class="line">&#125;);</span><br><span class="line">setImmediate(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;timeout2&quot;</span>);</span><br><span class="line">  process.nextTick(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;next tick2&quot;</span>));</span><br><span class="line">&#125;);</span><br><span class="line">setImmediate(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;timeout3&quot;</span>));</span><br><span class="line">setImmediate(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;timeout4&quot;</span>));</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>在 node11 之前，因为每一个 eventLoop 阶段完成后会去检查 nextTick 队列，如果里面有任务，会让这部分任务优先于微任务执行，因此上述代码是先进入 check 阶段，执行所有 setImmediate，完成之后执行 nextTick 队列，最后执行微任务队列，因此输出为<code>timeout1=&gt;timeout2=&gt;timeout3=&gt;timeout4=&gt;next tick1=&gt;next tick2=&gt;promise resolve</code></li>
-<li>在 node11 之后，process.nextTick 是微任务的一种,因此上述代码是先进入 check 阶段，执行一个 setImmediate 宏任务，然后执行其微任务队列，再执行下一个宏任务及其微任务,因此输出为<code>timeout1=&gt;next tick1=&gt;promise resolve=&gt;timeout2=&gt;next tick2=&gt;timeout3=&gt;timeout4</code></li>
-</ul>
-<h3 id="node-版本差异说明"><a href="#node-版本差异说明" class="headerlink" title="node 版本差异说明"></a>node 版本差异说明</h3><p>这里主要说明的是 node11 前后的差异，因为 node11 之后一些特性已经向浏览器看齐了，总的变化一句话来说就是，如果是 node11 版本一旦执行一个阶段里的一个宏任务(setTimeout,setInterval 和 setImmediate)就立刻执行对应的微任务队列，一起来看看吧～</p>
-<h4 id="timers-阶段的执行时机变化"><a href="#timers-阶段的执行时机变化" class="headerlink" title="timers 阶段的执行时机变化"></a>timers 阶段的执行时机变化</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;timer1&quot;</span>);</span><br><span class="line">  <span class="built_in">Promise</span>.resolve().then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;promise1&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;timer2&quot;</span>);</span><br><span class="line">  <span class="built_in">Promise</span>.resolve().then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;promise2&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果是 node11 版本一旦执行一个阶段里的一个宏任务(setTimeout,setInterval 和 setImmediate)就立刻执行微任务队列，这就跟浏览器端运行一致，最后的结果为<code>timer1=&gt;promise1=&gt;timer2=&gt;promise2</code></li>
-<li>如果是 node10 及其之前版本要看第一个定时器执行完，第二个定时器是否在完成队列中.<ul>
-<li>如果是第二个定时器还未在完成队列中，最后的结果为<code>timer1=&gt;promise1=&gt;timer2=&gt;promise2</code></li>
-<li>如果是第二个定时器已经在完成队列中，则最后的结果为<code>timer1=&gt;timer2=&gt;promise1=&gt;promise2</code></li>
-</ul>
-</li>
-</ul>
-<h4 id="check-阶段的执行时机变化"><a href="#check-阶段的执行时机变化" class="headerlink" title="check 阶段的执行时机变化"></a>check 阶段的执行时机变化</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">setImmediate(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;immediate1&quot;</span>));</span><br><span class="line">setImmediate(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;immediate2&quot;</span>);</span><br><span class="line">  <span class="built_in">Promise</span>.resolve().then(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;promise resolve&quot;</span>));</span><br><span class="line">&#125;);</span><br><span class="line">setImmediate(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;immediate3&quot;</span>));</span><br><span class="line">setImmediate(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;immediate4&quot;</span>));</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果是 node11 后的版本，会输出<code>immediate1=&gt;immediate2=&gt;promise resolve=&gt;immediate3=&gt;immediate4</code></li>
-<li>如果是 node11 前的版本，会输出<code>immediate1=&gt;immediate2=&gt;immediate3=&gt;immediate4=&gt;promise resolve</code></li>
-</ul>
-<h4 id="nextTick-队列的执行时机变化"><a href="#nextTick-队列的执行时机变化" class="headerlink" title="nextTick 队列的执行时机变化"></a>nextTick 队列的执行时机变化</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">setImmediate(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;timeout1&quot;</span>));</span><br><span class="line">setImmediate(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;timeout2&quot;</span>);</span><br><span class="line">  process.nextTick(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;next tick&quot;</span>));</span><br><span class="line">&#125;);</span><br><span class="line">setImmediate(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;timeout3&quot;</span>));</span><br><span class="line">setImmediate(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;timeout4&quot;</span>));</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果是 node11 后的版本，会输出<code>timeout1=&gt;timeout2=&gt;next tick=&gt;timeout3=&gt;timeout4</code></li>
-<li>如果是 node11 前的版本，会输出<code>timeout1=&gt;timeout2=&gt;timeout3=&gt;timeout4=&gt;next tick</code></li>
-</ul>
-<p>以上几个例子，你应该就能清晰感受到它的变化了，反正记着一个结论，如果是 node11 版本一旦执行一个阶段里的一个宏任务(setTimeout,setInterval 和 setImmediate)就立刻执行对应的微任务队列。</p>
-<h3 id="node-和-浏览器-eventLoop-的主要区别"><a href="#node-和-浏览器-eventLoop-的主要区别" class="headerlink" title="node 和 浏览器 eventLoop 的主要区别"></a>node 和 浏览器 eventLoop 的主要区别</h3><p>两者最主要的区别在于浏览器中的微任务是在每个相应的宏任务中执行的，而 nodejs 中的微任务是在不同阶段之间执行的。</p>
-<h3 id="更多理解资料"><a href="#更多理解资料" class="headerlink" title="更多理解资料"></a>更多理解资料</h3><ul>
-<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI0MzIyMDM5Ng==%E2%88%A3=2649826490&idx=1&sn=5e38c673dfa45dabc1a348597cdd6e82&chksm=f175ee79c602676fc885e145fbaef28e6e88678f852c62fb00b8229cfedcf9ac422bcf20b2e4&scene=21#wechat_redirect">【语音解题系列】说说 JS 的事件循环机制 (含满分答题技巧)</a></li>
-<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/qEmR-N6cANSkKuJt2QO_eg">【语音解题系列】说说 JS 的事件循环机制 (含满分答题技巧)</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/LuckyWinty/fe-weekly-questions/issues">自测题目</a></li>
-</ul>
-<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul>
-<li><a target="_blank" rel="noopener" href="https://juejin.im/book/6844733763675488269/section/6844733763763568654#heading-4">前端面试之道</a></li>
-<li><a target="_blank" rel="noopener" href="https://juejin.im/post/6844903858129338375">一道面试题引发的 node 事件循环深入思考</a></li>
-<li><a target="_blank" rel="noopener" href="https://nodejs.org/zh-cn/docs/guides/event-loop-timers-and-nexttick/">Node.js 事件循环，定时器和 process.nextTick()</a></li>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/33058983">详解 JavaScript 中的 Event Loop（事件循环）机制</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.insiderattack.net/new-changes-to-timers-and-microtasks-from-node-v11-0-0-and-above-68d112743eb3">New Changes to the Timers and Microtasks in Node v11.0.0 ( and above)</a></li>
-</ul>
-<h3 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h3><ul>
-<li>欢迎加我微信(winty230)，拉你进技术群，长期交流学习…</li>
-<li>欢迎关注「前端 Q」,认真学前端，做个有专业的技术人…</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618573825825-d88156eb-e92a-4394-95c6-642ec5c602cd.png#clientId=u0fbb7ad9-f0df-4&from=drop&id=ua550051a&margin=%5Bobject%20Object%5D&originHeight=480&originWidth=480&originalType=binary&size=207122&status=done&style=none&taskId=u875f592c-0be4-4d8f-ac64-3ffb5c9bdb7"></p>
 
       
     </div>
@@ -1847,7 +1753,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">64</span>
+          <span class="site-state-item-count">65</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
