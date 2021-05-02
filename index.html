@@ -170,7 +170,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-05-02 20:00:41" itemprop="dateCreated datePublished" datetime="2021-05-02T20:00:41+08:00">2021-05-02</time>
+              <time title="创建时间：2021-05-02 20:10:25" itemprop="dateCreated datePublished" datetime="2021-05-02T20:10:25+08:00">2021-05-02</time>
             </span>
 
           
@@ -241,7 +241,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-05-02 17:58:08 / 修改时间：20:01:26" itemprop="dateCreated datePublished" datetime="2021-05-02T17:58:08+08:00">2021-05-02</time>
+              <time title="创建时间：2021-05-02 17:58:08 / 修改时间：20:11:10" itemprop="dateCreated datePublished" datetime="2021-05-02T17:58:08+08:00">2021-05-02</time>
             </span>
 
           
@@ -272,6 +272,29 @@
 
 <p><strong>Object.prototype.toString 方法返回对象的类型字符串，因此可以用来判断一个值的类型。</strong></p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Object</span>.prototype.toString.call(value);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>数值：返回[object Number]。</strong></li>
+<li><strong>字符串：返回[object String]。</strong></li>
+<li><strong>布尔值：返回[object Boolean]。</strong></li>
+<li><strong>undefined：返回[object Undefined]。</strong></li>
+<li><strong>null：返回[object Null]。</strong></li>
+<li><strong>数组：返回[object Array]。</strong></li>
+<li><strong>arguments 对象：返回[object Arguments]。</strong></li>
+<li><strong>函数：返回[object Function]。</strong></li>
+<li><strong>Error 对象：返回[object Error]。</strong></li>
+<li><strong>Date 对象：返回[object Date]。</strong></li>
+<li><strong>RegExp 对象：返回[object RegExp]。</strong></li>
+<li><strong>其他对象：返回[object Object]。</strong></li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Object</span>.prototype.toString.call(<span class="number">2</span>); <span class="comment">// &quot;[object Number]&quot;</span></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call(<span class="string">&quot;&quot;</span>); <span class="comment">// &quot;[object String]&quot;</span></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call(<span class="literal">true</span>); <span class="comment">// &quot;[object Boolean]&quot;</span></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call(<span class="literal">undefined</span>); <span class="comment">// &quot;[object Undefined]&quot;</span></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call(<span class="literal">null</span>); <span class="comment">// &quot;[object Null]&quot;</span></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call(<span class="built_in">Math</span>); <span class="comment">// &quot;[object Math]&quot;</span></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call(&#123;&#125;); <span class="comment">// &quot;[object Object]&quot;</span></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call([]); <span class="comment">// &quot;[object Array]&quot;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> type = <span class="function"><span class="keyword">function</span> (<span class="params">o</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> s = <span class="built_in">Object</span>.prototype.toString.call(o);</span><br><span class="line">  <span class="keyword">return</span> s.match(<span class="regexp">/\[object (.*?)\]/</span>)[<span class="number">1</span>].toLowerCase();</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">type(&#123;&#125;); <span class="comment">// &quot;object&quot;</span></span><br><span class="line">type([]); <span class="comment">// &quot;array&quot;</span></span><br><span class="line">type(<span class="number">5</span>); <span class="comment">// &quot;number&quot;</span></span><br><span class="line">type(<span class="literal">null</span>); <span class="comment">// &quot;null&quot;</span></span><br><span class="line">type(); <span class="comment">// &quot;undefined&quot;</span></span><br><span class="line">type(<span class="regexp">/abcd/</span>); <span class="comment">// &quot;regex&quot;</span></span><br><span class="line">type(<span class="keyword">new</span> <span class="built_in">Date</span>()); <span class="comment">// &quot;date&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="4-Object-prototype-toLocaleString"><a href="#4-Object-prototype-toLocaleString" class="headerlink" title="4.Object.prototype.toLocaleString()"></a>4.Object.prototype.toLocaleString()</h1><p><strong>Object.prototype.toLocaleString 方法与 toString 的返回结果相同，也是返回一个值的字符串形式。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;&#125;;</span><br><span class="line">obj.toString(obj); <span class="comment">// &quot;[object Object]&quot;</span></span><br><span class="line">obj.toLocaleString(obj); <span class="comment">// &quot;[object Object]&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="5-Object-prototype-hasOwnProperty"><a href="#5-Object-prototype-hasOwnProperty" class="headerlink" title="5.Object.prototype.hasOwnProperty()"></a>5.Object.prototype.hasOwnProperty()</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = &#123; <span class="attr">b</span>: <span class="string">&quot;123&quot;</span> &#125;;</span><br><span class="line">a.hasOwnProperty(<span class="string">&quot;b&quot;</span>); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -322,7 +345,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-02 20:01:26" itemprop="dateModified" datetime="2021-05-02T20:01:26+08:00">2021-05-02</time>
+                <time title="修改时间：2021-05-02 20:11:10" itemprop="dateModified" datetime="2021-05-02T20:11:10+08:00">2021-05-02</time>
               </span>
 
           
@@ -478,7 +501,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-02 20:01:26" itemprop="dateModified" datetime="2021-05-02T20:01:26+08:00">2021-05-02</time>
+                <time title="修改时间：2021-05-02 20:11:10" itemprop="dateModified" datetime="2021-05-02T20:11:10+08:00">2021-05-02</time>
               </span>
 
           
@@ -566,7 +589,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-02 20:01:26" itemprop="dateModified" datetime="2021-05-02T20:01:26+08:00">2021-05-02</time>
+                <time title="修改时间：2021-05-02 20:11:10" itemprop="dateModified" datetime="2021-05-02T20:11:10+08:00">2021-05-02</time>
               </span>
 
           
@@ -763,7 +786,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-02 20:01:26" itemprop="dateModified" datetime="2021-05-02T20:01:26+08:00">2021-05-02</time>
+                <time title="修改时间：2021-05-02 20:11:11" itemprop="dateModified" datetime="2021-05-02T20:11:11+08:00">2021-05-02</time>
               </span>
 
           
@@ -930,7 +953,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-02 20:01:26" itemprop="dateModified" datetime="2021-05-02T20:01:26+08:00">2021-05-02</time>
+                <time title="修改时间：2021-05-02 20:11:11" itemprop="dateModified" datetime="2021-05-02T20:11:11+08:00">2021-05-02</time>
               </span>
 
           
@@ -1132,7 +1155,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-02 20:01:27" itemprop="dateModified" datetime="2021-05-02T20:01:27+08:00">2021-05-02</time>
+                <time title="修改时间：2021-05-02 20:11:11" itemprop="dateModified" datetime="2021-05-02T20:11:11+08:00">2021-05-02</time>
               </span>
 
           
@@ -1431,7 +1454,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-02 20:01:27" itemprop="dateModified" datetime="2021-05-02T20:01:27+08:00">2021-05-02</time>
+                <time title="修改时间：2021-05-02 20:11:11" itemprop="dateModified" datetime="2021-05-02T20:11:11+08:00">2021-05-02</time>
               </span>
 
           
@@ -1567,7 +1590,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-02 20:01:27" itemprop="dateModified" datetime="2021-05-02T20:01:27+08:00">2021-05-02</time>
+                <time title="修改时间：2021-05-02 20:11:11" itemprop="dateModified" datetime="2021-05-02T20:11:11+08:00">2021-05-02</time>
               </span>
 
           
