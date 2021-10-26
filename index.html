@@ -146,7 +146,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/02/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/26/hello-world/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -160,7 +160,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/05/02/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
+            <a href="/2021/10/26/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
         </h2>
 
         <div class="post-meta">
@@ -170,7 +170,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-05-02 20:10:25" itemprop="dateCreated datePublished" datetime="2021-05-02T20:10:25+08:00">2021-05-02</time>
+              <time title="创建时间：2021-10-26 12:45:46" itemprop="dateCreated datePublished" datetime="2021-10-26T12:45:46+08:00">2021-10-26</time>
             </span>
 
           
@@ -216,6 +216,242 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/26/yuque/%E9%9D%A2%E7%BB%8Fcss/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/10/26/yuque/%E9%9D%A2%E7%BB%8Fcss/" class="post-title-link" itemprop="url">面经css</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-10-26 12:45:25 / 修改时间：12:46:30" itemprop="dateCreated datePublished" datetime="2021-10-26T12:45:25+08:00">2021-10-26</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="CSS-基础"><a href="#CSS-基础" class="headerlink" title="CSS 基础"></a><strong>CSS 基础</strong></h1><h2 id="两种盒模型"><a href="#两种盒模型" class="headerlink" title="两种盒模型"></a>两种盒模型</h2><p>w3c 盒子模型 content-box</p>
+<p>IE 盒子模型 border-box</p>
+<p>w3c 的盒子模型中 盒子宽度为 content+padding+border 其中设置 width 的时候 只设置了 content 其他不设置</p>
+<p>IE 的盒子模型中 盒子宽度为 content+padding+border 其中设置 width 的时候 会将 content padding border 一起算进去</p>
+<h2 id="如何实现垂直居中-方案尽可能多"><a href="#如何实现垂直居中-方案尽可能多" class="headerlink" title="如何实现垂直居中(方案尽可能多)"></a>如何实现垂直居中(方案尽可能多)</h2><p>transfrom</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.center</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">50%</span>;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">50%</span>;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">translate</span>(-<span class="number">50%</span>, -<span class="number">50%</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>flex</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.parent&#123;</span><br><span class="line">	display:flex;</span><br><span class="line">	align-items:center;</span><br><span class="line">	justify-content:center;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>grid</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">.parent&#123;</span><br><span class="line">	display:grid;</span><br><span class="line">&#125;</span><br><span class="line">.center&#123;</span><br><span class="line">	margin:auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>text-center</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.parent&#123;</span><br><span class="line">	text-align:center;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>margin</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.center&#123;</span><br><span class="line">	margin:0 auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>table-cell</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.parent&#123;</span><br><span class="line">	display:table-cell;</span><br><span class="line">	vertical-align:middle;</span><br><span class="line">&#125;</span><br><span class="line">.center&#123;</span><br><span class="line">	margin:auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="移动端适配方案"><a href="#移动端适配方案" class="headerlink" title="移动端适配方案"></a>移动端适配方案</h2><p>1.Flexible</p>
+<p>先根据 html 元素的 font-size 来做计算的计算属性值 通过设置 documentElement 的 fontSize 属性来统一页面的布局标准</p>
+<p>控制 viewport 的 width 和 scale 值适配高倍屏显示</p>
+<p>缺陷:</p>
+<ol>
+<li>不能兼容 iframe</li>
+<li>对高倍屏的安卓手机没做处理</li>
+<li>不兼容响应式布局</li>
+<li>无法正确响应系统字体大小</li>
+</ol>
+<p>2.vh/vw</p>
+<p>根据<a target="_blank" rel="noopener" href="https://drafts.csswg.org/css-values-3/#viewport-relative-lengths">CSS3 规范</a>，视口单位主要包括以下 4 个：</p>
+<p>1.vw：1vw 等于视口宽度的 1%。</p>
+<p>2.vh：1vh 等于视口高度的 1%。</p>
+<p>3.vmin：选取 vw 和 vh 中最小的那个。</p>
+<p>4.vmax：选取 vw 和 vh 中最大的那个。</p>
+<p>vh and vw：相对于视口的高度和宽度，而不是父元素的（CSS 百分比是相对于包含它的最近的父元素的高度和宽度）。1vh 等于 1/100 的视口高度，1vw 等于 1/100 的视口宽度。</p>
+<p>比如：浏览器高度 950px，宽度为 1920px, 1 vh = 950px/100 = 9.5 px，1vw = 1920px/100 =19.2 px。</p>
+<p>vmax 相对于视口的宽度或高度中较大的那个。其中最大的那个被均分为 100 单位的 vmax。</p>
+<p>vmin 相对于视口的宽度或高度中较小的那个。其中最小的那个被均分为 100 单位的 vmin。</p>
+<p>vw/vh 和 100%的区别</p>
+<p>100%是相对于包含它的最近的父元素的高度和宽度。</p>
+<p>vw (viewport width) vh (viewport height) 是相对于视口的宽度和高度，用 vw，vh 设定的大小只和视窗大小有关，和他们的父元素高度宽度没关系，可以用来开发自适应多种屏幕设备。</p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903630655471624">后面的文章链接</a></p>
+<p>viewport</p>
+<table>
+<thead>
+<tr>
+<th>width</th>
+<th>设置**<em>layout viewport</em>** 的宽度，为一个正整数，或字符串”width-device”</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>initial-scale</td>
+<td>设置页面的初始缩放值，为一个数字，可以带小数</td>
+</tr>
+<tr>
+<td>minimum-scale</td>
+<td>允许用户的最小缩放值，为一个数字，可以带小数</td>
+</tr>
+<tr>
+<td>maximum-scale</td>
+<td>允许用户的最大缩放值，为一个数字，可以带小数</td>
+</tr>
+<tr>
+<td>height</td>
+<td>设置**<em>layout viewport</em>** 的高度，这个属性对我们并不重要，很少使用</td>
+</tr>
+<tr>
+<td>user-scalable</td>
+<td>是否允许用户进行缩放，值为”no”或”yes”, no 代表不允许，yes 代表允许</td>
+</tr>
+</tbody></table>
+<h2 id="伪类与伪元素的区别"><a href="#伪类与伪元素的区别" class="headerlink" title="伪类与伪元素的区别"></a>伪类与伪元素的区别</h2><p>css 引入伪类和伪元素概念是为了格式化文档树以外的信息。也就是说，伪类和伪元素是用来修饰不在文档树中的部分，比如，一句话中的第一个字母，或者是列表中的第一个元素。下面分别对伪类和伪元素进行解释。</p>
+<p>伪类用于当已有元素处于的某个状态时，为其添加对应的样式，这个状态是根据用户行为而动态变化的。比如说，当用户悬停在指定的元素时，我们可以通过:hover 来描述这个元素的状态。虽然它和普通的 css 类相似，可以为已有的元素添加样式，但是它只有处于 dom 树无法描述的状态下才能为元素添加样式，所以将其称为伪类。</p>
+<p>伪元素用于创建一些不在文档树中的元素，并为其添加样式。比如说，我们可以通过:before 来在一个元素前增加一些文本，并为这些文本添加样式。虽然用户可以看到这些文本，但是这些文本实际上不在文档树中。</p>
+<p><img src="https://pic2.zhimg.com/80/v2-a85036113478c3bc36062f76ef8e66bd_720w.jpg#alt=img"></p>
+<p><img src="https://pic4.zhimg.com/80/v2-e44eab840072dc00011854928fb0bcaf_720w.jpg#alt=img"></p>
+<h2 id="BFC"><a href="#BFC" class="headerlink" title="BFC"></a>BFC</h2><p><strong>BFC 到底是什么东西</strong></p>
+<p><code>BFC</code> 全称：<code>Block Formatting Context</code>， 名为 “块级格式化上下文”。</p>
+<p><code>W3C</code>官方解释为：<code>BFC</code>它决定了元素如何对其内容进行定位，以及与其它元素的关系和相互作用，当涉及到可视化布局时，<code>Block Formatting Context</code>提供了一个环境，<code>HTML</code>在这个环境中按照一定的规则进行布局。</p>
+<p>简单来说就是，<code>BFC</code>是一个完全独立的空间（布局环境），让空间里的子元素不会影响到外面的布局。那么怎么使用<code>BFC</code>呢，<code>BFC</code>可以看做是一个<code>CSS</code>元素属性</p>
+<p><strong>怎样触发 BFC</strong></p>
+<p>这里简单列举几个触发<code>BFC</code>使用的<code>CSS</code>属性</p>
+<ul>
+<li>overflow: hidden</li>
+<li>display: inline-block</li>
+<li>position: absolute</li>
+<li>position: fixed</li>
+<li>display: table-cell</li>
+<li>display: flex</li>
+</ul>
+<h2 id="选择器优先级"><a href="#选择器优先级" class="headerlink" title="选择器优先级"></a>选择器优先级</h2><p><strong>CSS 选择器类型</strong></p>
+<p>样式类型</p>
+<p>行内样式：<code>&lt;style&gt;&lt;/style&gt;</code></p>
+<p>内联样式：<code>&lt;div style=&quot;color:red;&quot;&gt;</code></p>
+<p>外部样式：<code>&lt;link&gt;或@import引入</code></p>
+<p>选择器类型</p>
+<p>id 选择器、class 选择器、属性选择器、*、伪类选择器、伪元素、后代选择器、子类选择器、兄弟选择器</p>
+<p><strong>权重计算规则</strong></p>
+<ul>
+<li>第一优先级：<code>!important</code>会覆盖页面内任何位置的元素样式</li>
+<li>1.内联样式，如<code>style=&quot;color: green&quot;</code>，权值为<code>1000</code></li>
+<li>2.ID 选择器，如<code>#app</code>，权值为<code>0100</code></li>
+<li>3.类、伪类、属性选择器，如<code>.foo, :first-child, div[class=&quot;foo&quot;]</code>，权值为<code>0010</code></li>
+<li>4.标签、伪元素选择器，如<code>div::first-line</code>，权值为<code>0001</code></li>
+<li>5.通配符、子类选择器、兄弟选择器，如<code>*, &gt;, +</code>，权值为<code>0000</code></li>
+<li>6.继承的样式没有权值</li>
+</ul>
+<p><strong>比较规则</strong></p>
+<ul>
+<li>1.<code>1000 &gt; 0100</code>，从左向右逐个比较，前一级相等才能往后比较</li>
+<li>2.无论是行内样式、内部样式还是外部样式，都是按照以上提到的权重方式进行比较，面试的时候遇到优先级比较，答案往往是：<code>行内&gt;id&gt;class&gt;元素(标签)</code>，我们以为给了能令面试官满意的答案，其实不然，比如对同一个元素操作，在权重相等的情况下，后面的样式会覆盖前面的，这样我们给出来的答案就不成立了</li>
+<li>3.权重相同的情况下，位于后面的样式会覆盖前面的样式</li>
+<li>4.通配符、子选择器、兄弟选择器，虽然权重为<code>0000</code>，但是优先于继承的样式</li>
+</ul>
+<p><strong>比较规则</strong></p>
+<ul>
+<li>1.<code>1000 &gt; 0100</code>，从左向右逐个比较，前一级相等才能往后比较</li>
+<li>2.无论是行内样式、内部样式还是外部样式，都是按照以上提到的权重方式进行比较，面试的时候遇到优先级比较，答案往往是：<code>行内&gt;id&gt;class&gt;元素(标签)</code>，我们以为给了能令面试官满意的答案，其实不然，比如对同一个元素操作，在权重相等的情况下，后面的样式会覆盖前面的，这样我们给出来的答案就不成立了</li>
+<li>3.权重相同的情况下，位于后面的样式会覆盖前面的样式</li>
+<li>4.通配符、子选择器、兄弟选择器，虽然权重为<code>0000</code>，但是优先于继承的样式</li>
+</ul>
+<h2 id="position-的值有哪些，区别是什么"><a href="#position-的值有哪些，区别是什么" class="headerlink" title="position 的值有哪些，区别是什么"></a>position 的值有哪些，区别是什么</h2><p><strong>relative(相对定位)</strong></p>
+<ul>
+<li>相对于元素自身定位，定位后空间不释放</li>
+</ul>
+<p><strong>absolute(绝对定位)</strong></p>
+<ul>
+<li>相对于最近的已定位的祖先元素进行定位，定位后空间释放，最深的祖先元素是 body</li>
+</ul>
+<p><strong>fixed(固定定位)</strong></p>
+<ul>
+<li>相对于浏览器窗口(window)定位,定位后空间释放</li>
+</ul>
+<p><strong>sticky(粘性定位)</strong></p>
+<ul>
+<li>相当于 relative 和 fixed 的混合,在元素处于正常文档流时，定位是 relative，滑出当前浏览器窗口时，定位 fixed；</li>
+</ul>
+<h2 id="animation-的参数，怎样实现一个动画"><a href="#animation-的参数，怎样实现一个动画" class="headerlink" title="animation 的参数，怎样实现一个动画"></a>animation 的参数，怎样实现一个动画</h2><p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c8b7d4949a6f4359b1ca1e4c41ffde52~tplv-k3u1fbpfcp-watermark.awebp#alt=img"></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6889226357851553805#heading-0">如何实现一个动画</a></p>
+<h2 id="css-设置元素隐藏，两种有什么区别？"><a href="#css-设置元素隐藏，两种有什么区别？" class="headerlink" title="css 设置元素隐藏，两种有什么区别？"></a>css 设置元素隐藏，两种有什么区别？</h2><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>表现</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>display:none</code></td>
+<td>不占据空间，不会触发事件，触发重排和重绘</td>
+</tr>
+<tr>
+<td><code>visibility:hidden</code></td>
+<td>占据空间，不会触发事件，只触发重绘</td>
+</tr>
+<tr>
+<td><code>opacity: 0</code></td>
+<td>占据空间，会触发事件，只触发重绘</td>
+</tr>
+<tr>
+<td><code>transfrom: scale(0)</code></td>
+<td>占据空间，不会触发事件，只触发重绘</td>
+</tr>
+<tr>
+<td><code>width和height设置为0</code></td>
+<td>不占据空间，不会触发事件，触发重排和重绘</td>
+</tr>
+</tbody></table>
+<h2 id="css-有哪些单位"><a href="#css-有哪些单位" class="headerlink" title="css 有哪些单位"></a>css 有哪些单位</h2><p>PX、EM、REM、%、VW、VH、VM</p>
+<h2 id="Link-与-import-的区别"><a href="#Link-与-import-的区别" class="headerlink" title="Link 与@import 的区别"></a>Link 与@import 的区别</h2><p>本质上，这两种方式都是为了加载 css 文件，但还是存在细微的差别。</p>
+<p>差别 1：老祖宗的差别，link 属于 XHTML 标签，而@import 完全是 css 提供的一种方式。</p>
+<p>link 标签除了可以加载 css 外，还可以做很多其他的事情，比如定义 RSS，定义 rel 连接属性等，@import 只能加载 CSS。</p>
+<p>差别 2：加载顺序的差别：当一个页面被夹在的时候（就是被浏览者浏览的时候），link 引用的 CSS 会同时被加载，而@import 引用的 CSS 会等到页面全部被下载完再加载。所以有时候浏览@import 加载 CSS 的页面时会没有样式（就是闪烁），网速慢的时候还挺明显。</p>
+<p>差别 3：兼容性的差别。由于@import 是 CSS2.1 提出的所以老的浏览器不支持，@import 只有在 IE5 以上的才能识别，而 link 标签无此问题，完全兼容。</p>
+<p>差别 4：使用 dom 控制样式时的差别。当时用 JavaScript 控制 dom 去改变样式的时候，只能使用 link 标签，因为@import 不是 dom 可以控制的（不支持）。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/02/yuque/Object%E7%9A%84%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95api/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -239,10 +475,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-05-02 17:58:08 / 修改时间：20:11:10" itemprop="dateCreated datePublished" datetime="2021-05-02T17:58:08+08:00">2021-05-02</time>
+              <time title="创建时间：2021-05-02 17:58:08" itemprop="dateCreated datePublished" datetime="2021-05-02T17:58:08+08:00">2021-05-02</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-26 12:46:30" itemprop="dateModified" datetime="2021-10-26T12:46:30+08:00">2021-10-26</time>
+              </span>
 
           
 
@@ -296,6 +538,27 @@
 
 <h1 id="5-Object-prototype-hasOwnProperty"><a href="#5-Object-prototype-hasOwnProperty" class="headerlink" title="5.Object.prototype.hasOwnProperty()"></a>5.Object.prototype.hasOwnProperty()</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = &#123; <span class="attr">b</span>: <span class="string">&quot;123&quot;</span> &#125;;</span><br><span class="line">a.hasOwnProperty(<span class="string">&quot;b&quot;</span>); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
 
+<h1 id="6-Object-getOwnPropertyDescriptor"><a href="#6-Object-getOwnPropertyDescriptor" class="headerlink" title="6.Object.getOwnPropertyDescriptor()"></a>6.Object.getOwnPropertyDescriptor()</h1><p><strong>Object.getOwnPropertyDescriptor() 方法返回指定对象上一个自有属性对应的属性描述符。（自有属性指的是直接赋予该对象的属性，不需要从原型链上进行查找的属性）</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = &#123; <span class="attr">b</span>: <span class="string">&quot;123&quot;</span> &#125;;</span><br><span class="line"><span class="built_in">Object</span>.getOwnPropertyDescriptor(a, <span class="string">&quot;b&quot;</span>);</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">&#123;value: &quot;123&quot;, writable: true, enumerable: true, configurable: true&#125;</span></span><br><span class="line"><span class="comment">configurable: true</span></span><br><span class="line"><span class="comment">enumerable: true</span></span><br><span class="line"><span class="comment">value: &quot;123&quot;</span></span><br><span class="line"><span class="comment">writable: true</span></span><br><span class="line"><span class="comment">__proto__: Object</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="7-Object-defineProperty"><a href="#7-Object-defineProperty" class="headerlink" title="7.Object.defineProperty()"></a>7.Object.defineProperty()</h1><blockquote>
+<p>Object.defineProperty(obj, prop, descriptor)</p>
+</blockquote>
+<ul>
+<li>obj</li>
+<li>要定义属性的对象。</li>
+<li>prop</li>
+<li>要定义或修改的属性的名称或<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Symbol">Symbol</a>。</li>
+<li>descriptor</li>
+<li>要定义或修改的属性描述符。</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">  test: <span class="string">&quot;hello&quot;</span>,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//对象已有的属性添加特性描述</span></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">&quot;test&quot;</span>, &#123;</span><br><span class="line">  configurable: <span class="literal">true</span> | <span class="literal">false</span>,</span><br><span class="line">  enumerable: <span class="literal">true</span> | <span class="literal">false</span>,</span><br><span class="line">  value: 任意类型的值,</span><br><span class="line">  writable: <span class="literal">true</span> | <span class="literal">false</span>,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">//对象新添加的属性的特性描述</span></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">&quot;newKey&quot;</span>, &#123;</span><br><span class="line">  configurable: <span class="literal">true</span> | <span class="literal">false</span>,</span><br><span class="line">  enumerable: <span class="literal">true</span> | <span class="literal">false</span>,</span><br><span class="line">  value: 任意类型的值,</span><br><span class="line">  writable: <span class="literal">true</span> | <span class="literal">false</span>,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">value</span><br><span class="line">属性对应的值,可以使任意类型的值，默认为undefined</span><br><span class="line"></span><br><span class="line">writable</span><br><span class="line">属性的值是否可以被重写。设置为true可以被重写；设置为false，不能被重写。默认为false。</span><br><span class="line"></span><br><span class="line">enumerable</span><br><span class="line">此属性是否可以被枚举（使用for…in或Object.keys()）。设置为true可以被枚举；设置为false，不能被枚举。默认为false。</span><br><span class="line"></span><br><span class="line">configurable</span><br><span class="line">是否可以删除目标属性或是否可以再次修改属性的特性（writable, configurable, enumerable）。设置为true可以被删除或可以重新设置特性；设置为false，不能被可以被删除或不可以重新设置特性。默认为false。</span><br><span class="line">这个属性起到两个作用：</span><br><span class="line">目标属性是否可以使用delete删除</span><br><span class="line">目标属性是否可以再次设置特性</span><br></pre></td></tr></table></figure>
+
+<p><strong>存取器描述：</strong><br><strong>注：当使用了 getter 或 setter 方法，不允许使用 writable 和 value 这两个属性</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;&#125;;</span><br><span class="line"><span class="keyword">var</span> initValue = <span class="string">&quot;hello&quot;</span>;</span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">&quot;newKey&quot;</span>, &#123;</span><br><span class="line">  get: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">//当获取值的时候触发的函数</span></span><br><span class="line">    <span class="keyword">return</span> initValue;</span><br><span class="line">  &#125;,</span><br><span class="line">  set: <span class="function"><span class="keyword">function</span> (<span class="params">value</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//当设置值的时候触发的函数,设置的新值通过参数value拿到</span></span><br><span class="line">    initValue = value;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//获取值</span></span><br><span class="line"><span class="built_in">console</span>.log(obj.newKey); <span class="comment">//hello</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//设置值</span></span><br><span class="line">obj.newKey = <span class="string">&quot;change value&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(obj.newKey); <span class="comment">//change value</span></span><br></pre></td></tr></table></figure>
+
       
     </div>
 
@@ -345,7 +608,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-02 20:11:10" itemprop="dateModified" datetime="2021-05-02T20:11:10+08:00">2021-05-02</time>
+                <time title="修改时间：2021-10-26 12:46:30" itemprop="dateModified" datetime="2021-10-26T12:46:30+08:00">2021-10-26</time>
               </span>
 
           
@@ -501,7 +764,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-02 20:11:10" itemprop="dateModified" datetime="2021-05-02T20:11:10+08:00">2021-05-02</time>
+                <time title="修改时间：2021-10-26 12:46:30" itemprop="dateModified" datetime="2021-10-26T12:46:30+08:00">2021-10-26</time>
               </span>
 
           
@@ -589,7 +852,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-02 20:11:10" itemprop="dateModified" datetime="2021-05-02T20:11:10+08:00">2021-05-02</time>
+                <time title="修改时间：2021-10-26 12:46:30" itemprop="dateModified" datetime="2021-10-26T12:46:30+08:00">2021-10-26</time>
               </span>
 
           
@@ -786,7 +1049,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-02 20:11:11" itemprop="dateModified" datetime="2021-05-02T20:11:11+08:00">2021-05-02</time>
+                <time title="修改时间：2021-10-26 12:46:30" itemprop="dateModified" datetime="2021-10-26T12:46:30+08:00">2021-10-26</time>
               </span>
 
           
@@ -953,7 +1216,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-02 20:11:11" itemprop="dateModified" datetime="2021-05-02T20:11:11+08:00">2021-05-02</time>
+                <time title="修改时间：2021-10-26 12:46:31" itemprop="dateModified" datetime="2021-10-26T12:46:31+08:00">2021-10-26</time>
               </span>
 
           
@@ -1155,7 +1418,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-02 20:11:11" itemprop="dateModified" datetime="2021-05-02T20:11:11+08:00">2021-05-02</time>
+                <time title="修改时间：2021-10-26 12:46:31" itemprop="dateModified" datetime="2021-10-26T12:46:31+08:00">2021-10-26</time>
               </span>
 
           
@@ -1454,7 +1717,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-02 20:11:11" itemprop="dateModified" datetime="2021-05-02T20:11:11+08:00">2021-05-02</time>
+                <time title="修改时间：2021-10-26 12:46:31" itemprop="dateModified" datetime="2021-10-26T12:46:31+08:00">2021-10-26</time>
               </span>
 
           
@@ -1555,80 +1818,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/25/yuque/UDP/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Adam Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Adam">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/25/yuque/UDP/" class="post-title-link" itemprop="url">UDP</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-25 22:40:45" itemprop="dateCreated datePublished" datetime="2021-04-25T22:40:45+08:00">2021-04-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-02 20:11:11" itemprop="dateModified" datetime="2021-05-02T20:11:11+08:00">2021-05-02</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>UDP 数据报<strong>一、UDP 的概述</strong>（<strong>User Datagram Protocol，用户数据报协议</strong>）UDP 是<strong>传输层</strong>的协议，功能即为在 IP 的数据报服务之上增加了最基本的服务：<strong>复用</strong>和<strong>分用</strong>以及<strong>差错检测</strong>。UDP 提供<strong>不可靠</strong>服务，具有 TCP 所没有的<strong>优势</strong>：</p>
-<ul>
-<li>UDP<strong>无连接</strong>，时间上<strong>不存在建立连接需要的时延</strong>。空间上，TCP 需要在端系统中<strong>维护连接</strong>状态，需要一定的开销。此连接装入包括接收和发送缓存，拥塞控制参数和序号与确认号的参数。UCP 不维护连接状态，也不跟踪这些参数，开销小。空间和时间上都具有优势。举个例子：DNS 如果运行在 TCP 之上而不是 UDP，那么 DNS 的速度将会慢很多。HTTP 使用 TCP 而不是 UDP，是因为对于基于文本数据的 Web 网页来说，<strong>可靠性</strong>很重要。同一种专用应用服务器在支持 UDP 时，一定能支持更多的活动客户机。</li>
-<li>分组首部开销小**，TCP 首部 20 字节，UDP 首部 8 字节。</li>
-<li><strong>UDP 没有拥塞控制</strong>，应用层能够更好的控制要发送的数据和发送时间，网络中的拥塞控制也不会影响主机的发送速率。某些实时应用要求以稳定的速度发送，<strong>能容 忍一些数据的丢失，但是不能允许有较大的时延</strong>（比如实时视频，直播等）</li>
-<li>UDP<strong>提供尽最大努力的交付</strong>，不保证可靠交付。所有维护传输可靠性的工作需要用户在<strong>应用层</strong>来完成。没有 TCP 的确认机制、重传机制。如果因为网络原因没有传送到对端，UDP 也不会给应用层返回错误信息</li>
-<li>UDP 是<strong>面向报文</strong>的，对应用层交下来的报文，添加首部后直接向下交付为 IP 层，既不合并，也不拆分，保留这些报文的边界。对 IP 层交上来 UDP 用户数据报，在去除首部后就原封不动地交付给上层应用进程，报文不可分割，是 UDP 数据报处理的最小单位。正是因为这样，UDP 显得不够灵活，不能控制读写数据的次数和数量。比如我们要发送 100 个字节的报文，我们调用一次 sendto 函数就会发送 100 字节，对端也需要用 recvfrom 函数一次性接收 100 字节，不能使用循环每次获取 10 个字节，获取十次这样的做法。</li>
-<li>UDP<strong>常用一次性传输比较少量数据的网络应用</strong>，如 DNS,SNMP 等，因为对于这些应用，若是采用 TCP，为连接的创建，维护和拆除带来不小的开销。UDP 也常用于多媒体应用（如 IP 电话，实时视频会议，流媒体等）数据的可靠传输对他们而言并不重要，TCP 的拥塞控制会使他们有较大的延迟，也是不可容忍的</li>
-</ul>
-<p><strong>二、UDP 的首部格式</strong>UDP 数据报分为<strong>首部</strong>和<strong>用户数据部分</strong>，整个 UDP 数据报作为 IP 数据报的数据部分封装在 IP 数据报中，UDP 数据报文结构如图所示：<br><img src="https://cdn.nlark.com/yuque/0/2021/jpg/21377586/1619361667214-2e9fb5f8-10e5-4e4d-bcf9-a232a777c3db.jpg#clientId=uf766e91f-7da9-4&from=paste&height=434&id=uc13cee0b&margin=%5Bobject%20Object%5D&originHeight=434&originWidth=1121&originalType=url&status=done&style=none&taskId=ucab3cb07-e1f4-49d7-a7a2-56d5143d585&width=1121"><br>UDP 首部有 8 个字节，由 4 个字段构成，每个字段都是两个字节，1.<strong>源端口</strong>： 源端口号，需要对方回信时选用，不需要时全部置 0.2.<strong>目的端口</strong>：目的端口号，在终点交付报文的时候需要用到。3.<strong>长度</strong>：UDP 的数据报的长度（包括首部和数据）其最小值为 8（只有首部）4.<strong>校验和</strong>：检测 UDP 数据报在传输中是否有错，有错则丢弃。该字段是可选的，当源主机不想计算校验和，则直接令该字段全为 0.当传输层从 IP 层收到 UDP 数据报时，就根据首部中的目的端口，把 UDP 数据报通过相应的端口，上交给应用进程。如果接收方 UDP 发现收到的报文中的目的端口号不正确（不存在对应端口号的应用进程 0,），就丢弃该报文，并由 ICMP 发送“端口不可达”差错报文给对方。UDP 校验在计算校验和的时候，需要在 UDP 数据报之前增加<strong>12 字节的伪首部</strong>，伪首部并不是 UDP 真正的首部。只是在计算校验和，临时添加在 UDP 数据报的前面，得到一个临时的 UDP 数据报。校验和就是按照这个临时的 UDP 数据报计算的。伪首部既不向下传送也不向上递交，而<strong>仅仅是为了计算校验和</strong>。这样的校验和，既<strong>检查了 UDP 数据报，又对 IP 数据报的源 IP 地址和目的 IP 地址进行了检验。</strong><br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619361667396-09c2b15d-e2c0-4254-b729-d4987d18a9b3.jpeg#clientId=uf766e91f-7da9-4&from=paste&height=521&id=u0b96cd49&margin=%5Bobject%20Object%5D&originHeight=521&originWidth=720&originalType=url&status=done&style=none&taskId=u6a91d411-a507-43da-a0b9-046e4cfe127&width=720"><br>UDP 校验和的计算方法和 IP 数据报首部校验和的计算方法相似，都使用二进制反码运算求和再取反，但不同的是：IP 数据报的校验和之检验 IP 数据报和首部，但 UDP 的校验和是把首部和数据部分一起校验。发送方，首先是把<strong>全零放入校验和字段</strong>并且添加<strong>伪首部</strong>，然后把 UDP 数据报看成是由许多 16 位的子串连接起来，若 UDP 数据报的数据部分不是偶数个字节，则要在数据部分末尾增加一个全零字节（此字节不发送），接下来就按照二进制反码计算出这些 16 位字的和。将此和的二进制反码写入校验和字段。在接收方，把收到得 UDP 数据报加上伪首部（如果不为偶数个字节，还需要补上全零字节）后，按二进制反码计算出这些 16 位字的和。<strong>当无差错时其结果全为 1</strong>,。否则就表明有差错出现，接收方应该丢弃这个 UDP 数据报。<br><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619361667438-0f18033d-fc51-4edd-a53a-b8a608f63d22.jpeg#clientId=uf766e91f-7da9-4&from=paste&height=454&id=u21c6ee63&margin=%5Bobject%20Object%5D&originHeight=454&originWidth=720&originalType=url&status=done&style=none&taskId=ucb722cc4-afb5-4088-81f6-28fdb315bda&width=720"><br>注意：1.校验时，若 UDP 数据报部分的长度不是偶数个字节，则需要填入一个全 0 字节，但是次字节和伪首部一样，是不发送的。2.如果 UDP 校验和校验出 UDP 数据报是错误的，可以丢弃，也可以交付上层，但是要附上错误报告，告诉上层这是错误的数据报。3.通过伪首部，不仅可以检查源端口号，目的端口号和 UDP 用户数据报的数据部分，还可以检查 IP 数据报的源 IP 地址和目的地址。这种差错检验的检错能力不强，但是简单，速度快</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1698,7 +1887,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">65</span>
+          <span class="site-state-item-count">66</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

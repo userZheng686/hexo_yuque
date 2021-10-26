@@ -146,6 +146,172 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/22/yuque/css%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/22/yuque/css%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" class="post-title-link" itemprop="url">css性能优化</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-22 23:02:27" itemprop="dateCreated datePublished" datetime="2021-04-22T23:02:27+08:00">2021-04-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-26 12:46:33" itemprop="dateModified" datetime="2021-10-26T12:46:33+08:00">2021-10-26</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>本文作者：<a target="_blank" rel="noopener" href="http://verymuch.site/">高峰</a>，360 奇舞团前端工程师，W3C 性能工作组成员，同时参与 WOT 工作组的学习。</p>
+</blockquote>
+<p>我们都知道对于网站来说，性能至关重要，CSS 作为页面渲染和内容展现的重要环节，影响着用户对整个网站的第一体验。因此，与其相关的性能优化是不容忽视的。</p>
+<p>对于性能优化我们常常在项目完成时才去考虑，经常被推迟到项目的末期，甚至到暴露出严重的性能问题时才进行性能优化，相信大多数人对此深有体会。</p>
+<p>笔者认为，为了更多地避免这一情况，首先要重视起性能优化相关的工作，将其贯穿到整个产品设计与开发中。其次，就是了解性能相关的内容，在项目开发过程中，自然而然地进行性能优化。最后，也是最最重要的，那就是从现在开始实施优化。</p>
+<p>推荐大家阅读下奇舞周刊之前推的<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/C2Zx3KPNPkgj-aHnOY43Iw">《嗨，送你一张 Web 性能优化地图》</a>1 这篇文章，能够帮助大家对性能优化需要做的事以及需要考虑的问题形成一个整体的概念。</p>
+<p>本文将会详细介绍 CSS 性能优化相关的技巧，笔者将它们分为<strong>实践型</strong>和<strong>建议型</strong>两类，共 8 个小技巧。实践型技巧能够快速地应用在项目中，能够很好地提升性能，也是笔者经常使用的，建议大家尽快在项目中实践。建议型技巧中，有的可能对性能影响并不显著，有的平时大家也并不会那么用，所以笔者不会着重讲述，读者们可以根据自身情况了解一下即可。</p>
+<p>在正式开始之前，需要大家对于<a target="_blank" rel="noopener" href="https://www.html5rocks.com/en/tutorials/internals/howbrowserswork/">浏览器的工作原理</a>2 有些一定的了解，需要的小伙伴可以先简单了解下。</p>
+<p>下面我们开始介绍<strong>实践型的 4 个优化技巧</strong>，先从首屏关键 CSS 开始。</p>
+<h2 id="1-内联首屏关键-CSS（Critical-CSS）"><a href="#1-内联首屏关键-CSS（Critical-CSS）" class="headerlink" title="1. 内联首屏关键 CSS（Critical CSS）"></a>1. 内联首屏关键 CSS（Critical CSS）</h2><p>性能优化中有一个重要的指标——<strong>首次有效绘制</strong>（First Meaningful Paint，简称 FMP）即指页面的首要内容（primary content）出现在屏幕上的时间。这一指标影响用户看到页面前所需等待的时间，而<strong>内联首屏关键 CSS（即 Critical CSS，可以称之为首屏关键 CSS）</strong>能减少这一时间。</p>
+<p>大家应该都习惯于通过 link 标签引用外部 CSS 文件。但需要知道的是，将 CSS 直接内联到 HTML 文档中能使 CSS 更快速地下载。而使用外部 CSS 文件时，需要在 HTML 文档下载完成后才知道所要引用的 CSS 文件，然后才下载它们。所以说，<strong>内联 CSS 能够使浏览器开始页面渲染的时间提前</strong>，因为在 HTML 下载完成之后就能渲染了。</p>
+<p>既然内联 CSS 能够使页面渲染的开始时间提前，那么是否可以内联所有的 CSS 呢？答案显然是否定的，这种方式并不适用于内联较大的 CSS 文件。因为<a target="_blank" rel="noopener" href="https://tylercipriani.com/blog/2016/09/25/the-14kb-in-the-tcp-initial-window/">初始拥塞窗口</a>3 存在限制（TCP 相关概念，通常是 14.6kB，压缩后大小），如果内联 CSS 后的文件超出了这一限制，系统就需要在服务器和浏览器之间进行更多次的往返，这样并不能提前页面渲染时间。因此，我们应当<strong>只将渲染首屏内容所需的关键 CSS 内联到 HTML 中</strong>。</p>
+<p>既然已经知道内联首屏关键 CSS 能够优化性能了，那下一步就是如何确定首屏关键 CSS 了。显然，我们不需要手动确定哪些内容是首屏关键 CSS。Github 上有一个项目<a target="_blank" rel="noopener" href="https://github.com/filamentgroup/criticalCSS">Critical CSS</a>4，可以将属于首屏的关键样式提取出来，大家可以看一下该项目，结合自己的构建工具进行使用。当然为了保证正确，大家最好再亲自确认下提取出的内容是否有缺失。</p>
+<p>不过内联 CSS 有一个缺点，内联之后的 CSS 不会进行缓存，每次都会重新下载。不过如上所说，如果我们将内联后的文件大小控制在了 14.6kb 以内，这似乎并不是什么大问题。</p>
+<p>如上，我们已经介绍了为什么要内联关键 CSS 以及如何内联，那么剩下的 CSS 我们怎么处理好呢？建议使用外部 CSS 引入剩余 CSS，这样能够启用缓存，除此之外还可以异步加载它们。</p>
+<h2 id="2-异步加载-CSS"><a href="#2-异步加载-CSS" class="headerlink" title="2. 异步加载 CSS"></a>2. 异步加载 CSS</h2><p>CSS 会阻塞渲染，在 CSS 文件请求、下载、解析完成之前，浏览器将不会渲染任何已处理的内容。有时，这种阻塞是必须的，因为我们并不希望在所需的 CSS 加载之前，浏览器就开始渲染页面。那么将首屏关键 CSS 内联后，剩余的 CSS 内容的阻塞渲染就不是必需的了，可以使用外部 CSS，并且异步加载。</p>
+<p>那么如何实现 CSS 的异步加载呢？有以下四种方式可以实现浏览器异步加载 CSS。</p>
+<p>第一种方式是使用 JavaScript 动态创建样式表 link 元素，并插入到 DOM 中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 创建link标签</span><br><span class="line">const myCSS &#x3D; document.createElement( &quot;link&quot; );</span><br><span class="line">myCSS.rel &#x3D; &quot;stylesheet&quot;;</span><br><span class="line">myCSS.href &#x3D; &quot;mystyles.css&quot;;</span><br><span class="line">&#x2F;&#x2F; 插入到header的最后位置</span><br><span class="line">document.head.insertBefore( myCSS, document.head.childNodes[ document.head.childNodes.length - 1 ].nextSibling );</span><br></pre></td></tr></table></figure>
+
+<p>第二种方式是将 link 元素的<code>media</code>属性设置为用户浏览器不匹配的媒体类型（或媒体查询），如<code>media=&quot;print&quot;</code>，甚至可以是完全不存在的类型<code>media=&quot;noexist&quot;</code>。对浏览器来说，如果样式表不适用于当前媒体类型，其优先级会被放低，会在不阻塞页面渲染的情况下再进行下载。</p>
+<p>当然，这么做只是为了实现 CSS 的异步加载，别忘了在文件加载完成之后，将<code>media</code>的值设为<code>screen</code>或<code>all</code>，从而让浏览器开始解析 CSS。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;link rel&#x3D;&quot;stylesheet&quot; href&#x3D;&quot;mystyles.css&quot; media&#x3D;&quot;noexist&quot; onload&#x3D;&quot;this.media&#x3D;&#39;all&#39;&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>与第二种方式相似，我们还可以通过<code>rel</code>属性将<code>link</code>元素标记为<code>alternate</code>可选样式表，也能实现浏览器异步加载。同样别忘了加载完成之后，将<code>rel</code>改回去。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;link rel&#x3D;&quot;alternate stylesheet&quot; href&#x3D;&quot;mystyles.css&quot; onload&#x3D;&quot;this.rel&#x3D;&#39;stylesheet&#39;&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>上述的三种方法都较为古老。现在，<a target="_blank" rel="noopener" href="https://www.w3.org/TR/preload/">rel=”preload”</a>5 这一 Web 标准指出了如何异步加载资源，包括 CSS 类资源。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;link rel&#x3D;&quot;preload&quot; href&#x3D;&quot;mystyles.css&quot; as&#x3D;&quot;style&quot; onload&#x3D;&quot;this.rel&#x3D;&#39;stylesheet&#39;&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>注意，<code>as</code>是必须的。忽略<code>as</code>属性，或者错误的<code>as</code>属性会使<code>preload</code>等同于<code>XHR</code>请求，浏览器不知道加载的是什么内容，因此此类资源加载优先级会非常低。<code>as</code>的可选值可以参考上述标准文档。</p>
+<p>看起来，<code>rel=&quot;preload&quot;</code>的用法和上面两种没什么区别，都是通过更改某些属性，使得浏览器异步加载 CSS 文件但不解析，直到加载完成并将修改还原，然后开始解析。</p>
+<p>但是它们之间其实有一个很重要的不同点，那就是<strong>使用 preload，比使用不匹配的</strong><code>**media**</code><strong>方法能够更早地开始加载 CSS</strong>。所以尽管这一标准的支持度还不完善，仍建议优先使用该方法。</p>
+<p>该标准现在已经是候选标准，相信浏览器会逐渐支持该标准。在各浏览器的支持度如下图所示。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/webp/21377586/1619103795934-1e5e7efa-a532-4436-a122-df52040a6183.webp#clientId=ueedfa31e-e32c-4&from=paste&height=424&id=uec2f5cd9&margin=%5Bobject%20Object%5D&originHeight=672&originWidth=1280&originalType=url&status=done&style=none&taskId=ua4e9f7be-b930-401d-b197-f62254715b8&width=807"></p>
+<p>从上图可以看出这一方法在现在的浏览器中支持度不算乐观，不过我们可以通过<a target="_blank" rel="noopener" href="https://github.com/filamentgroup/loadCSS/tree/v2.0.1#loadcss">loadCSS</a>6 进行 polyfill，所以支持不支持，这都不是事儿。</p>
+<h2 id="3-文件压缩"><a href="#3-文件压缩" class="headerlink" title="3. 文件压缩"></a>3. 文件压缩</h2><p>性能优化时有一个最容易想到，也最常使用的方法，那就是文件压缩，这一方案往往效果显著。</p>
+<p>文件的大小会直接影响浏览器的加载速度，这一点在网络较差时表现地尤为明显。相信大家都早已习惯对 CSS 进行压缩，现在的构建工具，如 webpack、gulp/grunt、rollup 等也都支持 CSS 压缩功能。压缩后的文件能够明显减小，可以大大降低了浏览器的加载时间。</p>
+<h2 id="4-去除无用-CSS"><a href="#4-去除无用-CSS" class="headerlink" title="4. 去除无用 CSS"></a>4. 去除无用 CSS</h2><p>虽然文件压缩能够降低文件大小。但 CSS 文件压缩通常只会去除无用的空格，这样就限制了 CSS 文件的压缩比例。那是否还有其他手段来精简 CSS 呢？答案显然是肯定的，如果压缩后的文件仍然超出了预期的大小，我们可以试着<strong>找到并删除代码中无用的 CSS</strong>。</p>
+<p>一般情况下，会存在这两种无用的 CSS 代码：一种是不同元素或者其他情况下的重复代码，一种是整个页面内没有生效的 CSS 代码。对于前者，在编写的代码时候，我们应该尽可能地提取公共类，减少重复。对于后者，在不同开发者进行代码维护的过程中，总会产生不再使用的 CSS 的代码，当然一个人编写时也有可能出现这一问题。而这些无用的 CSS 代码不仅会增加浏览器的下载量，还会增加浏览器的解析时间，这对性能来说是很大的消耗。所以我们需要找到并去除这些无用代码。</p>
+<p>当然，如果手动删除这些无用 CSS 是很低效的。我们可以借助<a target="_blank" rel="noopener" href="https://github.com/uncss/uncss">Uncss</a>7 库来进行。Uncss 可以用来移除样式表中的无用 CSS，并且支持多文件和 JavaScript 注入的 CSS。</p>
+<p>前面已经说完了实践型的 4 个优化技巧，下面我们介绍下<strong>建议型的 4 个技巧</strong>。</p>
+<h2 id="1-有选择地使用选择器"><a href="#1-有选择地使用选择器" class="headerlink" title="1. 有选择地使用选择器"></a>1. 有选择地使用选择器</h2><p>大多数朋友应该都知道<strong>CSS 选择器的匹配是从右向左进行的</strong>，这一策略导致了不同种类的选择器之间的性能也存在差异。相比于<code>#markdown-content-h3</code>，显然使用<code>#markdown .content h3</code>时，浏览器生成渲染树（render-tree）所要花费的时间更多。因为后者需要先找到 DOM 中的所有<code>h3</code>元素，再过滤掉祖先元素不是<code>.content</code>的，最后过滤掉<code>.content</code>的祖先不是<code>#markdown</code>的。试想，如果嵌套的层级更多，页面中的元素更多，那么匹配所要花费的时间代价自然更高。</p>
+<p><strong>不过现代浏览器在这一方面做了很多优化，不同选择器的性能差别并不明显，甚至可以说差别甚微。此外不同选择器在</strong><a target="_blank" rel="noopener" href="https://benfrain.com/css-performance-revisited-selectors-bloat-expensive-styles/#h-H1_1"><strong>不同浏览器中的性能表现</strong></a><strong>8 也不完全统一，在编写 CSS 的时候无法兼顾每种浏览器</strong>。鉴于这两点原因，我们在使用选择器时，只需要记住以下几点，其他的可以全凭喜好。</p>
+<ol>
+<li><strong>保持简单，不要使用嵌套过多过于复杂的选择器。</strong></li>
+<li><strong>通配符和属性选择器效率最低，需要匹配的元素最多，尽量避免使用。</strong></li>
+<li><strong>不要使用类选择器和 ID 选择器修饰元素标签，如</strong><code>**h3#markdown-content**</code><strong>，这样多此一举，还会降低效率。</strong></li>
+<li><strong>不要为了追求速度而放弃可读性与可维护性。</strong></li>
+</ol>
+<p>如果大家对于上面这几点还存在疑问，笔者建议大家选择以下几种 CSS 方法论之一（<a target="_blank" rel="noopener" href="https://en.bem.info/methodology/quick-start/">BEM</a>9，<a target="_blank" rel="noopener" href="http://oocss.org/">OOCSS</a>10，<a target="_blank" rel="noopener" href="https://github.com/suitcss/suit/blob/master/doc/naming-conventions.md">SUIT</a>11，<a target="_blank" rel="noopener" href="https://smacss.com/">SMACSS</a>12，<a target="_blank" rel="noopener" href="https://www.xfive.co/blog/itcss-scalable-maintainable-css-architecture/">ITCSS</a>13，<a target="_blank" rel="noopener" href="http://ecss.io/">Enduring CSS</a>14 等）作为 CSS 编写规范。使用统一的方法论能够帮助大家形成统一的风格，减少命名冲突，也能避免上述的问题，总之好处多多，如果你还没有使用，就赶快用起来吧。</p>
+<blockquote>
+</blockquote>
+<blockquote>
+</blockquote>
+<h3 id="Tips：为什么-CSS-选择器是从右向左匹配的？"><a href="#Tips：为什么-CSS-选择器是从右向左匹配的？" class="headerlink" title="Tips：为什么 CSS 选择器是从右向左匹配的？"></a>Tips：为什么 CSS 选择器是从右向左匹配的？</h3><blockquote>
+</blockquote>
+<blockquote>
+<p>CSS 中更多的选择器是不会匹配的，所以在考虑性能问题时，需要考虑的是如何在选择器不匹配时提升效率。从右向左匹配就是为了达成这一目的的，通过这一策略能够使得 CSS 选择器在不匹配的时候效率更高。这样想来，在匹配时多耗费一些性能也能够想的通了。</p>
+</blockquote>
+<h2 id="2-减少使用昂贵的属性"><a href="#2-减少使用昂贵的属性" class="headerlink" title="2. 减少使用昂贵的属性"></a>2. 减少使用昂贵的属性</h2><p>在浏览器绘制屏幕时，<strong>所有需要浏览器进行操作或计算的属性相对而言都需要花费更大的代价</strong>。当页面发生重绘时，它们会降低浏览器的渲染性能。所以在编写 CSS 时，我们应该尽量减少使用昂贵属性，如<code>box-shadow</code>/<code>border-radius</code>/<code>filter</code>/透明度/<code>:nth-child</code>等。</p>
+<p>当然，并不是让大家不要使用这些属性，因为这些应该都是我们经常使用的属性。之所以提这一点，是让大家对此有一个了解。当有两种方案可以选择的时候，可以优先选择没有昂贵属性或昂贵属性更少的方案，如果每次都这样的选择，网站的性能会在不知不觉中得到一定的提升。</p>
+<h2 id="3-优化重排与重绘"><a href="#3-优化重排与重绘" class="headerlink" title="3. 优化重排与重绘"></a>3. 优化重排与重绘</h2><p>在网站的使用过程中，某些操作会导致样式的改变，这时浏览器需要检测这些改变并重新渲染，其中有些操作所耗费的性能更多。我们都知道，当 FPS 为 60 时，用户使用网站时才会感到流畅。这也就是说，我们需要在 16.67ms 内完成每次渲染相关的所有操作，所以我们要尽量减少耗费更多的操作。</p>
+<h3 id="3-1-减少重排"><a href="#3-1-减少重排" class="headerlink" title="3.1 减少重排"></a>3.1 减少重排</h3><p>重排会导致浏览器重新计算整个文档，重新构建渲染树，这一过程会降低浏览器的渲染速度。如下所示，有很多操作会触发重排，我们应该避免频繁触发这些操作。</p>
+<ol>
+<li>改变<code>font-size</code>和<code>font-family</code></li>
+<li>改变元素的内外边距</li>
+<li>通过 JS 改变 CSS 类</li>
+<li>通过 JS 获取 DOM 元素的位置相关属性（如 width/height/left 等）</li>
+<li>CSS 伪类激活</li>
+<li>滚动滚动条或者改变窗口大小</li>
+</ol>
+<p>此外，我们还可以通过<a target="_blank" rel="noopener" href="https://csstriggers.com/">CSS Trigger</a>15 查询哪些属性会触发重排与重绘。</p>
+<p>值得一提的是，某些 CSS 属性具有更好的重排性能。如使用<code>Flex</code>时，比使用<code>inline-block</code>和<code>float</code>时重排更快，所以在布局时可以优先考虑<code>Flex</code>。</p>
+<h3 id="3-2-避免不必要的重绘"><a href="#3-2-避免不必要的重绘" class="headerlink" title="3.2 避免不必要的重绘"></a>3.2 避免不必要的重绘</h3><p>当元素的外观（如 color，background，visibility 等属性）发生改变时，会触发重绘。在网站的使用过程中，<strong>重绘是无法避免的</strong>。不过，浏览器对此做了优化，它会将多次的重排、重绘操作合并为一次执行。不过我们仍需要<strong>避免不必要的重绘</strong>，如页面滚动时触发的 hover 事件，可以在滚动的时候禁用 hover 事件，这样页面在滚动时会更加流畅。</p>
+<p>此外，我们编写的 CSS 中动画相关的代码越来越多，我们已经习惯于使用动画来提升用户体验。我们在编写动画时，也应当参考上述内容，减少重绘重排的触发。除此之外我们还可以通过<a target="_blank" rel="noopener" href="https://www.sitepoint.com/introduction-to-hardware-acceleration-css-animations/">硬件加速</a>16 和<a target="_blank" rel="noopener" href="https://drafts.csswg.org/css-will-change/">will-change</a>17 来提升动画性能，本文不对此展开详细介绍，感兴趣的小伙伴可以点击链接进行查看。</p>
+<p>最后需要注意的是，用户的设备可能并没有想象中的那么好，至少不会有我们的开发机器那么好。我们可以借助 Chrome 的开发者工具进行 CPU 降速，然后再进行相关的测试，降速方法如下图所示。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/webp/21377586/1619103814193-4014d5ef-05ac-4229-9ec6-b66aba280a83.webp#clientId=ueedfa31e-e32c-4&from=paste&height=120&id=u7438009e&margin=%5Bobject%20Object%5D&originHeight=120&originWidth=612&originalType=url&status=done&style=none&taskId=u954f7140-b2bc-4ca8-9409-a3d525f1ff5&width=612"></p>
+<p>如果需要在移动端访问的，最好将速度限制更低，因为移动端的性能往往更差。</p>
+<h2 id="4-不要使用-import"><a href="#4-不要使用-import" class="headerlink" title="4. 不要使用@import "></a>4. 不要使用<a href="/import">@import </a></h2><p>最后提一下，不要使用@import 引入 CSS，相信大家也很少使用。</p>
+<p>不建议使用@import 主要有以下两点原因。</p>
+<p>首先，使用@import 引入 CSS 会影响浏览器的并行下载。使用@import 引用的 CSS 文件只有在引用它的那个 css 文件被下载、解析之后，浏览器才会知道还有另外一个 css 需要下载，这时才去下载，然后下载后开始解析、构建 render tree 等一系列操作。这就导致浏览器无法并行下载所需的样式文件。</p>
+<p>其次，多个@import 会导致下载顺序紊乱。在 IE 中，@import 会引发资源文件的下载顺序被打乱，即<strong>排列在@import 后面的 js 文件先于@import 下载，并且打乱甚至破坏@import 自身的并行下载</strong>。</p>
+<p>所以不要使用这一方法，使用 link 标签就行了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>至此，我们介绍完了 CSS 性能优化的 4 个实践型技巧和 4 个建议型技巧，在了解这些技巧之后，CSS 的性能优化从现在就可以开始了。不要犹豫了，尽快开始吧。</p>
+<h2 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h2><p>特别感谢@anjia(安佳)、@刘宇晨、@hxl(黄小璐)、@刘观宇的辛苦审校，感谢你们对于文章结构和内容提出的宝贵建议。</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><blockquote>
+</blockquote>
+<blockquote>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://css-tricks.com/efficiently-rendering-css/#article-header-id-4">Efficiently Rendering CSS</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.nextzy.me/how-to-write-css-for-a-great-performance-web-application-edf75bb8a8cc">How to write CSS for a great performance web application</a></li>
+<li><a target="_blank" rel="noopener" href="https://benfrain.com/css-performance-revisited-selectors-bloat-expensive-styles/">CSS performance revisited: selectors, bloat and expensive styles</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.html5rocks.com/en/tutorials/speed/unnecessary-paints/">Avoiding Unnecessary Paints</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.sitepoint.com/five-css-performance-tools-speed-website/">Five CSS Performance Tools to Speed up Your Website</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.sitepoint.com/how-and-why-you-should-inline-your-critical-css/">How and Why You Should Inline Your Critical CSS</a></li>
+<li><a target="_blank" rel="noopener" href="https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-blocking-css?hl=zh-cn">Render blocking css</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.filamentgroup.com/lab/async-css.html">Modern Asynchronous CSS Loading</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.w3.org/TR/preload/">Preload</a></li>
+</ol>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/22/yuque/css%E6%A8%A1%E5%9D%97%E5%8C%96/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -177,7 +343,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-02 20:11:14" itemprop="dateModified" datetime="2021-05-02T20:11:14+08:00">2021-05-02</time>
+                <time title="修改时间：2021-10-26 12:46:33" itemprop="dateModified" datetime="2021-10-26T12:46:33+08:00">2021-10-26</time>
               </span>
 
           
@@ -356,7 +522,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-02 20:11:14" itemprop="dateModified" datetime="2021-05-02T20:11:14+08:00">2021-05-02</time>
+                <time title="修改时间：2021-10-26 12:46:34" itemprop="dateModified" datetime="2021-10-26T12:46:34+08:00">2021-10-26</time>
               </span>
 
           
@@ -644,7 +810,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-02 20:11:15" itemprop="dateModified" datetime="2021-05-02T20:11:15+08:00">2021-05-02</time>
+                <time title="修改时间：2021-10-26 12:46:34" itemprop="dateModified" datetime="2021-10-26T12:46:34+08:00">2021-10-26</time>
               </span>
 
           
@@ -774,7 +940,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-02 20:11:15" itemprop="dateModified" datetime="2021-05-02T20:11:15+08:00">2021-05-02</time>
+                <time title="修改时间：2021-10-26 12:46:34" itemprop="dateModified" datetime="2021-10-26T12:46:34+08:00">2021-10-26</time>
               </span>
 
           
@@ -847,7 +1013,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-02 20:11:15" itemprop="dateModified" datetime="2021-05-02T20:11:15+08:00">2021-05-02</time>
+                <time title="修改时间：2021-10-26 12:46:34" itemprop="dateModified" datetime="2021-10-26T12:46:34+08:00">2021-10-26</time>
               </span>
 
           
@@ -1127,7 +1293,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-02 20:11:15" itemprop="dateModified" datetime="2021-05-02T20:11:15+08:00">2021-05-02</time>
+                <time title="修改时间：2021-10-26 12:46:34" itemprop="dateModified" datetime="2021-10-26T12:46:34+08:00">2021-10-26</time>
               </span>
 
           
@@ -1510,7 +1676,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-02 20:11:15" itemprop="dateModified" datetime="2021-05-02T20:11:15+08:00">2021-05-02</time>
+                <time title="修改时间：2021-10-26 12:46:34" itemprop="dateModified" datetime="2021-10-26T12:46:34+08:00">2021-10-26</time>
               </span>
 
           
@@ -1614,7 +1780,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-02 20:11:15" itemprop="dateModified" datetime="2021-05-02T20:11:15+08:00">2021-05-02</time>
+                <time title="修改时间：2021-10-26 12:46:34" itemprop="dateModified" datetime="2021-10-26T12:46:34+08:00">2021-10-26</time>
               </span>
 
           
@@ -1759,7 +1925,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-02 20:11:15" itemprop="dateModified" datetime="2021-05-02T20:11:15+08:00">2021-05-02</time>
+                <time title="修改时间：2021-10-26 12:46:34" itemprop="dateModified" datetime="2021-10-26T12:46:34+08:00">2021-10-26</time>
               </span>
 
           
@@ -1775,162 +1941,6 @@
       
           <p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619004343554-4fb7cb99-a0df-4aef-b177-e6d1e82bb550.jpeg#clientId=u600b2deb-6239-4&from=paste&height=520&id=u3acfe243&margin=%5Bobject%20Object%5D&originHeight=523&originWidth=774&originalType=url&status=done&style=none&taskId=ub9ccb4c3-c6c4-4c6d-a761-5241a3b64b1&width=770"></p>
 <p><img src="https://cdn.nlark.com/yuque/0/2021/jpeg/21377586/1619004514408-4563fb15-7bcb-42bf-ae77-fa8023f72499.jpeg#clientId=u600b2deb-6239-4&from=paste&height=478&id=u0d4694fb&margin=%5Bobject%20Object%5D&originHeight=507&originWidth=761&originalType=url&status=done&style=none&taskId=udf19acdb-7d42-4db0-997e-5b4f2136b78&width=717.5"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/21/yuque/JavaScript%20%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Adam Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Adam">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/21/yuque/JavaScript%20%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2/" class="post-title-link" itemprop="url">JavaScript 内存泄露</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-21 13:12:55" itemprop="dateCreated datePublished" datetime="2021-04-21T13:12:55+08:00">2021-04-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-02 20:11:15" itemprop="dateModified" datetime="2021-05-02T20:11:15+08:00">2021-05-02</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><strong>这篇文章是针对浏览器的 JavaScript 脚本，Node.js 大同小异，这里不涉及到 Node.js 的场景。当然 Node.js 作为服务端语言，必然更关注内存泄漏的问题。</strong><br>用户一般不会在一个 Web 页面停留比较久，即使有一点内存泄漏，重载页面内存也会跟着释放。而且浏览器也有自动回收内存的机制，所以我们前端其实并没有像 C、C++ 这类语言一样，特别关注内存泄漏的问题。<br>但是如果我们对内存泄漏没有什么概念，有时候还是有可能因为内存泄漏，导致页面卡顿。了解内存泄漏，如何避免内存泄漏，也是我们提升前端技能的必经之路。<br>俗话说好记忆不如烂笔头，所以本人就总结了一些内存泄漏相关的知识，避免一些低级的内存泄漏问题。</p>
-<h2 id="什么是内存？"><a href="#什么是内存？" class="headerlink" title="什么是内存？"></a>什么是内存？</h2><p>在硬件级别上，计算机内存由大量触发器组成。每个触发器包含几个晶体管，能够存储一个位。单个触发器可以通过唯一标识符寻址，因此我们可以读取和覆盖它们。因此，从概念上讲，我们可以把我们的整个计算机内存看作是一个巨大的位数组，我们可以读和写。<br>这么底层的概念，了解下就好，绝大多数数情况下，JavaScript 语言作为你们高级语言，无需我们使用二进制进直接进行读和写。</p>
-<h2 id="内存生命周期"><a href="#内存生命周期" class="headerlink" title="内存生命周期"></a>内存生命周期</h2><p>内存也是有<strong>生命周期</strong>的，不管什么程序语言，一般可以按顺序分为三个周期：</p>
-<ul>
-<li>分配期分配所需要的内存</li>
-<li>使用期使用分配到的内存（读、写）</li>
-<li>释放期不需要时将其释放和归还</li>
-</ul>
-<p>内存分配 -&gt; 内存使用 -&gt; 内存释放。</p>
-<h2 id="什么是内存泄漏？"><a href="#什么是内存泄漏？" class="headerlink" title="什么是内存泄漏？"></a>什么是内存泄漏？</h2><p>在<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">计算机科学</a>中，<strong>内存泄漏</strong>指由于疏忽或错误造成程序未能释放已经不再使用的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%86%85%E5%AD%98">内存</a>。内存泄漏并非指内存在物理上的消失，而是应用程序分配某段内存后，由于设计错误，导致在释放该段内存之前就失去了对该段内存的控制，从而造成了内存的浪费。<br>如果内存不需要时，没有经过生命周期的<strong>释放期</strong>，那么就存在<strong>内存泄漏</strong>。<br>内存泄漏简单理解：无用的内存还在占用，得不到释放和归还。比较严重时，无用的内存会持续递增，从而导致整个系统卡顿，甚至崩溃。</p>
-<h2 id="JavaScript-内存管理机制"><a href="#JavaScript-内存管理机制" class="headerlink" title="JavaScript 内存管理机制"></a>JavaScript 内存管理机制</h2><p>像 C 语言这样的底层语言一般都有底层的内存管理接口，比如 malloc()和 free()。相反，JavaScript 是在创建变量（对象，字符串等）时自动进行了分配内存，并且在不使用它们时“自动”释放。 释放的过程称为垃圾回收。这个“自动”是混乱的根源，并让 JavaScript（和其他高级语言）开发者错误的感觉他们可以不关心内存管理。<br>JavaScript 内存管理机制和内存的<strong>生命周期</strong>是一一对应的。首先需要<strong>分配内存</strong>，然后<strong>使用内存</strong>，最后<strong>释放内存</strong>。<br>其中 JavaScript 语言<strong>不需要程序员手动</strong>分配内存，绝大部分情况下也不需要手动释放内存，对 JavaScript 程序员来说通常就是使用内存（即使用变量、函数、对象等）。</p>
-<h3 id="内存分配"><a href="#内存分配" class="headerlink" title="内存分配"></a>内存分配</h3><p>JavaScript 定义变量就会自动分配内存的。<strong>我们只需了解 JavaScript 的内存是自动分配的就足够了</strong>。<br>看下内存自动分配的例子：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 给数值变量分配内存</span></span><br><span class="line"><span class="keyword">let</span> number = <span class="number">123</span>;</span><br><span class="line"><span class="comment">// 给字符串分配内存</span></span><br><span class="line"><span class="keyword">const</span> string = <span class="string">&quot;xianshannan&quot;</span>;</span><br><span class="line"><span class="comment">// 给对象及其包含的值分配内存</span></span><br><span class="line"><span class="keyword">const</span> object = &#123;</span><br><span class="line">  a: <span class="number">1</span>,</span><br><span class="line">  b: <span class="literal">null</span>,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 给数组及其包含的值分配内存（就像对象一样）</span></span><br><span class="line"><span class="keyword">const</span> array = [<span class="number">1</span>, <span class="literal">null</span>, <span class="string">&quot;abra&quot;</span>];</span><br><span class="line"><span class="comment">// 给函数（可调用的对象）分配内存</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">func</span>(<span class="params">a</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="内存使用"><a href="#内存使用" class="headerlink" title="内存使用"></a>内存使用</h3><p>使用值的过程实际上是对分配内存进行<strong>读取与写入</strong>的操作。读取与写入可能是写入一个变量或者一个对象的属性值，甚至传递函数的参数。<br>根据上面的内存自动分配例子，我们继续内存使用的例子：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 写入内存</span></span><br><span class="line">number = <span class="number">234</span>;</span><br><span class="line"><span class="comment">// 读取 number 和 func 的内存，写入 func 参数内存</span></span><br><span class="line">func(number);</span><br></pre></td></tr></table></figure>
-
-<h3 id="内存回收"><a href="#内存回收" class="headerlink" title="内存回收"></a>内存回收</h3><p>前端界一般称<strong>垃圾内存回收</strong>为 GC（Garbage Collection，即垃圾回收）。<br><strong>内存泄漏一般都是发生在这一步，JavaScript 的内存回收机制虽然能回收绝大部分的垃圾内存，但是还是存在回收不了的情况，如果存在这些情况，需要我们手动清理内存。</strong><br>以前一些老版本的浏览器的 JavaScript 回收机制没那么完善，经常出现一些 bug 的内存泄漏，不过现在的浏览器基本都没这些问题了，已过时的知识这里就不做深究了。<br>这里了解下现在的 JavaScript 的垃圾内存的两种回收方式，熟悉下这两种算法可以帮助我们理解一些内存泄漏的场景。</p>
-<h4 id="引用计数垃圾收集"><a href="#引用计数垃圾收集" class="headerlink" title="引用计数垃圾收集"></a>引用计数垃圾收集</h4><p>这是最初级的垃圾收集算法。此算法把“对象是否不再需要”简化定义为“对象有没有其他对象引用到它”。如果没有引用指向该对象（零引用），对象将被垃圾回收机制回收。<br>看下下面的例子，“这个对象”的内存被回收了吗？</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// “这个对象”分配给 a 变量</span></span><br><span class="line"><span class="keyword">var</span> a = &#123;</span><br><span class="line">  a: <span class="number">1</span>,</span><br><span class="line">  b: <span class="number">2</span>,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// b 引用“这个对象”</span></span><br><span class="line"><span class="keyword">var</span> b = a;</span><br><span class="line"><span class="comment">// 现在，“这个对象”的原始引用 a 被 b 替换了</span></span><br><span class="line">a = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
-
-<p>当前执行环境中，“这个对象”内存还没有被回收的，需要手动释放“这个对象”的内存（当然是还没离开执行环境的情况下），例如：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">b = <span class="literal">null</span>;</span><br><span class="line"><span class="comment">// 或者 b = 1，反正替换“这个对象”就行了</span></span><br></pre></td></tr></table></figure>
-
-<p>这样引用的”这个对象”的内存就被回收了。<br>ES6 把<strong>引用</strong>有区分为<strong>强引用</strong>和<strong>弱引用</strong>，这个目前只有再 Set 和 Map 中才有。<br><strong>强引用</strong>才会有<strong>引用计数</strong>叠加，只有引用计数为 0 的对象的内存才会被回收，所以一般需要手动回收内存（手动回收的前提在于<strong>标记清除法</strong>还没执行，还处于当前执行环境）。<br>而<strong>弱引用</strong>没有触发<strong>引用计数</strong>叠加，只要引用计数为 0，弱引用就会自动消失，无需手动回收内存。</p>
-<h4 id="标记清除法"><a href="#标记清除法" class="headerlink" title="标记清除法"></a>标记清除法</h4><p>当变量进入执行环境时标记为“进入环境”，当变量离开执行环境时则标记为“离开环境”，被标记为“进入环境”的变量是不能被回收的，因为它们正在被使用，而标记为“离开环境”的变量则可以被回收<br>环境可以理解为我们的作用域，但是全局作用域的变量只会在页面关闭才会销毁。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 假设这里是全局变量</span></span><br><span class="line"><span class="comment">// b 被标记进入环境</span></span><br><span class="line"><span class="keyword">var</span> b = <span class="number">2</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> a = <span class="number">1</span>;</span><br><span class="line">  <span class="comment">// 函数执行时，a 被标记进入环境</span></span><br><span class="line">  <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 函数执行结束，a 被标记离开环境，被回收</span></span><br><span class="line"><span class="comment">// 但是 b 就没有被标记离开环境</span></span><br><span class="line">test();</span><br></pre></td></tr></table></figure>
-
-<h2 id="JavaScript-内存泄漏的一些场景"><a href="#JavaScript-内存泄漏的一些场景" class="headerlink" title="JavaScript 内存泄漏的一些场景"></a>JavaScript 内存泄漏的一些场景</h2><p>JavaScript 的内存回收机制虽然能回收绝大部分的垃圾内存，但是还是存在回收不了的情况。程序员要让浏览器内存泄漏，浏览器也是管不了的。<br><strong>下面有些例子是在执行环境中，没离开当前执行环境，还没触发标记清除法。所以你需要读懂上面 JavaScript 的内存回收机制，才能更好理解下面的场景。</strong></p>
-<h3 id="意外的全局变量"><a href="#意外的全局变量" class="headerlink" title="意外的全局变量"></a>意外的全局变量</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在全局作用域下定义</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">count</span>(<span class="params">number</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// basicCount 相当于 window.basicCount = 2;</span></span><br><span class="line">  basicCount = <span class="number">2</span>;</span><br><span class="line">  <span class="keyword">return</span> basicCount + number;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>不过在 eslint 帮助下，这种场景现在基本没人会犯了，eslint 会直接报错，了解下就好。</p>
-<h3 id="被遗忘的计时器"><a href="#被遗忘的计时器" class="headerlink" title="被遗忘的计时器"></a>被遗忘的计时器</h3><p>无用的计时器忘记清理是新手最容易犯的错误之一。<br>就拿一个 vue 组件来做例子。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">  methods: &#123;</span><br><span class="line">    refresh() &#123;</span><br><span class="line">      &#x2F;&#x2F; 获取一些数据</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  mounted() &#123;</span><br><span class="line">    setInterval(function () &#123;</span><br><span class="line">      &#x2F;&#x2F; 轮询获取数据</span><br><span class="line">      this.refresh();</span><br><span class="line">    &#125;, 2000);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
-
-<p>上面的组件销毁的时候，setInterval 还是在运行的，里面涉及到的内存都是没法回收的（浏览器会认为这是必须的内存，不是垃圾内存），需要在组件销毁的时候清除计时器，如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">  methods: &#123;</span><br><span class="line">    refresh() &#123;</span><br><span class="line">      &#x2F;&#x2F; 获取一些数据</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  mounted() &#123;</span><br><span class="line">    this.refreshInterval &#x3D; setInterval(function () &#123;</span><br><span class="line">      &#x2F;&#x2F; 轮询获取数据</span><br><span class="line">      this.refresh();</span><br><span class="line">    &#125;, 2000);</span><br><span class="line">  &#125;,</span><br><span class="line">  beforeDestroy() &#123;</span><br><span class="line">    clearInterval(this.refreshInterval);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
-
-<h3 id="被遗忘的事件监听器"><a href="#被遗忘的事件监听器" class="headerlink" title="被遗忘的事件监听器"></a>被遗忘的事件监听器</h3><p>无用的事件监听器忘记清理是新手最容易犯的错误之一。<br>还是继续使用 vue 组件做例子。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">  mounted() &#123;</span><br><span class="line">    window.addEventListener(&quot;resize&quot;, () &#x3D;&gt; &#123;</span><br><span class="line">      &#x2F;&#x2F; 这里做一些操作</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
-
-<p>上面的组件销毁的时候，resize 事件还是在监听中，里面涉及到的内存都是没法回收的（浏览器会认为这是必须的内存，不是垃圾内存），需要在组件销毁的时候移除相关的事件，如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">  mounted() &#123;</span><br><span class="line">    this.resizeEventCallback &#x3D; () &#x3D;&gt; &#123;</span><br><span class="line">      &#x2F;&#x2F; 这里做一些操作</span><br><span class="line">    &#125;;</span><br><span class="line">    window.addEventListener(&quot;resize&quot;, this.resizeEventCallback);</span><br><span class="line">  &#125;,</span><br><span class="line">  beforeDestroy() &#123;</span><br><span class="line">    window.removeEventListener(&quot;resize&quot;, this.resizeEventCallback);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
-
-<h3 id="被遗忘的-ES6-Set-成员"><a href="#被遗忘的-ES6-Set-成员" class="headerlink" title="被遗忘的 ES6 Set 成员"></a>被遗忘的 ES6 Set 成员</h3><p>如果对 Set 不熟悉，可以看<a target="_blank" rel="noopener" href="http://es6.ruanyifeng.com/#docs/set-map#Set">这里</a>。<br>如下是有内存泄漏的（成员是引用类型的，即对象）:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> map = <span class="keyword">new</span> <span class="built_in">Set</span>();</span><br><span class="line"><span class="keyword">let</span> value = &#123; <span class="attr">test</span>: <span class="number">22</span> &#125;;</span><br><span class="line">map.add(value);</span><br><span class="line"></span><br><span class="line">value = <span class="literal">null</span>;</span><br></pre></td></tr></table></figure>
-
-<p>需要改成这样，才没内存泄漏：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> map = <span class="keyword">new</span> <span class="built_in">Set</span>();</span><br><span class="line"><span class="keyword">let</span> value = &#123; <span class="attr">test</span>: <span class="number">22</span> &#125;;</span><br><span class="line">map.add(value);</span><br><span class="line"></span><br><span class="line">map.delete(value);</span><br><span class="line">value = <span class="literal">null</span>;</span><br></pre></td></tr></table></figure>
-
-<p>有个更便捷的方式，使用 WeakSet，WeakSet 的成员是<strong>弱引用</strong>，内存回收不会考虑到这个引用是否存在。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> map = <span class="keyword">new</span> <span class="built_in">WeakSet</span>();</span><br><span class="line"><span class="keyword">let</span> value = &#123; <span class="attr">test</span>: <span class="number">22</span> &#125;;</span><br><span class="line">map.add(value);</span><br><span class="line"></span><br><span class="line">value = <span class="literal">null</span>;</span><br></pre></td></tr></table></figure>
-
-<h3 id="被遗忘的-ES6-Map-键名"><a href="#被遗忘的-ES6-Map-键名" class="headerlink" title="被遗忘的 ES6 Map 键名"></a>被遗忘的 ES6 Map 键名</h3><p>如果对 Map 不熟悉，可以看<a target="_blank" rel="noopener" href="http://es6.ruanyifeng.com/#docs/set-map#Map">这里</a>。<br>如下是有内存泄漏的（键值是引用类型的，即对象）:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> map = <span class="keyword">new</span> <span class="built_in">Map</span>();</span><br><span class="line"><span class="keyword">let</span> key = <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="number">5</span> * <span class="number">1024</span> * <span class="number">1024</span>);</span><br><span class="line">map.set(key, <span class="number">1</span>);</span><br><span class="line">key = <span class="literal">null</span>;</span><br></pre></td></tr></table></figure>
-
-<p>需要改成这样，才没内存泄漏：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> map = <span class="keyword">new</span> <span class="built_in">Map</span>();</span><br><span class="line"><span class="keyword">let</span> key = <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="number">5</span> * <span class="number">1024</span> * <span class="number">1024</span>);</span><br><span class="line">map.set(key, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">map.delete(key);</span><br><span class="line">key = <span class="literal">null</span>;</span><br></pre></td></tr></table></figure>
-
-<p>有个更便捷的方式，使用 WeakMap，WeakMap 的键名是<strong>弱引用</strong>，内存回收不会考虑到这个引用是否存在。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> map = <span class="keyword">new</span> <span class="built_in">WeakMap</span>();</span><br><span class="line"><span class="keyword">let</span> key = <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="number">5</span> * <span class="number">1024</span> * <span class="number">1024</span>);</span><br><span class="line">map.set(key, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">key = <span class="literal">null</span>;</span><br></pre></td></tr></table></figure>
-
-<h3 id="被遗忘的订阅发布事件监听器"><a href="#被遗忘的订阅发布事件监听器" class="headerlink" title="被遗忘的订阅发布事件监听器"></a>被遗忘的订阅发布事件监听器</h3><p>这个跟上面的<strong>被遗忘的事件监听器</strong>的道理是一样的。<br>假设订阅发布事件有三个方法 emit、on、off 三个方法。<br>还是继续使用 vue 组件做例子。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div @click&#x3D;&quot;onClick&quot;&gt;&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">import customEvent from &quot;event&quot;;</span><br><span class="line"></span><br><span class="line">export default &#123;</span><br><span class="line">  methods: &#123;</span><br><span class="line">    onClick() &#123;</span><br><span class="line">      customEvent.emit(&quot;test&quot;, &#123; type: &quot;click&quot; &#125;);</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  mounted() &#123;</span><br><span class="line">    customEvent.on(&quot;test&quot;, (data) &#x3D;&gt; &#123;</span><br><span class="line">      &#x2F;&#x2F; 一些逻辑</span><br><span class="line">      console.log(data);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
-
-<p>上面的组件销毁的时候，自定义 test 事件还是在监听中，里面涉及到的内存都是没法回收的（浏览器会认为这是必须的内存，不是垃圾内存），需要在组件销毁的时候移除相关的事件，如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div @click&#x3D;&quot;onClick&quot;&gt;&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">import customEvent from &quot;event&quot;;</span><br><span class="line"></span><br><span class="line">export default &#123;</span><br><span class="line">  methods: &#123;</span><br><span class="line">    onClick() &#123;</span><br><span class="line">      customEvent.emit(&quot;test&quot;, &#123; type: &quot;click&quot; &#125;);</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  mounted() &#123;</span><br><span class="line">    customEvent.on(&quot;test&quot;, (data) &#x3D;&gt; &#123;</span><br><span class="line">      &#x2F;&#x2F; 一些逻辑</span><br><span class="line">      console.log(data);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;,</span><br><span class="line">  beforeDestroy() &#123;</span><br><span class="line">    customEvent.off(&quot;test&quot;);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
-
-<h3 id="被遗忘的闭包"><a href="#被遗忘的闭包" class="headerlink" title="被遗忘的闭包"></a>被遗忘的闭包</h3><p>闭包是经常使用的，闭包能给我们带来很多便利。<br>首先看下这个代码：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">closure</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> name = <span class="string">&quot;xianshannan&quot;</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> name.split(<span class="string">&quot;&quot;</span>).reverse().join(<span class="string">&quot;&quot;</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> reverseName = closure();</span><br><span class="line"><span class="comment">// 这里调用了 reverseName</span></span><br><span class="line">reverseName();</span><br></pre></td></tr></table></figure>
-
-<p>上面有没有内存泄漏？<br>上面是没有内存泄漏的，因为 name 变量是要用到的（非垃圾）。这也是从侧面反映了闭包的缺点，内存占用相对高，量多了会有性能影响。<br>但是改成这样就是有内存泄漏的：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">closure</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> name = <span class="string">&quot;xianshannan&quot;</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> name.split(<span class="string">&quot;&quot;</span>).reverse().join(<span class="string">&quot;&quot;</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> reverseName = closure();</span><br></pre></td></tr></table></figure>
-
-<p>在当前执行环境未结束的情况下，严格来说，这样是有内存泄漏的，name 变量是被 closure 返回的函数调用了，但是返回的函数没被使用，这个场景下 name 就属于垃圾内存。name 不是必须的，但是还是占用了内存，也不可被回收。<br>当然这种也是极端情况，很少人会犯这种低级错误。这个例子可以让我们更清楚的认识内存泄漏。</p>
-<h3 id="脱离-DOM-的引用"><a href="#脱离-DOM-的引用" class="headerlink" title="脱离 DOM 的引用"></a>脱离 DOM 的引用</h3><p>每个页面上的 DOM 都是占用内存的，假设有一个页面 A 元素，我们获取到了 A 元素 DOM 对象，然后赋值到了一个变量（内存指向是一样的），然后移除了页面的 A 元素，如果这个变量由于其他原因没有被回收，那么就存在内存泄漏，如下面的例子：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.elements = &#123;</span><br><span class="line">      button: <span class="built_in">document</span>.querySelector(<span class="string">&quot;#button&quot;</span>),</span><br><span class="line">      div: <span class="built_in">document</span>.querySelector(<span class="string">&quot;#div&quot;</span>),</span><br><span class="line">      span: <span class="built_in">document</span>.querySelector(<span class="string">&quot;#span&quot;</span>),</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">removeButton</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">document</span>.body.removeChild(<span class="built_in">this</span>.elements.button);</span><br><span class="line">    <span class="comment">// this.elements.button = null</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> a = <span class="keyword">new</span> Test();</span><br><span class="line">a.removeButton();</span><br></pre></td></tr></table></figure>
-
-<p>上面的例子 button 元素 虽然在页面上移除了，但是内存指向换为了 this.elements.button，内存占用还是存在的。所以上面的代码还需要这样写：this.elements.button = null，手动释放这个内存。</p>
-<h2 id="如何发现内存泄漏？"><a href="#如何发现内存泄漏？" class="headerlink" title="如何发现内存泄漏？"></a>如何发现内存泄漏？</h2><p>内存泄漏时，内存一般都是会周期性的增长，我们可以借助谷歌浏览器的开发者工具进行判别。<br>这里不进行详细的开发者工具使用说明，详细看<a target="_blank" rel="noopener" href="https://developers.google.com/web/tools/chrome-devtools/?hl=zh-cn">谷歌开发者工具</a>，不过谷歌浏览器是不断迭代更新的，有些文档落后了，界面长得不一样。<br>本人测试的谷歌版本为：<strong>版本 76.0.3809.100（正式版本） （64 位）</strong>。<br>这里针对下面例子进行一步一步的排查和找到问题出现在哪里：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">&quot;run&quot;</span>&gt;</span>运行<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">&quot;stop&quot;</span>&gt;</span>停止<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">      <span class="keyword">const</span> arr = [];</span></span><br><span class="line"><span class="javascript">      <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">200000</span>; i++) &#123;</span></span><br><span class="line">        arr.push(i);</span><br><span class="line">      &#125;</span><br><span class="line"><span class="javascript">      <span class="keyword">let</span> newArr = [];</span></span><br><span class="line"></span><br><span class="line"><span class="javascript">      <span class="function"><span class="keyword">function</span> <span class="title">run</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line">        newArr = newArr.concat(arr);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line"><span class="javascript">      <span class="keyword">let</span> clearRun;</span></span><br><span class="line"></span><br><span class="line"><span class="javascript">      <span class="built_in">document</span>.querySelector(<span class="string">&quot;#run&quot;</span>).onclick = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">        clearRun = <span class="built_in">setInterval</span>(<span class="function">() =&gt;</span> &#123;</span></span><br><span class="line">          run();</span><br><span class="line">        &#125;, 1000);</span><br><span class="line">      &#125;;</span><br><span class="line"></span><br><span class="line"><span class="javascript">      <span class="built_in">document</span>.querySelector(<span class="string">&quot;#stop&quot;</span>).onclick = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">        <span class="built_in">clearInterval</span>(clearRun);</span></span><br><span class="line">      &#125;;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>上面例子的代码可以直接运行的，怎么运行我就不多说了。</p>
-<h3 id="第一步：确定是否是内存泄漏问题"><a href="#第一步：确定是否是内存泄漏问题" class="headerlink" title="第一步：确定是否是内存泄漏问题"></a>第一步：确定是否是内存泄漏问题</h3><p>访问上面的代码页面，打开谷歌开发者工具，切换至<strong>Performance</strong>选项，勾选 Memory 选项。<br>在页面上点击<strong>运行按钮</strong>，然后在开发者工具上面点击左上角的录制按钮，10 秒后在页面上点击<strong>停止按钮</strong>，5 秒后停止内存录制。得到的内存走势如下：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618982286155-825d4497-b963-4664-86ae-97cc4b652f44.png#clientId=u6efdc0f7-98b0-4&from=paste&height=266&id=u8ed62004&margin=%5Bobject%20Object%5D&name=image.png&originHeight=296&originWidth=800&originalType=binary&size=159032&status=done&style=none&taskId=u2e86e7e4-00db-44cd-9000-c22f2b04ae6&width=720" alt="image.png"><br>由上图可知，10 秒之前内存周期性增长，10 后点击了停止按钮，内存平稳，不再递增。<br>我们可以使用内存走势图判断当前页面是否有内存泄漏。经过测试上面的代码 20000 个数组项改为 20 个数组项，内存走势也一样能看出来。</p>
-<h3 id="第二步：查找内存泄漏出现的位置"><a href="#第二步：查找内存泄漏出现的位置" class="headerlink" title="第二步：查找内存泄漏出现的位置"></a>第二步：查找内存泄漏出现的位置</h3><p>上一步确认是内存泄漏问题后，我们继续利用谷歌开发者工具进行问题查找。<br>访问上面的代码页面，打开谷歌开发者工具，切换至<strong>Memory</strong>选项。页面上点击运行按钮，然后点击开发者工具左上角录制按钮，录制完成后继续点击录制，知道录制完三个为止。然后点击页面的停止按钮，再连续录制 3 次内存（不要清理之前的录制）。下图就是进行这些步骤后的截图：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618982305113-76c5e0fd-2468-46dc-8b21-4c3c6a9ba7cb.png#clientId=u6efdc0f7-98b0-4&from=paste&height=303&id=u32ff6783&margin=%5Bobject%20Object%5D&name=image.png&originHeight=303&originWidth=437&originalType=binary&size=72501&status=done&style=none&taskId=uc0884f51-e8bf-47dd-8231-32d09fcf71c&width=437" alt="image.png"><br>从这里也可以看出，点击运行按钮后，内存在不断递增。点击停止按钮后，内存就平稳了。虽然我们也可以使用这样的方式来判别是否存在内存泄漏，但是不够第一步的方法便捷，走势图也更直观。<br>然后第二步的主要目的来了，记录 JavaScript 堆内存才是内存录制的主要目的，我们可以看到哪个堆占用的内存更高。<br>在刚才的录制中选择 Snapshot 3 ，然后按照<strong>Shallow Size</strong>进行逆序排序（不了解的可以看<a target="_blank" rel="noopener" href="https://developers.google.com/web/tools/chrome-devtools/memory-problems/memory-101?hl=zh-cn">内存术语</a>），如下：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/21377586/1618982322964-45409ee4-1206-45d0-8f2a-5675234fb0bd.png#clientId=u6efdc0f7-98b0-4&from=paste&height=555&id=u921fa3a5&margin=%5Bobject%20Object%5D&name=image.png&originHeight=555&originWidth=732&originalType=binary&size=332930&status=done&style=none&taskId=u6ca2ef43-cba2-4ce5-ac31-71dcdf078e4&width=732" alt="image.png"><br>从内存记录中，发现 array 对象占用最大，展开后发现，第一个 object elements 占用最大，选择这个 object elements 后可以在下面看到 newArr 变量，然后点击 test:23，只要是高亮下划线的地方都可以进去看看 （测试页面是 test.html），可以跳转到 newArr 附近。</p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/zh-hans/%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F">维基百科-内存泄漏</a></li>
-<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Memory_Management">内存管理</a></li>
-<li><a target="_blank" rel="noopener" href="https://auth0.com/blog/four-types-of-leaks-in-your-javascript-code-and-how-to-get-rid-of-them/">4 Types of Memory Leaks in JavaScript and How to Get Rid Of Them</a></li>
-<li><a target="_blank" rel="noopener" href="https://juejin.im/post/5b684f30f265da0f9f4e87cf">javascript 垃圾回收机制</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.sessionstack.com/how-javascript-works-memory-management-how-to-handle-4-common-memory-leaks-3f28b94cfbec">How JavaScript works: memory management + how to handle 4 common memory leaks</a></li>
-</ul>
 
       
     </div>
@@ -2015,7 +2025,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">65</span>
+          <span class="site-state-item-count">66</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

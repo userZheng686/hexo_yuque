@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="CSS 基础两种盒模型w3c 盒子模型 content-box IE 盒子模型 border-box w3c 的盒子模型中 盒子宽度为 content+padding+border 其中设置 width 的时候 只设置了 content 其他不设置 IE 的盒子模型中 盒子宽度为 content+padding+border 其中设置 width 的时候 会将 content padding bo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面经css">
+<meta property="og:url" content="http://example.com/2021/10/26/yuque/%E9%9D%A2%E7%BB%8Fcss/index.html">
+<meta property="og:site_name" content="Adam">
+<meta property="og:description" content="CSS 基础两种盒模型w3c 盒子模型 content-box IE 盒子模型 border-box w3c 的盒子模型中 盒子宽度为 content+padding+border 其中设置 width 的时候 只设置了 content 其他不设置 IE 的盒子模型中 盒子宽度为 content+padding+border 其中设置 width 的时候 会将 content padding bo">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-a85036113478c3bc36062f76ef8e66bd_720w.jpg#alt=img">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-e44eab840072dc00011854928fb0bcaf_720w.jpg#alt=img">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c8b7d4949a6f4359b1ca1e4c41ffde52~tplv-k3u1fbpfcp-watermark.awebp#alt=img">
+<meta property="article:published_time" content="2021-10-26T04:45:25.000Z">
+<meta property="article:modified_time" content="2021-10-26T04:46:30.175Z">
+<meta property="article:author" content="Adam Blog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic2.zhimg.com/80/v2-a85036113478c3bc36062f76ef8e66bd_720w.jpg#alt=img">
+
+<link rel="canonical" href="http://example.com/2021/10/26/yuque/%E9%9D%A2%E7%BB%8Fcss/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>面经css | Adam</title>
+  <meta name="referrer" content="no-referrer" />
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Adam</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/26/yuque/%E9%9D%A2%E7%BB%8Fcss/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Adam Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adam">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          面经css
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-10-26 12:45:25 / 修改时间：12:46:30" itemprop="dateCreated datePublished" datetime="2021-10-26T12:45:25+08:00">2021-10-26</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="CSS-基础"><a href="#CSS-基础" class="headerlink" title="CSS 基础"></a><strong>CSS 基础</strong></h1><h2 id="两种盒模型"><a href="#两种盒模型" class="headerlink" title="两种盒模型"></a>两种盒模型</h2><p>w3c 盒子模型 content-box</p>
+<p>IE 盒子模型 border-box</p>
+<p>w3c 的盒子模型中 盒子宽度为 content+padding+border 其中设置 width 的时候 只设置了 content 其他不设置</p>
+<p>IE 的盒子模型中 盒子宽度为 content+padding+border 其中设置 width 的时候 会将 content padding border 一起算进去</p>
+<h2 id="如何实现垂直居中-方案尽可能多"><a href="#如何实现垂直居中-方案尽可能多" class="headerlink" title="如何实现垂直居中(方案尽可能多)"></a>如何实现垂直居中(方案尽可能多)</h2><p>transfrom</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.center</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">50%</span>;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">50%</span>;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">translate</span>(-<span class="number">50%</span>, -<span class="number">50%</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>flex</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.parent&#123;</span><br><span class="line">	display:flex;</span><br><span class="line">	align-items:center;</span><br><span class="line">	justify-content:center;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>grid</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">.parent&#123;</span><br><span class="line">	display:grid;</span><br><span class="line">&#125;</span><br><span class="line">.center&#123;</span><br><span class="line">	margin:auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>text-center</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.parent&#123;</span><br><span class="line">	text-align:center;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>margin</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.center&#123;</span><br><span class="line">	margin:0 auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>table-cell</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.parent&#123;</span><br><span class="line">	display:table-cell;</span><br><span class="line">	vertical-align:middle;</span><br><span class="line">&#125;</span><br><span class="line">.center&#123;</span><br><span class="line">	margin:auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="移动端适配方案"><a href="#移动端适配方案" class="headerlink" title="移动端适配方案"></a>移动端适配方案</h2><p>1.Flexible</p>
+<p>先根据 html 元素的 font-size 来做计算的计算属性值 通过设置 documentElement 的 fontSize 属性来统一页面的布局标准</p>
+<p>控制 viewport 的 width 和 scale 值适配高倍屏显示</p>
+<p>缺陷:</p>
+<ol>
+<li>不能兼容 iframe</li>
+<li>对高倍屏的安卓手机没做处理</li>
+<li>不兼容响应式布局</li>
+<li>无法正确响应系统字体大小</li>
+</ol>
+<p>2.vh/vw</p>
+<p>根据<a target="_blank" rel="noopener" href="https://drafts.csswg.org/css-values-3/#viewport-relative-lengths">CSS3 规范</a>，视口单位主要包括以下 4 个：</p>
+<p>1.vw：1vw 等于视口宽度的 1%。</p>
+<p>2.vh：1vh 等于视口高度的 1%。</p>
+<p>3.vmin：选取 vw 和 vh 中最小的那个。</p>
+<p>4.vmax：选取 vw 和 vh 中最大的那个。</p>
+<p>vh and vw：相对于视口的高度和宽度，而不是父元素的（CSS 百分比是相对于包含它的最近的父元素的高度和宽度）。1vh 等于 1/100 的视口高度，1vw 等于 1/100 的视口宽度。</p>
+<p>比如：浏览器高度 950px，宽度为 1920px, 1 vh = 950px/100 = 9.5 px，1vw = 1920px/100 =19.2 px。</p>
+<p>vmax 相对于视口的宽度或高度中较大的那个。其中最大的那个被均分为 100 单位的 vmax。</p>
+<p>vmin 相对于视口的宽度或高度中较小的那个。其中最小的那个被均分为 100 单位的 vmin。</p>
+<p>vw/vh 和 100%的区别</p>
+<p>100%是相对于包含它的最近的父元素的高度和宽度。</p>
+<p>vw (viewport width) vh (viewport height) 是相对于视口的宽度和高度，用 vw，vh 设定的大小只和视窗大小有关，和他们的父元素高度宽度没关系，可以用来开发自适应多种屏幕设备。</p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903630655471624">后面的文章链接</a></p>
+<p>viewport</p>
+<table>
+<thead>
+<tr>
+<th>width</th>
+<th>设置**<em>layout viewport</em>** 的宽度，为一个正整数，或字符串”width-device”</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>initial-scale</td>
+<td>设置页面的初始缩放值，为一个数字，可以带小数</td>
+</tr>
+<tr>
+<td>minimum-scale</td>
+<td>允许用户的最小缩放值，为一个数字，可以带小数</td>
+</tr>
+<tr>
+<td>maximum-scale</td>
+<td>允许用户的最大缩放值，为一个数字，可以带小数</td>
+</tr>
+<tr>
+<td>height</td>
+<td>设置**<em>layout viewport</em>** 的高度，这个属性对我们并不重要，很少使用</td>
+</tr>
+<tr>
+<td>user-scalable</td>
+<td>是否允许用户进行缩放，值为”no”或”yes”, no 代表不允许，yes 代表允许</td>
+</tr>
+</tbody></table>
+<h2 id="伪类与伪元素的区别"><a href="#伪类与伪元素的区别" class="headerlink" title="伪类与伪元素的区别"></a>伪类与伪元素的区别</h2><p>css 引入伪类和伪元素概念是为了格式化文档树以外的信息。也就是说，伪类和伪元素是用来修饰不在文档树中的部分，比如，一句话中的第一个字母，或者是列表中的第一个元素。下面分别对伪类和伪元素进行解释。</p>
+<p>伪类用于当已有元素处于的某个状态时，为其添加对应的样式，这个状态是根据用户行为而动态变化的。比如说，当用户悬停在指定的元素时，我们可以通过:hover 来描述这个元素的状态。虽然它和普通的 css 类相似，可以为已有的元素添加样式，但是它只有处于 dom 树无法描述的状态下才能为元素添加样式，所以将其称为伪类。</p>
+<p>伪元素用于创建一些不在文档树中的元素，并为其添加样式。比如说，我们可以通过:before 来在一个元素前增加一些文本，并为这些文本添加样式。虽然用户可以看到这些文本，但是这些文本实际上不在文档树中。</p>
+<p><img src="https://pic2.zhimg.com/80/v2-a85036113478c3bc36062f76ef8e66bd_720w.jpg#alt=img"></p>
+<p><img src="https://pic4.zhimg.com/80/v2-e44eab840072dc00011854928fb0bcaf_720w.jpg#alt=img"></p>
+<h2 id="BFC"><a href="#BFC" class="headerlink" title="BFC"></a>BFC</h2><p><strong>BFC 到底是什么东西</strong></p>
+<p><code>BFC</code> 全称：<code>Block Formatting Context</code>， 名为 “块级格式化上下文”。</p>
+<p><code>W3C</code>官方解释为：<code>BFC</code>它决定了元素如何对其内容进行定位，以及与其它元素的关系和相互作用，当涉及到可视化布局时，<code>Block Formatting Context</code>提供了一个环境，<code>HTML</code>在这个环境中按照一定的规则进行布局。</p>
+<p>简单来说就是，<code>BFC</code>是一个完全独立的空间（布局环境），让空间里的子元素不会影响到外面的布局。那么怎么使用<code>BFC</code>呢，<code>BFC</code>可以看做是一个<code>CSS</code>元素属性</p>
+<p><strong>怎样触发 BFC</strong></p>
+<p>这里简单列举几个触发<code>BFC</code>使用的<code>CSS</code>属性</p>
+<ul>
+<li>overflow: hidden</li>
+<li>display: inline-block</li>
+<li>position: absolute</li>
+<li>position: fixed</li>
+<li>display: table-cell</li>
+<li>display: flex</li>
+</ul>
+<h2 id="选择器优先级"><a href="#选择器优先级" class="headerlink" title="选择器优先级"></a>选择器优先级</h2><p><strong>CSS 选择器类型</strong></p>
+<p>样式类型</p>
+<p>行内样式：<code>&lt;style&gt;&lt;/style&gt;</code></p>
+<p>内联样式：<code>&lt;div style=&quot;color:red;&quot;&gt;</code></p>
+<p>外部样式：<code>&lt;link&gt;或@import引入</code></p>
+<p>选择器类型</p>
+<p>id 选择器、class 选择器、属性选择器、*、伪类选择器、伪元素、后代选择器、子类选择器、兄弟选择器</p>
+<p><strong>权重计算规则</strong></p>
+<ul>
+<li>第一优先级：<code>!important</code>会覆盖页面内任何位置的元素样式</li>
+<li>1.内联样式，如<code>style=&quot;color: green&quot;</code>，权值为<code>1000</code></li>
+<li>2.ID 选择器，如<code>#app</code>，权值为<code>0100</code></li>
+<li>3.类、伪类、属性选择器，如<code>.foo, :first-child, div[class=&quot;foo&quot;]</code>，权值为<code>0010</code></li>
+<li>4.标签、伪元素选择器，如<code>div::first-line</code>，权值为<code>0001</code></li>
+<li>5.通配符、子类选择器、兄弟选择器，如<code>*, &gt;, +</code>，权值为<code>0000</code></li>
+<li>6.继承的样式没有权值</li>
+</ul>
+<p><strong>比较规则</strong></p>
+<ul>
+<li>1.<code>1000 &gt; 0100</code>，从左向右逐个比较，前一级相等才能往后比较</li>
+<li>2.无论是行内样式、内部样式还是外部样式，都是按照以上提到的权重方式进行比较，面试的时候遇到优先级比较，答案往往是：<code>行内&gt;id&gt;class&gt;元素(标签)</code>，我们以为给了能令面试官满意的答案，其实不然，比如对同一个元素操作，在权重相等的情况下，后面的样式会覆盖前面的，这样我们给出来的答案就不成立了</li>
+<li>3.权重相同的情况下，位于后面的样式会覆盖前面的样式</li>
+<li>4.通配符、子选择器、兄弟选择器，虽然权重为<code>0000</code>，但是优先于继承的样式</li>
+</ul>
+<p><strong>比较规则</strong></p>
+<ul>
+<li>1.<code>1000 &gt; 0100</code>，从左向右逐个比较，前一级相等才能往后比较</li>
+<li>2.无论是行内样式、内部样式还是外部样式，都是按照以上提到的权重方式进行比较，面试的时候遇到优先级比较，答案往往是：<code>行内&gt;id&gt;class&gt;元素(标签)</code>，我们以为给了能令面试官满意的答案，其实不然，比如对同一个元素操作，在权重相等的情况下，后面的样式会覆盖前面的，这样我们给出来的答案就不成立了</li>
+<li>3.权重相同的情况下，位于后面的样式会覆盖前面的样式</li>
+<li>4.通配符、子选择器、兄弟选择器，虽然权重为<code>0000</code>，但是优先于继承的样式</li>
+</ul>
+<h2 id="position-的值有哪些，区别是什么"><a href="#position-的值有哪些，区别是什么" class="headerlink" title="position 的值有哪些，区别是什么"></a>position 的值有哪些，区别是什么</h2><p><strong>relative(相对定位)</strong></p>
+<ul>
+<li>相对于元素自身定位，定位后空间不释放</li>
+</ul>
+<p><strong>absolute(绝对定位)</strong></p>
+<ul>
+<li>相对于最近的已定位的祖先元素进行定位，定位后空间释放，最深的祖先元素是 body</li>
+</ul>
+<p><strong>fixed(固定定位)</strong></p>
+<ul>
+<li>相对于浏览器窗口(window)定位,定位后空间释放</li>
+</ul>
+<p><strong>sticky(粘性定位)</strong></p>
+<ul>
+<li>相当于 relative 和 fixed 的混合,在元素处于正常文档流时，定位是 relative，滑出当前浏览器窗口时，定位 fixed；</li>
+</ul>
+<h2 id="animation-的参数，怎样实现一个动画"><a href="#animation-的参数，怎样实现一个动画" class="headerlink" title="animation 的参数，怎样实现一个动画"></a>animation 的参数，怎样实现一个动画</h2><p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c8b7d4949a6f4359b1ca1e4c41ffde52~tplv-k3u1fbpfcp-watermark.awebp#alt=img"></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6889226357851553805#heading-0">如何实现一个动画</a></p>
+<h2 id="css-设置元素隐藏，两种有什么区别？"><a href="#css-设置元素隐藏，两种有什么区别？" class="headerlink" title="css 设置元素隐藏，两种有什么区别？"></a>css 设置元素隐藏，两种有什么区别？</h2><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>表现</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>display:none</code></td>
+<td>不占据空间，不会触发事件，触发重排和重绘</td>
+</tr>
+<tr>
+<td><code>visibility:hidden</code></td>
+<td>占据空间，不会触发事件，只触发重绘</td>
+</tr>
+<tr>
+<td><code>opacity: 0</code></td>
+<td>占据空间，会触发事件，只触发重绘</td>
+</tr>
+<tr>
+<td><code>transfrom: scale(0)</code></td>
+<td>占据空间，不会触发事件，只触发重绘</td>
+</tr>
+<tr>
+<td><code>width和height设置为0</code></td>
+<td>不占据空间，不会触发事件，触发重排和重绘</td>
+</tr>
+</tbody></table>
+<h2 id="css-有哪些单位"><a href="#css-有哪些单位" class="headerlink" title="css 有哪些单位"></a>css 有哪些单位</h2><p>PX、EM、REM、%、VW、VH、VM</p>
+<h2 id="Link-与-import-的区别"><a href="#Link-与-import-的区别" class="headerlink" title="Link 与@import 的区别"></a>Link 与@import 的区别</h2><p>本质上，这两种方式都是为了加载 css 文件，但还是存在细微的差别。</p>
+<p>差别 1：老祖宗的差别，link 属于 XHTML 标签，而@import 完全是 css 提供的一种方式。</p>
+<p>link 标签除了可以加载 css 外，还可以做很多其他的事情，比如定义 RSS，定义 rel 连接属性等，@import 只能加载 CSS。</p>
+<p>差别 2：加载顺序的差别：当一个页面被夹在的时候（就是被浏览者浏览的时候），link 引用的 CSS 会同时被加载，而@import 引用的 CSS 会等到页面全部被下载完再加载。所以有时候浏览@import 加载 CSS 的页面时会没有样式（就是闪烁），网速慢的时候还挺明显。</p>
+<p>差别 3：兼容性的差别。由于@import 是 CSS2.1 提出的所以老的浏览器不支持，@import 只有在 IE5 以上的才能识别，而 link 标签无此问题，完全兼容。</p>
+<p>差别 4：使用 dom 控制样式时的差别。当时用 JavaScript 控制 dom 去改变样式的时候，只能使用 link 标签，因为@import 不是 dom 可以控制的（不支持）。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/05/02/yuque/Object%E7%9A%84%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95api/" rel="prev" title="Object的常用方法api">
+      <i class="fa fa-chevron-left"></i> Object的常用方法api
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/10/26/hello-world/" rel="next" title="Hello World">
+      Hello World <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CSS-%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">CSS 基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E7%9B%92%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.1.</span> <span class="nav-text">两种盒模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%9E%82%E7%9B%B4%E5%B1%85%E4%B8%AD-%E6%96%B9%E6%A1%88%E5%B0%BD%E5%8F%AF%E8%83%BD%E5%A4%9A"><span class="nav-number">1.2.</span> <span class="nav-text">如何实现垂直居中(方案尽可能多)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A7%BB%E5%8A%A8%E7%AB%AF%E9%80%82%E9%85%8D%E6%96%B9%E6%A1%88"><span class="nav-number">1.3.</span> <span class="nav-text">移动端适配方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%AA%E7%B1%BB%E4%B8%8E%E4%BC%AA%E5%85%83%E7%B4%A0%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.4.</span> <span class="nav-text">伪类与伪元素的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BFC"><span class="nav-number">1.5.</span> <span class="nav-text">BFC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E5%99%A8%E4%BC%98%E5%85%88%E7%BA%A7"><span class="nav-number">1.6.</span> <span class="nav-text">选择器优先级</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#position-%E7%9A%84%E5%80%BC%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%8C%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.7.</span> <span class="nav-text">position 的值有哪些，区别是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#animation-%E7%9A%84%E5%8F%82%E6%95%B0%EF%BC%8C%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%8A%A8%E7%94%BB"><span class="nav-number">1.8.</span> <span class="nav-text">animation 的参数，怎样实现一个动画</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#css-%E8%AE%BE%E7%BD%AE%E5%85%83%E7%B4%A0%E9%9A%90%E8%97%8F%EF%BC%8C%E4%B8%A4%E7%A7%8D%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-number">1.9.</span> <span class="nav-text">css 设置元素隐藏，两种有什么区别？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#css-%E6%9C%89%E5%93%AA%E4%BA%9B%E5%8D%95%E4%BD%8D"><span class="nav-number">1.10.</span> <span class="nav-text">css 有哪些单位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Link-%E4%B8%8E-import-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.11.</span> <span class="nav-text">Link 与@import 的区别</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Adam Blog</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">66</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Adam Blog</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
